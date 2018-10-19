@@ -1,0 +1,39 @@
+/* unvisited link */
+a:link {
+    color: silver;
+}
+
+/* visited link */
+a:visited {
+    color: silver;
+}
+
+/* mouse over link */
+a:hover {
+    color: blue;
+}
+
+a.strike:hover {
+    color: silver;
+	text-decoration: line-through;
+	font-weight: bold;
+}
+
+a:hover {
+    color: blue;
+}
+
+
+/* selected link */
+a:active {
+    color: blue;
+}
+
+a {
+	font-size: xx-large;
+}
+
+ul.idn: {
+  list-style-type: none;
+
+}
