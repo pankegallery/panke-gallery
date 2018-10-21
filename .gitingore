@@ -1,8 +1,0 @@
-.sass-cache
-
-__pycache__
-
-node_modules/*
-
-*.map
-path--*
