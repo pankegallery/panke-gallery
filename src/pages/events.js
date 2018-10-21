@@ -247,30 +247,3 @@ export default function Events({
   );
 }
 
-export const pageQuery = graphql`
-  query IndexQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          excerpt(pruneLength: 250)
-          id
-          frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-            path
-          }
-        }
-      }
-    }
-    archive: allMarkdownRemark {
-      edges {
-        node {
-          frontmatter {
-            path: date(formatString: "Y-MM")
-            title: date(formatString: "MMMM Y")
-          }
-        }
-      }
-    }
-  }
-`;

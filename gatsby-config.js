@@ -25,9 +25,16 @@ module.exports = {
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-sass',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
+    },
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        includePaths: ["absolute/path/a", "absolute/path/b"],
+      },
     }
   ],
 }
