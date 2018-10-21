@@ -1,0 +1,8 @@
+//
+// Functions
+// ==============================
+
+//Retrieve panke color from variables
+@function panke-color($key: "blue") {
+    @return map-get($panke-colors, $key);
+}
