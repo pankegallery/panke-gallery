@@ -8,7 +8,22 @@
         "*.js": {
             "spaceUnits": 2,
             "wordWrap": true,
-            "brackets-git.gitPath": "/usr/local/bin/git"
+            "brackets-git.gitPath": "/usr/local/bin/git",
+            "fileFilters": [
+                {
+                    "name": "Gatsby | SCSS",
+                    "patterns": [
+                        "*.map"
+                    ]
+                }
+            ],
+            "jwolfe.file-tree-exclude.list": [
+                "node_modules",
+                "bower_components",
+                ".git",
+                "dist",
+                "vendor"
+            ]
         },
         "*.scss": {
             "spaceUnits": 4,
@@ -23,27 +38,11 @@
     "language.fileExtensions": {
         "js": "jsx"
     },
-    //Settings compied from default
-	"closeTags": {
-		// An array of tags that should not be auto-closed
-		"dontCloseTags": [],
-
-		// An array of tags that when opened has a blank line
-		"indentTags": [],
-
-		// Close when / of closing tag is typed
-		"whenClosing": true,
-
-		// Close when > of opening tag is typed
-		"whenOpening": true
-	},
-    "brackets-git.commitAllShortcut": {},
-	"brackets-git.commitCurrentShortcut": {},
-    "brackets-git.pullShortcut": {},
-	"brackets-git.pushShortcut": {},
-	"brackets-git.refreshShortcut": {},
-    // Default: false
-	"brackets-git.enableAdvancedFeatures": true,
-    // The color of the indent guides. Can be any valid CSS Color value.
-	"brackets-indent-guides.guideColor": "rgba(100, 100, 100, 0.2)"
+    "closeTags": {
+        "dontCloseTags": [],
+        "indentTags": [],
+        "whenClosing": true,
+        "whenOpening": true
+    },
+    "brackets-indent-guides.guideColor": "rgba(100, 100, 100, 0.3)"
 }

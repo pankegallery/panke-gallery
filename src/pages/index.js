@@ -1,6 +1,4 @@
 import React from 'react';
-import List from '../templates/list';
-import ArchiveList from '../templates/archiveList';
 import Link from 'gatsby-link';
 
 export default function Index({
