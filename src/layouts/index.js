@@ -4,6 +4,7 @@ import {Link} from 'gatsby-link'
 import Helmet from 'react-helmet'
 import Navigation from '../components/navigation'
 import SocialIcons from '../components/social-icons'
+import ColorSwap from '../components/color-swap'
 
 import '../styles/panke.scss';
 
@@ -21,7 +22,6 @@ const TemplateWrapper = ({ children }) => {
       <Navigation />
     </div>
     <div className="container theme-blue">
-
       <header>
         <div className="row">
           <div className="col-md-4 col-sm-3 col-xs-6">
@@ -49,6 +49,8 @@ const TemplateWrapper = ({ children }) => {
         </div>
       </footer>
     </div>
+
+    <ColorSwap />
 
   </div>
 ;
