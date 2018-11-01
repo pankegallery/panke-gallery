@@ -1,4 +1,4 @@
-# Contentful Gatsby Starter Blog
+# Panke contentful on Gatsby 1
 
 Create a [Gatsby](http://gatsbyjs.com/) blog powered by [Contentful](https://www.contentful.com). This is a simplified version of the [Gatsby Contentful Starter](https://github.com/contentful-userland/gatsby-contentful-starter) which is maintained by our Community.
 
