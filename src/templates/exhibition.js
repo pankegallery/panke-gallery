@@ -3,31 +3,26 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
 
-import heroStyles from '../components/hero.module.css'
-
-class BlogPostTemplate extends React.Component {
+class ExhibitionTemplate extends React.Component {
   render() {
-    const post = get(this.props, 'data.contentfulBlogPost')
+    const exhibition = get(this.props, 'data.contentfulExhibition')
     const siteTitle = get(this.props, 'data.site.siteMetadata.title')
 
     return (
       <div style={{ background: '#fff' }}>
-        <Helmet title={`${post.title} | ${siteTitle}`} />
-        <div className={heroStyles.hero}>
-          <Img className={heroStyles.heroImage} alt={post.title} sizes={post.heroImage.sizes} />
-        </div>
+        <Helmet title={`${exhibition.title} | ${siteTitle}`} />
         <div className="wrapper">
-          <h1 className="section-headline">{post.title}</h1>
+          <h1 className="section-headline">{exhibition.title}</h1>
           <p
             style={{
               display: 'block',
             }}
           >
-            {post.publishDate}
+            {exhibition.publishDate}
           </p>
           <div
             dangerouslySetInnerHTML={{
-              __html: post.body.childMarkdownRemark.html,
+              __html: exhibition.description.childMarkdownRemark.html,
             }}
           />
         </div>
@@ -36,19 +31,19 @@ class BlogPostTemplate extends React.Component {
   }
 }
 
-export default BlogPostTemplate
+export default ExhibitionTemplate
 
 export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
-    contentfulBlogPost(slug: { eq: $slug }) {
+  query ExhibitionsBySlug($slug: String!) {
+    contentfulExhibition(slug: { eq: $slug }) {
       title
-      publishDate(formatString: "MMMM Do, YYYY")
-      heroImage {
+      startDate(formatString: "MMMM Do, YYYY")
+      featuredImage {
         sizes(maxWidth: 1180, background: "rgb:000000") {
           ...GatsbyContentfulSizes_withWebp
         }
       }
-      body {
+      description {
         childMarkdownRemark {
           html
         }
