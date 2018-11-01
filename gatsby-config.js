@@ -25,7 +25,8 @@ module.exports = {
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
-    'gatsby-plugin-sass',
+    //'gatsby-plugin-sass',
+    //'gatsby-1-config-css-modules',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,

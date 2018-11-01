@@ -6,7 +6,7 @@ import Navigation from '../components/navigation'
 import SocialIcons from '../components/social-icons'
 import ColorSwap from '../components/color-swap'
 
-import '../styles/panke.scss';
+import '../styles/panke.css';
 
 const TemplateWrapper = ({ children }) => {
   return <div>

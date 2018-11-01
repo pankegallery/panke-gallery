@@ -65,3 +65,7 @@ public
 
 # contentful config file
 .contentful.json
+
+# sass cache
+src/styles/.sass-cache/*
+src/styles/*.map
