@@ -11,7 +11,7 @@ export default ({ article }) => (
     <small>{article.startDate}</small>
     <p
       dangerouslySetInnerHTML={{
-        __html: article.description.childMarkdownRemark.html,
+        __html: article.description.childMarkdownRemark.html
       }}
     />
   </div>
