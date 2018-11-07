@@ -20,22 +20,17 @@ if (!spaceId || !accessToken) {
 }
 
 module.exports = {
-  pathPrefix: '/gatsby-contentful-starter',
+  siteMetadata: {
+    title: `panke.gallery`,
+  },
+  pathPrefix: '/panke-gallery-gatsby1',
   plugins: [
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
-    //'gatsby-plugin-sass',
-    //'gatsby-1-config-css-modules',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
-    },
-    {
-      resolve: `gatsby-plugin-sass`,
-      options: {
-        includePaths: ["absolute/path/a", "absolute/path/b"],
-      },
     }
   ],
 }

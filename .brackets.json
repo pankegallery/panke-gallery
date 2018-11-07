@@ -11,7 +11,7 @@
             "brackets-git.gitPath": "/usr/local/bin/git",
             "fileFilters": [
                 {
-                    "name": "Gatsby | SCSS",
+                    "name": "",
                     "patterns": [
                         "*.map"
                     ]
