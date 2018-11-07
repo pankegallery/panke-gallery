@@ -2,7 +2,7 @@
 
 The panke.gallery website runs on Gatsby v1, Contentful and Bootstrap.
 
-
+![Screenshot of panke.gallery website](static/screenshot-website.png)
 
 ## Edit content
 
