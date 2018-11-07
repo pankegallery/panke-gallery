@@ -69,3 +69,4 @@ public
 # sass cache
 src/styles/.sass-cache/*
 src/styles/*.map
+.sass-cache/*
