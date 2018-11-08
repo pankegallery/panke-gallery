@@ -41,6 +41,7 @@ class PankeIndex extends React.Component {
     console.log("Upcoming Exhibitions:");
     console.log(upcomingExhibitions);
 
+    {/*Create news code*/}
     var news = (
         <section className="news">
 
@@ -68,6 +69,8 @@ class PankeIndex extends React.Component {
           </div>
         </section>
     );
+
+    {/*Create current exhibitions code if there are*/}
     if (currentExhibitions.length > 0){
       var current = (
         <section className="currently">
@@ -94,6 +97,7 @@ class PankeIndex extends React.Component {
       var current;
     }
 
+    {/*Create upcoming exhibitions code if there are*/}
     if (upcomingExhibitions.length > 0){
       var upcoming = (
         <section className="upcoming">
@@ -155,11 +159,6 @@ export const pageQuery = graphql`
           featuredImage {
             sizes(maxWidth: 1000) {
              ...GatsbyContentfulSizes
-            }
-          }
-          description {
-            childMarkdownRemark {
-              html
             }
           }
           openingHours

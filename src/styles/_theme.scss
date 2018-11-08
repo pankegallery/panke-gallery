@@ -240,12 +240,16 @@ section.news::after{
     width: 40px;
 }
 
-.headline h2, .info h2, .further h2{
+.headline h1, .info h2, .further h2{
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: 0.9em;
     font-weight: 300;
     margin-bottom: 1em;
+}
+
+.headline h1{
+    font-weight: 500;
 }
 
 h3{

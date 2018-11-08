@@ -7,7 +7,7 @@ export default ({ exhibition }) => (
   <article className="exhibition-item">
     <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
     <h3>
-      <Link to={`/blog/${exhibition.slug}`}>{exhibition.title}</Link>
+      <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>
       <small>{Moment(exhibition.startDate).format('DD MMMM')}&thinsp;&ndash;&thinsp;{Moment(exhibition.endDate).format('DD MMMM YYYY')}</small>
     </h3>
   </article>
