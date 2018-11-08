@@ -6580,12 +6580,8 @@ section.past .image-wrapper {
   text-align: center;
   vertical-align: middle; }
 
-section.past article h3 {
-  margin: 1em 0 2em;
-  min-height: 4.2em; }
-
-section.currently article h3 {
-  margin: 1em 0 0; }
+section.past article h3, section.currently article h3, section.upcoming article h3 {
+  margin: 1em 0 1em; }
 
 .info p {
   font-weight: 500; }

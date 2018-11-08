@@ -2,20 +2,46 @@ import React from 'react';
 import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
-import ArticlePreview from '../components/article-preview'
 import ExhibitionPreview from '../components/exhibition-preview'
 
 
 class PankeIndex extends React.Component {
   render() {
     const siteTitle = get(this, 'props.data.site.siteMetadata.title')
+
+    {/*Get array of exhibitions*/}
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
+
+    {/*Log array of exhibitions*/}
     console.log("Posts:");
     console.log(posts);
     
-    return (
-      <main>
-        <Helmet title={siteTitle} />
+    {/*Filter array of exhibitions*/}
+    function filterCurrent(_ex) {
+      var currentDate = new Date();
+      var exhibtionStartDate = new Date(_ex.node.startDate);
+      var exhibtionEndDate = new Date(_ex.node.endDate);
+      return exhibtionEndDate > currentDate && currentDate > exhibtionStartDate;
+    }
+    const currentExhibitions = posts.filter(filterCurrent);
+
+    function filterUpcoming(_ex) {
+      var currentDate = new Date();
+      var exhibtionStartDate = new Date(_ex.node.startDate);
+      var exhibtionEndDate = new Date(_ex.node.endDate);
+      return exhibtionStartDate > currentDate;
+    }
+    const upcomingExhibitions = posts.filter(filterUpcoming);
+
+    {/*Log array of current exhibitions*/}
+    console.log("Current Exhibitions:");
+    console.log(currentExhibitions);
+
+    {/*Log array of upcoming exhibitions*/}
+    console.log("Upcoming Exhibitions:");
+    console.log(upcomingExhibitions);
+
+    var news = (
         <section className="news">
 
           <div className="row headline">
@@ -41,7 +67,9 @@ class PankeIndex extends React.Component {
             </div>
           </div>
         </section>
-
+    );
+    if (currentExhibitions.length > 0){
+      var current = (
         <section className="currently">
 
           <div className="row headline">
@@ -52,15 +80,55 @@ class PankeIndex extends React.Component {
 
           <div className="row">
             <div className="col-md-12 col-sm-8 col-xs-12">
-              {posts.map(({ node }) => {
+              {currentExhibitions.map(({ node }) => {
                 return (
                     <ExhibitionPreview key={node.slug} exhibition={node} />
                 )
               })}
             </div>
           </div>
-
         </section>
+      );
+    }
+    else{
+      var current;
+    }
+
+    if (upcomingExhibitions.length > 0){
+      var upcoming = (
+        <section className="upcoming">
+
+          <div className="row headline">
+            <div className="col-md-12 col-sm-12 col-xs-12">
+              <h2>Upcoming</h2>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-12 col-sm-8 col-xs-12">
+              {upcomingExhibitions.map(({ node }) => {
+                return (
+                    <ExhibitionPreview key={node.slug} exhibition={node} />
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      );
+    }
+    else{
+      var upcoming;
+    }
+
+    return (
+      <main>
+        <Helmet title={siteTitle} />
+
+        {news}
+
+        {current}
+
+        {upcoming}
         
       </main>
 
@@ -80,11 +148,13 @@ export const pageQuery = graphql`
         node {
           title
           slug
-          startDate(formatString: "DD MMMM YYYY")
-          endDate(formatString: "DD MMMM YYYY")
+          startDate
+          endDate
+          #startDate(formatString: "DD MMMM YYYY")
+          #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
-            sizes(maxWidth: 350, maxHeight: 196, resizingBehavior: SCALE) {
-             ...GatsbyContentfulSizes_withWebp
+            sizes(maxWidth: 1000) {
+             ...GatsbyContentfulSizes
             }
           }
           description {
