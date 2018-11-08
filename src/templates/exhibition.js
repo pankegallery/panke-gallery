@@ -22,7 +22,7 @@ class ExhibitionTemplate extends React.Component {
           </p>
           <div
             dangerouslySetInnerHTML={{
-              __html: exhibition.description.childMarkdownRemark.html,
+              __html: exhibition.subtitleShortDescription.childMarkdownRemark.html,
             }}
           />
         </div>
@@ -39,11 +39,11 @@ export const pageQuery = graphql`
       title
       startDate(formatString: "MMMM Do, YYYY")
       featuredImage {
-        sizes(maxWidth: 1180, background: "rgb:000000") {
-          ...GatsbyContentfulSizes_withWebp
+        sizes(maxWidth: 1200) {
+          ...GatsbyContentfulSizes
         }
       }
-      description {
+      subtitleShortDescription {
         childMarkdownRemark {
           html
         }
