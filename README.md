@@ -2,6 +2,8 @@
 
 The panke.gallery website runs on Gatsby v1, Contentful and Bootstrap.
 
+
+
 ## Edit content
 
 Log in to panke.gallery contentful and change content
