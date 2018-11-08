@@ -2,15 +2,13 @@ import React from 'react'
 import Link from 'gatsby-link'
 import Img from 'gatsby-image'
 
-import styles from './article-preview.module.css'
-
 export default ({ article }) => (
-  <div className={styles.preview}>
-    <Img alt="" sizes={article.heroImage.sizes} />
-    <h3 className={styles.previewTitle}>
+  <div className="preview">
+    <Img alt="FeaturedImage" sizes={article.featuredImage.sizes}/>
+    <h3 className="previewTitle">
       <Link to={`/blog/${article.slug}`}>{article.title}</Link>
     </h3>
-    <small>{article.publishDate}</small>
+    <small>{article.startDate}</small>
     <p
       dangerouslySetInnerHTML={{
         __html: article.description.childMarkdownRemark.html,
