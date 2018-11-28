@@ -66,9 +66,9 @@ class ExhibitionTemplate extends React.Component {
 
         {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
-        {exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockContentTextNode }) => {
+        {exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
-              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockContentTextNode} />
+              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
           )
         })}
 
@@ -115,13 +115,15 @@ export const pageQuery = graphql`
       }
       openingHours
       furtherInformationBlocks {
+        id
         title
-        childContentfulContentBlockContentTextNode {
-          childMarkdownRemark{
+        childContentfulContentBlockBlockContentTextNode {
+          id
+          childMarkdownRemark {
             html
           }
         }
-        id
+
       }
       exhibitionImpressionsSlideshow{
         sizes(maxWidth: 1000) {
