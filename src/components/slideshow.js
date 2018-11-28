@@ -25,9 +25,10 @@ export default ({slides, length}) => (
     {/* Wrapper for slides */}
     <div className="carousel-inner" role="listbox">
 
-      {slides.map(({sizes, description }) => {
+      {slides.map(({sizes, description}, index ) => {
+        var cls = (index === 0) ? 'carousel-item active' : 'carousel-item';
         return (
-          <div className="carousel-item active">
+          <div className={cls}>
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="image-wrapper 3-col">
                     <Img alt="FeaturedImage" sizes={{...sizes , aspectRatio: 16/9}} />
