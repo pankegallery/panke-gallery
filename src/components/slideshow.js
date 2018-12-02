@@ -5,21 +5,15 @@ import Img from 'gatsby-image'
 export default ({slides, length}) => (
   <div id="myCarousel" className="row carousel slide" data-ride="carousel">
 
-
-
     {/* Indicators */}
     <ol className="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" className="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-        <li data-target="#myCarousel" data-slide-to="4"></li>
-        <li data-target="#myCarousel" data-slide-to="5"></li>
-        <li data-target="#myCarousel" data-slide-to="6"></li>
-        <li data-target="#myCarousel" data-slide-to="7"></li>
-        <li data-target="#myCarousel" data-slide-to="8"></li>
-        <li data-target="#myCarousel" data-slide-to="9"></li>
-        <li data-target="#myCarousel" data-slide-to="9"></li>
+      {slides.map(({sizes}, index ) => {
+        var sldto = index;
+        var cls = (index === 0) ? 'active' : '';
+        return (
+          <li data-target="#myCarousel" data-slide-to={sldto} className={cls}></li>
+        )
+      })}
     </ol>
 
     {/* Wrapper for slides */}

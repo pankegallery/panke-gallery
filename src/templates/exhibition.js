@@ -4,29 +4,42 @@ import get from 'lodash/get'
 import Img from 'gatsby-image'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
+import Documentation from '../components/documentation-images'
 
 class ExhibitionTemplate extends React.Component {
   render() {
-    const exhibition = get(this.props, 'data.contentfulExhibition')
 
+    const exhibition = get(this.props, 'data.contentfulExhibition')
     console.log(exhibition);
 
     const siteTitle = get(this.props, 'data.site.siteMetadata.title')
-
     console.log(siteTitle);
 
-    console.log('Slides: ' + exhibition.exhibitionImpressionsSlideshow.length)
+    {/* ––– Slideshow or featured images ––– */}
 
-    if (exhibition.exhibitionImpressionsSlideshow.length > 0){
+    if (exhibition.exhibitionImpressionsSlideshow > 0){
       var ImageOrSlides =(
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
-      )
+      );
     }
     else{
       var ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
-      )
+      );
     }
+
+
+    {/* ––– Documentation ––– */}
+    console.log(exhibition.exhibitionDocumentationImagesBelow);
+    if (exhibition.exhibitionDocumentationImagesBelow){
+      var DocumentationImages =(
+        <Documentation images={exhibition.exhibitionDocumentationImagesBelow} />
+      );
+    }
+    else{
+      var DocumentationImages = "";
+    }
+
 
     return (
       <main>
@@ -72,24 +85,10 @@ class ExhibitionTemplate extends React.Component {
           )
         })}
 
-        {/* ---- DOKUMENTATION IMAGES ---- */}
-        <section className="further">
-          <div className="col-md-12 col-sm-8 col-xs-12">
-            <div className="image-wrapper 3col">
-                <img src="../../img/netzkunst/Overview/Manzano,Alexia_7225_WEB.jpg" alt="Zentrum der Netzkunst" width="" height="" />
-                    <p>Exhibition Overview</p>
-            </div>
-            <div className="image-wrapper 3col">
-                <img src="../../img/netzkunst/Overview/Manzano,Alexia_7236_WEB.jpg" alt="Zentrum der Netzkunst" width="" height="" />
-                    <p>Exhibition Overview </p>
-            </div>
-             <div className="image-wrapper 3col">
-                <img src="../../img/netzkunst/Overview/Manzano,Alexia_7248_WEB.jpg" alt="Zentrum der Netzkunst" width="" height="" />
-                    <p>Exhibition Overview </p>
-            </div>
-            <p>Documention - Fotos by Manzano, Alexia - </p>
-          </div>
-        </section>
+        {/* ---- DOCUMENTATION IMAGES ---- */}
+
+        {DocumentationImages}
+
       </main>
     )
   }
@@ -125,16 +124,22 @@ export const pageQuery = graphql`
         }
 
       }
+      featuredImage{
+        sizes(maxWidth: 1000) {
+          ...GatsbyContentfulSizes
+        }
+      }
       exhibitionImpressionsSlideshow{
         sizes(maxWidth: 1000) {
           ...GatsbyContentfulSizes
         }
         description
       }
-      featuredImage{
+      exhibitionDocumentationImagesBelow{
         sizes(maxWidth: 1000) {
           ...GatsbyContentfulSizes
         }
+        description
       }
     }
   }
