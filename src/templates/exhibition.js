@@ -17,7 +17,7 @@ class ExhibitionTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
-    if (exhibition.exhibitionImpressionsSlideshow > 0){
+    if (exhibition.exhibitionImpressionsSlideshow.length > 0){
       var ImageOrSlides =(
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
       );
@@ -37,7 +37,7 @@ class ExhibitionTemplate extends React.Component {
       );
     }
     else{
-      var DocumentationImages = "";
+      var DocumentationImages;
     }
 
 

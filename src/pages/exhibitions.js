@@ -151,7 +151,7 @@ export default PankeExhibitions
 export const pageQuery = graphql`
   query PankeExhibitionsQuery {
     allContentfulExhibition(
-      sort: { fields: [startDate], order: ASC }
+      sort: { fields: [startDate], order: DESC }
 
     ) {
       edges {
