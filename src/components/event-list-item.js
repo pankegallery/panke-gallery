@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'gatsby-link'
 import EventDate from '../components/event-date-time'
 
+
 export default ({ event }) => (
   <article className="news-item">
     <h3>
