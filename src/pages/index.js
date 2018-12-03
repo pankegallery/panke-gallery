@@ -3,6 +3,7 @@ import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import ExhibitionPreview from '../components/exhibition-preview'
+import ContentBlock from '../components/content-block'
 
 
 class PankeIndex extends React.Component {
@@ -11,10 +12,17 @@ class PankeIndex extends React.Component {
 
     {/*Get array of exhibitions*/}
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
+    
+    {/*Get array of news*/}
+    const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
     {/*Log array of exhibitions*/}
     console.log("Posts:");
     console.log(posts);
+    
+    {/*Log array of upcoming exhibitions*/}
+    console.log("news:");
+    console.log(newsItems);
     
     {/*Filter array of exhibitions*/}
     function filterCurrent(_ex) {
@@ -43,31 +51,29 @@ class PankeIndex extends React.Component {
 
     {/*Create news code*/}
     var news = (
-        <section className="news">
+      <section className="news">
 
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Upcoming events of panke.gallery</h2>
-            </div>
-          </div>
+        {newsItems.map(({node}) => {
+          return (
+            <article className="news-item">
+              <div className="row headline">
+                <div className="col-md-12 col-sm-12 col-xs-12">
+                  <h2>{node.title}</h2>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-12 col-sm-12 col-xs-12">
+                  {<p dangerouslySetInnerHTML={{
+                    __html: node.blockContent.childMarkdownRemark.html
+                  }} />}
+                
+                </div>
+              </div>
+            </article>
+          )
+        })}
 
-          <div className="row">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <article className="news-item">
-                <a href="https://netzkunst.berlin">
-                  <h3>berlin infrastructure</h3>
-                  <p>15:00&thinsp;-&thinsp;17:00 workshop<br />
-                  Nadja Buttendorf<br />
-                  17:00&thinsp;-&thinsp;19:00 panel<br />
-                  Diana MacCarty, Pit Schulz (Moderation: Sakrowski)<br />
-                  19:00&thinsp;-&thinsp;21:00 discussion<br />
-                  Joachim Blank, tba</p>
-                  <p className="meta">27 October 2018</p>
-                </a>
-              </article>
-            </div>
-          </div>
-        </section>
+      </section>
     );
 
     {/*Create current exhibitions code if there are*/}
@@ -163,6 +169,21 @@ export const pageQuery = graphql`
           }
           openingHours
           subtitleShortDescription {
+            childMarkdownRemark {
+              html
+            }
+          }
+        }
+      }
+    }
+    allContentfulContentBlock (filter: {page: {eq: "News"}}, sort: { fields: [createdAt], order: ASC}){
+      edges {
+        node {
+          id
+          title
+          page
+          slug
+          blockContent {
             childMarkdownRemark {
               html
             }
