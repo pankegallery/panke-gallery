@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import Helmet from 'react-helmet'
 import ContentBlock from '../components/content-block'
 
-class PankeContact extends React.Component{
+class PankeInfo extends React.Component{
   render() {
     {/*Get array of content blocks*/}
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
@@ -25,7 +25,7 @@ class PankeContact extends React.Component{
   }
 }
 
-export default PankeContact;
+export default PankeInfo;
 
 
 export const pageQuery = graphql`
