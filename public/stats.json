@@ -1,56 +1,98 @@
 {
   "assetsByChunkName": {
+    "path---exhibition-zentrum-netzkunst": [
+      "path---exhibition-zentrum-netzkunst-b36d7a48a39ba21e017b.js",
+      "path---exhibition-zentrum-netzkunst-b36d7a48a39ba21e017b.js.map"
+    ],
     "component---src-pages-index-js": [
-      "component---src-pages-index-js-ee4f1676e0bab5c0e3a4.js",
-      "component---src-pages-index-js-ee4f1676e0bab5c0e3a4.js.map"
+      "component---src-pages-index-js-934ac1387810508c6acb.js",
+      "component---src-pages-index-js-934ac1387810508c6acb.js.map"
+    ],
+    "path---events": [
+      "path---events-071c9fb619e521956805.js",
+      "path---events-071c9fb619e521956805.js.map"
     ],
     "path---blog": [
-      "path---blog-013fcfc6c5e4761d9469.js",
-      "path---blog-013fcfc6c5e4761d9469.js.map"
+      "path---blog-a0e39f21c11f6a62c5ab.js",
+      "path---blog-a0e39f21c11f6a62c5ab.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
       "path----557518bd178906f8d58a.js.map"
     ],
-    "path---blog-automate-with-webhooks": [
-      "path---blog-automate-with-webhooks-c1132e507bd4189f2050.js",
-      "path---blog-automate-with-webhooks-c1132e507bd4189f2050.js.map"
+    "path---info": [
+      "path---info-7cfb052e71af4b72788e.js",
+      "path---info-7cfb052e71af4b72788e.js.map"
     ],
-    "component---src-templates-blog-post-js": [
-      "component---src-templates-blog-post-js-54ed0a12f5ff671a4ad0.js",
-      "component---src-templates-blog-post-js-54ed0a12f5ff671a4ad0.js.map"
+    "component---src-pages-contact-js": [
+      "component---src-pages-contact-js-6460c2d98f0d5a723e1c.js",
+      "component---src-pages-contact-js-6460c2d98f0d5a723e1c.js.map"
+    ],
+    "path---exhibitions": [
+      "path---exhibitions-8b0a0b6b5514dd3449e7.js",
+      "path---exhibitions-8b0a0b6b5514dd3449e7.js.map"
     ],
     "component---src-layouts-index-js": [
-      "component---src-layouts-index-js-2b4d8dab8af461f4b30e.js",
-      "component---src-layouts-index-js-2b4d8dab8af461f4b30e.js.map"
+      "component---src-layouts-index-js-cc1e6282fe1381440056.js",
+      "component---src-layouts-index-js-cc1e6282fe1381440056.js.map"
     ],
-    "path---blog-hello-world": [
-      "path---blog-hello-world-0b8ab048f95e8345c44c.js",
-      "path---blog-hello-world-0b8ab048f95e8345c44c.js.map"
+    "component---src-templates-exhibition-js": [
+      "component---src-templates-exhibition-js-005526692a62c5ee9747.js",
+      "component---src-templates-exhibition-js-005526692a62c5ee9747.js.map"
     ],
     "path---index": [
-      "path---index-ea0995b53a5fce857866.js",
-      "path---index-ea0995b53a5fce857866.js.map"
+      "path---index-02595b02dcc4fc6f8dba.js",
+      "path---index-02595b02dcc4fc6f8dba.js.map"
+    ],
+    "component---src-pages-exhibitions-js": [
+      "component---src-pages-exhibitions-js-01fa2432563b8a24b34b.js",
+      "component---src-pages-exhibitions-js-01fa2432563b8a24b34b.js.map"
     ],
     "commons": [
-      "commons-ba4cb63d6a7a0250cd9f.js",
-      "build-js-styles.css",
-      "commons-ba4cb63d6a7a0250cd9f.js.map",
-      "build-js-styles.css.map"
+      "commons-c2a883f2275f06e0744c.js",
+      "commons-c2a883f2275f06e0744c.js.map"
     ],
-    "path---blog-static-sites-are-great": [
-      "path---blog-static-sites-are-great-90db114dfe773eb46225.js",
-      "path---blog-static-sites-are-great-90db114dfe773eb46225.js.map"
+    "path---contact": [
+      "path---contact-1df56713fb3733b382d9.js",
+      "path---contact-1df56713fb3733b382d9.js.map"
+    ],
+    "path---exhibition-medienkoerper": [
+      "path---exhibition-medienkoerper-58053c110b57f5507889.js",
+      "path---exhibition-medienkoerper-58053c110b57f5507889.js.map"
+    ],
+    "path---exhibition-next-zentrum-netzkunst": [
+      "path---exhibition-next-zentrum-netzkunst-ec85e89c2f50c98780f0.js",
+      "path---exhibition-next-zentrum-netzkunst-ec85e89c2f50c98780f0.js.map"
+    ],
+    "path---event-cryptorave": [
+      "path---event-cryptorave-94fceb0a3de8e909f4af.js",
+      "path---event-cryptorave-94fceb0a3de8e909f4af.js.map"
     ],
     "component---src-pages-blog-js": [
-      "component---src-pages-blog-js-80ab4094666ff15e2c6b.js",
-      "component---src-pages-blog-js-80ab4094666ff15e2c6b.js.map"
+      "component---src-pages-blog-js-8c8d9b451caeb722a7dd.js",
+      "component---src-pages-blog-js-8c8d9b451caeb722a7dd.js.map"
+    ],
+    "component---src-pages-info-js": [
+      "component---src-pages-info-js-6f6f83156d9ee761b939.js",
+      "component---src-pages-info-js-6f6f83156d9ee761b939.js.map"
+    ],
+    "component---src-templates-event-js": [
+      "component---src-templates-event-js-4af0d7e3d0060cf84559.js",
+      "component---src-templates-event-js-4af0d7e3d0060cf84559.js.map"
     ],
     "app": [
-      "app-a1aa5a03a0fbc138e65f.js",
+      "app-b6f01fbfeba040fa91fd.js",
       "build-js-styles.css",
-      "app-a1aa5a03a0fbc138e65f.js.map",
+      "app-b6f01fbfeba040fa91fd.js.map",
       "build-js-styles.css.map"
+    ],
+    "component---src-pages-events-js": [
+      "component---src-pages-events-js-cc86c1154ab8d0eed941.js",
+      "component---src-pages-events-js-cc86c1154ab8d0eed941.js.map"
+    ],
+    "path---event-e-games-6": [
+      "path---event-e-games-6-2c5daf8fa5c7759e8465.js",
+      "path---event-e-games-6-2c5daf8fa5c7759e8465.js.map"
     ]
   }
 }
