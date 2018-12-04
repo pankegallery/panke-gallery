@@ -12,10 +12,6 @@
       "path---events-071c9fb619e521956805.js",
       "path---events-071c9fb619e521956805.js.map"
     ],
-    "path---blog": [
-      "path---blog-a0e39f21c11f6a62c5ab.js",
-      "path---blog-a0e39f21c11f6a62c5ab.js.map"
-    ],
     "path---": [
       "path----557518bd178906f8d58a.js",
       "path----557518bd178906f8d58a.js.map"
@@ -68,22 +64,18 @@
       "path---event-cryptorave-94fceb0a3de8e909f4af.js",
       "path---event-cryptorave-94fceb0a3de8e909f4af.js.map"
     ],
-    "component---src-pages-blog-js": [
-      "component---src-pages-blog-js-8c8d9b451caeb722a7dd.js",
-      "component---src-pages-blog-js-8c8d9b451caeb722a7dd.js.map"
-    ],
     "component---src-pages-info-js": [
-      "component---src-pages-info-js-6f6f83156d9ee761b939.js",
-      "component---src-pages-info-js-6f6f83156d9ee761b939.js.map"
+      "component---src-pages-info-js-8f8d7c696bf4141ed133.js",
+      "component---src-pages-info-js-8f8d7c696bf4141ed133.js.map"
     ],
     "component---src-templates-event-js": [
       "component---src-templates-event-js-4af0d7e3d0060cf84559.js",
       "component---src-templates-event-js-4af0d7e3d0060cf84559.js.map"
     ],
     "app": [
-      "app-b6f01fbfeba040fa91fd.js",
+      "app-33a28688bd4e6ab4108f.js",
       "build-js-styles.css",
-      "app-b6f01fbfeba040fa91fd.js.map",
+      "app-33a28688bd4e6ab4108f.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-pages-events-js": [
