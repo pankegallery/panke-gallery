@@ -112,7 +112,7 @@ header nav{
     padding: 1em 0 0;
     display: inline-block;
 
-    #nav-main {
+    &#nav-main {
         float: left;
 
         ul{
@@ -125,7 +125,7 @@ header nav{
         }
     }
 
-    #nav-satellite ul{
+    &#nav-satellite ul{
         margin: 0 0 0 10px;
         padding: 0;
     }
