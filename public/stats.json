@@ -24,9 +24,13 @@
       "component---src-pages-contact-js-6460c2d98f0d5a723e1c.js",
       "component---src-pages-contact-js-6460c2d98f0d5a723e1c.js.map"
     ],
+    "path---edition": [
+      "path---edition-f62a670d917122bfb0f6.js",
+      "path---edition-f62a670d917122bfb0f6.js.map"
+    ],
     "path---exhibitions": [
-      "path---exhibitions-8b0a0b6b5514dd3449e7.js",
-      "path---exhibitions-8b0a0b6b5514dd3449e7.js.map"
+      "path---exhibitions-590a8807d2bd2399abcc.js",
+      "path---exhibitions-590a8807d2bd2399abcc.js.map"
     ],
     "component---src-layouts-index-js": [
       "component---src-layouts-index-js-cc1e6282fe1381440056.js",
@@ -37,8 +41,8 @@
       "component---src-templates-exhibition-js-9c03ce8f3eefa185c2c0.js.map"
     ],
     "path---index": [
-      "path---index-02595b02dcc4fc6f8dba.js",
-      "path---index-02595b02dcc4fc6f8dba.js.map"
+      "path---index-8186e5d4b66cc697aff6.js",
+      "path---index-8186e5d4b66cc697aff6.js.map"
     ],
     "component---src-pages-exhibitions-js": [
       "component---src-pages-exhibitions-js-01fa2432563b8a24b34b.js",
@@ -56,10 +60,6 @@
       "path---exhibition-medienkoerper-58053c110b57f5507889.js",
       "path---exhibition-medienkoerper-58053c110b57f5507889.js.map"
     ],
-    "path---exhibition-next-zentrum-netzkunst": [
-      "path---exhibition-next-zentrum-netzkunst-ec85e89c2f50c98780f0.js",
-      "path---exhibition-next-zentrum-netzkunst-ec85e89c2f50c98780f0.js.map"
-    ],
     "path---event-cryptorave": [
       "path---event-cryptorave-94fceb0a3de8e909f4af.js",
       "path---event-cryptorave-94fceb0a3de8e909f4af.js.map"
@@ -73,14 +73,18 @@
       "component---src-templates-event-js-4af0d7e3d0060cf84559.js.map"
     ],
     "app": [
-      "app-33a28688bd4e6ab4108f.js",
+      "app-7c5c019adfa8527b154a.js",
       "build-js-styles.css",
-      "app-33a28688bd4e6ab4108f.js.map",
+      "app-7c5c019adfa8527b154a.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-pages-events-js": [
       "component---src-pages-events-js-cc86c1154ab8d0eed941.js",
       "component---src-pages-events-js-cc86c1154ab8d0eed941.js.map"
+    ],
+    "component---src-pages-edition-js": [
+      "component---src-pages-edition-js-f0742c61928e699df2d0.js",
+      "component---src-pages-edition-js-f0742c61928e699df2d0.js.map"
     ],
     "path---event-e-games-6": [
       "path---event-e-games-6-2c5daf8fa5c7759e8465.js",
