@@ -4,6 +4,9 @@ import get from 'lodash/get'
 import Img from 'gatsby-image'
 import ContentBlock from '../components/content-block'
 import EventDate from '../components/event-date-time'
+import Slideshow from '../components/slideshow'
+import Documentation from '../components/documentation-images'
+
 
 class EventTemplate extends React.Component {
   render() {
@@ -11,8 +14,29 @@ class EventTemplate extends React.Component {
     const event = get(this.props, 'data.contentfulEvent')
     console.log(event);
 
-    const siteTitle = get(this.props, 'data.site.siteMetadata.title')
-    console.log(siteTitle);
+    {/* ––– Slideshow or featured images ––– */}
+
+    if (event.eventImpressionsSlideshow != null){
+      var ImageOrSlides =(
+        <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
+      );
+    }
+    else{
+      var ImageOrSlides =(
+        <Img alt="FeaturedImage" sizes={{...event.featuredImage.sizes , aspectRatio: 16/9}} />
+      );
+    }
+
+    {/* ––– Documentation ––– */}
+    console.log(event.eventDocumentationImagesBelow);
+    if (event.eventDocumentationImagesBelow){
+      var DocumentationImages =(
+        <Documentation images={event.eventDocumentationImagesBelow} />
+      );
+    }
+    else{
+      var DocumentationImages;
+    }
 
     return (
       <main>
@@ -29,7 +53,7 @@ class EventTemplate extends React.Component {
 
               {/* ---- FEATURED IMAGE ---- */}
 
-              <Img alt="FeaturedImage" sizes={{...event.featuredImage.sizes , aspectRatio: 16/9}} />
+              {ImageOrSlides}
 
             </div>
           </div>
@@ -57,6 +81,10 @@ class EventTemplate extends React.Component {
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
           )
         })}
+
+        {/* ---- DOCUMENTATION IMAGES ---- */}
+
+        {DocumentationImages}
 
       </main>
     )
@@ -97,6 +125,18 @@ export const pageQuery = graphql`
         sizes(maxWidth: 1000) {
           ...GatsbyContentfulSizes
         }
+      }
+      eventImpressionsSlideshow{
+        sizes(maxWidth: 1000) {
+          ...GatsbyContentfulSizes
+        }
+        description
+      }
+      eventDocumentationImagesBelow{
+        sizes(maxWidth: 1000) {
+          ...GatsbyContentfulSizes
+        }
+        description
       }
     }
   }
