@@ -21,7 +21,7 @@ if (!spaceId || !accessToken) {
 
 module.exports = {
   siteMetadata: {
-    title: `panke.gallery`,
+    title: 'panke.gallery',
   },
   pathPrefix: '/panke-gallery-gatsby1',
   plugins: [
