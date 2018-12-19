@@ -45,6 +45,15 @@ class PankeContact extends React.Component{
     
     return(
       <main>
+        <Helmet
+          title="Contact"
+          meta={[
+            {
+              name: 'description',
+              content: 'Opening hours, contact information and guidance how to reach panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
+            }
+          ]}
+        />
         <section className="further">  {/* Contact info and opening times*/}
           <div className="row">
             <div className="col-sm-4 col-xs-12"> 

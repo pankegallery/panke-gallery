@@ -14,7 +14,8 @@ const TemplateWrapper = ({ children }) => {
   return (
     <div>
       <Helmet
-        title="panke.gallery"
+        titleTemplate="%s · panke.gallery"
+        title="Home"
         meta={[
           { name: 'description', content: 'panke.gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture, especially in the recent history of Berlin. Its program of exhibitions and events takes place in a gallery space within the premises of panke.club.' },
           { name: 'keywords', content: 'net art, Netzkunst, Galerlie, gallery, Berlin, Wedding, Sakrowski, transmediale, Kultur' },

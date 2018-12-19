@@ -14,6 +14,16 @@ class PankeEdition extends React.Component{
 
     return(
       <main>
+        <Helmet
+          title="Edition"
+          meta={[
+            {
+              name: 'description',
+              content: 'The edition of panke.gallery is published as a limited edition of 100. It is a series of artist’s editions and is made up of a designed cover and an inlay with the download code for the artwork. The design of the editions is intended emphasize its character as a collectible digital object and illustrate the work of the featured artist.'
+            }
+          ]}
+        />
+
         {blocks.map(({node}) => {
           return (
               <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />

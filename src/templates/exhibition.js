@@ -43,7 +43,7 @@ class ExhibitionTemplate extends React.Component {
 
     return (
       <main>
-        <Helmet title={`${exhibition.title} | ${siteTitle}`} />
+        <Helmet title={`${exhibition.title}`} />
         <section className="head">
           <div className="row headline">
             <div className="col-md-12 col-sm-12 col-xs-12">

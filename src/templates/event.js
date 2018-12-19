@@ -16,7 +16,7 @@ class EventTemplate extends React.Component {
 
     return (
       <main>
-        <Helmet title={`${event.title} | ${siteTitle}`} />
+        <Helmet title={`${event.title}`} />
         <section className="head">
           <div className="row headline">
             <div className="col-md-12 col-sm-12 col-xs-12">

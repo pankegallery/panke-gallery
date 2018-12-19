@@ -6,7 +6,6 @@ import EventListItem from '../components/event-list-item'
 
 class PankeEvents extends React.Component {
   render() {
-    const siteTitle = get(this, 'props.data.site.siteMetadata.title')
 
     {/*Get array of exhibitions*/}
     const posts = get(this, 'props.data.allContentfulEvent.edges')
@@ -92,7 +91,15 @@ class PankeEvents extends React.Component {
 
     return (
       <main>
-        <Helmet title={siteTitle} />
+        <Helmet
+          title="Events"
+          meta={[
+            {
+              name: 'description',
+              content: 'Upcoming and past events of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
+            }
+          ]}
+        />
 
         {upcoming}
 
