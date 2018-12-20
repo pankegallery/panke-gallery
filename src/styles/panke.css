@@ -6586,6 +6586,9 @@ section.past .image-wrapper {
 section.past article h3, section.currently article h3, section.upcoming article h3 {
   margin: 1em 0 1em; }
 
+.further p > img {
+  max-width: 100%; }
+
 .info p {
   font-weight: 500; }
 

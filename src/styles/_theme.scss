@@ -332,6 +332,11 @@ section.past, section.currently, section.upcoming{
     }
 }
 
+// Fixing width of images that come from further content blocks
+.further p > img {
+    max-width: 100%;
+}
+
 .info p{
     font-weight: 500;
 }
