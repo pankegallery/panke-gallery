@@ -28,7 +28,6 @@ class EventTemplate extends React.Component {
     }
 
     {/* ––– Documentation ––– */}
-    console.log(event.eventDocumentationImagesBelow);
     if (event.eventDocumentationImagesBelow){
       var DocumentationImages =(
         <Documentation images={event.eventDocumentationImagesBelow} />
@@ -37,6 +36,40 @@ class EventTemplate extends React.Component {
     else{
       var DocumentationImages;
     }
+
+    {/* ––– Event date and fee ––– */}
+    if (event.entryfee){
+      var EventDateAndEntryFee =(
+        <p className="meta"><EventDate event={event} /> | {event.entryfee}</p>
+      );
+    }
+    else{
+      var EventDateAndEntryFee=(
+        <p className="meta"><EventDate event={event} /></p>
+      );
+    }
+
+
+    {/* ––– Further Content Blocks ––– */}
+
+    if (event.furtherInformationBlocks){
+      var FurtherContentBlocks =(
+        event.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
+          return (
+              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
+          )
+        })
+      );
+    }
+    else{
+      var FurtherContentBlocks;
+    }
+
+   {/*==========================================================================
+
+                                    OUTPUT
+
+    ==========================================================================*/}
 
     return (
       <main>
@@ -49,7 +82,7 @@ class EventTemplate extends React.Component {
               <p dangerouslySetInnerHTML={{
                   __html: event.subtitleShortDescription.childMarkdownRemark.html
                 }} />
-              <p className="meta"><EventDate event={event} /> | {event.entryfee}</p>
+              {EventDateAndEntryFee}
 
               {/* ---- FEATURED IMAGE ---- */}
 
@@ -76,11 +109,7 @@ class EventTemplate extends React.Component {
 
         {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
-        {event.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
-          return (
-              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
-          )
-        })}
+        {FurtherContentBlocks}
 
         {/* ---- DOCUMENTATION IMAGES ---- */}
 
@@ -91,7 +120,16 @@ class EventTemplate extends React.Component {
   }
 }
 
-export default EventTemplate
+export default EventTemplate;
+
+
+
+{/*=========================================================================
+
+                                QUERY
+
+==========================================================================*/}
+
 
 export const pageQuery = graphql`
   query EventBySlug($slug: String!) {

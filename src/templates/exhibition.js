@@ -9,9 +9,6 @@ import Documentation from '../components/documentation-images'
 class ExhibitionTemplate extends React.Component {
   render() {
 
-    {/*=======================================================================
-    =======================================================================*/}
-
     const exhibition = get(this.props, 'data.contentfulExhibition')
     console.log(exhibition);
 
