@@ -70,7 +70,7 @@ class ExhibitionTemplate extends React.Component {
             <div className="col-md-12 col-sm-12 col-xs-12">
 
               <h1>{exhibition.title}</h1>
-              <p dangerouslySetInnerHTML={{
+              <div className="subtitle" dangerouslySetInnerHTML={{
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               <p className="meta">{exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate} | {exhibition.openingHours}</p>
