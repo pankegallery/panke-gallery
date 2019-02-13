@@ -129,6 +129,12 @@ class PankeExhibitions extends React.Component {
       var past;
     }
 
+    {/*==========================================================================
+
+                                    OUTPUT
+
+    ==========================================================================*/}
+
     return (
       <main>
         <Helmet
@@ -153,7 +159,14 @@ class PankeExhibitions extends React.Component {
   }
 }
 
-export default PankeExhibitions
+export default PankeExhibitions;
+
+
+{/*=========================================================================
+
+                                QUERY
+
+==========================================================================*/}
 
 export const pageQuery = graphql`
   query PankeExhibitionsQuery {

@@ -5,7 +5,9 @@ import Moment from 'moment'
 
 export default ({ exhibition }) => (
   <article className="exhibition-item">
-    <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
+    <Link to={`/exhibition/${exhibition.slug}`}>
+      <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
+    </Link>
     <h3>
       <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>
       <small>{Moment(exhibition.startDate).format('DD MMMM')}&thinsp;&ndash;&thinsp;{Moment(exhibition.endDate).format('DD MMMM YYYY')}</small>

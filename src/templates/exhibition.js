@@ -9,6 +9,9 @@ import Documentation from '../components/documentation-images'
 class ExhibitionTemplate extends React.Component {
   render() {
 
+    {/*=======================================================================
+    =======================================================================*/}
+
     const exhibition = get(this.props, 'data.contentfulExhibition')
     console.log(exhibition);
 
@@ -30,6 +33,7 @@ class ExhibitionTemplate extends React.Component {
 
 
     {/* ––– Documentation ––– */}
+
     console.log(exhibition.exhibitionDocumentationImagesBelow);
     if (exhibition.exhibitionDocumentationImagesBelow){
       var DocumentationImages =(
@@ -40,6 +44,26 @@ class ExhibitionTemplate extends React.Component {
       var DocumentationImages;
     }
 
+    {/* ––– Further Content Blocks ––– */}
+
+    if (exhibition.furtherInformationBlocks){
+      var FurtherContentBlocks =(
+        exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
+          return (
+              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
+          )
+        })
+      );
+    }
+    else{
+      var FurtherContentBlocks;
+    }
+
+    {/*==========================================================================
+
+                                    OUTPUT
+
+    ==========================================================================*/}
 
     return (
       <main>
@@ -79,11 +103,7 @@ class ExhibitionTemplate extends React.Component {
 
         {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
-        {exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
-          return (
-              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
-          )
-        })}
+        {FurtherContentBlocks}
 
         {/* ---- DOCUMENTATION IMAGES ---- */}
 
@@ -94,7 +114,14 @@ class ExhibitionTemplate extends React.Component {
   }
 }
 
-export default ExhibitionTemplate
+export default ExhibitionTemplate;
+
+
+{/*=========================================================================
+
+                                QUERY
+
+==========================================================================*/}
 
 export const pageQuery = graphql`
   query ExhibitionsBySlug($slug: String!) {
