@@ -4,7 +4,7 @@ import Moment from 'moment'
 class EventDateComp extends React.Component {
   render() {
     var thisevent = this.props.event;
-    var eventDate = Moment(thisevent.date).format('DD MMMM');
+    var eventDate = Moment(thisevent.date).format('DD MMMM YYYY');
     var eventTime = Moment(thisevent.date).format('HH:mm')
     console.log('open' + thisevent.openEnd)
     if (thisevent.openEnd) {
