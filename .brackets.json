@@ -28,7 +28,7 @@
         },
         "*.scss": {
             "spaceUnits": 4,
-            "brackets-git.gitPath": "git"
+            "brackets-git.gitPath": "/usr/local/bin/git"
         },
         "*.css": {
             "spaceUnits": 4

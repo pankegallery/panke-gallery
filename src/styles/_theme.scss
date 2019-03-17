@@ -326,11 +326,16 @@ section.past .image-wrapper{
 }
 
 
-section.past, section.currently, section.upcoming{
-     article h3{
-        margin: 1em 0 1em;
+section.past, section.currently, section.upcoming, section.editions{
+    article{
+        margin-bottom: 2em;
+
+        h3{
+            margin: 1em 0 1em;
+        }
     }
 }
+
 
 // Fixing width of images that come from further content blocks
 .further p > img {

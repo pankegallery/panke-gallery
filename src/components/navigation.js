@@ -14,7 +14,7 @@ export default () => (
 
     <nav id="nav-satellite">
       <ul>
-        <li><Link to="/edition">Edition</Link></li>
+        <li><Link to="/editions">Edition</Link></li>
         <li><a href="http://router.gallery" target="_blank">Router</a></li>
       </ul>
     </nav>

@@ -2,15 +2,24 @@ import React from 'react';
 import get from 'lodash/get'
 import Helmet from 'react-helmet'
 import ContentBlock from '../components/content-block'
+import EditionListItem from '../components/edition-list-item'
+
 
 class PankeEdition extends React.Component{
   render() {
     {/*Get array of content blocks*/}
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
-    {/*Log array of Blocks*/}
-    console.log('Blocks:');
+    {/*Get array of editions*/}
+    const posts = get(this, 'props.data.allContentfulEdition.edges');
+
+    {/*Log array of Content Blocks*/}
+    console.log("Blocks:");
     console.log(blocks);
+
+    {/*Log array of Editions*/}
+    console.log("Editions:");
+    console.log(posts);
 
     return(
       <main>
@@ -30,6 +39,23 @@ class PankeEdition extends React.Component{
           )
         })}
 
+        <section className="editions further">
+
+          <div className="row">
+            <div className="col-md-4 col-sm-12 col-xs-12">
+              <h2>Previous editions</h2>
+            </div>
+
+            <div className="col-md-8 col-sm-12 col-xs-12">
+              {posts.map(({ node }) => {
+                return (
+                    <EditionListItem key={node.slug} edition={node} />
+                )
+              })}
+            </div>
+          </div>
+        </section>
+
       </main>
     );
   }
@@ -48,6 +74,27 @@ export const pageQuery = graphql`
           page
           slug
           blockContent {
+            childMarkdownRemark {
+              html
+            }
+          }
+        }
+      }
+    }
+    allContentfulEdition(
+      sort: { fields: [slug], order: DESC }
+
+    ) {
+      edges {
+        node {
+          title
+          slug
+          featuredImage {
+            sizes(maxWidth: 1000) {
+             ...GatsbyContentfulSizes
+            }
+          }
+          subtitleShortDescription {
             childMarkdownRemark {
               html
             }

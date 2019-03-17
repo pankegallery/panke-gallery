@@ -6583,8 +6583,10 @@ section.past .image-wrapper {
   text-align: center;
   vertical-align: middle; }
 
-section.past article h3, section.currently article h3, section.upcoming article h3 {
-  margin: 1em 0 1em; }
+section.past article, section.currently article, section.upcoming article, section.editions article {
+  margin-bottom: 2em; }
+  section.past article h3, section.currently article h3, section.upcoming article h3, section.editions article h3 {
+    margin: 1em 0 1em; }
 
 .further p > img {
   max-width: 100%; }
@@ -6639,7 +6641,7 @@ footer .social a.twitter:hover {
 
 #color-swap {
   left: 20px;
-  position: absolute;
+  position: fixed;
   top: 80%; }
 
 #color-swap > div {

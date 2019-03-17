@@ -7,6 +7,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
   return new Promise((resolve, reject) => {
     const exhibition = path.resolve('./src/templates/exhibition.js');
     const event = path.resolve('./src/templates/event.js');
+    const edition = path.resolve('./src/templates/edition.js');
     resolve(
       graphql(
         `
@@ -27,6 +28,14 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
                 }
               }
             }
+            allContentfulEdition {
+              edges {
+                node {
+                  title
+                  slug
+                }
+              }
+            }
           }`
       ).then(result => {
         if (result.errors) {
@@ -36,6 +45,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 
         const exhibitions = result.data.allContentfulExhibition.edges;
         const events = result.data.allContentfulEvent.edges;
+        const editions = result.data.allContentfulEdition.edges;
 
         exhibitions.forEach((entry, index) => {
           createPage({
@@ -51,6 +61,16 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
           createPage({
             path: `/event/${entry.node.slug}/`,
             component: event,
+            context: {
+              slug: entry.node.slug
+            },
+          })
+        })
+
+        editions.forEach((entry, index) => {
+          createPage({
+            path: `/edition/${entry.node.slug}/`,
+            component: edition,
             context: {
               slug: entry.node.slug
             },
