@@ -42,5 +42,10 @@
   },
   "devDependencies": {
     "gatsby-plugin-sass": "^2.0.2"
+  },
+  "repository" :
+      { "type" : "git"
+      , "url" : "https://github.com/crosssenses/panke-gallery"
   }
 }
+

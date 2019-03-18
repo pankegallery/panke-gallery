@@ -35,7 +35,7 @@
         }
     },
     "wordWrap": false,
-    "spaceUnits": 4,
+    "spaceUnits": 2,
     "language.fileExtensions": {
         "js": "jsx"
     },

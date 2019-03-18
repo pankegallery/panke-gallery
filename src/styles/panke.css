@@ -6587,6 +6587,10 @@ section.past article, section.currently article, section.upcoming article, secti
   margin-bottom: 2em; }
   section.past article h3, section.currently article h3, section.upcoming article h3, section.editions article h3 {
     margin: 1em 0 1em; }
+section.past .news-item h3, section.currently .news-item h3, section.upcoming .news-item h3, section.editions .news-item h3 {
+  margin-bottom: 0; }
+section.past .news-item p, section.currently .news-item p, section.upcoming .news-item p, section.editions .news-item p {
+  margin-bottom: 0.5em; }
 
 .further p > img {
   max-width: 100%; }

@@ -334,6 +334,15 @@ section.past, section.currently, section.upcoming, section.editions{
             margin: 1em 0 1em;
         }
     }
+
+    .news-item{
+        h3{
+            margin-bottom: 0;
+        }
+        p{
+            margin-bottom: 0.5em;
+        }
+    }
 }
 
 
