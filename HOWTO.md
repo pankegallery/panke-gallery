@@ -44,3 +44,12 @@ $ checkout YYY
 $ merge --no-ff XXX
 
 ```
+
+Set tags after commit and push tags
+
+```
+$ git tag v1.0
+
+$ git push --tags
+````
+
