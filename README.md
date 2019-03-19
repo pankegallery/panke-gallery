@@ -1,6 +1,7 @@
+
 # panke.gallery website
 
-The panke.gallery website runs on Gatsby v1, Contentful and Bootstrap.
+The panke.gallery website runs on Gatsby v1, Contentful and Bootstrap and is rendered by Netlify. [![Netlify Status](https://api.netlify.com/api/v1/badges/e8f56c74-c878-4c4b-8b4f-19fd815fbb4a/deploy-status)](https://app.netlify.com/sites/pankegallery/deploys)
 
 ![Screenshot of panke.gallery website](static/screenshot-website.png)
 
