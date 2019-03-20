@@ -8,7 +8,7 @@
 
 Run the project locally with live reload in development mode.
 
-`$ npm run build`
+`$ npm run build` oder `$ gatsby build`
 
 Run a production build into `./public`. The result is ready to be put on any static hosting you prefer.
 
