@@ -24,6 +24,8 @@ Couldn't get SASS running with Gatsby v1. Watch creates css in Terminal independ
 
 ## Git notebook
 
+Good tutorial: https://nvie.com/posts/a-successful-git-branching-model/
+
 ### Create branches
 
 #### In Terminal:
