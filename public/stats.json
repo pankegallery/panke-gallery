@@ -5,8 +5,8 @@
       "path---exhibition-zentrum-netzkunst-b36d7a48a39ba21e017b.js.map"
     ],
     "path---exhibition-theinternetexpress": [
-      "path---exhibition-theinternetexpress-02958ab49814c78330a2.js",
-      "path---exhibition-theinternetexpress-02958ab49814c78330a2.js.map"
+      "path---exhibition-theinternetexpress-34fc8d012bd709a88656.js",
+      "path---exhibition-theinternetexpress-34fc8d012bd709a88656.js.map"
     ],
     "path---event-performance": [
       "path---event-performance-60576d627a43bdaa02a6.js",
@@ -25,16 +25,20 @@
       "path---event-e-games-2-a68e9dfa430381e78860.js.map"
     ],
     "component---src-pages-index-js": [
-      "component---src-pages-index-js-01273841f77465af30af.js",
-      "component---src-pages-index-js-01273841f77465af30af.js.map"
+      "component---src-pages-index-js-adb0c6164b76f4a8ea3f.js",
+      "component---src-pages-index-js-adb0c6164b76f4a8ea3f.js.map"
     ],
     "path---events": [
-      "path---events-59f3507e1f1dffcf30a0.js",
-      "path---events-59f3507e1f1dffcf30a0.js.map"
+      "path---events-b92e35a53ef0b96f1ea1.js",
+      "path---events-b92e35a53ef0b96f1ea1.js.map"
     ],
     "path---event-lounch": [
       "path---event-lounch-e284a95604af9c035bb0.js",
       "path---event-lounch-e284a95604af9c035bb0.js.map"
+    ],
+    "path---exhibition-netart": [
+      "path---exhibition-netart-bcf972fdeb3129ece0d7.js",
+      "path---exhibition-netart-bcf972fdeb3129ece0d7.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
@@ -64,9 +68,13 @@
       "path---event-how-to-beat-everyone-in-your-office-at-table-tennis-c2ad0527173ac735170f.js",
       "path---event-how-to-beat-everyone-in-your-office-at-table-tennis-c2ad0527173ac735170f.js.map"
     ],
+    "path---exhibition-personal-color-correction": [
+      "path---exhibition-personal-color-correction-48b1391854acbb89e27d.js",
+      "path---exhibition-personal-color-correction-48b1391854acbb89e27d.js.map"
+    ],
     "path---exhibitions": [
-      "path---exhibitions-05c3b3b0cecaf1d9933a.js",
-      "path---exhibitions-05c3b3b0cecaf1d9933a.js.map"
+      "path---exhibitions-af1541e03dfc65d62eff.js",
+      "path---exhibitions-af1541e03dfc65d62eff.js.map"
     ],
     "component---src-layouts-index-js": [
       "component---src-layouts-index-js-a1803ccadd0fc2c9270d.js",
@@ -101,16 +109,20 @@
       "component---src-templates-edition-js-b4a75c2add6d4614e581.js.map"
     ],
     "path---index": [
-      "path---index-19b333803094fe4ed4dc.js",
-      "path---index-19b333803094fe4ed4dc.js.map"
+      "path---index-7b5998c970d908a6a3b5.js",
+      "path---index-7b5998c970d908a6a3b5.js.map"
     ],
     "path---edition-edition-002-alexiety": [
-      "path---edition-edition-002-alexiety-c0cf23e61394cc8a3ad0.js",
-      "path---edition-edition-002-alexiety-c0cf23e61394cc8a3ad0.js.map"
+      "path---edition-edition-002-alexiety-af728e65cae80dc56561.js",
+      "path---edition-edition-002-alexiety-af728e65cae80dc56561.js.map"
     ],
     "path---event-e-games-3": [
       "path---event-e-games-3-e04b61977d466dfae289.js",
       "path---event-e-games-3-e04b61977d466dfae289.js.map"
+    ],
+    "path---event-net-culture": [
+      "path---event-net-culture-387f7be2a70a4c4df900.js",
+      "path---event-net-culture-387f7be2a70a4c4df900.js.map"
     ],
     "path---exhibition-work-game": [
       "path---exhibition-work-game-c12fb8bda2075491e51e.js",
@@ -144,6 +156,10 @@
       "path---event-soundnight-06-d696d75bf3105f3d850a.js",
       "path---event-soundnight-06-d696d75bf3105f3d850a.js.map"
     ],
+    "path---exhibition-re-konstruktion": [
+      "path---exhibition-re-konstruktion-8c7312107453634aefa3.js",
+      "path---exhibition-re-konstruktion-8c7312107453634aefa3.js.map"
+    ],
     "path---event-panel-curation": [
       "path---event-panel-curation-bd1c6c45a98ca756d34f.js",
       "path---event-panel-curation-bd1c6c45a98ca756d34f.js.map"
@@ -172,6 +188,10 @@
       "path---exhibition-idn-street-art-aded41eb976662f11223.js",
       "path---exhibition-idn-street-art-aded41eb976662f11223.js.map"
     ],
+    "path---event-recustructing-net-art-forever": [
+      "path---event-recustructing-net-art-forever-2f5ff9626d5f7f349bd0.js",
+      "path---event-recustructing-net-art-forever-2f5ff9626d5f7f349bd0.js.map"
+    ],
     "path---event-soundnight-01": [
       "path---event-soundnight-01-41e5a2efaaf3921983e4.js",
       "path---event-soundnight-01-41e5a2efaaf3921983e4.js.map"
@@ -184,6 +204,10 @@
       "path---event-launch-0f711eca09272b3a615b.js",
       "path---event-launch-0f711eca09272b3a615b.js.map"
     ],
+    "path---event-berlin-infrastructure": [
+      "path---event-berlin-infrastructure-939fc0fab7b835711a1d.js",
+      "path---event-berlin-infrastructure-939fc0fab7b835711a1d.js.map"
+    ],
     "path---event-soundnight-07": [
       "path---event-soundnight-07-2d0e38dbe27509e14374.js",
       "path---event-soundnight-07-2d0e38dbe27509e14374.js.map"
@@ -191,6 +215,10 @@
     "component---src-pages-info-js": [
       "component---src-pages-info-js-f4854e010c44b7b0fcf5.js",
       "component---src-pages-info-js-f4854e010c44b7b0fcf5.js.map"
+    ],
+    "path---event-net-art-and-the-gallery-system": [
+      "path---event-net-art-and-the-gallery-system-5bd7b30b6db3e824bd4d.js",
+      "path---event-net-art-and-the-gallery-system-5bd7b30b6db3e824bd4d.js.map"
     ],
     "path---event-soundnight-04": [
       "path---event-soundnight-04-a30b4a01a0690dd92895.js",
@@ -209,10 +237,14 @@
       "path---event-soundnight-03-f930fa54596495d6dcc7.js.map"
     ],
     "app": [
-      "app-284d3940d11513ef1b7e.js",
+      "app-81a57461bd7ccb62e490.js",
       "build-js-styles.css",
-      "app-284d3940d11513ef1b7e.js.map",
+      "app-81a57461bd7ccb62e490.js.map",
       "build-js-styles.css.map"
+    ],
+    "path---exhibition-neingag": [
+      "path---exhibition-neingag-a09bf01dd57abd175ea5.js",
+      "path---exhibition-neingag-a09bf01dd57abd175ea5.js.map"
     ],
     "path---event-party": [
       "path---event-party-1282a30eb6f991088468.js",
@@ -226,13 +258,17 @@
       "path---exhibition-transmediale-195bf8cdd07a09fff563.js",
       "path---exhibition-transmediale-195bf8cdd07a09fff563.js.map"
     ],
+    "path---exhibition-phototron": [
+      "path---exhibition-phototron-79f38f6dfb0d13ec60a0.js",
+      "path---exhibition-phototron-79f38f6dfb0d13ec60a0.js.map"
+    ],
     "path---event-soundnight-05": [
       "path---event-soundnight-05-a42c8adb68dc82b11654.js",
       "path---event-soundnight-05-a42c8adb68dc82b11654.js.map"
     ],
     "path---exhibition-stream-instream-out": [
-      "path---exhibition-stream-instream-out-3618f38fc37be62bbd7d.js",
-      "path---exhibition-stream-instream-out-3618f38fc37be62bbd7d.js.map"
+      "path---exhibition-stream-instream-out-2440c1e5a46513f544af.js",
+      "path---exhibition-stream-instream-out-2440c1e5a46513f544af.js.map"
     ],
     "path---exhibition-internet-fame": [
       "path---exhibition-internet-fame-d2cda59156dc2bd28e2b.js",
