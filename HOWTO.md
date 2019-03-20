@@ -24,17 +24,28 @@ Couldn't get SASS running with Gatsby v1. Watch creates css in Terminal independ
 
 ## Git notebook
 
-Create branch:
+Good tutorial: https://nvie.com/posts/a-successful-git-branching-model/
 
-`$ git checkout -b XXX`
+### Create branches
 
-Push branch:
+#### In Terminal:
 
-`$ git push`
+```
+# Create branch:
+$ git checkout -b XXX
 
-then follow instruction and create branch online:
+# Push branch:
+$ git push
 
-e.g. `$ git push --set-upstream origin XXX`
+# then follow instruction and create branch online:
+e.g. $ git push --set-upstream origin XXX
+```
+
+#### In Brackets 
+
+Create branch from old branch in Brackets · **Dont' select origin but the simple local one**
+
+### Merge branches
 
 When merging branches, merge XXX into YYY where XXX is new and YYY is old(master).
 
@@ -45,11 +56,13 @@ $ merge --no-ff XXX
 
 ```
 
+### Set tags (versioning releases)
+
 Set tags after commit and push tags
 
 ```
 $ git tag v1.0
 
 $ git push --tags
-````
+```
 

@@ -6592,7 +6592,8 @@ section.past .news-item h3, section.currently .news-item h3, section.upcoming .n
 section.past .news-item p, section.currently .news-item p, section.upcoming .news-item p, section.editions .news-item p {
   margin-bottom: 0.5em; }
 
-.further p > img {
+.further p > img,
+.info p > img {
   max-width: 100%; }
 
 .info p {
