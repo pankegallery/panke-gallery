@@ -9,31 +9,19 @@ The panke.gallery website runs on Gatsby v1, Contentful and Bootstrap and is ren
 
 Log in to panke.gallery contentful and change content
 
-### Add exhibition
+### Add exhibition, event, edition
 
-Add content type exhibtion
+Add content type exhibtion, add content blocks within new item as needed
+
+### Add news item
+
+Add content block and check news under page at bottom
 
 ### Change static page elements
 
-About page etc....
+Add content block and define static page at bottom, block will show up underneath (ordered by creation date ASC)
 
-## Crucial Commands
-
-### `gatsby develop`
-
-Run the project locally with live reload in development mode.
-
-### `npm run build`
-
-Run a production build into `./public`. The result is ready to be put on any static hosting you prefer.
-
-### `sass --watch src/styles/panke.scss:src/styles/panke.css`
-
-Couldn't get SASS running with Gatsby v1. Watch creates css in Terminal independetly from React.
-
-## Deployment
-
-See the [official Contentful getting started guide](https://www.contentful.com/developers/docs/tutorials/general/get-started/).
+On Info page, content block slugs are numbered (ordered by slug ASC) 
 
 ## Contribution
 

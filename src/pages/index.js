@@ -51,31 +51,35 @@ class PankeIndex extends React.Component {
     console.log(upcomingExhibitions);
 
     {/*Create news code*/}
-    var news = (
-      <section className="news">
-
-        {newsItems.map(({node}) => {
-          return (
-            <article className="news-item">
-              <div className="row headline">
-                <div className="col-md-12 col-sm-12 col-xs-12">
-                  <h2>{node.title}</h2>
+    if (newsItems){
+      var news = (
+        <section className="news">
+          {newsItems.map(({node}) => {
+            return (
+              <article className="news-item">
+                <div className="row headline">
+                  <div className="col-md-12 col-sm-12 col-xs-12">
+                    <h2>{node.title}</h2>
+                  </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 col-sm-12 col-xs-12">
-                  {<p dangerouslySetInnerHTML={{
-                    __html: node.blockContent.childMarkdownRemark.html
-                  }} />}
-                
-                </div>
-              </div>
-            </article>
-          )
-        })}
+                <div className="row">
+                  <div className="col-md-12 col-sm-12 col-xs-12">
+                    {<p dangerouslySetInnerHTML={{
+                      __html: node.blockContent.childMarkdownRemark.html
+                    }} />}
 
-      </section>
-    );
+                  </div>
+                </div>
+              </article>
+            )
+          })}
+
+        </section>
+      );
+    }
+    else{
+      var news;
+    }
 
     {/*Create current exhibitions code if there are*/}
     if (currentExhibitions.length > 0){
