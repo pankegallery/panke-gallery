@@ -66,3 +66,6 @@ $ git tag v1.0
 $ git push --tags
 ```
 
+### Skip netlify build
+
+Add `[skip ci]` anywhere in commit message
