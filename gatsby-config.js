@@ -23,7 +23,7 @@ module.exports = {
   siteMetadata: {
     title: 'panke.gallery test'
   },
-  pathPrefix: '/panke-gallery-gatsby1',
+  pathPrefix: '/panke-gallery',
   plugins: [
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
