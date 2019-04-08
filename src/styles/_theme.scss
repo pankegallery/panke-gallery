@@ -347,8 +347,8 @@ section.past, section.currently, section.upcoming, section.editions{
 
 
 // Fixing width of images that come from further content blocks
-.further p > img,
-.info p > img{
+.further p img,
+.info p img{
     max-width: 100%;
 }
 
