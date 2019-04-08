@@ -47,12 +47,12 @@ Create branch from old branch in Brackets · **Dont' select origin but the simpl
 
 ### Merge branches
 
-When merging branches, merge XXX into YYY where XXX is new and YYY is old(master).
+When merging branches, merge XXX-new into YYY-old(master).
 
 ```
-$ checkout YYY
+$ checkout YYY-old
 
-$ merge --no-ff XXX
+$ merge --no-ff XXX-new
 
 ```
 
