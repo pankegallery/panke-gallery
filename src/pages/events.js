@@ -130,6 +130,10 @@ export const pageQuery = graphql`
           endTime
           openEnd
           entryfee
+          eventSeries {
+            slug
+            name
+          }
           featuredImage {
             sizes(maxWidth: 1000) {
              ...GatsbyContentfulSizes
