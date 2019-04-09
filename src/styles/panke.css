@@ -6332,33 +6332,39 @@ a:hover {
   color: #000;
   text-decoration: none; }
 
-.container.theme-red a:hover, .container.theme-red .highlight-color {
-  color: red; }
+.container.theme-red a:hover, .container.theme-red .highlight-color, .container.theme-red .tag {
+  color: red;
+  border-color: red; }
 .container.theme-red .carousel-indicators li.active {
   background-color: red; }
 
-.container.theme-green a:hover, .container.theme-green .highlight-color {
-  color: lime; }
+.container.theme-green a:hover, .container.theme-green .highlight-color, .container.theme-green .tag {
+  color: lime;
+  border-color: lime; }
 .container.theme-green .carousel-indicators li.active {
   background-color: lime; }
 
-.container.theme-blue a:hover, .container.theme-blue .highlight-color {
-  color: blue; }
+.container.theme-blue a:hover, .container.theme-blue .highlight-color, .container.theme-blue .tag {
+  color: blue;
+  border-color: blue; }
 .container.theme-blue .carousel-indicators li.active {
   background-color: blue; }
 
-.container.theme-magenta a:hover, .container.theme-magenta .highlight-color {
-  color: #e80f80; }
+.container.theme-magenta a:hover, .container.theme-magenta .highlight-color, .container.theme-magenta .tag {
+  color: #e80f80;
+  border-color: #e80f80; }
 .container.theme-magenta .carousel-indicators li.active {
   background-color: #e80f80; }
 
-.container.theme-gold a:hover, .container.theme-gold .highlight-color {
-  color: #b8a407; }
+.container.theme-gold a:hover, .container.theme-gold .highlight-color, .container.theme-gold .tag {
+  color: #b8a407;
+  border-color: #b8a407; }
 .container.theme-gold .carousel-indicators li.active {
   background-color: #b8a407; }
 
-.container.theme-tropical a:hover, .container.theme-tropical .highlight-color {
-  color: #088a96; }
+.container.theme-tropical a:hover, .container.theme-tropical .highlight-color, .container.theme-tropical .tag {
+  color: #088a96;
+  border-color: #088a96; }
 .container.theme-tropical .carousel-indicators li.active {
   background-color: #088a96; }
 
@@ -6609,6 +6615,17 @@ section.past .news-item p, section.currently .news-item p, section.upcoming .new
 
 .meta {
   color: #999; }
+
+.tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border: blue 2px solid;
+  border-radius: 5px;
+  color: blue;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9em;
+  margin-top: 10px; }
 
 .responsive-video iframe {
   position: absolute;

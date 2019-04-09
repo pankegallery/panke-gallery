@@ -72,16 +72,11 @@ class PankeEvents extends React.Component {
               <h2>Past events</h2>
             </div>
           </div>
-
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {pastEvents.map(({ node }) => {
-                return (
-                  <EventListItem key={node.slug} event={node} />
-                )
-              })}
-            </div>
-          </div>
+          {pastEvents.map(({ node }) => {
+            return (
+              <EventListItem key={node.slug} event={node} />
+            )
+          })}
         </section>
       );
     }

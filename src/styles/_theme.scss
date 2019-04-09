@@ -23,6 +23,7 @@ a:hover {
     .container.theme-#{$key}{
         a:hover, .highlight-color{
             color: $value;
+            border-color: $value;
         }
         .carousel-indicators li.active{
             background-color: $value;
@@ -372,6 +373,20 @@ section.past, section.currently, section.upcoming, section.editions{
 
 .meta {
     color: #999;
+}
+
+.tag{
+    display: inline-block;
+    padding: 4px 8px;
+    border: panke-color() 2px solid;
+    border-radius: 5px;
+    color: panke-color();
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9em;
+    margin-top: 10px;
+
+    @extend .highlight-color;
 }
 
 .responsive-video iframe {

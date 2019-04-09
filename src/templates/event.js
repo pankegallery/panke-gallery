@@ -44,7 +44,7 @@ class EventTemplate extends React.Component {
       );
     }
     else{
-      var EventDateAndEntryFee=(
+      var EventDateAndEntryFee =(
         <p className="meta"><EventDate event={event} /></p>
       );
     }
