@@ -78,10 +78,10 @@ class EventTemplate extends React.Component {
     }
     if (event.tags!=null){
       var eventTags =(
-        event.tags.map(({tagSlug, tagName}) => {
+        event.tags.map(({slug, name}) => {
           return (
             <p className="tag">
-              {tagName}
+              {name}
             </p>
           )
         })
@@ -173,8 +173,8 @@ export const pageQuery = graphql`
         name
       }
       tags {
-        tagSlug
-        tagName
+        slug
+        name
       }
       subtitleShortDescription {
         childMarkdownRemark {

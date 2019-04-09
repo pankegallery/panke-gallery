@@ -7,14 +7,16 @@ import EventListItem from '../components/event-list-item'
 class PankeEvents extends React.Component {
   render() {
 
-    {/*Get array of exhibitions*/}
+    {/*Get array of events*/}
     const posts = get(this, 'props.data.allContentfulEvent.edges')
 
-    {/*Log array of Events*/}
-    console.log("Posts:");
-    console.log(posts);
+    global.filterEventsBy= null;
 
-    {/*Filter array of exhibitions*/}
+    {/*Log array of Events*/}
+//    console.log("Posts:");
+//    console.log(posts);
+
+    {/*Filter array of events*/}
     function filterUpcoming(_ev) {
       var currentDate = new Date();
       var eventDate = new Date(_ev.node.date);
@@ -29,13 +31,13 @@ class PankeEvents extends React.Component {
     }
     const pastEvents = posts.filter(filterPast);
 
-    {/*Log array of upcoming Events*/}
-    console.log("Upcoming Events:");
-    console.log(upcomingEvents);
+    {/*Log array of upcoming events*/}
+//    console.log("Upcoming events:");
+//    console.log(upcomingEvents);
 
-    {/*Log array of past Events*/}
-    console.log("Past Events:");
-    console.log(pastEvents);
+    {/*Log array of past events*/}
+//    console.log("Past events:");
+//    console.log(pastEvents);
 
     if (upcomingEvents.length > 0){
       var upcoming = (
@@ -47,15 +49,11 @@ class PankeEvents extends React.Component {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {upcomingEvents.map(({ node }) => {
-                return (
-                  <EventListItem key={node.slug} event={node} />
-                )
-              })}
-            </div>
-          </div>
+          {upcomingEvents.map(({ node }) => {
+            return (
+              <EventListItem key={node.slug} event={node} />
+            )
+          })}
         </section>
       );
     }

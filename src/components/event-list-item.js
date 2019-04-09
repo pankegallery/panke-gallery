@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import EventDate from '../components/event-date-time'
+import Tag from '../components/tag'
+
 
 
 class EventListItem extends React.Component {
@@ -9,17 +11,17 @@ class EventListItem extends React.Component {
 
     if (event.eventSeries!=null){
       var eventCategory =(
-        <p className="eventSeries tag">
-          {event.eventSeries.name}
-        </p>
+        <Tag tag={event.eventSeries} type="eventSeries"/>
       );
+      var articleClass = `news-item ${event.eventSeries.slug}`;
     }
     else {
       var eventCategory;
+      var articleClass = 'news-item';
     }
 
     return(
-      <article className="news-item">
+      <article ref="eventItem" className={articleClass}>
         <div className="row">
           <div className="col-md-4 col-sm-4 col-xs-12">
               {eventCategory}

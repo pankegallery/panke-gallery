@@ -59,10 +59,10 @@ class ExhibitionTemplate extends React.Component {
     {/* ––– Exhibition tags ––– */}
     if (exhibition.tags!=null){
       var exhibitionTags =(
-        exhibition.tags.map(({tagSlug, tagName}) => {
+        exhibition.tags.map(({slug, name}) => {
           return (
             <p className="tag">
-              {tagName}
+              {name}
             </p>
           )
         })
@@ -144,8 +144,8 @@ export const pageQuery = graphql`
       startDate(formatString: "DD MMMM YYYY")
       endDate(formatString: "DD MMMM YYYY")
       tags {
-        tagSlug
-        tagName
+        slug
+        name
       }
       subtitleShortDescription {
         childMarkdownRemark {
