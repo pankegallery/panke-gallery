@@ -68,7 +68,7 @@ class EventTemplate extends React.Component {
     {/* ––– Event series and tags ––– */}
     if (event.eventSeries!=null){
       var eventCategory =(
-        <p className="eventSeries tag">
+        <p className="eventSeries">
           {event.eventSeries.name}
         </p>
       );
@@ -76,6 +76,22 @@ class EventTemplate extends React.Component {
     else {
       var eventCategory;
     }
+    if (event.tags!=null){
+      var eventTags =(
+        event.tags.map(({tagSlug, tagName}) => {
+          return (
+            <p className="tag">
+              {tagName}
+            </p>
+          )
+        })
+      );
+    }
+    else{
+      var eventTags;
+    }
+
+
 
    {/*==========================================================================
 
@@ -95,6 +111,7 @@ class EventTemplate extends React.Component {
                   __html: event.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               {EventDateAndEntryFee}
+              {eventCategory}{eventTags}
 
               {/* ---- FEATURED IMAGE ---- */}
 
