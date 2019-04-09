@@ -11,12 +11,11 @@ class Tag extends React.Component {
   }
 
   handleClick() {
+    this.props.handleClick(this.props.tag.slug);
     this.setState(state => ({
       isToggleOn: !state.isToggleOn
     }));
     this.refs.tag.classList.toggle('tag-selected');
-    global.filterEventsBy ? this.props.tag.slug : null;
-    console.log(global.filterEventsBy);
   }
 
   render() {
@@ -32,7 +31,7 @@ class Tag extends React.Component {
 
     return (
       <p ref="tag" className ={className} onClick={this.handleClick}>
-        {thistag.name} {this.state.isToggleOn ? 'ON' : 'OFF'}
+        {thistag.name}
       </p>
     );
   }

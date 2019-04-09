@@ -5,12 +5,32 @@ import get from 'lodash/get'
 import EventListItem from '../components/event-list-item'
 
 class PankeEvents extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {isFilterOn: false,
+                 filterby: ''};
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(tagSlug) {
+    this.setState(state => ({
+      isFilterOn: !state.isFilterOn
+    }));
+    this.setState(state => ({
+      filterby: {tagSlug}
+    }));
+    console.log(this.state.isFilterOn);
+    console.log({tagSlug});
+    console.log(this.state.filterby);
+  }
+
   render() {
 
     {/*Get array of events*/}
     const posts = get(this, 'props.data.allContentfulEvent.edges')
-
-    global.filterEventsBy= null;
 
     {/*Log array of Events*/}
 //    console.log("Posts:");
@@ -51,7 +71,7 @@ class PankeEvents extends React.Component {
 
           {upcomingEvents.map(({ node }) => {
             return (
-              <EventListItem key={node.slug} event={node} />
+              <EventListItem key={node.slug} event={node} handleClick={this.handleClick} />
             )
           })}
         </section>
@@ -72,7 +92,7 @@ class PankeEvents extends React.Component {
           </div>
           {pastEvents.map(({ node }) => {
             return (
-              <EventListItem key={node.slug} event={node} />
+              <EventListItem key={node.slug} event={node} handleClick={this.handleClick} />
             )
           })}
         </section>

@@ -11,7 +11,7 @@ class EventListItem extends React.Component {
 
     if (event.eventSeries!=null){
       var eventCategory =(
-        <Tag tag={event.eventSeries} type="eventSeries"/>
+        <Tag tag={event.eventSeries} type="eventSeries" handleClick={this.props.handleClick}/>
       );
       var articleClass = `news-item ${event.eventSeries.slug}`;
     }
