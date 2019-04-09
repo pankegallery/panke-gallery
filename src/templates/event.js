@@ -139,6 +139,14 @@ export const pageQuery = graphql`
       endTime
       openEnd
       entryfee
+      eventSeries {
+        slug
+        name
+      }
+      tags {
+        tagSlug
+        tagName
+      }
       subtitleShortDescription {
         childMarkdownRemark {
           html

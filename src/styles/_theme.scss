@@ -68,7 +68,7 @@ body {
     height: 100%;
     width: 100%;
     background-color: #fff;
-    color: #444;
+    color: theme-color('black');
     text-align: left;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -372,20 +372,23 @@ section.past, section.currently, section.upcoming, section.editions{
 }
 
 .meta {
-    color: #999;
+    color: theme-color('grey');
 }
 
 .tag{
     display: inline-block;
     padding: 4px 8px;
-    border: panke-color() 2px solid;
+    border: theme-color('grey') 2px solid;
     border-radius: 5px;
-    color: panke-color();
+    color: theme-color('grey');
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: 0.9em;
     margin-top: 10px;
+    margin-right: 10px;
+}
 
+.eventSeries{
     @extend .highlight-color;
 }
 
