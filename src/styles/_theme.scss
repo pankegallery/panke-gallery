@@ -389,6 +389,7 @@ section.past, section.currently, section.upcoming, section.editions{
 }
 
 .eventSeries{
+    @extend .tag;
     @extend .highlight-color;
 }
 

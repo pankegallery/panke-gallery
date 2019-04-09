@@ -65,6 +65,18 @@ class EventTemplate extends React.Component {
       var FurtherContentBlocks;
     }
 
+    {/* ––– Event series and tags ––– */}
+    if (event.eventSeries!=null){
+      var eventCategory =(
+        <p className="eventSeries tag">
+          {event.eventSeries.name}
+        </p>
+      );
+    }
+    else {
+      var eventCategory;
+    }
+
    {/*==========================================================================
 
                                     OUTPUT

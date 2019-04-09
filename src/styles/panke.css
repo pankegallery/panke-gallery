@@ -6916,7 +6916,7 @@ section.past .news-item p, section.currently .news-item p, section.upcoming .new
 .meta {
   color: #999; }
 
-.tag {
+.tag, .eventSeries {
   display: inline-block;
   padding: 4px 8px;
   border: #999 2px solid;
