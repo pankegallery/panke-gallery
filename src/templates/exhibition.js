@@ -56,6 +56,22 @@ class ExhibitionTemplate extends React.Component {
       var FurtherContentBlocks;
     }
 
+    {/* ––– Exhibition tags ––– */}
+    if (exhibition.tags!=null){
+      var exhibitionTags =(
+        exhibition.tags.map(({tagSlug, tagName}) => {
+          return (
+            <p className="tag">
+              {tagName}
+            </p>
+          )
+        })
+      );
+    }
+    else{
+      var exhibitionTags;
+    }
+
     {/*==========================================================================
 
                                     OUTPUT
@@ -74,6 +90,7 @@ class ExhibitionTemplate extends React.Component {
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               <p className="meta">{exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate} | {exhibition.openingHours}</p>
+              {exhibitionTags}
 
               {/* ---- SLIDESHOW ---- */}
 
@@ -126,6 +143,10 @@ export const pageQuery = graphql`
       title
       startDate(formatString: "DD MMMM YYYY")
       endDate(formatString: "DD MMMM YYYY")
+      tags {
+        tagSlug
+        tagName
+      }
       subtitleShortDescription {
         childMarkdownRemark {
           html
