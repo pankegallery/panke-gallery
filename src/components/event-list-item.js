@@ -6,13 +6,6 @@ import Tag from '../components/tag'
 
 class EventListItem extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {show: true};
-
-    this.tagElement = React.createRef();
-  }
-
   render() {
     var event = this.props.event;
 
@@ -25,21 +18,17 @@ class EventListItem extends React.Component {
           tag={event.eventSeries}
           type="eventSeries"
           handleClick={this.props.handleClick}
+          filterIsOn={this.props.filterIsOn}
         />
       );
-      if (this.state.show){
-        articleClass = `news-item show ${event.eventSeries.slug}`;
-      }
-      else{
-        articleClass = `news-item hide ${event.eventSeries.slug}`;
-      }
+      articleClass = `news-item ${event.eventSeries.slug}`;
     }
     else {
       articleClass = 'news-item';
     }
 
     return(
-      <article ref="eventItem" className={articleClass}>
+      <article className={articleClass}>
         <div className="row">
           <div className="col-md-4 col-sm-4 col-xs-12">
               {eventCategory}

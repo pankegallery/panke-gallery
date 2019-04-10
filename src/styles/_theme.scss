@@ -25,7 +25,8 @@ a:hover {
             color: $value;
             border-color: $value;
         }
-        .carousel-indicators li.active{
+        .carousel-indicators li.active,
+        .highlight-background{
             background-color: $value;
         }
     }
@@ -391,11 +392,26 @@ section.past, section.currently, section.upcoming, section.editions{
     font-size: 0.9em;
     margin-top: 10px;
     margin-right: 10px;
+
+    &.tag-selected{
+        background: theme-color('grey');
+        color: #fff !important;
+    }
+
+    &.tag-selected:before{
+        content: "×";
+        display: inline-block;
+        margin-right: 1em;
+    }
 }
 
 .eventSeries{
     @extend .tag;
     @extend .highlight-color;
+
+    &.tag-selected{
+        @extend .highlight-background;
+    }
 }
 
 .responsive-video iframe {

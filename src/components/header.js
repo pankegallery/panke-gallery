@@ -12,7 +12,7 @@ export default () => (
             </div>
             <div className="col-xs-6 text-right d-block d-sm-none">
               <button className="toggle-menu">
-                <i class="fas fa-bars"></i>
+                <i className="fas fa-bars"></i>
               </button>
             </div>
           </div>

@@ -28,13 +28,12 @@ class PankeEvents extends React.Component {
       filterby: {tagSlug}
     }));
 
-    console.log('Im changed the parent states');
+    console.log(this.listElement);
+//    this.listElement.toggleDisplay;
 
-//    listElement.state.show = false;
-
-    console.log(this.state.isFilterOn);
-    console.log({tagSlug});
-    console.log(this.state.filterby);
+//    console.log(this.state.isFilterOn);
+//    console.log({tagSlug});
+//    console.log(this.state.filterby);
   }
 
   render() {
@@ -81,14 +80,19 @@ class PankeEvents extends React.Component {
           </div>
 
           {upcomingEvents.map(({ node }) => {
-            return (
-              <EventListItem
-                ref={this.listElement}
-                key={node.slug}
-                event={node}
-                handleClick={this.handleEventsClick}
-              />
-            )
+            if (!this.state.isFilterOn
+                || (node.eventSeries
+                && this.state.filterby.tagSlug === node.eventSeries.slug)){
+              return (
+                <EventListItem
+                  ref={this.listElement}
+                  key={node.slug}
+                  event={node}
+                  handleClick={this.handleEventsClick}
+                  filterOn={this.state.isFilterOn}
+                />
+              )
+            }
           })}
         </section>
       );
@@ -104,15 +108,21 @@ class PankeEvents extends React.Component {
               <h2>Past events</h2>
             </div>
           </div>
+
           {pastEvents.map(({ node }) => {
-            return (
-              <EventListItem
-                ref={this.listElement}
-                key={node.slug}
-                event={node}
-                handleClick={this.handleEventsClick}
-              />
-            )
+            if (!this.state.isFilterOn
+                || (node.eventSeries
+                && this.state.filterby.tagSlug === node.eventSeries.slug)){
+              return (
+                <EventListItem
+                  ref={this.listElement}
+                  key={node.slug}
+                  event={node}
+                  handleClick={this.handleEventsClick}
+                  filterIsOn={this.state.isFilterOn}
+                />
+              )
+            }
           })}
         </section>
       );
