@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
 
@@ -16,15 +16,26 @@ class EventListItem extends React.Component {
   render() {
     var event = this.props.event;
 
+    var eventCategory;
+    var articleClass;
     if (event.eventSeries!=null){
-      var eventCategory =(
-        <Tag ref="tagElement" tag={event.eventSeries} type="eventSeries" handleClick={this.props.handleClick}/>
+      eventCategory =(
+        <Tag
+          ref={this.tagElement}
+          tag={event.eventSeries}
+          type="eventSeries"
+          handleClick={this.props.handleClick}
+        />
       );
-      var articleClass = `news-item ${event.eventSeries.slug}`;
+      if (this.state.show){
+        articleClass = `news-item show ${event.eventSeries.slug}`;
+      }
+      else{
+        articleClass = `news-item hide ${event.eventSeries.slug}`;
+      }
     }
     else {
-      var eventCategory;
-      var articleClass = 'news-item';
+      articleClass = 'news-item';
     }
 
     return(

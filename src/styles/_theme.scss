@@ -153,9 +153,14 @@ header nav{
     height: auto;
 }
 
-.toggle-menu span {
-    font-size: 1.5em;
-    padding: 6px 0 0;
+.toggle-menu{
+    border: 0;
+    background: none;
+
+    i {
+        font-size: 1.5em;
+        padding: 6px 0 0;
+    }
 }
 
 .off-canvas {

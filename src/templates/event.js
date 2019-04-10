@@ -16,35 +16,35 @@ class EventTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (event.eventImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...event.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
 
     {/* ––– Documentation ––– */}
+    var DocumentationImages;
     if (event.eventDocumentationImagesBelow){
-      var DocumentationImages =(
+      DocumentationImages =(
         <Documentation images={event.eventDocumentationImagesBelow} />
       );
     }
-    else{
-      var DocumentationImages;
-    }
 
     {/* ––– Event date and fee ––– */}
+    var EventDateAndEntryFee;
     if (event.entryfee){
-      var EventDateAndEntryFee =(
+      EventDateAndEntryFee =(
         <p className="meta"><EventDate event={event} /> | {event.entryfee}</p>
       );
     }
     else{
-      var EventDateAndEntryFee =(
+      EventDateAndEntryFee =(
         <p className="meta"><EventDate event={event} /></p>
       );
     }
@@ -52,8 +52,9 @@ class EventTemplate extends React.Component {
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks;
     if (event.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         event.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -61,23 +62,20 @@ class EventTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
-    }
 
     {/* ––– Event series and tags ––– */}
+    var eventCategory;
     if (event.eventSeries!=null){
-      var eventCategory =(
+      eventCategory =(
         <p className="eventSeries">
           {event.eventSeries.name}
         </p>
       );
     }
-    else {
-      var eventCategory;
-    }
+
+    var eventTags;
     if (event.tags!=null){
-      var eventTags =(
+      eventTags =(
         event.tags.map(({slug, name}) => {
           return (
             <p className="tag">
@@ -87,11 +85,6 @@ class EventTemplate extends React.Component {
         })
       );
     }
-    else{
-      var eventTags;
-    }
-
-
 
    {/*==========================================================================
 

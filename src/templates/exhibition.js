@@ -17,13 +17,14 @@ class ExhibitionTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (exhibition.exhibitionImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
@@ -31,20 +32,18 @@ class ExhibitionTemplate extends React.Component {
 
     {/* ––– Documentation ––– */}
 
-    console.log(exhibition.exhibitionDocumentationImagesBelow);
+    var DocumentationImages;
     if (exhibition.exhibitionDocumentationImagesBelow){
-      var DocumentationImages =(
+      DocumentationImages =(
         <Documentation images={exhibition.exhibitionDocumentationImagesBelow} />
       );
-    }
-    else{
-      var DocumentationImages;
     }
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks
     if (exhibition.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -52,13 +51,11 @@ class ExhibitionTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
-    }
 
     {/* ––– Exhibition tags ––– */}
+    var exhibitionTags;
     if (exhibition.tags!=null){
-      var exhibitionTags =(
+      exhibitionTags =(
         exhibition.tags.map(({slug, name}) => {
           return (
             <p className="tag">
@@ -67,9 +64,6 @@ class ExhibitionTemplate extends React.Component {
           )
         })
       );
-    }
-    else{
-      var exhibitionTags;
     }
 
     {/*==========================================================================

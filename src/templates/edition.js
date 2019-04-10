@@ -13,13 +13,14 @@ class EditionTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (edition.editionImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...edition.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
@@ -27,8 +28,9 @@ class EditionTemplate extends React.Component {
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks;
     if (edition.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         edition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -36,10 +38,6 @@ class EditionTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
-    }
-
    {/*==========================================================================
 
                                     OUTPUT

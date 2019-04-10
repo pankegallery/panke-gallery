@@ -25,16 +25,16 @@ class Tag extends React.Component {
     const thistag = this.props.tag;
     var type = this.props.type;
 
-    if (type == 'eventSeries'){
+    if (type === 'eventSeries'){
       var className = 'tag eventSeries';
     }
     else{
-      var className = 'tag';
+      className = 'tag';
     }
 
     return (
       <p ref="tag" className ={className} onClick={this.handleTagClick}>
-        {thistag.name}{this.state.isToggleOn ? 'ON' : 'OFF'}
+        {thistag.name} {this.state.isToggleOn ? 'ON' : 'OFF'}
       </p>
     );
   }

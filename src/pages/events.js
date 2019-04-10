@@ -1,7 +1,7 @@
 import React from 'react';
-import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
@@ -29,6 +29,8 @@ class PankeEvents extends React.Component {
     }));
 
     console.log('Im changed the parent states');
+
+//    listElement.state.show = false;
 
     console.log(this.state.isFilterOn);
     console.log({tagSlug});
@@ -67,8 +69,9 @@ class PankeEvents extends React.Component {
 //    console.log("Past events:");
 //    console.log(pastEvents);
 
+    var upcoming;
     if (upcomingEvents.length > 0){
-      var upcoming = (
+      upcoming = (
         <section className="upcoming">
 
           <div className="row headline">
@@ -80,7 +83,7 @@ class PankeEvents extends React.Component {
           {upcomingEvents.map(({ node }) => {
             return (
               <EventListItem
-                ref="listElement"
+                ref={this.listElement}
                 key={node.slug}
                 event={node}
                 handleClick={this.handleEventsClick}
@@ -90,12 +93,10 @@ class PankeEvents extends React.Component {
         </section>
       );
     }
-    else{
-      var upcoming;
-    }
 
-    if (pastEvents.length > 0){
-      var past = (
+    var past;
+    if (pastEvents.length > 0) {
+      past = (
         <section className="past">
 
           <div className="row headline">
@@ -106,7 +107,7 @@ class PankeEvents extends React.Component {
           {pastEvents.map(({ node }) => {
             return (
               <EventListItem
-                ref="listElement"
+                ref={this.listElement}
                 key={node.slug}
                 event={node}
                 handleClick={this.handleEventsClick}
@@ -115,9 +116,6 @@ class PankeEvents extends React.Component {
           })}
         </section>
       );
-    }
-    else{
-      var past;
     }
 
     return (
