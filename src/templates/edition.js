@@ -2,6 +2,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 
@@ -45,6 +48,7 @@ class EditionTemplate extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet title={`${edition.title}`} />
         <section className="head">
@@ -88,6 +92,7 @@ class EditionTemplate extends React.Component {
         {FurtherContentBlocks}
 
       </main>
+      </Layout>
     )
   }
 }

@@ -2,6 +2,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
@@ -73,6 +76,7 @@ class ExhibitionTemplate extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet title={`${exhibition.title}`} />
         <section className="head">
@@ -118,6 +122,7 @@ class ExhibitionTemplate extends React.Component {
         {DocumentationImages}
 
       </main>
+      </Layout>
     )
   }
 }
