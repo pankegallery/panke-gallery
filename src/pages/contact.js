@@ -1,6 +1,8 @@
 import React from 'react';
 import get from 'lodash/get'
 import Helmet from 'react-helmet'
+
+import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 
 class PankeContact extends React.Component{
@@ -44,6 +46,7 @@ class PankeContact extends React.Component{
     console.log(otherBlocks);
     
     return(
+      <Layout>
       <main>
         <Helmet
           title="Contact"
@@ -103,6 +106,7 @@ class PankeContact extends React.Component{
           </div>
         </section>
       </main>
+      </Layout>
     );
   }
 }

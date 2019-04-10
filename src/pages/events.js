@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+
+import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
 
 class PankeEvents extends React.Component {
@@ -10,6 +12,8 @@ class PankeEvents extends React.Component {
     super(props);
     this.state = {isFilterOn: false,
                  filterby: ''};
+
+    this.listElement = React.createRef();    
 
     // This binding is necessary to make `this` work in the callback
     this.handleEventsClick = this.handleEventsClick.bind(this);
@@ -117,6 +121,7 @@ class PankeEvents extends React.Component {
     }
 
     return (
+      <Layout>
       <main>
         <Helmet
           title="Events"
@@ -133,7 +138,7 @@ class PankeEvents extends React.Component {
         {past}
 
       </main>
-
+      </Layout>
 
 
 

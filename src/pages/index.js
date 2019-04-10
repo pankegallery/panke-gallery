@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+
+import Layout from '../components/layout'
 import ExhibitionPreview from '../components/exhibition-preview'
 import ContentBlock from '../components/content-block'
 
@@ -136,6 +138,7 @@ class PankeIndex extends React.Component {
     }
 
     return (
+      <Layout>
       <main>
         <Helmet
           title="Home"
@@ -154,6 +157,7 @@ class PankeIndex extends React.Component {
         {upcoming}
         
       </main>
+      </Layout>
 
     );
   }

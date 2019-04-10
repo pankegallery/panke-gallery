@@ -9,6 +9,8 @@ class EventListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {show: true};
+
+    this.tagElement = React.createRef();
   }
 
   render() {
