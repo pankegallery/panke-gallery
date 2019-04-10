@@ -12,16 +12,20 @@ class PankeEvents extends React.Component {
                  filterby: ''};
 
     // This binding is necessary to make `this` work in the callback
-    this.handleClick = this.handleClick.bind(this);
+    this.handleEventsClick = this.handleEventsClick.bind(this);
   }
 
-  handleClick(tagSlug) {
+  handleEventsClick(tagSlug) {
+    console.log('Im in the parent handler');
     this.setState(state => ({
       isFilterOn: !state.isFilterOn
     }));
     this.setState(state => ({
       filterby: {tagSlug}
     }));
+
+    console.log('Im changed the parent states');
+
     console.log(this.state.isFilterOn);
     console.log({tagSlug});
     console.log(this.state.filterby);
@@ -71,7 +75,12 @@ class PankeEvents extends React.Component {
 
           {upcomingEvents.map(({ node }) => {
             return (
-              <EventListItem key={node.slug} event={node} handleClick={this.handleClick} />
+              <EventListItem
+                ref="listElement"
+                key={node.slug}
+                event={node}
+                handleClick={this.handleEventsClick}
+              />
             )
           })}
         </section>
@@ -92,7 +101,12 @@ class PankeEvents extends React.Component {
           </div>
           {pastEvents.map(({ node }) => {
             return (
-              <EventListItem key={node.slug} event={node} handleClick={this.handleClick} />
+              <EventListItem
+                ref="listElement"
+                key={node.slug}
+                event={node}
+                handleClick={this.handleEventsClick}
+              />
             )
           })}
         </section>

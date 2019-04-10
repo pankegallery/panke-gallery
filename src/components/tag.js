@@ -7,14 +7,17 @@ class Tag extends React.Component {
     this.state = {isToggleOn: false};
 
     // This binding is necessary to make `this` work in the callback
-    this.handleClick = this.handleClick.bind(this);
+    this.handleTagClick = this.handleTagClick.bind(this);
   }
 
-  handleClick() {
+  handleTagClick() {
+    console.log('Im in the child handler');
     this.props.handleClick(this.props.tag.slug);
+    console.log('Im triggered the parent handler');
     this.setState(state => ({
       isToggleOn: !state.isToggleOn
     }));
+    console.log('Im changed the child state handler');
     this.refs.tag.classList.toggle('tag-selected');
   }
 
@@ -30,8 +33,8 @@ class Tag extends React.Component {
     }
 
     return (
-      <p ref="tag" className ={className} onClick={this.handleClick}>
-        {thistag.name}
+      <p ref="tag" className ={className} onClick={this.handleTagClick}>
+        {thistag.name}{this.state.isToggleOn ? 'ON' : 'OFF'}
       </p>
     );
   }

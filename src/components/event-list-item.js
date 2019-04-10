@@ -4,14 +4,19 @@ import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
 
 
-
 class EventListItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {show: true};
+  }
+
   render() {
     var event = this.props.event;
 
     if (event.eventSeries!=null){
       var eventCategory =(
-        <Tag tag={event.eventSeries} type="eventSeries" handleClick={this.props.handleClick}/>
+        <Tag ref="tagElement" tag={event.eventSeries} type="eventSeries" handleClick={this.props.handleClick}/>
       );
       var articleClass = `news-item ${event.eventSeries.slug}`;
     }
