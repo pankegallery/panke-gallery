@@ -2,6 +2,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 
@@ -13,13 +16,14 @@ class EditionTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (edition.editionImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...edition.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
@@ -27,8 +31,9 @@ class EditionTemplate extends React.Component {
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks;
     if (edition.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         edition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -36,10 +41,6 @@ class EditionTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
-    }
-
    {/*==========================================================================
 
                                     OUTPUT
@@ -47,6 +48,7 @@ class EditionTemplate extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet title={`${edition.title}`} />
         <section className="head">
@@ -90,6 +92,7 @@ class EditionTemplate extends React.Component {
         {FurtherContentBlocks}
 
       </main>
+      </Layout>
     )
   }
 }

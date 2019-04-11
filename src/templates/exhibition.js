@@ -2,6 +2,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
@@ -17,13 +20,14 @@ class ExhibitionTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (exhibition.exhibitionImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
@@ -31,20 +35,18 @@ class ExhibitionTemplate extends React.Component {
 
     {/* ––– Documentation ––– */}
 
-    console.log(exhibition.exhibitionDocumentationImagesBelow);
+    var DocumentationImages;
     if (exhibition.exhibitionDocumentationImagesBelow){
-      var DocumentationImages =(
+      DocumentationImages =(
         <Documentation images={exhibition.exhibitionDocumentationImagesBelow} />
       );
-    }
-    else{
-      var DocumentationImages;
     }
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks
     if (exhibition.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -52,8 +54,19 @@ class ExhibitionTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
+
+    {/* ––– Exhibition tags ––– */}
+    var exhibitionTags;
+    if (exhibition.tags!=null){
+      exhibitionTags =(
+        exhibition.tags.map(({slug, name}) => {
+          return (
+            <p className="tag">
+              {name}
+            </p>
+          )
+        })
+      );
     }
 
     {/*==========================================================================
@@ -63,6 +76,7 @@ class ExhibitionTemplate extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet title={`${exhibition.title}`} />
         <section className="head">
@@ -74,6 +88,7 @@ class ExhibitionTemplate extends React.Component {
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               <p className="meta">{exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate} | {exhibition.openingHours}</p>
+              {exhibitionTags}
 
               {/* ---- SLIDESHOW ---- */}
 
@@ -107,6 +122,7 @@ class ExhibitionTemplate extends React.Component {
         {DocumentationImages}
 
       </main>
+      </Layout>
     )
   }
 }
@@ -126,6 +142,10 @@ export const pageQuery = graphql`
       title
       startDate(formatString: "DD MMMM YYYY")
       endDate(formatString: "DD MMMM YYYY")
+      tags {
+        slug
+        name
+      }
       subtitleShortDescription {
         childMarkdownRemark {
           html

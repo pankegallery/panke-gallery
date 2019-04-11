@@ -1,6 +1,9 @@
 import React from 'react';
 import get from 'lodash/get'
 import Helmet from 'react-helmet'
+import { graphql } from 'gatsby'
+
+import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 
 class PankeContact extends React.Component{
@@ -24,7 +27,7 @@ class PankeContact extends React.Component{
     {/*Fill definedBlocks with content*/}
     for(var key in definedBlocks) {
       const _b = blocks.filter(function (_blocks) {
-        return _blocks.node.slug == definedBlocks[key].slug;
+        return _blocks.node.slug === definedBlocks[key].slug;
       });
       Object.assign(definedBlocks[key], {array: _b});
       slugs.push(definedBlocks[key].slug);
@@ -44,6 +47,7 @@ class PankeContact extends React.Component{
     console.log(otherBlocks);
     
     return(
+      <Layout>
       <main>
         <Helmet
           title="Contact"
@@ -66,7 +70,7 @@ class PankeContact extends React.Component{
               })}
             </div>
             <div className="col-sm-8 col-xs-12">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9705.692702113927!2d13.373449086888234!3d52.54386988291701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x5738e3f5827699bf!2sPanke+Culture!5e0!3m2!1sde!2sde!4v1483889418506" width="600" height="350" className="googleMap" frameBorder="0"></iframe>
+                <iframe title="Way to panke.gallery" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9705.692702113927!2d13.373449086888234!3d52.54386988291701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x5738e3f5827699bf!2sPanke+Culture!5e0!3m2!1sde!2sde!4v1483889418506" width="600" height="350" className="googleMap" frameBorder="0"></iframe>
             </div>
           </div>
         </section>
@@ -103,6 +107,7 @@ class PankeContact extends React.Component{
           </div>
         </section>
       </main>
+      </Layout>
     );
   }
 }

@@ -1,6 +1,9 @@
 import React from 'react';
 import get from 'lodash/get'
 import Helmet from 'react-helmet'
+import { graphql } from 'gatsby'
+
+import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EditionListItem from '../components/edition-list-item'
 
@@ -22,6 +25,7 @@ class PankeEdition extends React.Component{
     console.log(posts);
 
     return(
+      <Layout>
       <main>
         <Helmet
           title="Edition"
@@ -55,8 +59,8 @@ class PankeEdition extends React.Component{
             </div>
           </div>
         </section>
-
       </main>
+      </Layout>
     );
   }
 }

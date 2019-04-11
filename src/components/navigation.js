@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import { Link } from 'gatsby'
 
 export default () => (
   <div>
@@ -14,8 +14,8 @@ export default () => (
 
     <nav id="nav-satellite">
       <ul>
-        <li><Link to="/editions">Edition</Link></li>
-        <li><a href="http://router.gallery" target="_blank">Router</a></li>
+        <li><Link to="/editions" rel="noopener noreferrer">Edition</Link></li>
+        <li><a href="http://router.gallery" target="_blank" rel="noopener noreferrer">Router</a></li>
       </ul>
     </nav>
   </div>

@@ -6,3 +6,9 @@
 @function panke-color($key: "blue") {
     @return map-get($panke-colors, $key);
 }
+
+@function theme-color($key: "black") {
+    @return map-get($theme-colors, $key);
+}
+
+

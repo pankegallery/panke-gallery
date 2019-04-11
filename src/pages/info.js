@@ -1,6 +1,9 @@
 import React from 'react';
 import get from 'lodash/get'
 import Helmet from 'react-helmet'
+import { graphql } from 'gatsby'
+
+import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 
 class PankeInfo extends React.Component{
@@ -13,6 +16,7 @@ class PankeInfo extends React.Component{
     console.log(blocks);
 
     return(
+      <Layout>
       <main>
         <Helmet
           title="About"
@@ -31,6 +35,7 @@ class PankeInfo extends React.Component{
         })}
 
       </main>
+      </Layout>
     );
   }
 }

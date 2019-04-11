@@ -8,6 +8,12 @@
 
 Run the project locally with live reload in development mode.
 
+`$ gatsby develop - - verbose`
+
+
+
+Safe-mode-ish environment, ignores some errors, worked when above wasn't 
+
 `$ npm run build` oder `$ gatsby build`
 
 Run a production build into `./public`. The result is ready to be put on any static hosting you prefer.
@@ -66,6 +72,6 @@ $ git tag v1.0
 $ git push --tags
 ```
 
-### Skip netlify build
+event### Skip netlify build
 
 Add `[skip ci]` anywhere in commit message
