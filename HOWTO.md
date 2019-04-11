@@ -28,7 +28,7 @@ Remove cache and rerun gatsby develop (cache needs to be deleted to see changes 
 
 Couldn't get SASS running with Gatsby v1. Watch creates css in Terminal independetly from React. Executed from root folder
 
-## Git notebook
+## Git cheat sheet
 
 Good tutorial: https://nvie.com/posts/a-successful-git-branching-model/
 
@@ -72,6 +72,6 @@ $ git tag v1.0
 $ git push --tags
 ```
 
-event### Skip netlify build
+### Skip netlify build
 
 Add `[skip ci]` anywhere in commit message
