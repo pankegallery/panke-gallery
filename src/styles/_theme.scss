@@ -166,7 +166,7 @@ header nav{
 
 .off-canvas {
     background: #ccc none repeat scroll 0 0;
-    box-shadow: 0 0 10px #999 inset;
+    box-shadow: 0 0 10px theme-color('lightgrey') inset;
     height: 100%;
     padding: 4em 2em;
     position: fixed;
@@ -194,9 +194,13 @@ header nav{
     }
 
 
-    & > nav#nav-main {
+    nav#nav-main {
         float: none;
-        margin: 0 0 3em;
+    }
+
+    nav#nav-satellite{
+        float: none;
+        margin-top: 6vh;
     }
 
     ul {
@@ -209,9 +213,15 @@ header nav{
                 a {
                 display: block;
                 padding: 1em 0;
+                margin: 0;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-size: 0.9em;
             }
         }
     }
+
+
 
 }
 
