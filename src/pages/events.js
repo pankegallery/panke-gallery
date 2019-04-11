@@ -13,27 +13,38 @@ class PankeEvents extends React.Component {
     this.state = {isFilterOn: false,
                  filterby: ''};
 
-    this.listElement = React.createRef();    
-
     // This binding is necessary to make `this` work in the callback
     this.handleEventsClick = this.handleEventsClick.bind(this);
   }
 
   handleEventsClick(tagSlug) {
-    console.log('Im in the parent handler');
     this.setState(state => ({
       isFilterOn: !state.isFilterOn
     }));
     this.setState(state => ({
       filterby: {tagSlug}
     }));
+  }
 
-    console.log(this.listElement);
-//    this.listElement.toggleDisplay;
+  passFilter(ev){
+    !this.state.isFilterOn && return true
 
-//    console.log(this.state.isFilterOn);
-//    console.log({tagSlug});
-//    console.log(this.state.filterby);
+    !ev.eventSeries && return false
+
+    return this.state.filterby.tagSlug === ev.eventSeries.slug
+      ?  true
+      :  false
+  }
+
+  returnEventListItem(ev){
+    return (
+      <EventListItem
+        key={ev.slug}
+        event={ev}
+        handleClick={this.handleEventsClick}
+        filterOn={this.state.isFilterOn}
+      />
+    )
   }
 
   render() {
@@ -80,19 +91,10 @@ class PankeEvents extends React.Component {
           </div>
 
           {upcomingEvents.map(({ node }) => {
-            if (!this.state.isFilterOn
-                || (node.eventSeries
-                && this.state.filterby.tagSlug === node.eventSeries.slug)){
-              return (
-                <EventListItem
-                  ref={this.listElement}
-                  key={node.slug}
-                  event={node}
-                  handleClick={this.handleEventsClick}
-                  filterOn={this.state.isFilterOn}
-                />
-              )
-            }
+            passFilter(node)
+              ? returnEventListItem(node)
+              : return null
+          }
           })}
         </section>
       );
@@ -110,19 +112,9 @@ class PankeEvents extends React.Component {
           </div>
 
           {pastEvents.map(({ node }) => {
-            if (!this.state.isFilterOn
-                || (node.eventSeries
-                && this.state.filterby.tagSlug === node.eventSeries.slug)){
-              return (
-                <EventListItem
-                  ref={this.listElement}
-                  key={node.slug}
-                  event={node}
-                  handleClick={this.handleEventsClick}
-                  filterIsOn={this.state.isFilterOn}
-                />
-              )
-            }
+            passFilter(node)
+              ? returnEventListItem(node)
+              : return null
           })}
         </section>
       );
