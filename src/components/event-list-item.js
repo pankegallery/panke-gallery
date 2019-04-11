@@ -11,7 +11,7 @@ class EventListItem extends React.Component {
 
     var eventCategory;
     var articleClass;
-    if (event.eventSeries!=null){
+    if (event.eventSeries!=null) {
       eventCategory =(
         <Tag
           ref={this.tagElement}
@@ -21,14 +21,10 @@ class EventListItem extends React.Component {
           filterIsOn={this.props.filterIsOn}
         />
       );
-      articleClass = `news-item ${event.eventSeries.slug}`;
-    }
-    else {
-      articleClass = 'news-item';
     }
 
     return(
-      <article className={articleClass}>
+      <article className="news-item">
         <div className="row">
           <div className="col-md-4 col-sm-4 col-xs-12">
               {eventCategory}

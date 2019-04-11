@@ -27,22 +27,25 @@ class PankeEvents extends React.Component {
   }
 
   passFilter(ev){
-    !this.state.isFilterOn && return true
+    if (!this.state.isFilterOn) {
+      return true;
+    }
 
-    !ev.eventSeries && return false
+    if (!ev.eventSeries){
+      return false;
+    }
 
     return this.state.filterby.tagSlug === ev.eventSeries.slug
-      ?  true
-      :  false
   }
 
   returnEventListItem(ev){
+    console.log('hä?')
     return (
       <EventListItem
         key={ev.slug}
         event={ev}
         handleClick={this.handleEventsClick}
-        filterOn={this.state.isFilterOn}
+        filterIsOn={this.state.isFilterOn}
       />
     )
   }
@@ -91,10 +94,9 @@ class PankeEvents extends React.Component {
           </div>
 
           {upcomingEvents.map(({ node }) => {
-            passFilter(node)
-              ? returnEventListItem(node)
-              : return null
-          }
+            if (this.passFilter(node)){
+              return this.returnEventListItem(node);
+            }
           })}
         </section>
       );
@@ -112,9 +114,9 @@ class PankeEvents extends React.Component {
           </div>
 
           {pastEvents.map(({ node }) => {
-            passFilter(node)
-              ? returnEventListItem(node)
-              : return null
+            if (this.passFilter(node)){
+              return this.returnEventListItem(node);
+            }
           })}
         </section>
       );
