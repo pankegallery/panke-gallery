@@ -2,6 +2,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
@@ -16,35 +19,35 @@ class EventTemplate extends React.Component {
 
     {/* ––– Slideshow or featured images ––– */}
 
+    var ImageOrSlides;
     if (event.eventImpressionsSlideshow != null){
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
       );
     }
     else{
-      var ImageOrSlides =(
+      ImageOrSlides =(
         <Img alt="FeaturedImage" sizes={{...event.featuredImage.sizes , aspectRatio: 16/9}} />
       );
     }
 
     {/* ––– Documentation ––– */}
+    var DocumentationImages;
     if (event.eventDocumentationImagesBelow){
-      var DocumentationImages =(
+      DocumentationImages =(
         <Documentation images={event.eventDocumentationImagesBelow} />
       );
     }
-    else{
-      var DocumentationImages;
-    }
 
     {/* ––– Event date and fee ––– */}
+    var EventDateAndEntryFee;
     if (event.entryfee){
-      var EventDateAndEntryFee =(
+      EventDateAndEntryFee =(
         <p className="meta"><EventDate event={event} /> | {event.entryfee}</p>
       );
     }
     else{
-      var EventDateAndEntryFee=(
+      EventDateAndEntryFee =(
         <p className="meta"><EventDate event={event} /></p>
       );
     }
@@ -52,8 +55,9 @@ class EventTemplate extends React.Component {
 
     {/* ––– Further Content Blocks ––– */}
 
+    var FurtherContentBlocks;
     if (event.furtherInformationBlocks){
-      var FurtherContentBlocks =(
+      FurtherContentBlocks =(
         event.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
           return (
               <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
@@ -61,8 +65,28 @@ class EventTemplate extends React.Component {
         })
       );
     }
-    else{
-      var FurtherContentBlocks;
+
+    {/* ––– Event series and tags ––– */}
+    var eventCategory;
+    if (event.eventSeries!=null){
+      eventCategory =(
+        <p className="eventSeries">
+          {event.eventSeries.name}
+        </p>
+      );
+    }
+
+    var eventTags;
+    if (event.tags!=null){
+      eventTags =(
+        event.tags.map(({slug, name}) => {
+          return (
+            <p className="tag">
+              {name}
+            </p>
+          )
+        })
+      );
     }
 
    {/*==========================================================================
@@ -72,6 +96,7 @@ class EventTemplate extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet title={`${event.title}`} />
         <section className="head">
@@ -83,6 +108,7 @@ class EventTemplate extends React.Component {
                   __html: event.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               {EventDateAndEntryFee}
+              {eventCategory}{eventTags}
 
               {/* ---- FEATURED IMAGE ---- */}
 
@@ -116,6 +142,7 @@ class EventTemplate extends React.Component {
         {DocumentationImages}
 
       </main>
+      </Layout>
     )
   }
 }
@@ -139,6 +166,14 @@ export const pageQuery = graphql`
       endTime
       openEnd
       entryfee
+      eventSeries {
+        slug
+        name
+      }
+      tags {
+        slug
+        name
+      }
       subtitleShortDescription {
         childMarkdownRemark {
           html

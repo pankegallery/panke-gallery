@@ -1,7 +1,9 @@
 import React from 'react';
-import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import { graphql } from 'gatsby'
+
+import Layout from "../components/layout"
 import ExhibitionListItem from '../components/exhibition-list-item'
 
 class PankeExhibitions extends React.Component {
@@ -26,14 +28,12 @@ class PankeExhibitions extends React.Component {
     function filterUpcoming(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
-      var exhibtionEndDate = new Date(_ex.node.endDate);
       return exhibtionStartDate > currentDate;
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
 
     function filterPast(_ex) {
       var currentDate = new Date();
-      var exhibtionStartDate = new Date(_ex.node.startDate);
       var exhibtionEndDate = new Date(_ex.node.endDate);
       return exhibtionEndDate < currentDate;
     }
@@ -51,8 +51,9 @@ class PankeExhibitions extends React.Component {
     console.log("Past Exhibitions:");
     console.log(pastExhibitions);
 
+    var current;
     if (currentExhibitions.length > 0){
-      var current = (
+      current = (
         <section className="currently">
 
           <div className="row headline">
@@ -73,12 +74,10 @@ class PankeExhibitions extends React.Component {
         </section>
       );
     }
-    else{
-      var current;
-    }
 
+    var upcoming;
     if (upcomingExhibitions.length > 0){
-      var upcoming = (
+      upcoming = (
         <section className="upcoming">
 
           <div className="row headline">
@@ -99,12 +98,10 @@ class PankeExhibitions extends React.Component {
         </section>
       );
     }
-    else{
-      var upcoming;
-    }
 
+    var past;
     if (pastExhibitions.length > 0){
-      var past = (
+      past = (
         <section className="past">
 
           <div className="row headline">
@@ -125,10 +122,6 @@ class PankeExhibitions extends React.Component {
         </section>
       );
     }
-    else{
-      var past;
-    }
-
     {/*==========================================================================
 
                                     OUTPUT
@@ -136,6 +129,7 @@ class PankeExhibitions extends React.Component {
     ==========================================================================*/}
 
     return (
+      <Layout>
       <main>
         <Helmet
           title="Exhibitions"
@@ -154,7 +148,7 @@ class PankeExhibitions extends React.Component {
         {past}
 
       </main>
-
+      </Layout>
     );
   }
 }

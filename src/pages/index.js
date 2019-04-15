@@ -1,9 +1,10 @@
-import React from 'react';
-import Link from 'gatsby-link';
+import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import ExhibitionPreview from '../components/exhibition-preview'
-import ContentBlock from '../components/content-block'
 
 
 class PankeIndex extends React.Component {
@@ -37,7 +38,6 @@ class PankeIndex extends React.Component {
     function filterUpcoming(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
-      var exhibtionEndDate = new Date(_ex.node.endDate);
       return exhibtionStartDate > currentDate;
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
@@ -51,8 +51,9 @@ class PankeIndex extends React.Component {
     console.log(upcomingExhibitions);
 
     {/*Create news code*/}
+    var news;
     if (newsItems){
-      var news = (
+      news = (
         <section className="news">
           {newsItems.map(({node}) => {
             return (
@@ -77,13 +78,11 @@ class PankeIndex extends React.Component {
         </section>
       );
     }
-    else{
-      var news;
-    }
 
     {/*Create current exhibitions code if there are*/}
+    var current;
     if (currentExhibitions.length > 0){
-      var current = (
+      current = (
         <section className="currently">
 
           <div className="row headline">
@@ -104,13 +103,11 @@ class PankeIndex extends React.Component {
         </section>
       );
     }
-    else{
-      var current;
-    }
 
     {/*Create upcoming exhibitions code if there are*/}
+    var upcoming;
     if (upcomingExhibitions.length > 0){
-      var upcoming = (
+      upcoming = (
         <section className="upcoming">
 
           <div className="row headline">
@@ -131,11 +128,9 @@ class PankeIndex extends React.Component {
         </section>
       );
     }
-    else{
-      var upcoming;
-    }
 
     return (
+      <Layout>
       <main>
         <Helmet
           title="Home"
@@ -154,6 +149,7 @@ class PankeIndex extends React.Component {
         {upcoming}
         
       </main>
+      </Layout>
 
     );
   }

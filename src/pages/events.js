@@ -1,20 +1,65 @@
 import React from 'react';
-import Link from 'gatsby-link';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import { graphql } from 'gatsby'
+
+import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
 
 class PankeEvents extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {isFilterOn: false,
+                 filterby: ''};
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleEventsClick = this.handleEventsClick.bind(this);
+  }
+
+  handleEventsClick(tagSlug) {
+    this.setState(state => ({
+      isFilterOn: !state.isFilterOn
+    }));
+    this.setState(state => ({
+      filterby: {tagSlug}
+    }));
+  }
+
+  passFilter(ev){
+    if (!this.state.isFilterOn) {
+      return true;
+    }
+
+    if (!ev.eventSeries){
+      return false;
+    }
+
+    return this.state.filterby.tagSlug === ev.eventSeries.slug
+  }
+
+  returnEventListItem(ev){
+    console.log('hä?')
+    return (
+      <EventListItem
+        key={ev.slug}
+        event={ev}
+        handleClick={this.handleEventsClick}
+        filterIsOn={this.state.isFilterOn}
+      />
+    )
+  }
+
   render() {
 
-    {/*Get array of exhibitions*/}
+    {/*Get array of events*/}
     const posts = get(this, 'props.data.allContentfulEvent.edges')
 
     {/*Log array of Events*/}
-    console.log("Posts:");
-    console.log(posts);
+//    console.log("Posts:");
+//    console.log(posts);
 
-    {/*Filter array of exhibitions*/}
+    {/*Filter array of events*/}
     function filterUpcoming(_ev) {
       var currentDate = new Date();
       var eventDate = new Date(_ev.node.date);
@@ -29,16 +74,17 @@ class PankeEvents extends React.Component {
     }
     const pastEvents = posts.filter(filterPast);
 
-    {/*Log array of upcoming Events*/}
-    console.log("Upcoming Events:");
-    console.log(upcomingEvents);
+    {/*Log array of upcoming events*/}
+//    console.log("Upcoming events:");
+//    console.log(upcomingEvents);
 
-    {/*Log array of past Events*/}
-    console.log("Past Events:");
-    console.log(pastEvents);
+    {/*Log array of past events*/}
+//    console.log("Past events:");
+//    console.log(pastEvents);
 
+    var upcoming;
     if (upcomingEvents.length > 0){
-      var upcoming = (
+      upcoming = (
         <section className="upcoming">
 
           <div className="row headline">
@@ -47,24 +93,18 @@ class PankeEvents extends React.Component {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {upcomingEvents.map(({ node }) => {
-                return (
-                  <EventListItem key={node.slug} event={node} />
-                )
-              })}
-            </div>
-          </div>
+          {upcomingEvents.map(({ node }) => {
+            if (this.passFilter(node)){
+              return this.returnEventListItem(node);
+            }
+          })}
         </section>
       );
     }
-    else{
-      var upcoming;
-    }
 
-    if (pastEvents.length > 0){
-      var past = (
+    var past;
+    if (pastEvents.length > 0) {
+      past = (
         <section className="past">
 
           <div className="row headline">
@@ -73,23 +113,17 @@ class PankeEvents extends React.Component {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {pastEvents.map(({ node }) => {
-                return (
-                  <EventListItem key={node.slug} event={node} />
-                )
-              })}
-            </div>
-          </div>
+          {pastEvents.map(({ node }) => {
+            if (this.passFilter(node)){
+              return this.returnEventListItem(node);
+            }
+          })}
         </section>
       );
     }
-    else{
-      var past;
-    }
 
     return (
+      <Layout>
       <main>
         <Helmet
           title="Events"
@@ -106,7 +140,7 @@ class PankeEvents extends React.Component {
         {past}
 
       </main>
-
+      </Layout>
 
 
 
@@ -130,6 +164,10 @@ export const pageQuery = graphql`
           endTime
           openEnd
           entryfee
+          eventSeries {
+            slug
+            name
+          }
           featuredImage {
             sizes(maxWidth: 1000) {
              ...GatsbyContentfulSizes

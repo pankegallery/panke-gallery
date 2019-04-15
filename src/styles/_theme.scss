@@ -23,8 +23,10 @@ a:hover {
     .container.theme-#{$key}{
         a:hover, .highlight-color{
             color: $value;
+            border-color: $value;
         }
-        .carousel-indicators li.active{
+        .carousel-indicators li.active,
+        .highlight-background{
             background-color: $value;
         }
     }
@@ -67,7 +69,7 @@ body {
     height: 100%;
     width: 100%;
     background-color: #fff;
-    color: #444;
+    color: theme-color('black');
     text-align: left;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -152,14 +154,19 @@ header nav{
     height: auto;
 }
 
-.toggle-menu span {
-    font-size: 1.5em;
-    padding: 6px 0 0;
+.toggle-menu{
+    border: 0;
+    background: none;
+
+    i {
+        font-size: 1.5em;
+        padding: 6px 0 0;
+    }
 }
 
 .off-canvas {
     background: #ccc none repeat scroll 0 0;
-    box-shadow: 0 0 10px #999 inset;
+    box-shadow: 0 0 10px theme-color('lightgrey') inset;
     height: 100%;
     padding: 4em 2em;
     position: fixed;
@@ -187,9 +194,13 @@ header nav{
     }
 
 
-    & > nav#nav-main {
+    nav#nav-main {
         float: none;
-        margin: 0 0 3em;
+    }
+
+    nav#nav-satellite{
+        float: none;
+        margin-top: 6vh;
     }
 
     ul {
@@ -202,9 +213,15 @@ header nav{
                 a {
                 display: block;
                 padding: 1em 0;
+                margin: 0;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-size: 0.9em;
             }
         }
     }
+
+
 
 }
 
@@ -371,7 +388,40 @@ section.past, section.currently, section.upcoming, section.editions{
 }
 
 .meta {
-    color: #999;
+    color: theme-color('grey');
+}
+
+.tag{
+    display: inline-block;
+    padding: 4px 8px;
+    border: theme-color('grey') 2px solid;
+    border-radius: 5px;
+    color: theme-color('grey');
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9em;
+    margin-top: 10px;
+    margin-right: 10px;
+
+    &.tag-selected{
+        background: theme-color('grey');
+        color: #fff !important;
+    }
+
+    &.tag-selected:before{
+        content: "×";
+        display: inline-block;
+        margin-right: 1em;
+    }
+}
+
+.eventSeries{
+    @extend .tag;
+    @extend .highlight-color;
+
+    &.tag-selected{
+        @extend .highlight-background;
+    }
 }
 
 .responsive-video iframe {

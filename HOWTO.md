@@ -8,6 +8,12 @@
 
 Run the project locally with live reload in development mode.
 
+`$ gatsby develop - - verbose`
+
+
+
+Safe-mode-ish environment, ignores some errors, worked when above wasn't 
+
 `$ npm run build` oder `$ gatsby build`
 
 Run a production build into `./public`. The result is ready to be put on any static hosting you prefer.
@@ -22,7 +28,7 @@ Remove cache and rerun gatsby develop (cache needs to be deleted to see changes 
 
 Couldn't get SASS running with Gatsby v1. Watch creates css in Terminal independetly from React. Executed from root folder
 
-## Git notebook
+## Git cheat sheet
 
 Good tutorial: https://nvie.com/posts/a-successful-git-branching-model/
 

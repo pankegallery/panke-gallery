@@ -11,8 +11,10 @@
             "brackets-git.gitPath": "/usr/local/bin/git",
             "fileFilters": [
                 {
-                    "name": "",
+                    "name": "cache_map_public",
                     "patterns": [
+                        "publich/*",
+                        ".cache/*",
                         "*.map"
                     ]
                 }
