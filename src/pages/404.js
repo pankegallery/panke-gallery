@@ -1,18 +1,29 @@
 import React from 'react';
-import get from 'lodash/get'
 import Helmet from 'react-helmet'
+import get from 'lodash/get'
+
 
 import Layout from "../components/layout"
-import ContentBlock from '../components/content-block'
 
 class Panke404 extends React.Component{
   render() {
-    return(){
+    return(
       <Layout>
-      <p>OOps…</p>
+        <section className="further">
+          <div className="row headline">
+            <div className="col-md-4">
+              <h1>Oops…</h1>
+            </div>
+            <div className="col-md-8">
+              <p>This shouldn't have happened. But we're working on fixing it. </p>
+
+              <p>Meanwhile, click on the coloured squares and decide which color you like best for our site. Don't hesitate to tell us why.</p>
+            </div>
+          </div>
+        </section>
       </Layout>
-    }
+    );
   }
 }
 
-export default PankeContact;
+export default Panke404;
