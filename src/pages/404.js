@@ -17,7 +17,7 @@ class Panke404 extends React.Component{
             <div className="col-md-8">
               <p>This shouldn't have happened. But we're working on fixing it. </p>
 
-              <p>Meanwhile, click on the coloured squares and decide which color you like best for our site. Don't hesitate to tell us why.</p>
+              <p>Meanwhile, click on the coloured squares and decide which color you like best for our site.</p>
             </div>
           </div>
         </section>
