@@ -26,7 +26,6 @@ class PankeEdition extends React.Component{
 
     return(
       <Layout>
-      <main>
         <Helmet
           title="Edition"
           meta={[
@@ -59,7 +58,6 @@ class PankeEdition extends React.Component{
             </div>
           </div>
         </section>
-      </main>
       </Layout>
     );
   }

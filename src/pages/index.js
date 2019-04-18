@@ -131,7 +131,6 @@ class PankeIndex extends React.Component {
 
     return (
       <Layout>
-      <main>
         <Helmet
           title="Home"
           meta={[
@@ -147,8 +146,7 @@ class PankeIndex extends React.Component {
         {current}
 
         {upcoming}
-        
-      </main>
+
       </Layout>
 
     );

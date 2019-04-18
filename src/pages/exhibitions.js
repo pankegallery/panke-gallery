@@ -130,7 +130,6 @@ class PankeExhibitions extends React.Component {
 
     return (
       <Layout>
-      <main>
         <Helmet
           title="Exhibitions"
           meta={[
@@ -147,7 +146,6 @@ class PankeExhibitions extends React.Component {
 
         {past}
 
-      </main>
       </Layout>
     );
   }

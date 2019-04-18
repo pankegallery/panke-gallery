@@ -53,7 +53,11 @@ const TemplateWrapper = ({ children }) => {
 
         <Header />
 
-        {children}
+        <main>
+
+          {children}
+
+        </main>
 
         <Footer />
 
