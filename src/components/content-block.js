@@ -7,7 +7,7 @@ export default ({ blockTitle, blockContent }) => (
                       <h2>{blockTitle}</h2>
                   </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
-              {<p dangerouslySetInnerHTML={{
+              {<div dangerouslySetInnerHTML={{
                 __html: blockContent.childMarkdownRemark.html
               }} />}
           </div>
