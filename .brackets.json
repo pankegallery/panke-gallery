@@ -26,7 +26,8 @@
                 "dist",
                 "vendor"
             ],
-            "brackets-git.terminalCommand": "/Users/larissa/Library/Application Support/Brackets/extensions/user/zaggino.brackets-git/shell/terminal.osa"
+            "brackets-git.terminalCommand": "/Users/larissa/Library/Application Support/Brackets/extensions/user/zaggino.brackets-git/shell/terminal.osa",
+            "linting.collapsed": true
         },
         "*.scss": {
             "spaceUnits": 4,
