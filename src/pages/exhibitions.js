@@ -130,7 +130,10 @@ class PankeExhibitions extends React.Component {
 
     return (
       <Layout>
+<<<<<<< HEAD
       <main>
+=======
+>>>>>>> development
         <Helmet
           title="Exhibitions"
           meta={[
@@ -147,7 +150,10 @@ class PankeExhibitions extends React.Component {
 
         {past}
 
+<<<<<<< HEAD
       </main>
+=======
+>>>>>>> development
       </Layout>
     );
   }

@@ -12,7 +12,7 @@ import '../styles/panke.css';
 
 const TemplateWrapper = ({ children }) => {
   return (
-    <div>
+    <div className="pageWrapper">
       <Helmet
         titleTemplate="%s · panke.gallery"
         title="Home"
@@ -36,24 +36,30 @@ const TemplateWrapper = ({ children }) => {
         <meta name="theme-color" content="#ffffff" />
 
         {/* CDN Scripts for Slideshow, Icons and SUPR */}
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" />
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" />
-        <script type="application/javascript" data-main="https://widget.supr.com/app/main" src="https://widget.supr.com/load.js" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" type="text/javascript" />
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript" />
+        <script type="application/javascript" data-main="https://widget.supr.com/app/main" src="https://widget.supr.com/load.js" type="text/javascript" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" type="style/css" />
 
         {/* panke.gallery scripts for link color */}
-        <script src="scripts/js.cookie.js" type="text/javascript"></script>
-        <script src="scripts/panke.js"></script>
+        <script src="scripts/js.cookie.js" type="text/javascript" />
+        <script src="scripts/panke.js" type="text/javascript" />
 
       </Helmet>
+
       <div className="off-canvas">
         <Navigation />
       </div>
+
       <div className="container theme-blue">
 
         <Header />
 
+<<<<<<< HEAD:src/components/layout.js
         {children}
+=======
+        <main>{children}</main>
+>>>>>>> development:src/components/layout.js
 
         <Footer />
 
