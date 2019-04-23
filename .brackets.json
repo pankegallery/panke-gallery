@@ -8,22 +8,14 @@
         "*.js": {
             "spaceUnits": 2,
             "wordWrap": true,
-            "brackets-git.gitPath": "/usr/local/bin/git",
+            "brackets-git.gitPath": "git",
             "fileFilters": [
                 {
-<<<<<<< HEAD
                     "name": "cache_map_public",
                     "patterns": [
                         "publich/*",
                         ".cache/*",
                         "*.map"
-=======
-                    "name": "public+cache",
-                    "patterns": [
-                        "public/*",
-                        ".cache/*",
-                        "node-modules/*"
->>>>>>> development
                     ]
                 }
             ],

@@ -48,10 +48,6 @@ class PankeContact extends React.Component{
     
     return(
       <Layout>
-<<<<<<< HEAD
-      <main>
-=======
->>>>>>> development
         <Helmet
           title="Contact"
           meta={[
@@ -109,10 +105,6 @@ class PankeContact extends React.Component{
             </div>
           </div>
         </section>
-<<<<<<< HEAD
-      </main>
-=======
->>>>>>> development
       </Layout>
     );
   }

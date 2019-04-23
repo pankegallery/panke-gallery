@@ -55,11 +55,7 @@ const TemplateWrapper = ({ children }) => {
 
         <Header />
 
-<<<<<<< HEAD:src/components/layout.js
-        {children}
-=======
         <main>{children}</main>
->>>>>>> development:src/components/layout.js
 
         <Footer />
 

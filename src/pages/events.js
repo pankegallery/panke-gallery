@@ -124,10 +124,6 @@ class PankeEvents extends React.Component {
 
     return (
       <Layout>
-<<<<<<< HEAD
-      <main>
-=======
->>>>>>> development
         <Helmet
           title="Events"
           meta={[
@@ -142,13 +138,7 @@ class PankeEvents extends React.Component {
 
         {past}
 
-<<<<<<< HEAD
-      </main>
-=======
->>>>>>> development
       </Layout>
-
-
 
     );
   }
