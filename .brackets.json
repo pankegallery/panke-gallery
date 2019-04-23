@@ -8,7 +8,7 @@
         "*.js": {
             "spaceUnits": 2,
             "wordWrap": true,
-            "brackets-git.gitPath": "/usr/local/bin/git",
+            "brackets-git.gitPath": "git",
             "fileFilters": [
                 {
                     "name": "public+cache",
