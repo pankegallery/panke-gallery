@@ -64,12 +64,9 @@ class PankeIndex extends React.Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-12 col-sm-12 col-xs-12">
-                    {<p dangerouslySetInnerHTML={{
+                  {<div className="col-md-12 col-sm-12 col-xs-12" dangerouslySetInnerHTML={{
                       __html: node.blockContent.childMarkdownRemark.html
                     }} />}
-
-                  </div>
                 </div>
               </article>
             )
