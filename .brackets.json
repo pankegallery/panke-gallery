@@ -15,7 +15,8 @@
                     "patterns": [
                         "publich/*",
                         ".cache/*",
-                        "*.map"
+                        "*.map",
+                        "*.js.map"
                     ]
                 }
             ],
