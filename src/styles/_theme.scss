@@ -446,24 +446,23 @@ footer {
     color: grey;
     font-size: 0.7em;
     padding: 100px 0 30px;
-}
 
-footer .social {
-    font-size: 1.3em;
-    letter-spacing: 0.8em;
-}
+    .social {
+        a{
+            color: grey;
+            font-size: 1.3em;
+            margin-left: 10px;
+            display: inline-block;
 
-footer .social a{
-    color: grey;
-}
+            &.facebook:hover{
+                color: #2f4984;
+            }
 
-footer .social a.facebook:hover{
-    color: #2f4984;
-}
-
-
-footer .social a.twitter:hover{
-    color: #339aea;
+            &.facebook:hover{
+                color: #339aea;
+            }
+        }
+    }
 }
 
 #color-swap {

@@ -9,8 +9,6 @@ import ExhibitionPreview from '../components/exhibition-preview'
 
 class PankeIndex extends React.Component {
   render() {
-    const siteTitle = get(this, 'props.data.site.siteMetadata.title')
-    console.log(siteTitle);
 
     // Get array of exhibitions
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
@@ -18,13 +16,13 @@ class PankeIndex extends React.Component {
     // Get array of news
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
-    // Log array of exhibitions
-    console.log("Posts:");
-    console.log(posts);
+    // Log array of all exhibitions
+//    console.log("Posts:");
+//    console.log(posts);
     
-    // Log array of upcoming exhibitions
-    console.log("news:");
-    console.log(newsItems);
+    // Log array of news
+//    console.log("news:");
+//    console.log(newsItems);
     
     // Filter array of exhibitions
     function filterCurrent(_ex) {
@@ -43,12 +41,12 @@ class PankeIndex extends React.Component {
     const upcomingExhibitions = posts.filter(filterUpcoming);
 
     // Log array of current exhibitions
-    console.log("Current Exhibitions:");
-    console.log(currentExhibitions);
+//    console.log("Current Exhibitions:");
+//    console.log(currentExhibitions);
 
     // Log array of upcoming exhibitions
-    console.log("Upcoming Exhibitions:");
-    console.log(upcomingExhibitions);
+//    console.log("Upcoming Exhibitions:");
+//    console.log(upcomingExhibitions);
 
     // Create news code
     var news;
@@ -57,7 +55,7 @@ class PankeIndex extends React.Component {
         <section className="news">
           {newsItems.map(({node}) => {
             return (
-              <article className="news-item">
+              <article key={node.id} className="news-item">
                 <div className="row headline">
                   <div className="col-md-12 col-sm-12 col-xs-12">
                     <h2>{node.title}</h2>
@@ -129,7 +127,7 @@ class PankeIndex extends React.Component {
     return (
       <Layout>
         <Helmet
-          title="Home"
+          title= '  Home'
           meta={[
             {
               name: 'description',

@@ -1,15 +1,20 @@
 import React from 'react'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons'
+import { faInstagram } from '@fortawesome/free-brands-svg-icons'
+
 export default () => (
-  <div className="social text-right">
+  <div className="social text-center text-sm-right mt-4 mt-sm-0">
     <a href="https://www.facebook.com/panke.gallery/" className="facebook" target="_blank" rel="noopener noreferrer">
-      <i className="fab fa-facebook-f"></i>
+      <FontAwesomeIcon icon={faFacebookF} />
     </a>
     <a href="https://www.instagram.com/panke.gallery/" className="facebook" target="_blank" rel="noopener noreferrer">
-      <i className="fab fa-instagram"></i>
+      <FontAwesomeIcon icon={faInstagram} />
     </a>
     <a href="https://twitter.com/pankegallery/" className="twitter" target="_blank" rel="noopener noreferrer">
-      <i className="fab fa-twitter"></i>
+      <FontAwesomeIcon icon={faTwitter} />
     </a>
   </div>
 )

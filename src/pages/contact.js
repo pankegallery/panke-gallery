@@ -15,7 +15,7 @@ class PankeContact extends React.Component{
     console.log('Blocks:');
     console.log(blocks);
     
-    {/*Define decidated content blocks: definedBlocks*/}
+    // Define decidated content blocks: definedBlocks
     var definedBlocks = {
       'visitUs'     : { slug:'contact-visit-us'   },
       'disclaimer'  : { slug:'contact-disclaimer' },
@@ -57,7 +57,7 @@ class PankeContact extends React.Component{
             }
           ]}
         />
-        <section className="further">  //  Contact info and opening times
+        <section className="further">  {/*  Contact info and opening times */}
           <div className="row">
             <div className="col-sm-4 col-xs-12"> 
               {definedBlocks.visitUs.array.map(({ node }) => {
@@ -79,7 +79,7 @@ class PankeContact extends React.Component{
           )
         })}
 
-        <section className="further">  //  Imprint and disclaimer
+        <section className="further">  {/*  Imprint and disclaimer */}
           <div className="row">
             <div className="col-sm-4 col-xs-12">
                 <h2>Impressum<br /></h2>

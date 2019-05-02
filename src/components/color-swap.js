@@ -1,12 +1,18 @@
 import React from 'react'
 
-export default () => (
-    <div id="color-swap">
-        <div className="red"></div>
-        <div className="green"></div>
-        <div className="blue"></div>
-        <div className="magenta"></div>
-        <div className="gold"></div>
-        <div className="tropical"></div>
-    </div>
-)
+class PankeColorSwap extends React.Component{
+  render(){
+    return(
+      <div id="color-swap">
+        <div className='red'      onClick={(e) => this.props.handleThemeColorClick(e, 'red'      )}  />
+        <div className='green'    onClick={(e) => this.props.handleThemeColorClick(e, 'green'    )}  />
+        <div className='blue'     onClick={(e) => this.props.handleThemeColorClick(e, 'blue'     )}  />
+        <div className='magenta'  onClick={(e) => this.props.handleThemeColorClick(e, 'magenta'  )}  />
+        <div className='gold'     onClick={(e) => this.props.handleThemeColorClick(e, 'gold'     )}  />
+        <div className='tropical' onClick={(e) => this.props.handleThemeColorClick(e, 'tropical' )}  />
+      </div>
+    );
+  }
+}
+
+export default PankeColorSwap;

@@ -1,8 +1,15 @@
 import React from 'react'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+
 import Navigation from '../components/navigation'
 
-export default () => (
-        <header>
+class pankeHeader extends React.Component {
+  render () {
+    return (
+
+      <header>
           <div className="row">
             <div className="col-md-4 col-9">
                 <a href="/" title="Go to Homepage"><p className="logotype">panke.gallery</p></a>
@@ -11,10 +18,15 @@ export default () => (
               <Navigation />
             </div>
             <div className="col-3 text-right d-block d-sm-none">
-              <button className="toggle-menu">
-                <i className="fas fa-bars"></i>
+              <button className="toggle-menu" onClick={this.props.handleClick}>
+                <FontAwesomeIcon icon={faBars} />
               </button>
             </div>
           </div>
         </header>
-)
+
+    ); // return
+  } // render
+} // class
+
+export default pankeHeader;
