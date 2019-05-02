@@ -79,12 +79,6 @@ class TemplateWrapper extends React.Component {
           <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" type="text/javascript" />
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript" />
           <script type="application/javascript" data-main="https://widget.supr.com/app/main" src="https://widget.supr.com/load.js" />
-          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" type="style/css" />
-
-          {/* panke.gallery scripts for link color and menu  */}
-          <script src="scripts/js.cookie.js" type="text/javascript" />
-          <script src="scripts/panke.js" type="text/javascript" />
-
         </Helmet>
 
 
