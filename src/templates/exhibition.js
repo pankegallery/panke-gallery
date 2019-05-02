@@ -18,7 +18,7 @@ class ExhibitionTemplate extends React.Component {
     const siteTitle = get(this.props, 'data.site.siteMetadata.title')
     console.log(siteTitle);
 
-    {/* ––– Slideshow or featured images ––– */}
+    // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
     if (exhibition.exhibitionImpressionsSlideshow != null){
@@ -33,7 +33,7 @@ class ExhibitionTemplate extends React.Component {
     }
 
 
-    {/* ––– Documentation ––– */}
+    // ––– Documentation –––
 
     var DocumentationImages;
     if (exhibition.exhibitionDocumentationImagesBelow){
@@ -42,7 +42,7 @@ class ExhibitionTemplate extends React.Component {
       );
     }
 
-    {/* ––– Further Content Blocks ––– */}
+    // ––– Further Content Blocks –––
 
     var FurtherContentBlocks
     if (exhibition.furtherInformationBlocks){
@@ -55,7 +55,7 @@ class ExhibitionTemplate extends React.Component {
       );
     }
 
-    {/* ––– Exhibition tags ––– */}
+    // ––– Exhibition tags –––
     var exhibitionTags;
     if (exhibition.tags!=null){
       exhibitionTags =(
@@ -69,11 +69,11 @@ class ExhibitionTemplate extends React.Component {
       );
     }
 
-    {/*==========================================================================
+    //==========================================================================
 
-                                    OUTPUT
+    //                                OUTPUT
 
-    ==========================================================================*/}
+    //==========================================================================
 
     return (
       <Layout>
@@ -87,10 +87,14 @@ class ExhibitionTemplate extends React.Component {
               <div className="subtitle" dangerouslySetInnerHTML={{
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
-              <p className="meta">{exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate} | {exhibition.openingHours}</p>
+              <p className="meta">
+                {exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate}
+                {exhibition.openingHours && ' | '} {exhibition.openingHours}
+                {exhibition.vernissageInfos && ' | '} {exhibition.vernissageInfos}
+              </p>
               {exhibitionTags}
 
-              {/* ---- SLIDESHOW ---- */}
+              {/*  ---- SLIDESHOW ---- */}
 
               {ImageOrSlides}
 
@@ -98,7 +102,7 @@ class ExhibitionTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ABOUT ---- */}
+        {/*  ---- ABOUT ---- */}
 
         <section className="info">
           <div className="row">
@@ -113,11 +117,11 @@ class ExhibitionTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
+        {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
         {FurtherContentBlocks}
 
-        {/* ---- DOCUMENTATION IMAGES ---- */}
+        {/*  ---- DOCUMENTATION IMAGES ---- */}
 
         {DocumentationImages}
 
@@ -130,11 +134,12 @@ class ExhibitionTemplate extends React.Component {
 export default ExhibitionTemplate;
 
 
-{/*=========================================================================
+//==========================================================================
 
-                                QUERY
+//                                QUERY
 
-==========================================================================*/}
+//==========================================================================
+
 
 export const pageQuery = graphql`
   query ExhibitionsBySlug($slug: String!) {
@@ -157,6 +162,7 @@ export const pageQuery = graphql`
         }
       }
       openingHours
+      vernissageInfos
       furtherInformationBlocks {
         id
         title

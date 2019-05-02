@@ -27,7 +27,9 @@
                 "vendor"
             ],
             "brackets-git.terminalCommand": "/Users/larissa/Library/Application Support/Brackets/extensions/user/zaggino.brackets-git/shell/terminal.osa",
-            "linting.collapsed": true
+            "linting.collapsed": true,
+            "linting.enabled": true,
+            "quickview.enabled": true
         },
         "*.scss": {
             "spaceUnits": 4,

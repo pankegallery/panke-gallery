@@ -24,7 +24,7 @@ const TemplateWrapper = ({ children }) => {
       />
 
       <Helmet>
-        {/* Favicons for all platforms */}
+        {/*  Favicons for all platforms */}
         <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" />
@@ -41,7 +41,7 @@ const TemplateWrapper = ({ children }) => {
         <script type="application/javascript" data-main="https://widget.supr.com/app/main" src="https://widget.supr.com/load.js" type="text/javascript" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" type="style/css" />
 
-        {/* panke.gallery scripts for link color */}
+        {/* panke.gallery scripts for link color  */}
         <script src="scripts/js.cookie.js" type="text/javascript" />
         <script src="scripts/panke.js" type="text/javascript" />
 

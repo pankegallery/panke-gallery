@@ -8,10 +8,10 @@ import ContentBlock from '../components/content-block'
 
 class PankeContact extends React.Component{
   render() {
-    {/*Get array of content blocks*/}
+    // Get array of content blocks
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
     
-    {/*Log array of Blocks*/}
+    // Log array of Blocks
     console.log('Blocks:');
     console.log(blocks);
     
@@ -24,7 +24,7 @@ class PankeContact extends React.Component{
     
     var slugs = [];
     
-    {/*Fill definedBlocks with content*/}
+    // Fill definedBlocks with content
     for(var key in definedBlocks) {
       const _b = blocks.filter(function (_blocks) {
         return _blocks.node.slug === definedBlocks[key].slug;
@@ -57,7 +57,7 @@ class PankeContact extends React.Component{
             }
           ]}
         />
-        <section className="further">  {/* Contact info and opening times*/}
+        <section className="further">  //  Contact info and opening times
           <div className="row">
             <div className="col-sm-4 col-xs-12"> 
               {definedBlocks.visitUs.array.map(({ node }) => {
@@ -79,7 +79,7 @@ class PankeContact extends React.Component{
           )
         })}
 
-        <section className="further">  {/* Imprint and disclaimer */}
+        <section className="further">  //  Imprint and disclaimer
           <div className="row">
             <div className="col-sm-4 col-xs-12">
                 <h2>Impressum<br /></h2>

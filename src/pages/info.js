@@ -8,10 +8,10 @@ import ContentBlock from '../components/content-block'
 
 class PankeInfo extends React.Component{
   render() {
-    {/*Get array of content blocks*/}
+
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
-    {/*Log array of Blocks*/}
+
     console.log('Blocks:');
     console.log(blocks);
 

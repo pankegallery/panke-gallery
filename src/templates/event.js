@@ -17,7 +17,7 @@ class EventTemplate extends React.Component {
     const event = get(this.props, 'data.contentfulEvent')
     console.log(event);
 
-    {/* ––– Slideshow or featured images ––– */}
+    // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
     if (event.eventImpressionsSlideshow != null){
@@ -31,7 +31,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-    {/* ––– Documentation ––– */}
+    // ––– Documentation ––– */}
     var DocumentationImages;
     if (event.eventDocumentationImagesBelow){
       DocumentationImages =(
@@ -39,7 +39,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-    {/* ––– Event date and fee ––– */}
+    // ––– Event date and fee ––– */}
     var EventDateAndEntryFee;
     if (event.entryfee){
       EventDateAndEntryFee =(
@@ -53,7 +53,7 @@ class EventTemplate extends React.Component {
     }
 
 
-    {/* ––– Further Content Blocks ––– */}
+    // ––– Further Content Blocks –––
 
     var FurtherContentBlocks;
     if (event.furtherInformationBlocks){
@@ -66,7 +66,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-    {/* ––– Event series and tags ––– */}
+    // ––– Event series and tags –––
     var eventCategory;
     if (event.eventSeries!=null){
       eventCategory =(
@@ -89,11 +89,11 @@ class EventTemplate extends React.Component {
       );
     }
 
-   {/*==========================================================================
+    //==========================================================================
 
-                                    OUTPUT
+    //                                OUTPUT
 
-    ==========================================================================*/}
+    //==========================================================================
 
     return (
       <Layout>
@@ -110,7 +110,7 @@ class EventTemplate extends React.Component {
               {EventDateAndEntryFee}
               {eventCategory}{eventTags}
 
-              {/* ---- FEATURED IMAGE ---- */}
+              {/*  ---- FEATURED IMAGE ---- */}
 
               {ImageOrSlides}
 
@@ -118,7 +118,7 @@ class EventTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ABOUT ---- */}
+        {/*  ---- ABOUT ---- */}
 
         <section className="info">
           <div className="row">
@@ -133,11 +133,11 @@ class EventTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
+        {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
         {FurtherContentBlocks}
 
-        {/* ---- DOCUMENTATION IMAGES ---- */}
+        {/*  ---- DOCUMENTATION IMAGES ---- */}
 
         {DocumentationImages}
 
@@ -151,11 +151,11 @@ export default EventTemplate;
 
 
 
-{/*=========================================================================
+//==========================================================================
 
-                                QUERY
+//                                QUERY
 
-==========================================================================*/}
+//==========================================================================
 
 
 export const pageQuery = graphql`

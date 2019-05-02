@@ -10,17 +10,17 @@ import EditionListItem from '../components/edition-list-item'
 
 class PankeEdition extends React.Component{
   render() {
-    {/*Get array of content blocks*/}
+    // Get array of content blocks
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
-    {/*Get array of editions*/}
+    // Get array of editions
     const posts = get(this, 'props.data.allContentfulEdition.edges');
 
-    {/*Log array of Content Blocks*/}
+    // Log array of Content Blocks
     console.log("Blocks:");
     console.log(blocks);
 
-    {/*Log array of Editions*/}
+    // Log array of Editions
     console.log("Editions:");
     console.log(posts);
 

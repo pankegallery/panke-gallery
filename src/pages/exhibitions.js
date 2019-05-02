@@ -9,14 +9,14 @@ import ExhibitionListItem from '../components/exhibition-list-item'
 class PankeExhibitions extends React.Component {
   render() {
 
-    {/*Get array of exhibitions*/}
+    // Get array of exhibitions
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
 
-    {/*Log array of exhibitions*/}
+    // Log array of exhibitions
     console.log("Posts:");
     console.log(posts);
 
-    {/*Filter array of exhibitions*/}
+    // Filter array of exhibitions
     function filterCurrent(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
@@ -39,15 +39,15 @@ class PankeExhibitions extends React.Component {
     }
     const pastExhibitions = posts.filter(filterPast);
 
-    {/*Log array of current exhibitions*/}
+    // Log array of current exhibitions
     console.log("Current Exhibitions:");
     console.log(currentExhibitions);
 
-    {/*Log array of upcoming exhibitions*/}
+    // Log array of upcoming exhibitions
     console.log("Upcoming Exhibitions:");
     console.log(upcomingExhibitions);
 
-    {/*Log array of past exhibitions*/}
+    // Log array of past exhibitions
     console.log("Past Exhibitions:");
     console.log(pastExhibitions);
 

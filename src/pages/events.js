@@ -52,14 +52,14 @@ class PankeEvents extends React.Component {
 
   render() {
 
-    {/*Get array of events*/}
+    // Get array of events
     const posts = get(this, 'props.data.allContentfulEvent.edges')
 
-    {/*Log array of Events*/}
+    // Log array of Events
 //    console.log("Posts:");
 //    console.log(posts);
 
-    {/*Filter array of events*/}
+    // Filter array of events
     function filterUpcoming(_ev) {
       var currentDate = new Date();
       var eventDate = new Date(_ev.node.date);
@@ -74,11 +74,11 @@ class PankeEvents extends React.Component {
     }
     const pastEvents = posts.filter(filterPast);
 
-    {/*Log array of upcoming events*/}
+    // Log array of upcoming events
 //    console.log("Upcoming events:");
 //    console.log(upcomingEvents);
 
-    {/*Log array of past events*/}
+    // Log array of past events
 //    console.log("Past events:");
 //    console.log(pastEvents);
 

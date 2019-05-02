@@ -5,7 +5,7 @@ import Img from 'gatsby-image'
 export default ({slides, length}) => (
   <div id="myCarousel" className="row carousel slide" data-ride="carousel">
 
-    {/* Indicators */}
+    //  Indicators
     <ol className="carousel-indicators">
       {slides.map(({sizes}, index ) => {
         var sldto = index;
@@ -16,7 +16,7 @@ export default ({slides, length}) => (
       })}
     </ol>
 
-    {/* Wrapper for slides */}
+    //  Wrapper for slides
     <div className="carousel-inner" role="listbox">
 
       {slides.map(({sizes, description}, index ) => {
@@ -37,7 +37,7 @@ export default ({slides, length}) => (
 
     </div>
 
-    {/* Left and right controls */}
+    //  Left and right controls
 
     <a className="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -10,7 +10,7 @@ class EventListItem extends React.Component {
     var event = this.props.event;
 
     var eventCategory;
-    var articleClass;
+
     if (event.eventSeries!=null) {
       eventCategory =(
         <Tag

@@ -12,21 +12,21 @@ class PankeIndex extends React.Component {
     const siteTitle = get(this, 'props.data.site.siteMetadata.title')
     console.log(siteTitle);
 
-    {/*Get array of exhibitions*/}
+    // Get array of exhibitions
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
     
-    {/*Get array of news*/}
+    // Get array of news
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
-    {/*Log array of exhibitions*/}
+    // Log array of exhibitions
     console.log("Posts:");
     console.log(posts);
     
-    {/*Log array of upcoming exhibitions*/}
+    // Log array of upcoming exhibitions
     console.log("news:");
     console.log(newsItems);
     
-    {/*Filter array of exhibitions*/}
+    // Filter array of exhibitions
     function filterCurrent(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
@@ -42,15 +42,15 @@ class PankeIndex extends React.Component {
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
 
-    {/*Log array of current exhibitions*/}
+    // Log array of current exhibitions
     console.log("Current Exhibitions:");
     console.log(currentExhibitions);
 
-    {/*Log array of upcoming exhibitions*/}
+    // Log array of upcoming exhibitions
     console.log("Upcoming Exhibitions:");
     console.log(upcomingExhibitions);
 
-    {/*Create news code*/}
+    // Create news code
     var news;
     if (newsItems){
       news = (
@@ -76,7 +76,7 @@ class PankeIndex extends React.Component {
       );
     }
 
-    {/*Create current exhibitions code if there are*/}
+    // Create current exhibitions code if there are
     var current;
     if (currentExhibitions.length > 0){
       current = (
@@ -101,7 +101,7 @@ class PankeIndex extends React.Component {
       );
     }
 
-    {/*Create upcoming exhibitions code if there are*/}
+    // Create upcoming exhibitions code if there are
     var upcoming;
     if (upcomingExhibitions.length > 0){
       upcoming = (
@@ -172,6 +172,7 @@ export const pageQuery = graphql`
             }
           }
           openingHours
+          vernissageInfos
           subtitleShortDescription {
             childMarkdownRemark {
               html
