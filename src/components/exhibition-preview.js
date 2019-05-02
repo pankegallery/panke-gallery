@@ -14,6 +14,10 @@ export default ({ exhibition }) => (
     <p dangerouslySetInnerHTML={{
         __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
       }} />
-    <p className="meta">{Moment(exhibition.startDate).format('DD MMMM')}&thinsp;&ndash;&thinsp;{Moment(exhibition.endDate).format('DD MMMM YYYY')} | {exhibition.openingHours}</p>
+    <p className="meta">
+      {Moment(exhibition.startDate).format('DD MMMM')}&thinsp;&ndash;&thinsp;{Moment(exhibition.endDate).format('DD MMMM YYYY')}
+      {exhibition.openingHours && ' | ' }{exhibition.openingHours}
+      {exhibition.vernissageInfos && ' | ' }{exhibition.vernissageInfos}
+    </p>
   </article>
 )

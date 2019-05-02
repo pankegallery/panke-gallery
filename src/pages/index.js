@@ -9,24 +9,22 @@ import ExhibitionPreview from '../components/exhibition-preview'
 
 class PankeIndex extends React.Component {
   render() {
-    const siteTitle = get(this, 'props.data.site.siteMetadata.title')
-    console.log(siteTitle);
 
-    {/*Get array of exhibitions*/}
+    // Get array of exhibitions
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
     
-    {/*Get array of news*/}
+    // Get array of news
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
-    {/*Log array of exhibitions*/}
-    console.log("Posts:");
-    console.log(posts);
+    // Log array of all exhibitions
+//    console.log("Posts:");
+//    console.log(posts);
     
-    {/*Log array of upcoming exhibitions*/}
-    console.log("news:");
-    console.log(newsItems);
+    // Log array of news
+//    console.log("news:");
+//    console.log(newsItems);
     
-    {/*Filter array of exhibitions*/}
+    // Filter array of exhibitions
     function filterCurrent(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
@@ -42,22 +40,26 @@ class PankeIndex extends React.Component {
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
 
-    {/*Log array of current exhibitions*/}
-    console.log("Current Exhibitions:");
-    console.log(currentExhibitions);
+    // Log array of current exhibitions
+//    console.log("Current Exhibitions:");
+//    console.log(currentExhibitions);
 
-    {/*Log array of upcoming exhibitions*/}
-    console.log("Upcoming Exhibitions:");
-    console.log(upcomingExhibitions);
+    // Log array of upcoming exhibitions
+//    console.log("Upcoming Exhibitions:");
+//    console.log(upcomingExhibitions);
 
+<<<<<<< HEAD
     {/*Create news code*/}
+=======
+    // Create news code
+>>>>>>> development
     var news;
     if (newsItems){
       news = (
         <section className="news">
           {newsItems.map(({node}) => {
             return (
-              <article className="news-item">
+              <article key={node.id} className="news-item">
                 <div className="row headline">
                   <div className="col-md-12 col-sm-12 col-xs-12">
                     <h2>{node.title}</h2>
@@ -76,7 +78,11 @@ class PankeIndex extends React.Component {
       );
     }
 
+<<<<<<< HEAD
     {/*Create current exhibitions code if there are*/}
+=======
+    // Create current exhibitions code if there are
+>>>>>>> development
     var current;
     if (currentExhibitions.length > 0){
       current = (
@@ -101,7 +107,11 @@ class PankeIndex extends React.Component {
       );
     }
 
+<<<<<<< HEAD
     {/*Create upcoming exhibitions code if there are*/}
+=======
+    // Create upcoming exhibitions code if there are
+>>>>>>> development
     var upcoming;
     if (upcomingExhibitions.length > 0){
       upcoming = (
@@ -129,7 +139,7 @@ class PankeIndex extends React.Component {
     return (
       <Layout>
         <Helmet
-          title="Home"
+          title= '  Home'
           meta={[
             {
               name: 'description',
@@ -143,6 +153,10 @@ class PankeIndex extends React.Component {
         {current}
 
         {upcoming}
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
       </Layout>
 
     );
@@ -171,6 +185,7 @@ export const pageQuery = graphql`
             }
           }
           openingHours
+          vernissageInfos
           subtitleShortDescription {
             childMarkdownRemark {
               html

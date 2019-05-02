@@ -52,6 +52,7 @@ class PankeEvents extends React.Component {
 
   render() {
 
+<<<<<<< HEAD
     {/*Get array of events*/}
     const posts = get(this, 'props.data.allContentfulEvent.edges')
 
@@ -60,12 +61,23 @@ class PankeEvents extends React.Component {
 //    console.log(posts);
 
     {/*Filter array of events*/}
+=======
+    // Get array of events
+    const posts = get(this, 'props.data.allContentfulEvent.edges')
+
+    // Log array of Events
+//    console.log("Posts:");
+//    console.log(posts);
+
+    // Filter array of events
+>>>>>>> development
     function filterUpcoming(_ev) {
       var currentDate = new Date();
       var eventDate = new Date(_ev.node.date);
       return eventDate >= currentDate;
     }
     const upcomingEvents = posts.filter(filterUpcoming);
+    upcomingEvents.reverse();
 
     function filterPast(_ev) {
       var currentDate = new Date();
@@ -74,11 +86,19 @@ class PankeEvents extends React.Component {
     }
     const pastEvents = posts.filter(filterPast);
 
+<<<<<<< HEAD
     {/*Log array of upcoming events*/}
 //    console.log("Upcoming events:");
 //    console.log(upcomingEvents);
 
     {/*Log array of past events*/}
+=======
+    // Log array of upcoming events
+//    console.log("Upcoming events:");
+//    console.log(upcomingEvents);
+
+    // Log array of past events
+>>>>>>> development
 //    console.log("Past events:");
 //    console.log(pastEvents);
 
@@ -121,6 +141,15 @@ class PankeEvents extends React.Component {
         </section>
       );
     }
+<<<<<<< HEAD
+=======
+
+    //==========================================================================
+
+    //                                OUTPUT
+
+    //==========================================================================
+>>>>>>> development
 
     return (
       <Layout>
@@ -139,12 +168,24 @@ class PankeEvents extends React.Component {
         {past}
 
       </Layout>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> development
 
     );
   }
 }
 
 export default PankeEvents;
+
+
+//=========================================================================
+
+//                                QUERY
+
+//=========================================================================
 
 export const pageQuery = graphql`
   query PankeEventsQuery {

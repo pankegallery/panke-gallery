@@ -11,12 +11,11 @@
             "brackets-git.gitPath": "git",
             "fileFilters": [
                 {
-                    "name": "cache_map_public",
+                    "name": "public+cache",
                     "patterns": [
-                        "publich/*",
+                        "public/*",
                         ".cache/*",
-                        "*.map",
-                        "*.js.map"
+                        "node-modules/*"
                     ]
                 }
             ],
@@ -27,11 +26,14 @@
                 "dist",
                 "vendor"
             ],
-            "brackets-git.terminalCommand": "/Users/larissa/Library/Application Support/Brackets/extensions/user/zaggino.brackets-git/shell/terminal.osa"
+            "brackets-git.terminalCommand": "/Users/larissa/Library/Application Support/Brackets/extensions/user/zaggino.brackets-git/shell/terminal.osa",
+            "linting.collapsed": true,
+            "linting.enabled": true,
+            "quickview.enabled": true
         },
         "*.scss": {
             "spaceUnits": 4,
-            "brackets-git.gitPath": "/usr/local/bin/git"
+            "brackets-git.gitPath": "git"
         },
         "*.css": {
             "spaceUnits": 4

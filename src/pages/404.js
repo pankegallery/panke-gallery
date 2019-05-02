@@ -1,7 +1,10 @@
 import React from 'react';
+<<<<<<< HEAD
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 
+=======
+>>>>>>> development
 
 import Layout from "../components/layout"
 

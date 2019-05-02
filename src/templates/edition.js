@@ -14,7 +14,7 @@ class EditionTemplate extends React.Component {
     const edition = get(this.props, 'data.contentfulEdition')
     console.log(edition);
 
-    {/* ––– Slideshow or featured images ––– */}
+    // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
     if (edition.editionImpressionsSlideshow != null){
@@ -29,7 +29,7 @@ class EditionTemplate extends React.Component {
     }
 
 
-    {/* ––– Further Content Blocks ––– */}
+    // ––– Further Content Blocks –––
 
     var FurtherContentBlocks;
     if (edition.furtherInformationBlocks){
@@ -41,11 +41,16 @@ class EditionTemplate extends React.Component {
         })
       );
     }
+<<<<<<< HEAD
    {/*==========================================================================
+=======
 
-                                    OUTPUT
+    //==========================================================================
+>>>>>>> development
 
-    ==========================================================================*/}
+    //                                OUTPUT
+
+    //==========================================================================
 
     return (
       <Layout>
@@ -60,7 +65,7 @@ class EditionTemplate extends React.Component {
                   __html: edition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
 
-              {/* ---- FEATURED IMAGE ---- */}
+              {/*  ---- FEATURED IMAGE ---- */}
 
               {ImageOrSlides}
 
@@ -68,7 +73,7 @@ class EditionTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ABOUT ---- */}
+        {/*  ---- ABOUT ---- */}
 
         <section className="further">
           <div className="row">
@@ -87,7 +92,7 @@ class EditionTemplate extends React.Component {
           </div>
         </section>
 
-        {/* ---- ADDITIONAL BLOCKS (each a section) ---- */}
+        {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
         {FurtherContentBlocks}
 
@@ -101,11 +106,11 @@ export default EditionTemplate;
 
 
 
-{/*=========================================================================
+//==========================================================================
 
-                                QUERY
+//                                QUERY
 
-==========================================================================*/}
+//==========================================================================
 
 
 export const pageQuery = graphql`
