@@ -66,6 +66,7 @@ class PankeEvents extends React.Component {
       return eventDate >= currentDate;
     }
     const upcomingEvents = posts.filter(filterUpcoming);
+    upcomingEvents.reverse();
 
     function filterPast(_ev) {
       var currentDate = new Date();
@@ -122,6 +123,12 @@ class PankeEvents extends React.Component {
       );
     }
 
+    //==========================================================================
+
+    //                                OUTPUT
+
+    //==========================================================================
+
     return (
       <Layout>
         <Helmet
@@ -147,6 +154,13 @@ class PankeEvents extends React.Component {
 }
 
 export default PankeEvents;
+
+
+//=========================================================================
+
+//                                QUERY
+
+//=========================================================================
 
 export const pageQuery = graphql`
   query PankeEventsQuery {

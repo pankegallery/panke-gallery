@@ -24,6 +24,7 @@ class PankeExhibitions extends React.Component {
       return exhibtionEndDate > currentDate && currentDate > exhibtionStartDate;
     }
     const currentExhibitions = posts.filter(filterCurrent);
+    currentExhibitions.reverse();
 
     function filterUpcoming(_ex) {
       var currentDate = new Date();
@@ -31,6 +32,7 @@ class PankeExhibitions extends React.Component {
       return exhibtionStartDate > currentDate;
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
+    upcomingExhibitions.reverse();
 
     function filterPast(_ex) {
       var currentDate = new Date();
@@ -122,11 +124,13 @@ class PankeExhibitions extends React.Component {
         </section>
       );
     }
-    {/*==========================================================================
 
-                                    OUTPUT
 
-    ==========================================================================*/}
+    //==========================================================================
+
+    //                                OUTPUT
+
+    //==========================================================================
 
     return (
       <Layout>
@@ -154,11 +158,11 @@ class PankeExhibitions extends React.Component {
 export default PankeExhibitions;
 
 
-{/*=========================================================================
+//=========================================================================
 
-                                QUERY
+//                                QUERY
 
-==========================================================================*/}
+//=========================================================================
 
 export const pageQuery = graphql`
   query PankeExhibitionsQuery {
