@@ -18,13 +18,9 @@ class pankeHeader extends React.Component {
               <Navigation />
             </div>
             <div className="col-3 text-right d-block d-sm-none">
-<<<<<<< HEAD
-              <button className="toggle-menu">
-                <i className="fas fa-bars"></i>
-=======
               <button className="toggle-menu" onClick={this.props.handleClick}>
                 <FontAwesomeIcon icon={faBars} />
->>>>>>> development
+
               </button>
             </div>
           </div>

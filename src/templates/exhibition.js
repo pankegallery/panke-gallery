@@ -55,11 +55,8 @@ class ExhibitionTemplate extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/* ––– Exhibition tags ––– */}
-=======
     // ––– Exhibition tags –––
->>>>>>> development
+
     var exhibitionTags;
     if (exhibition.tags!=null){
       exhibitionTags =(
@@ -91,15 +88,12 @@ class ExhibitionTemplate extends React.Component {
               <div className="subtitle" dangerouslySetInnerHTML={{
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
-<<<<<<< HEAD
-              <p className="meta">{exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate} | {exhibition.openingHours}</p>
-=======
               <p className="meta">
                 {exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate}
                 {exhibition.openingHours && ' | '} {exhibition.openingHours}
                 {exhibition.vernissageInfos && ' | '} {exhibition.vernissageInfos}
               </p>
->>>>>>> development
+
               {exhibitionTags}
 
               {/*  ---- SLIDESHOW ---- */}
