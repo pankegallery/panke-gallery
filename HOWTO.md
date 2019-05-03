@@ -75,3 +75,10 @@ $ git push --tags
 ### Skip netlify build
 
 Add `[skip ci]` anywhere in commit message
+
+
+## Find/Replace Cheat Sheet
+
+# Git merge conflict
+
+Find `(<<<<<<< \w+)([\W\w\n\r\t]*?)(\n=======\n)([\W\w\n\r\t]*?)(>>>>>>> \w+\n)` replace by `$4`

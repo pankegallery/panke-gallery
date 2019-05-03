@@ -56,6 +56,7 @@ class ExhibitionTemplate extends React.Component {
     }
 
     // ––– Exhibition tags –––
+
     var exhibitionTags;
     if (exhibition.tags!=null){
       exhibitionTags =(
@@ -92,6 +93,7 @@ class ExhibitionTemplate extends React.Component {
                 {exhibition.openingHours && ' | '} {exhibition.openingHours}
                 {exhibition.vernissageInfos && ' | '} {exhibition.vernissageInfos}
               </p>
+
               {exhibitionTags}
 
               {/*  ---- SLIDESHOW ---- */}

@@ -125,7 +125,6 @@ class PankeExhibitions extends React.Component {
       );
     }
 
-
     //==========================================================================
 
     //                                OUTPUT

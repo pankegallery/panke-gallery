@@ -31,7 +31,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-    // ––– Documentation ––– */}
+    // ––– Documentation –––
     var DocumentationImages;
     if (event.eventDocumentationImagesBelow){
       DocumentationImages =(
@@ -39,7 +39,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-    // ––– Event date and fee ––– */}
+    // ––– Event date and fee –––
     var EventDateAndEntryFee;
     if (event.entryfee){
       EventDateAndEntryFee =(
