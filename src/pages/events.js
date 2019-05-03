@@ -59,7 +59,8 @@ class PankeEvents extends React.Component {
 //    console.log("Posts:");
 //    console.log(posts);
 
-    // Filter array of events    function filterUpcoming(_ev) {
+    // Filter array of events    
+    function filterUpcoming(_ev) {
       var currentDate = new Date();
       var eventDate = new Date(_ev.node.date);
       return eventDate >= currentDate;
@@ -78,7 +79,8 @@ class PankeEvents extends React.Component {
 //    console.log("Upcoming events:");
 //    console.log(upcomingEvents);
 
-    // Log array of past events//    console.log("Past events:");
+    // Log array of past events
+//    console.log("Past events:");
 //    console.log(pastEvents);
 
     var upcoming;
