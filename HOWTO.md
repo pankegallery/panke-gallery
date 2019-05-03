@@ -56,9 +56,9 @@ Create branch from old branch in Brackets · **Dont' select origin but the simpl
 When merging branches, merge XXX-new into YYY-old(master).
 
 ```
-$ checkout YYY-old
+$ git checkout YYY-old
 
-$ merge --no-ff XXX-new
+$ git merge --no-ff XXX-new
 
 ```
 
