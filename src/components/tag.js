@@ -12,11 +12,7 @@ class Tag extends React.Component {
   }
 
   componentDidUpdate(){
-<<<<<<< HEAD
-    if (this.state.isToggleOn != this.props.filterIsOn){
-=======
     if (this.state.isToggleOn !== this.props.filterIsOn){
->>>>>>> development
       this.setState(state => ({
         isToggleOn: this.props.filterIsOn
       }));
@@ -42,22 +38,14 @@ class Tag extends React.Component {
       var className = 'tag eventSeries tag-selected';
     }
     else if (type === 'eventSeries' && !toogle) {
-<<<<<<< HEAD
-      var className = 'tag eventSeries';
-=======
       className = 'tag eventSeries';
->>>>>>> development
     }
     else{
       className = 'tag';
     }
 
     return (
-<<<<<<< HEAD
-      <p ref="tag" className ={className} onClick={this.handleTagClick}>
-=======
       <p ref="tag" className={className} onClick={this.handleTagClick}>
->>>>>>> development
         {thistag.name}
       </p>
     );

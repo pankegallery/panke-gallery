@@ -31,11 +31,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/* ––– Documentation ––– */}
-=======
-    // ––– Documentation ––– */}
->>>>>>> development
+    // ––– Documentation –––
     var DocumentationImages;
     if (event.eventDocumentationImagesBelow){
       DocumentationImages =(
@@ -43,11 +39,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/* ––– Event date and fee ––– */}
-=======
-    // ––– Event date and fee ––– */}
->>>>>>> development
+    // ––– Event date and fee –––
     var EventDateAndEntryFee;
     if (event.entryfee){
       EventDateAndEntryFee =(
@@ -74,11 +66,7 @@ class EventTemplate extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/* ––– Event series and tags ––– */}
-=======
     // ––– Event series and tags –––
->>>>>>> development
     var eventCategory;
     if (event.eventSeries!=null){
       eventCategory =(

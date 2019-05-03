@@ -48,11 +48,7 @@ class PankeIndex extends React.Component {
 //    console.log("Upcoming Exhibitions:");
 //    console.log(upcomingExhibitions);
 
-<<<<<<< HEAD
-    {/*Create news code*/}
-=======
     // Create news code
->>>>>>> development
     var news;
     if (newsItems){
       news = (
@@ -78,11 +74,7 @@ class PankeIndex extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/*Create current exhibitions code if there are*/}
-=======
     // Create current exhibitions code if there are
->>>>>>> development
     var current;
     if (currentExhibitions.length > 0){
       current = (
@@ -107,11 +99,7 @@ class PankeIndex extends React.Component {
       );
     }
 
-<<<<<<< HEAD
-    {/*Create upcoming exhibitions code if there are*/}
-=======
     // Create upcoming exhibitions code if there are
->>>>>>> development
     var upcoming;
     if (upcomingExhibitions.length > 0){
       upcoming = (
@@ -153,10 +141,7 @@ class PankeIndex extends React.Component {
         {current}
 
         {upcoming}
-<<<<<<< HEAD
-=======
 
->>>>>>> development
       </Layout>
 
     );
