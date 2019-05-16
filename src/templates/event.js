@@ -126,7 +126,7 @@ class EventTemplate extends React.Component {
               <h2>About the event</h2>
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
-              <p dangerouslySetInnerHTML={{
+              <div dangerouslySetInnerHTML={{
                 __html: event.description.childMarkdownRemark.html
               }} />
             </div>
