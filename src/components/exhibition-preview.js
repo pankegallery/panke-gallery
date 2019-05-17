@@ -11,7 +11,7 @@ export default ({ exhibition }) => (
     <h3>
       <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>
     </h3>
-    <p dangerouslySetInnerHTML={{
+    <div dangerouslySetInnerHTML={{
         __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
       }} />
     <p className="meta">

@@ -75,13 +75,13 @@ class EditionTemplate extends React.Component {
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12">
               <h2>About the edition</h2>
-              <p dangerouslySetInnerHTML={{
+              <div dangerouslySetInnerHTML={{
                 __html: edition.embedCode.childMarkdownRemark.html
               }} />
               <small>The widget needs coockies from third parties to be enabled. If you don't want to follow this requirement, feel free to write us an email to info@panke.gallery.</small>
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
-              <p dangerouslySetInnerHTML={{
+              <div dangerouslySetInnerHTML={{
                 __html: edition.description.childMarkdownRemark.html
               }} />
             </div>

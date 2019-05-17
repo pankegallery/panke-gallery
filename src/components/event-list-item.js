@@ -33,7 +33,7 @@ class EventListItem extends React.Component {
             <h3>
               <Link to={`/event/${event.slug}`}>{event.title}</Link>
             </h3>
-            <p dangerouslySetInnerHTML={{
+            <div dangerouslySetInnerHTML={{
                 __html: event.subtitleShortDescription.childMarkdownRemark.html
               }} />
             <p className="meta"><EventDate event={event} /></p>

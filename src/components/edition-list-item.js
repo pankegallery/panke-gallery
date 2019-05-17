@@ -10,7 +10,7 @@ export default ({ edition }) => (
     <h3>
       <Link to={`/edition/${edition.slug}`}>{edition.title}</Link>
     </h3>
-    <p dangerouslySetInnerHTML={{
+    <div dangerouslySetInnerHTML={{
         __html: edition.subtitleShortDescription.childMarkdownRemark.html
       }} />
   </article>
