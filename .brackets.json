@@ -11,11 +11,12 @@
             "brackets-git.gitPath": "git",
             "fileFilters": [
                 {
-                    "name": "public+cache",
+                    "name": "public+cache+map",
                     "patterns": [
                         "public/*",
                         ".cache/*",
-                        "node-modules/*"
+                        "node-modules/*",
+                        "*.map"
                     ]
                 }
             ],

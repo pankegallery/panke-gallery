@@ -12,7 +12,7 @@ export default ({ exhibition }) => (
       <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>
       <small>{Moment(exhibition.startDate).format('DD MMMM')}&thinsp;&ndash;&thinsp;{Moment(exhibition.endDate).format('DD MMMM YYYY')}</small>
     </h3>
-    <p dangerouslySetInnerHTML={{
+    <div dangerouslySetInnerHTML={{
         __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
       }} />
   </article>
