@@ -1,6 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import Moment from 'moment'
 import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
@@ -21,7 +22,9 @@ class PankeExhibitions extends React.Component {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
       var exhibtionEndDate = new Date(_ex.node.endDate);
-      return exhibtionEndDate > currentDate && currentDate > exhibtionStartDate;
+      // Moment(exhibtionEndDate).isSameOrAfter(Moment(currentDate, 'day'));
+      // return Moment(exhibtionEndDate, 'day').isSameOrAfter(Moment(currentDate, 'day')) && currentDate >= exhibtionStartDate;
+      return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
     }
     const currentExhibitions = posts.filter(filterCurrent);
     currentExhibitions.reverse();
@@ -29,7 +32,7 @@ class PankeExhibitions extends React.Component {
     function filterUpcoming(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
-      return exhibtionStartDate > currentDate;
+      return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
     upcomingExhibitions.reverse();
@@ -37,7 +40,7 @@ class PankeExhibitions extends React.Component {
     function filterPast(_ex) {
       var currentDate = new Date();
       var exhibtionEndDate = new Date(_ex.node.endDate);
-      return exhibtionEndDate < currentDate;
+      return Moment(exhibtionEndDate, 'day').utcOffset(120).isBefore(currentDate, 'day');
     }
     const pastExhibitions = posts.filter(filterPast);
 
@@ -68,7 +71,7 @@ class PankeExhibitions extends React.Component {
             <div className="col-md-12 col-sm-8 col-xs-12">
               {currentExhibitions.map(({ node }) => {
                 return (
-                    <ExhibitionListItem key={node.slug} exhibition={node} />
+                  <ExhibitionListItem key={node.slug} exhibition={node} />
                 )
               })}
             </div>
@@ -92,7 +95,7 @@ class PankeExhibitions extends React.Component {
             <div className="col-md-12 col-sm-8 col-xs-12">
               {upcomingExhibitions.map(({ node }) => {
                 return (
-                    <ExhibitionListItem key={node.slug} exhibition={node} />
+                  <ExhibitionListItem key={node.slug} exhibition={node} />
                 )
               })}
             </div>
@@ -116,7 +119,7 @@ class PankeExhibitions extends React.Component {
             <div className="col-md-12 col-sm-8 col-xs-12">
               {pastExhibitions.map(({ node }) => {
                 return (
-                    <ExhibitionListItem key={node.slug} exhibition={node} />
+                  <ExhibitionListItem key={node.slug} exhibition={node} />
                 )
               })}
             </div>

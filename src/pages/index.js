@@ -1,6 +1,7 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
+import Moment from 'moment'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
@@ -29,14 +30,14 @@ class PankeIndex extends React.Component {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
       var exhibtionEndDate = new Date(_ex.node.endDate);
-      return exhibtionEndDate > currentDate && currentDate > exhibtionStartDate;
+      return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
     }
     const currentExhibitions = posts.filter(filterCurrent);
 
     function filterUpcoming(_ex) {
       var currentDate = new Date();
       var exhibtionStartDate = new Date(_ex.node.startDate);
-      return exhibtionStartDate > currentDate;
+      return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
     }
     const upcomingExhibitions = posts.filter(filterUpcoming);
 
