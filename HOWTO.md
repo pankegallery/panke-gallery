@@ -58,7 +58,7 @@ When merging branches, merge XXX-new into YYY-old(master).
 ```
 $ git checkout YYY-old
 
-$ git merge --no-ff XXX-new
+$ git merge --no-ff XXX-new -m "Merge message"
 
 ```
 
