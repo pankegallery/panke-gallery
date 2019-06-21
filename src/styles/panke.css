@@ -8577,11 +8577,6 @@ header nav ul li:first-child a {
   padding-left: 0;
 }
 
-.image-wrapper img {
-  max-width: 100%;
-  height: auto;
-}
-
 .toggle-menu {
   border: 0;
   background: none;
@@ -8766,7 +8761,8 @@ section.past .news-item p, section.currently .news-item p, section.upcoming .new
 }
 
 .further p img,
-.info p img {
+.info p img,
+.news p img {
   max-width: 100%;
 }
 
