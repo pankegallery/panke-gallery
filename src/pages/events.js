@@ -98,6 +98,7 @@ class PankeEvents extends React.Component {
             if (this.passFilter(node)){
               return this.returnEventListItem(node);
             }
+            return null
           })}
         </section>
       );
@@ -118,6 +119,7 @@ class PankeEvents extends React.Component {
             if (this.passFilter(node)){
               return this.returnEventListItem(node);
             }
+            return null
           })}
         </section>
       );
