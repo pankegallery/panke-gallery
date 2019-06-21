@@ -149,10 +149,10 @@ header nav{
     }
 }
 
-.image-wrapper img{
-    max-width: 100%;
-    height: auto;
-}
+//.image-wrapper img{
+//    max-width: 100%;
+//    height: auto;
+//}
 
 .toggle-menu{
     border: 0;
@@ -365,7 +365,8 @@ section.past, section.currently, section.upcoming, section.editions{
 
 // Fixing width of images that come from further content blocks
 .further p img,
-.info p img{
+.info p img,
+.news p img{
     max-width: 100%;
 }
 
