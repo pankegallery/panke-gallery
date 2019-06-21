@@ -25,10 +25,11 @@ class PankeContact extends React.Component{
     var slugs = [];
     
     // Fill definedBlocks with content
+    function filterDefinedBlock(_block){
+      return _block.node.slug === definedBlocks[key].slug;
+    }
     for(var key in definedBlocks) {
-      const _b = blocks.filter(function (_blocks) {
-        return _blocks.node.slug === definedBlocks[key].slug;
-      });
+      const _b = blocks.filter(filterDefinedBlock);
       Object.assign(definedBlocks[key], {array: _b});
       slugs.push(definedBlocks[key].slug);
     } 
