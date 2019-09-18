@@ -79,6 +79,19 @@ Add `[skip ci]` anywhere in commit message
 
 ## Find/Replace Cheat Sheet
 
-# Git merge conflict
+### Git merge conflict
 
 Find `(<<<<<<< \w+)([\W\w\n\r\t]*?)(\n=======\n)([\W\w\n\r\t]*?)(>>>>>>> \w+\n)` replace by `$4`
+
+## Error workarounds
+
+### Firefox Websocket security issue
+
+When facing this error:
+
+![Error messag in FF](documentation/screenshot-error-security.png)
+
+Close with **X** on top right or add this workaround in *.cache/app.js*
+
+![Error messag in FF](documentation/screenshot-error-security-fix.png)
+

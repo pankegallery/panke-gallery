@@ -1,17 +1,20 @@
 {
-  "name": "contentful-starter-gatsby-blog",
-  "description": "Contentful Gatsby Starter Blog",
+  "name": "panke-gallery-website",
+  "description": "panke.gallery Website",
   "private": true,
   "version": "0.0.1",
-  "author": "Contentful <opensource@contentful.com>",
+  "author": "Larissa Wunderlich <info@larissawunderlich.de>",
   "bugs": {
-    "url": "https://github.com/contentful/starter-gatsby-blog/issues"
+    "url": "https://github.com/crosssenses/panke-gallery/issues"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "ajv": "^6.10.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-flowtype": "^2.50.3",
     "gatsby": "^2.15.17",
     "gatsby-image": "^2.2.19",
     "gatsby-link": "^2.2.13",
@@ -30,13 +33,16 @@
     "react-dom": "^16.9.0",
     "react-fontawesome": "^1.6.1",
     "react-helmet": "^5.2.1",
-    "react-responsive-carousel": "^3.1.50"
+    "react-responsive-carousel": "^3.1.50",
+    "typescript": "^2.8.4"
   },
-  "homepage": "https://github.com/contentful/starter-gatsby-blog#readme",
+  "homepage": "https://github.com/crosssenses/panke-gallery#readme",
   "keywords": [
     "gatsby",
     "contentful",
-    "starter"
+    "panke",
+    "gallery",
+    "berlin"
   ],
   "license": "MIT",
   "main": "n/a",

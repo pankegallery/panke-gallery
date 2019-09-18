@@ -22,8 +22,8 @@ class PankeIndex extends React.Component {
 //    console.log(posts);
     
     // Log array of news
-//    console.log("news:");
-//    console.log(newsItems);
+    console.log("news:");
+    console.log(newsItems);
     
     // Filter array of exhibitions
     function filterCurrent(_ex) {
