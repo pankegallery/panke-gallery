@@ -1,4 +1,4 @@
-let contentfulConfig
+let contentfulConfig;
 
 try {
   // Load the Contentful config from the .contentful.json
@@ -28,6 +28,7 @@ module.exports = {
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-offline',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
