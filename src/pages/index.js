@@ -51,7 +51,7 @@ class PankeIndex extends React.Component {
 
     // Create news code
     var news;
-    if (newsItems){
+    if (newsItems.length > 0){
       news = (
         <section className="news">
           {newsItems.map(({node}) => {
