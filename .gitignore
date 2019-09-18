@@ -70,3 +70,6 @@ public
 src/styles/.sass-cache/*
 src/styles/*.map
 .sass-cache/*
+
+# Other
+/.brackets.json
