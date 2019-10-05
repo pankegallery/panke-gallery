@@ -89,9 +89,9 @@ Find `(<<<<<<< \w+)([\W\w\n\r\t]*?)(\n=======\n)([\W\w\n\r\t]*?)(>>>>>>> \w+\n)`
 
 When facing this error:
 
-![Error messag in FF](documentation/screenshot-error-security.png)
+![Error messag in FF](screenshot-error-security.png)
 
 Close with **X** on top right or add this workaround in *.cache/app.js*
 
-![Error messag in FF](documentation/screenshot-error-security-fix.png)
+![Error messag in FF](screenshot-error-security-fix.png)
 
