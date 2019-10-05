@@ -5,7 +5,7 @@ Custom off-cavas menu for Panke
 (function ($) {
 
     var menu_active = false;
-    var active_color;
+//    var active_color;
 
     // ==================================================  Functions for mobile menu
 
@@ -48,39 +48,39 @@ Custom off-cavas menu for Panke
 
     // ==================================================  Functions for theme colour
 
-    function swapThemeColor() {
-        $(".container").removeClass(function (index, css) {
-            return (css.match(/(^|\s)theme-\S+/g) || []).join(' ');
-        });
-
-        $('.container').addClass('theme-' + active_color);
-        Cookies.set('active_color', active_color);
-    }
-
-    function readColorCookie() {
-
-        active_color = Cookies.get('active_color');
-        // prompt('Farbe ausgewählt zu ' + active_color);
-        if (active_color!='undefined')
-            swapThemeColor();
-
-    }
-
-    function enableColorSwap() {
-
-        $('#color-swap ').children('div').click(function () {
-            active_color = $(this).attr('class');
-            // prompt('Farbe ausgewählt zu ' + active_color);
-            swapThemeColor();
-        });
-
-    }
+//    function swapThemeColor() {
+//        $(".container").removeClass(function (index, css) {
+//            return (css.match(/(^|\s)theme-\S+/g) || []).join(' ');
+//        });
+//
+//        $('.container').addClass('theme-' + active_color);
+//        Cookies.set('active_color', active_color);
+//    }
+//
+//    function readColorCookie() {
+//
+//        active_color = Cookies.get('active_color');
+//        // prompt('Farbe ausgewählt zu ' + active_color);
+//        if (active_color!='undefined')
+//            swapThemeColor();
+//
+//    }
+//
+//    function enableColorSwap() {
+//
+//        $('#color-swap ').children('div').click(function () {
+//            active_color = $(this).attr('class');
+//            // prompt('Farbe ausgewählt zu ' + active_color);
+//            swapThemeColor();
+//        });
+//
+//    }
 
     $(document).ready(function () {
 
         enableOffCanvas();
-        readColorCookie();
-        enableColorSwap();
+//        readColorCookie();
+//        enableColorSwap();
 
     });
 

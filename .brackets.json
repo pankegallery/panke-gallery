@@ -109,7 +109,8 @@
                 "/Users/larissa/Development/panke-gallery/node_modules/@types/glob/README.md": [],
                 "/Users/larissa/Development/panke-gallery/gatsby-node.js": [],
                 "/Users/larissa/Development/panke-gallery/HOWTO.md": [],
-                "/Users/larissa/Development/panke-gallery/README.md": []
+                "/Users/larissa/Development/panke-gallery/README.md": [],
+                "/Users/larissa/Development/panke-gallery/documentation/HOWTO.md": []
             }
         },
         "*.js": {
@@ -182,7 +183,12 @@
                 "/Users/larissa/Development/panke-gallery/gatsby-node.js": [],
                 "/Users/larissa/Development/panke-gallery/src/pages/info.js": [],
                 "/Users/larissa/Development/panke-gallery/setup.js": [],
-                "/Users/larissa/Development/panke-gallery/__setup.js": []
+                "/Users/larissa/Development/panke-gallery/__setup.js": [],
+                "/Users/larissa/Development/panke-gallery/package.json": [],
+                "/Users/larissa/Development/panke-gallery/static/index.html": [],
+                "/Users/larissa/Development/panke-gallery/static/scripts/panke.js": [],
+                "/Users/larissa/Development/panke-gallery/src/contexts/ThemeContext.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/color-swap.js": []
             }
         },
         "*.scss": {
