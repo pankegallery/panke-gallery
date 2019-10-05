@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export const ThemeContext = React.createContext();
 
 export class ThemeProvider extends React.Component {
@@ -13,7 +12,7 @@ export class ThemeProvider extends React.Component {
     this.setState( {
       color: c
     });
-    console.log(c);
+//    console.log(c);
   }
 
   componentDidMount() {
