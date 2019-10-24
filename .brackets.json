@@ -188,7 +188,10 @@
                 "/Users/larissa/Development/panke-gallery/static/index.html": [],
                 "/Users/larissa/Development/panke-gallery/static/scripts/panke.js": [],
                 "/Users/larissa/Development/panke-gallery/src/contexts/ThemeContext.js": [],
-                "/Users/larissa/Development/panke-gallery/src/components/color-swap.js": []
+                "/Users/larissa/Development/panke-gallery/src/components/color-swap.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/tag.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/event-list-item.js": [],
+                "/Users/larissa/Development/panke-gallery/src/pages/events.js": []
             }
         },
         "*.scss": {
