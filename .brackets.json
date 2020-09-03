@@ -116,7 +116,7 @@
         "*.js": {
             "spaceUnits": 2,
             "wordWrap": true,
-            "brackets-git.gitPath": "git",
+            "brackets-git.gitPath": "/usr/bin/git",
             "fileFilters": [
                 {
                     "name": "public+cache+map",
@@ -191,7 +191,9 @@
                 "/Users/larissa/Development/panke-gallery/src/components/color-swap.js": [],
                 "/Users/larissa/Development/panke-gallery/src/components/tag.js": [],
                 "/Users/larissa/Development/panke-gallery/src/components/event-list-item.js": [],
-                "/Users/larissa/Development/panke-gallery/src/pages/events.js": []
+                "/Users/larissa/Development/panke-gallery/src/pages/events.js": [],
+                "/Users/larissa/Development/panke-gallery/src/styles/_theme.scss": [],
+                "/Users/larissa/Development/panke-gallery/src/components/navigation.js": []
             }
         },
         "*.scss": {
@@ -295,8 +297,10 @@
                 "/Users/larissa/Development/lightspeed_integration/static_page/case-study-1_it.html": [],
                 "/Users/larissa/Development/lightspeed_integration/static_page/case-study-1_es.html": [],
                 "/Users/larissa/Development/panke-gallery/src/styles/panke.scss": [],
+                "/Users/larissa/Development/panke-gallery/src/pages/index.js": [],
                 "/Users/larissa/Development/panke-gallery/src/styles/_theme.scss": [],
-                "/Users/larissa/Development/panke-gallery/src/pages/index.js": []
+                "/Users/larissa/Development/panke-gallery/src/components/layout.js": [],
+                "/Users/larissa/Development/panke-gallery/.cache/app.js": []
             }
         },
         "*.css": {
