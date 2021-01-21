@@ -8,6 +8,8 @@ import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
+import Moment from 'moment'
+
 
 class ExhibitionTemplate extends React.Component {
   render() {
@@ -70,6 +72,27 @@ class ExhibitionTemplate extends React.Component {
       );
     }
 
+
+        // --- Date or to be confirmed plus other meta--
+
+    let dateDisplayed
+
+    if (exhibition.dateTbc){
+      dateDisplayed = "Date to be confirmed"
+    }
+    else{
+      dateDisplayed = Moment(exhibition.startDate).format('DD MMMM') + '\u2009\u2013\u2009' + Moment(exhibition.endDate).format('DD MMMM YYYY')
+    }
+
+    let metaInfos = dateDisplayed
+
+    if (exhibition.vernissageInfos){
+      metaInfos += ' | ' + exhibition.openingHours
+    }
+
+    if (exhibition.vernissageInfos){
+      metaInfos += ' | ' + exhibition.vernissageInfos
+    }
     //==========================================================================
 
     //                                OUTPUT
@@ -89,9 +112,7 @@ class ExhibitionTemplate extends React.Component {
                   __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
                 }} />
               <p className="meta">
-                {exhibition.startDate}&thinsp;&ndash;&thinsp;{exhibition.endDate}
-                {exhibition.openingHours && ' | '} {exhibition.openingHours}
-                {exhibition.vernissageInfos && ' | '} {exhibition.vernissageInfos}
+               {metaInfos}
               </p>
 
               {exhibitionTags}
@@ -147,8 +168,9 @@ export const pageQuery = graphql`
   query ExhibitionsBySlug($slug: String!) {
     contentfulExhibition(slug: { eq: $slug }) {
       title
-      startDate(formatString: "DD MMMM YYYY")
-      endDate(formatString: "DD MMMM YYYY")
+      startDate
+      endDate
+      dateTbc
       tags {
         slug
         name

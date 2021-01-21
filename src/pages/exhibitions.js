@@ -8,41 +8,43 @@ import Layout from "../components/layout"
 import ExhibitionListItem from '../components/exhibition-list-item'
 
 class PankeExhibitions extends React.Component {
+
+  filterCurrent = (_ex) => {
+    var currentDate = new Date();
+    var exhibtionStartDate = new Date(_ex.node.startDate);
+    var exhibtionEndDate = new Date(_ex.node.endDate);
+    return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
+  }
+
+  filterUpcoming = (_ex) => {
+    var currentDate = new Date();
+    var exhibtionStartDate = new Date(_ex.node.startDate);
+    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
+  }
+
+  filterPast = (_ex) => {
+    var currentDate = new Date();
+    var exhibtionEndDate = new Date(_ex.node.endDate);
+    return Moment(exhibtionEndDate, 'day').utcOffset(120).isBefore(currentDate, 'day');
+  }
+
   render() {
 
     // Get array of exhibitions
     const posts = get(this, 'props.data.allContentfulExhibition.edges')
 
     // Log array of exhibitions
-    console.log("Posts:");
-    console.log(posts);
+    console.log("Posts:", posts);
 
     // Filter array of exhibitions
-    function filterCurrent(_ex) {
-      var currentDate = new Date();
-      var exhibtionStartDate = new Date(_ex.node.startDate);
-      var exhibtionEndDate = new Date(_ex.node.endDate);
-      // Moment(exhibtionEndDate).isSameOrAfter(Moment(currentDate, 'day'));
-      // return Moment(exhibtionEndDate, 'day').isSameOrAfter(Moment(currentDate, 'day')) && currentDate >= exhibtionStartDate;
-      return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
-    }
-    const currentExhibitions = posts.filter(filterCurrent);
+
+    const currentExhibitions = posts.filter(this.filterCurrent);
     currentExhibitions.reverse();
 
-    function filterUpcoming(_ex) {
-      var currentDate = new Date();
-      var exhibtionStartDate = new Date(_ex.node.startDate);
-      return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
-    }
-    const upcomingExhibitions = posts.filter(filterUpcoming);
+    const upcomingExhibitions = posts.filter(this.filterUpcoming);
     upcomingExhibitions.reverse();
 
-    function filterPast(_ex) {
-      var currentDate = new Date();
-      var exhibtionEndDate = new Date(_ex.node.endDate);
-      return Moment(exhibtionEndDate, 'day').utcOffset(120).isBefore(currentDate, 'day');
-    }
-    const pastExhibitions = posts.filter(filterPast);
+    const pastExhibitions = posts.filter(this.filterPast);
 
     // Log array of current exhibitions
     console.log("Current Exhibitions:");
@@ -178,11 +180,13 @@ export const pageQuery = graphql`
           slug
           startDate
           endDate
+          dateTbc
           #startDate(formatString: "DD MMMM YYYY")
           #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
-            sizes(maxWidth: 1000) {
-             ...GatsbyContentfulSizes
+            fluid(maxWidth: 1000) {
+              sizes
+              src
             }
           }
           description {
