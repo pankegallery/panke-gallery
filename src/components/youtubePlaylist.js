@@ -1,8 +1,7 @@
 import React from 'react'
 import Moment from 'moment';
-import Truncate from 'react-truncate';
 
-const YOUTUBE_PLAYLIST_ITEMS_API = 'https://www.googleapis.com/youtube/v3/playlistItems';
+const YOUTUBE_PLAYLIST_API = process.env.GATSBY_YOUTUBE_URL;
 const YOUTUBE_API_KEY = process.env.GATSBY_YOUTUBE_API_KEY;
 
 class YoutubePlaylist extends React.Component{
@@ -15,7 +14,8 @@ class YoutubePlaylist extends React.Component{
   }
 
   getPlaylistFromServer = async (playlist_id) => {
-    const res = await fetch(`${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlist_id}&key=${YOUTUBE_API_KEY}`)
+//    console.log('url', YOUTUBE_PLAYLIST_API);
+    const res = await fetch(`${YOUTUBE_PLAYLIST_API}?part=snippet&maxResults=50&playlistId=${playlist_id}&key=${YOUTUBE_API_KEY}`)
     const data = await res.json();
 
 //    console.log('data', data);
