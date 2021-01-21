@@ -9,6 +9,20 @@ import ExhibitionPreview from '../components/exhibition-preview'
 
 
 class PankeIndex extends React.Component {
+
+  filterCurrent = (_ex) => {
+    var currentDate = new Date();
+    var exhibtionStartDate = new Date(_ex.node.startDate);
+    var exhibtionEndDate = new Date(_ex.node.endDate);
+    return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
+  }
+
+  filterUpcoming = (_ex) => {
+    var currentDate = new Date();
+    var exhibtionStartDate = new Date(_ex.node.startDate);
+    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+  }
+
   render() {
 
     // Get array of exhibitions
@@ -17,37 +31,17 @@ class PankeIndex extends React.Component {
     // Get array of news
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
-    // Log array of all exhibitions
-//    console.log("Posts:");
-//    console.log(posts);
-    
-    // Log array of news
-    console.log("news:");
-    console.log(newsItems);
+//    console.log("Posts:", posts);
+//    console.log("news:", newsItems);
     
     // Filter array of exhibitions
-    function filterCurrent(_ex) {
-      var currentDate = new Date();
-      var exhibtionStartDate = new Date(_ex.node.startDate);
-      var exhibtionEndDate = new Date(_ex.node.endDate);
-      return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
-    }
-    const currentExhibitions = posts.filter(filterCurrent);
+    const currentExhibitions = posts.filter(this.filterCurrent);
 
-    function filterUpcoming(_ex) {
-      var currentDate = new Date();
-      var exhibtionStartDate = new Date(_ex.node.startDate);
-      return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
-    }
-    const upcomingExhibitions = posts.filter(filterUpcoming);
+    const upcomingExhibitions = posts.filter(this.filterUpcoming);
 
-    // Log array of current exhibitions
-//    console.log("Current Exhibitions:");
-//    console.log(currentExhibitions);
-
-    // Log array of upcoming exhibitions
-//    console.log("Upcoming Exhibitions:");
-//    console.log(upcomingExhibitions);
+    // Log exhibitions
+//    console.log("Current Exhibitions:", currentExhibitions);
+//    console.log("Upcoming Exhibitions:", upcomingExhibitions);
 
     // Create news code
     var news;
@@ -163,6 +157,7 @@ export const pageQuery = graphql`
           slug
           startDate
           endDate
+          dateTbc
           #startDate(formatString: "DD MMMM YYYY")
           #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
@@ -180,7 +175,7 @@ export const pageQuery = graphql`
         }
       }
     }
-    allContentfulContentBlock (filter: {page: {eq: "News"}}, sort: { fields: [createdAt], order: ASC}){
+    allContentfulContentBlock (filter: {page: {eq: "News"}}, sort: { fields: [updatedAt], order: DESC}){
       edges {
         node {
           id
