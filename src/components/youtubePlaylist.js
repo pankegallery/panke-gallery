@@ -3,7 +3,7 @@ import Moment from 'moment';
 import Truncate from 'react-truncate';
 
 const YOUTUBE_PLAYLIST_ITEMS_API = 'https://www.googleapis.com/youtube/v3/playlistItems';
-const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+const YOUTUBE_API_KEY = process.env.GATSBY_YOUTUBE_API_KEY;
 
 class YoutubePlaylist extends React.Component{
 
