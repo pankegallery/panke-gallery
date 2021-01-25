@@ -10,7 +10,6 @@ import YouTube from 'react-youtube';
 //import YouTubePlaylist from 'react-youtube-playlist';
 //import 'react-youtube-playlist/dist/styles'
 
-
 class PankeStreaming extends React.Component{
 
   constructor(props) {
@@ -91,30 +90,17 @@ class PankeStreaming extends React.Component{
 
         <section className="videos further">
 
-          <div className="row">
-            <div className="col-md-4 col-sm-12 col-xs-12">
-              <h2>panke.gallery talks</h2>
-            </div>
+          <YoutubePlaylist
+            title="panke.gallery Talks"
+            playlist_id="PLftbjK2gCCbLQ2QXGuOKylxp9oFQFhIPf"
+            replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
+          />
+          <YoutubePlaylist
+            title="panke.gallery Performances"
+            playlist_id="PLftbjK2gCCbLYlv_Lsl9ONl1Buu8CE5wF"
+            replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
+          />
 
-            <div className="col-md-8 col-sm-12 col-xs-12">
-              <YoutubePlaylist
-                playlist_id="PLftbjK2gCCbLQ2QXGuOKylxp9oFQFhIPf"
-                replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
-              />
-            </div>
-
-            <div className="col-md-4 col-sm-12 col-xs-12">
-              <h2>More Videos</h2>
-            </div>
-
-            <div className="col-md-8 col-sm-12 col-xs-12">
-              <YoutubePlaylist
-                 playlist_id="PLlE5r1i6nB9tXly_lktvBkvbHSyQ0iHth"
-                replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
-              />
-            </div>
-
-          </div>
         </section>
       </Layout>
     );

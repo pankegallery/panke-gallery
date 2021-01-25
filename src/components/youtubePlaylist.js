@@ -18,7 +18,7 @@ class YoutubePlaylist extends React.Component{
     const res = await fetch(`${YOUTUBE_PLAYLIST_API}?part=snippet&maxResults=50&playlistId=${playlist_id}&key=${YOUTUBE_API_KEY}`)
     const data = await res.json();
 
-//    console.log('data', data);
+    console.log('data', data);
 
     this.setState({
       playlistData: data
@@ -47,33 +47,39 @@ class YoutubePlaylist extends React.Component{
 //    console.log('items', playlistData.items);
 
     if(playlistData.items){
-
       return(
         <div className="row">
-        {
-          playlistData.items.map(({id, snippet ={}}) => {
-//          console.log('id', id);
-//          console.log('snippet', snippet);
-//          console.log('title', snippet.title);
-            {/* href={`https://www.youtube.com/watch?v=${snippet.resourceId.videoId}`} */}
-          return (
-          <div key={id} className="col-md-6 col-sm-6 col-xs-12">
-            <a
-              onClick={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
-             >
-              <p>
-                <img src={snippet.thumbnails.medium.url} alt="" />
-              </p>
-            </a>
-            <h3>{snippet.title}</h3>
-            {this.truncateDescription(snippet.description)}
-            <p className="meta">{Moment(snippet.publishedAt).format('DD.MM.YYYY')} </p>
-          </div>)
-        })
-        }
+          <div className="col-md-4 col-sm-12 col-xs-12">
+            <h2>{this.props.title}</h2>
+          </div>
+          <div className="col-md-8 col-sm-12 col-xs-12">
+            <div className="row">
+            {
+              playlistData.items.map(({id, snippet ={}}) => {
+    //          console.log('id', id);
+    //          console.log('snippet', snippet);
+    //          console.log('title', snippet.title);
+                {/* href={`https://www.youtube.com/watch?v=${snippet.resourceId.videoId}`} */}
+                return (
+                <div key={id} className="col-sm-6 col-xs-12 mb-4">
+                  <a
+                    onClick={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
+                   >
+                    <p>
+                      <img src={snippet.thumbnails.medium.url} alt="" />
+                    </p>
+                  </a>
+                  <h3>{snippet.title}</h3>
+                    <p>{this.truncateDescription(snippet.description)}</p>
+                  <p className="meta">{Moment(snippet.publishedAt).format('DD.MM.YYYY')} </p>
+                </div>
+                )
+              })
+            }
+            </div>
+          </div>
         </div>
       );
-
     }
     else{
       console.log('Playlist loading or loading failed');
