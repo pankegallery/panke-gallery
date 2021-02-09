@@ -6,6 +6,7 @@ import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import ExhibitionPreview from '../components/exhibition-preview'
+import EventPreview from '../components/event-preview'
 
 
 class PankeIndex extends React.Component {
@@ -20,28 +21,43 @@ class PankeIndex extends React.Component {
   filterUpcoming = (_ex) => {
     var currentDate = new Date();
     var exhibtionStartDate = new Date(_ex.node.startDate);
-    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+//    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
+  }
+
+  filterUpcomingEvents = (_ev) => {
+    var currentDate = new Date();
+    var eventStartDate = new Date(_ev.node.date);
+//    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
   }
 
   render() {
 
     // Get array of exhibitions
-    const posts = get(this, 'props.data.allContentfulExhibition.edges')
+    const exhibitions = get(this, 'props.data.allContentfulExhibition.edges')
+
+    // Get array of events
+    const events = get(this, 'props.data.allContentfulEvent.edges')
     
     // Get array of news
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
-//    console.log("Posts:", posts);
+//    console.log("Exhibitions:", posts);
+//    console.log("Events:", posts);
 //    console.log("news:", newsItems);
     
     // Filter array of exhibitions
-    const currentExhibitions = posts.filter(this.filterCurrent);
+    const currentExhibitions = exhibitions.filter(this.filterCurrent);
+    const upcomingExhibitions = exhibitions.filter(this.filterUpcoming);
 
-    const upcomingExhibitions = posts.filter(this.filterUpcoming);
+    // Filter array of events
+    const upcomingEvents = events.filter(this.filterUpcomingEvents);
 
     // Log exhibitions
 //    console.log("Current Exhibitions:", currentExhibitions);
 //    console.log("Upcoming Exhibitions:", upcomingExhibitions);
+    console.log("Upcoming Events:", upcomingEvents);
 
     // Create news code
     var news;
@@ -69,6 +85,31 @@ class PankeIndex extends React.Component {
       );
     }
 
+    // Create upcoming events code if there are
+    var upcomingEv;
+    if (upcomingEvents.length > 0){
+      upcomingEv = (
+        <section className="upcoming">
+
+          <div className="row headline">
+            <div className="col-md-12 col-sm-12 col-xs-12">
+              <h2>Upcoming events</h2>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-12 col-sm-8 col-xs-12">
+              {upcomingEvents.map(({ node }) => {
+                return (
+                    <EventPreview key={node.slug} event={node} />
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     // Create current exhibitions code if there are
     var current;
     if (currentExhibitions.length > 0){
@@ -77,7 +118,7 @@ class PankeIndex extends React.Component {
 
           <div className="row headline">
             <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Current</h2>
+              <h2>Current exhibitions</h2>
             </div>
           </div>
 
@@ -102,7 +143,7 @@ class PankeIndex extends React.Component {
 
           <div className="row headline">
             <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Upcoming</h2>
+              <h2>Upcoming exhibitions</h2>
             </div>
           </div>
 
@@ -133,6 +174,8 @@ class PankeIndex extends React.Component {
 
         {news}
 
+        {upcomingEv}
+
         {current}
 
         {upcoming}
@@ -149,8 +192,8 @@ export const pageQuery = graphql`
   query PankeHomeQuery {
     allContentfulExhibition(
       sort: { fields: [startDate], order: ASC }
-
-    ) {
+      )
+     {
       edges {
         node {
           title
@@ -158,17 +201,39 @@ export const pageQuery = graphql`
           startDate
           endDate
           dateTbc
-          #startDate(formatString: "DD MMMM YYYY")
-          #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
-            sizes(maxWidth: 1000) {
-             ...GatsbyContentfulSizes
+            fluid(maxWidth: 1000) {
+              sizes
+              src
             }
           }
           openingHours
           vernissageInfos
           subtitleShortDescription {
             childMarkdownRemark {
+              html
+            }
+          }
+        }
+      }
+    }
+    allContentfulEvent(
+      sort: { fields: [date], order: DESC }
+      )
+     {
+      edges {
+        node {
+          title
+          slug
+          date
+          featuredImage {
+            fluid(maxWidth: 1000) {
+              sizes
+              src
+            }
+          }
+          subtitleShortDescription {
+            childMarkdownRemark{
               html
             }
           }
