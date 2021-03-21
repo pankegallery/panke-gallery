@@ -92,8 +92,9 @@ export const pageQuery = graphql`
           title
           slug
           featuredImage {
-            sizes(maxWidth: 1000) {
-             ...GatsbyContentfulSizes
+            fluid(maxWidth: 1000) {
+              sizes
+              src
             }
           }
           subtitleShortDescription {

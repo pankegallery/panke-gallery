@@ -3,6 +3,7 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
 import { graphql } from 'gatsby'
+import { loadStripe } from '@stripe/stripe-js'
 
 import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
@@ -24,7 +25,7 @@ class EditionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...edition.featuredImage.sizes , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" sizes={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 
@@ -139,13 +140,15 @@ export const pageQuery = graphql`
         }
       }
       featuredImage{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
       }
       editionImpressionsSlideshow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }

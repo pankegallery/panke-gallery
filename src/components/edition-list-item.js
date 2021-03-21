@@ -5,7 +5,7 @@ import Img from 'gatsby-image'
 export default ({ edition }) => (
   <article className="edition-item">
     <Link to={`/edition/${edition.slug}`}>
-      <Img alt="FeaturedImage" sizes={{...edition.featuredImage.sizes , aspectRatio: 16/9}} />
+      <Img alt="FeaturedImage" fluid={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
     </Link>
     <h3>
       <Link to={`/edition/${edition.slug}`}>{edition.title}</Link>

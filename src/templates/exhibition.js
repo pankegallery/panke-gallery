@@ -30,7 +30,7 @@ class ExhibitionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.sizes , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 
@@ -199,19 +199,22 @@ export const pageQuery = graphql`
 
       }
       featuredImage{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
       }
       exhibitionImpressionsSlideshow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }
       exhibitionDocumentationImagesBelow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }

@@ -27,7 +27,7 @@ class EventTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...event.featuredImage.sizes , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" sizes={{...event.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 
@@ -195,19 +195,22 @@ export const pageQuery = graphql`
         }
       }
       featuredImage{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
       }
       eventImpressionsSlideshow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }
       eventDocumentationImagesBelow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }
