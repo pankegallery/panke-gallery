@@ -27,7 +27,7 @@ class EventTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...event.featuredImage.fluid , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" fluid={{...event.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 

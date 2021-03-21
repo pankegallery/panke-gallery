@@ -30,7 +30,7 @@ class ExhibitionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...exhibition.featuredImage.fluid , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" fluid={{...exhibition.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 

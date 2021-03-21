@@ -3,14 +3,57 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
 import { graphql } from 'gatsby'
-import { loadStripe } from '@stripe/stripe-js'
+//import { loadStripe } from '@stripe/stripe-js'
 
 import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
+import Checkout from '../components/checkout'
+
+//const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
+//const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+
+//let stripePromise
+//const getStripe = () => {
+//  if (!this.state.stripePromise) {
+//    stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
+//  }
+//  return stripePromise
+//}
 
 class EditionTemplate extends React.Component {
+
+//  state = {
+//    stripePromise: undefined,
+//  };
+//
+//  getStripe = () => {
+//    let stripePromise
+//    if (!this.state.stripePromise) {
+//      stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
+//    }
+//    this.setState({stripePromise: stripePromise});
+////    console.log("stripePromise:", stripePromise)
+//  }
+
+  getChechoutStatus = () => {
+    let url = typeof window !== 'undefined' ? window.location.href : '';
+    let checkoutGet
+    if (url.indexOf('checkout')){
+      checkoutGet = url.substr(url.indexOf('=')+1);
+    }
+
+    console.log("=:", checkoutGet)
+
+  }
+
+//  componentDidMount = () => {
+//    this.getStripe();
+//  }
+
   render() {
+
+    const checkout = this.getChechoutStatus()
 
     const edition = get(this.props, 'data.contentfulEdition')
     console.log(edition);
@@ -25,7 +68,7 @@ class EditionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" fluid={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 
@@ -76,10 +119,7 @@ class EditionTemplate extends React.Component {
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12">
               <h2>About the edition</h2>
-              {/*<div dangerouslySetInnerHTML={{
-                __html: edition.embedCode.childMarkdownRemark.html
-              }} />
-              <small>The widget needs coockies from third parties to be enabled. If you don't want to follow this requirement, feel free to write us an email to info@panke.gallery.</small>*/}
+              <Checkout />
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
