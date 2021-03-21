@@ -116,7 +116,7 @@
         "*.js": {
             "spaceUnits": 2,
             "wordWrap": true,
-            "brackets-git.gitPath": "/usr/bin/git",
+            "brackets-git.gitPath": "/usr/local/bin/git",
             "fileFilters": [
                 {
                     "name": "public+cache+map",
@@ -125,6 +125,13 @@
                         ".cache/*",
                         "node-modules/*",
                         "*.map"
+                    ]
+                },
+                {
+                    "name": "Graphite-only",
+                    "patterns": [
+                        "docs/*",
+                        "styles/bootstrap/*"
                     ]
                 }
             ],
@@ -190,16 +197,26 @@
                 "/Users/larissa/Development/panke-gallery/src/components/color-swap.js": [],
                 "/Users/larissa/Development/panke-gallery/src/components/tag.js": [],
                 "/Users/larissa/Development/panke-gallery/src/components/event-list-item.js": [],
-                "/Users/larissa/Development/panke-gallery/src/pages/events.js": [],
                 "/Users/larissa/Development/panke-gallery/src/styles/_theme.scss": [],
                 "/Users/larissa/Development/panke-gallery/src/components/navigation.js": [],
                 "/Users/larissa/Downloads/wp-config.php": [],
+                "/Users/larissa/Development/panke-gallery/src/pages/index.js": [],
+                "/Users/larissa/Development/panke-gallery/src/styles/_variables.scss": [],
+                "/Users/larissa/Development/panke-gallery/public/exhibition/medienkoerper/index.html": [],
+                "/Users/larissa/Development/panke-gallery/src/pages/events.js": [],
                 "/Users/larissa/Development/panke-gallery/src/templates/event.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/slideshow.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/documentation-images.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/event-preview.js": [],
                 "/Users/larissa/Development/panke-gallery/src/components/exhibition-list-item.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/article-preview.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/edition-list-item.js": [],
+                "/Users/larissa/Development/panke-gallery/src/pages/streaming.js": [],
+                "/Users/larissa/Development/panke-gallery/src/components/youtubePlaylist.js": [],
+                "/Users/larissa/Development/panke-gallery/.env.development": [],
                 "/Users/larissa/Development/panke-gallery/src/components/exhibition-preview.js": [],
                 "/Users/larissa/Development/panke-gallery/src/templates/exhibition.js": [],
-                "/Users/larissa/Development/panke-gallery/src/pages/index.js": [],
-                "/Users/larissa/Development/panke-gallery/src/components/event-preview.js": []
+                "/Users/larissa/Development/panke-gallery/src/templates/edition.js": []
             }
         },
         "*.scss": {
@@ -306,7 +323,10 @@
                 "/Users/larissa/Development/panke-gallery/src/pages/index.js": [],
                 "/Users/larissa/Development/panke-gallery/src/styles/_theme.scss": [],
                 "/Users/larissa/Development/panke-gallery/src/components/layout.js": [],
-                "/Users/larissa/Development/panke-gallery/.cache/app.js": []
+                "/Users/larissa/Development/panke-gallery/.cache/app.js": [],
+                "/Users/larissa/Development/panke-gallery/src/styles/_variables.scss": [],
+                "/Users/larissa/Development/panke-gallery/src/styles/bootstrap/mixins/_image.scss": [],
+                "/Users/larissa/Development/panke-gallery/src/components/exhibition-preview.js": []
             }
         },
         "*.css": {
