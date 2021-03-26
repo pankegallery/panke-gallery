@@ -28,10 +28,9 @@ const getStripe = () => {
   return stripePromise
 }
 
-const Checkout = ({ location }) => {
+const Checkout = ({ slug }) => {
 
-  let url = typeof window !== 'undefined' ? window.location.href : '';
-  url = url.substr(0, url.indexOf('?'));
+  const url = `${window.location.origin}/edition/${slug}`
 
   const [loading, setLoading] = useState(false)
 
@@ -42,7 +41,14 @@ const Checkout = ({ location }) => {
     const stripe = await getStripe()
     const { error } = await stripe.redirectToCheckout({
       mode: 'payment',
-      lineItems: [{ price: 'price_1IXXQqJ1sNuO02XTuYiyaCo3', quantity: 1 }],
+      lineItems: [{
+        price: 'price_1IXXQqJ1sNuO02XTuYiyaCo3',
+        quantity: 1
+      }],
+      shippingAddressCollection: {
+        allowedCountries: ['AT', 'BE', 'HR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE',
+'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'US', 'CA'],
+      },
       successUrl: `${url}?checkout=success`,
       cancelUrl: `${url}?checkout=cancel`,
     })

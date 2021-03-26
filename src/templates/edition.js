@@ -3,57 +3,26 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
 import { graphql } from 'gatsby'
-//import { loadStripe } from '@stripe/stripe-js'
 
 import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
 
-//const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
-//const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-
-//let stripePromise
-//const getStripe = () => {
-//  if (!this.state.stripePromise) {
-//    stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
-//  }
-//  return stripePromise
-//}
-
 class EditionTemplate extends React.Component {
 
-//  state = {
-//    stripePromise: undefined,
-//  };
-//
-//  getStripe = () => {
-//    let stripePromise
-//    if (!this.state.stripePromise) {
-//      stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
-//    }
-//    this.setState({stripePromise: stripePromise});
-////    console.log("stripePromise:", stripePromise)
-//  }
-
   getChechoutStatus = () => {
+    console.log('location:', window.location)
     let url = typeof window !== 'undefined' ? window.location.href : '';
-    let checkoutGet
-    if (url.indexOf('checkout')){
-      checkoutGet = url.substr(url.indexOf('=')+1);
-    }
-
-    console.log("=:", checkoutGet)
-
+    return (url.indexOf('checkout')>0) ?
+      url.substr(url.indexOf('=')+1) : 'initial'
   }
 
-//  componentDidMount = () => {
-//    this.getStripe();
-//  }
 
   render() {
 
-    const checkout = this.getChechoutStatus()
+    console.log('props:', window.location)
+
 
     const edition = get(this.props, 'data.contentfulEdition')
     console.log(edition);
@@ -84,6 +53,22 @@ class EditionTemplate extends React.Component {
           )
         })
       );
+    }
+
+    // --- Checkout ---
+
+    const checkoutStatus = this.getChechoutStatus()
+    var EditionCheckout;
+
+    if (checkoutStatus === 'success'){
+      EditionCheckout=(
+        <div className="alert alert-success"><p><strong>Thank you for your purchase.</strong></p><p>Once we receive your payment, we will contact you for shipping details.</p><p> Enjoy the edition!</p></div>
+      )
+    }
+    else{
+      EditionCheckout = (
+        <Checkout slug={edition.slug} />
+      )
     }
 
     //==========================================================================
@@ -119,7 +104,7 @@ class EditionTemplate extends React.Component {
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12">
               <h2>About the edition</h2>
-              <Checkout />
+              {EditionCheckout}
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
@@ -154,6 +139,7 @@ export const pageQuery = graphql`
   query EditionBySlug($slug: String!) {
     contentfulEdition(slug: { eq: $slug }) {
       title
+      slug
       subtitleShortDescription {
         childMarkdownRemark {
           html
