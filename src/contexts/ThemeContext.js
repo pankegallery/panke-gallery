@@ -8,11 +8,12 @@ export class ThemeProvider extends React.Component {
   }
 
   changeThemeColor = (c) => {
+    console.log(c);
     localStorage.setItem("themeColor", JSON.stringify(c))
     this.setState( {
       color: c
     });
-//    console.log(c);
+
   }
 
   componentDidMount() {

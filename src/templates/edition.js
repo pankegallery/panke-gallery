@@ -150,11 +150,7 @@ export const pageQuery = graphql`
           html
         }
       }
-      embedCode{
-        childMarkdownRemark {
-          html
-        }
-      }
+      stripePriceId
       furtherInformationBlocks {
         id
         title

@@ -20,6 +20,10 @@ const buttonDisabledStyles = {
   cursor: 'not-allowed',
 }
 
+const buttonHoverStyles = {
+  opacity: '0.8',
+}
+
 let stripePromise
 const getStripe = () => {
   if (!stripePromise) {

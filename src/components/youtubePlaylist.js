@@ -59,16 +59,16 @@ class YoutubePlaylist extends React.Component{
     //          console.log('id', id);
     //          console.log('snippet', snippet);
     //          console.log('title', snippet.title);
-                {/* href={`https://www.youtube.com/watch?v=${snippet.resourceId.videoId}`} */}
                 return (
                 <div key={id} className="col-sm-6 col-xs-12 mb-4">
-                  <a
+                  <button
                     onClick={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
+                    onKeyDown={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
                    >
                     <p>
                       <img src={snippet.thumbnails.medium.url} alt="" />
                     </p>
-                  </a>
+                  </button>
                   <h3>{snippet.title}</h3>
                     <p>{this.truncateDescription(snippet.description)}</p>
                   <p className="meta">{Moment(snippet.publishedAt).format('DD.MM.YYYY')} </p>
