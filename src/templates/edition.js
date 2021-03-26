@@ -25,7 +25,7 @@ class EditionTemplate extends React.Component {
 
 
     const edition = get(this.props, 'data.contentfulEdition')
-    console.log(edition);
+//    console.log(edition);
 
     // ––– Slideshow or featured images –––
 
