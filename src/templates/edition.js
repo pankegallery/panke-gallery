@@ -60,15 +60,17 @@ class EditionTemplate extends React.Component {
     const checkoutStatus = this.getChechoutStatus()
     var EditionCheckout;
 
-    if (checkoutStatus === 'success'){
-      EditionCheckout=(
-        <div className="alert alert-success"><p><strong>Thank you for your purchase.</strong></p><p>Once we receive your payment, we will contact you for shipping details.</p><p> Enjoy the edition!</p></div>
-      )
-    }
-    else{
-      EditionCheckout = (
-        <Checkout slug={edition.slug} />
-      )
+    if (edition.stripePriceId){
+      if (checkoutStatus === 'success'){
+        EditionCheckout=(
+          <div className="alert alert-success"><p><strong>Thank you for your purchase.</strong></p><p>Once we receive your payment, we will contact you for shipping details.</p><p> Enjoy the edition!</p></div>
+        )
+      }
+      else{
+        EditionCheckout = (
+          <Checkout slug={edition.slug} priceID={edition.stripePriceId} />
+        )
+      }
     }
 
     //==========================================================================

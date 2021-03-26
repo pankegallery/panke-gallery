@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 
-const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
+const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_TEST_KEY;
 
 const buttonStyles = {
   fontSize: '.9em',
@@ -20,9 +20,10 @@ const buttonDisabledStyles = {
   cursor: 'not-allowed',
 }
 
-const buttonHoverStyles = {
-  opacity: '0.8',
-}
+const shippingCountries = [
+  'AT', 'BE', 'HR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE',
+'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'US', 'CA'
+]
 
 let stripePromise
 const getStripe = () => {
@@ -32,7 +33,7 @@ const getStripe = () => {
   return stripePromise
 }
 
-const Checkout = ({ slug }) => {
+const Checkout = ({ slug, priceID }) => {
 
   const url = `${window.location.origin}/edition/${slug}`
 
@@ -46,12 +47,11 @@ const Checkout = ({ slug }) => {
     const { error } = await stripe.redirectToCheckout({
       mode: 'payment',
       lineItems: [{
-        price: 'price_1IXXQqJ1sNuO02XTuYiyaCo3',
+        price: priceID,
         quantity: 1
       }],
       shippingAddressCollection: {
-        allowedCountries: ['AT', 'BE', 'HR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE',
-'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB', 'US', 'CA'],
+        allowedCountries: shippingCountries,
       },
       successUrl: `${url}?checkout=success`,
       cancelUrl: `${url}?checkout=cancel`,
