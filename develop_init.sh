@@ -1,2 +1,2 @@
-rm -r ./.cache
+rm -fr ./.cache
 gatsby develop

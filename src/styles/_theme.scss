@@ -397,6 +397,7 @@ section.past, section.currently, section.upcoming, section.editions{
     padding: 4px 8px;
     border: theme-color('grey') 2px solid;
     border-radius: 5px;
+    background: transparent;
     color: theme-color('grey');
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -426,20 +427,28 @@ section.past, section.currently, section.upcoming, section.editions{
 }
 
 .responsive-video iframe {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .responsive-video {
-position: relative;
-padding-bottom: 56.25%; /* Default for 1600x900 videos 16:9 ratio*/
-padding-top: 0px;
-height: 0;
-overflow: hidden;
+    position: relative;
+    padding-bottom: 56.25%; /* Default for 1600x900 videos 16:9 ratio*/
+    padding-top: 0px;
+    height: 0;
+    overflow: hidden;
 }
+
+.videos button{
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
 
 /*--  ==================================================  FOOTER */
 

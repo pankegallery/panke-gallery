@@ -6,7 +6,6 @@ import Header from '../components/header'
 import Navigation from '../components/navigation'
 import ColorSwap from '../components/color-swap'
 import Footer from '../components/footer'
-//import ThemeContext from '../contexts/ThemeContext'
 
 import '../styles/panke.css';
 

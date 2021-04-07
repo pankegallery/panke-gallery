@@ -183,8 +183,9 @@ export const pageQuery = graphql`
             name
           }
           featuredImage {
-            sizes(maxWidth: 1000) {
-             ...GatsbyContentfulSizes
+            fluid(maxWidth: 1000) {
+              sizes
+              src
             }
           }
           description {

@@ -9,20 +9,20 @@ import EditionListItem from '../components/edition-list-item'
 
 
 class PankeEdition extends React.Component{
+
   render() {
+
     // Get array of content blocks
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
     // Get array of editions
     const posts = get(this, 'props.data.allContentfulEdition.edges');
 
-    // Log array of Content Blocks
-    console.log("Blocks:");
-    console.log(blocks);
-
-    // Log array of Editions
-    console.log("Editions:");
-    console.log(posts);
+//    // Log array of Content Blocks
+//    console.log("Blocks:", blocks);
+//
+//    // Log array of Editions
+//    console.log("Editions:", posts);
 
     return(
       <Layout>
@@ -92,8 +92,9 @@ export const pageQuery = graphql`
           title
           slug
           featuredImage {
-            sizes(maxWidth: 1000) {
-             ...GatsbyContentfulSizes
+            fluid(maxWidth: 1000) {
+              sizes
+              src
             }
           }
           subtitleShortDescription {

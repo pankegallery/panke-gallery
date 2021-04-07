@@ -45,9 +45,16 @@ class Tag extends React.Component {
     }
 
     return (
-      <p ref="tag" className={className} onClick={this.handleTagClick}>
+      <button
+        ref="tag"
+        className={className}
+        onClick={this.handleTagClick}
+        onKeyDown={this.handleTagClick}
+        aria-label={`Tagged with ${thistag.name}`}
+        tabindex="-100"
+      >
         {thistag.name}
-      </p>
+      </button>
     );
   }
 }

@@ -8789,6 +8789,7 @@ section.past .news-item p, section.currently .news-item p, section.upcoming .new
   padding: 4px 8px;
   border: #999 2px solid;
   border-radius: 5px;
+  background: transparent;
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -8821,6 +8822,13 @@ section.past .news-item p, section.currently .news-item p, section.upcoming .new
   padding-top: 0px;
   height: 0;
   overflow: hidden;
+}
+
+.videos button {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
 }
 
 /*--  ==================================================  FOOTER */

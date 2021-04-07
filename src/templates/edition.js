@@ -7,12 +7,25 @@ import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
+import Checkout from '../components/checkout'
 
 class EditionTemplate extends React.Component {
+
+  getChechoutStatus = () => {
+//    console.log('location:', window.location)
+    let url = typeof window !== 'undefined' ? window.location.href : '';
+    return (url.indexOf('checkout')>0) ?
+      url.substr(url.indexOf('=')+1) : 'initial'
+  }
+
+
   render() {
 
+//    console.log('props:', window.location)
+
+
     const edition = get(this.props, 'data.contentfulEdition')
-    console.log(edition);
+//    console.log(edition);
 
     // ––– Slideshow or featured images –––
 
@@ -24,7 +37,7 @@ class EditionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" sizes={{...edition.featuredImage.sizes , aspectRatio: 16/9}} />
+        <Img alt="FeaturedImage" fluid={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
       );
     }
 
@@ -40,6 +53,24 @@ class EditionTemplate extends React.Component {
           )
         })
       );
+    }
+
+    // --- Checkout ---
+
+    const checkoutStatus = this.getChechoutStatus()
+    var EditionCheckout;
+
+    if (edition.stripePriceId){
+      if (checkoutStatus === 'success'){
+        EditionCheckout=(
+          <div className="alert alert-success"><p><strong>Thank you for your purchase.</strong></p><p>Once we receive your payment, we will contact you for shipping details.</p><p> Enjoy the edition!</p></div>
+        )
+      }
+      else{
+        EditionCheckout = (
+          <Checkout slug={edition.slug} priceID={edition.stripePriceId} />
+        )
+      }
     }
 
     //==========================================================================
@@ -75,10 +106,7 @@ class EditionTemplate extends React.Component {
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12">
               <h2>About the edition</h2>
-              {/*<div dangerouslySetInnerHTML={{
-                __html: edition.embedCode.childMarkdownRemark.html
-              }} />
-              <small>The widget needs coockies from third parties to be enabled. If you don't want to follow this requirement, feel free to write us an email to info@panke.gallery.</small>*/}
+              {EditionCheckout}
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
@@ -113,6 +141,7 @@ export const pageQuery = graphql`
   query EditionBySlug($slug: String!) {
     contentfulEdition(slug: { eq: $slug }) {
       title
+      slug
       subtitleShortDescription {
         childMarkdownRemark {
           html
@@ -123,11 +152,7 @@ export const pageQuery = graphql`
           html
         }
       }
-      embedCode{
-        childMarkdownRemark {
-          html
-        }
-      }
+      stripePriceId
       furtherInformationBlocks {
         id
         title
@@ -139,13 +164,15 @@ export const pageQuery = graphql`
         }
       }
       featuredImage{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
       }
       editionImpressionsSlideshow{
-        sizes(maxWidth: 1000) {
-          ...GatsbyContentfulSizes
+        fluid(maxWidth: 1000) {
+          sizes
+          src
         }
         description
       }
