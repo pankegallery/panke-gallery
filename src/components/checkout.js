@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 
-const STRIPE_PUBLISHABLE_KEY = process.env.GATSBY_STRIPE_PUBLISHABLE_TEST_KEY;
+const STRIPE_PUBLISHABLE_KEY = process.env.GATSBY_STRIPE_PUBLISHABLE_LIVE_KEY;
 
 const buttonStyles = {
   fontSize: '.9em',
