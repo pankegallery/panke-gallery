@@ -62,6 +62,6 @@
     "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
   },
   "devDependencies": {
-    "gatsby-plugin-sass": "^2.1.14"
+    "gatsby-plugin-sass": "^2.8.0"
   }
 }

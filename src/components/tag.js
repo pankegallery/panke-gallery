@@ -44,18 +44,34 @@ class Tag extends React.Component {
       className = 'tag';
     }
 
-    return (
-      <button
-        ref="tag"
-        className={className}
-        onClick={this.handleTagClick}
-        onKeyDown={this.handleTagClick}
-        aria-label={`Tagged with ${thistag.name}`}
-        tabindex="-100"
-      >
-        {thistag.name}
-      </button>
-    );
+    if (this.props.noClick) {
+      return (
+        <button
+          ref="tag"
+          className={className}
+          aria-label={`Tagged with ${thistag.name}`}
+          tabindex="-100"
+        >
+          {thistag.name}
+        </button>
+      );
+    }
+    else{
+      return (
+        <button
+          ref="tag"
+          className={className}
+          onClick={this.handleTagClick}
+          onKeyDown={this.handleTagClick}
+          aria-label={`Tagged with ${thistag.name}`}
+          tabindex="-100"
+        >
+          {thistag.name}
+        </button>
+      );
+    }
+
+
   }
 }
 

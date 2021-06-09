@@ -16,7 +16,6 @@ class EventTemplate extends React.Component {
 
     const event = get(this.props, 'data.contentfulEvent')
     console.log(event);
-
     // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
