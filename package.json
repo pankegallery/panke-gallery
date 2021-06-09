@@ -38,7 +38,7 @@
     "react-twitch-embed": "^2.1.0",
     "react-youtube": "^7.13.0",
     "sass-loader": "^11.1.1",
-    "typescript": "^2.8.4"
+    "webpack": "^4.44.2"
   },
   "homepage": "https://github.com/crosssenses/panke-gallery#readme",
   "keywords": [
