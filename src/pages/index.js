@@ -2,7 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Moment from 'moment'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
 import ExhibitionPreview from '../components/exhibition-preview'
@@ -10,6 +10,7 @@ import EventPreview from '../components/event-preview'
 
 
 class PankeIndex extends React.Component {
+
 
   filterCurrent = (_ex) => {
     var currentDate = new Date();
@@ -25,15 +26,16 @@ class PankeIndex extends React.Component {
     return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
   }
 
-  filterUpcomingEvents = (_ev) => {
-    var currentDate = new Date();
-    var eventStartDate = new Date(_ev.node.date);
-//    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
-    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
-  }
+//  filterUpcomingEvents = (_ev) => {
+//    var currentDate = new Date();
+//    var eventStartDate = new Date(_ev.node.date);
+////    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+//    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
+//  }
 
   render() {
 
+    console.log('Context: ', get(this.props, 'pageContext'))
     // Get array of exhibitions
     const exhibitions = get(this, 'props.data.allContentfulExhibition.edges')
 
@@ -52,7 +54,9 @@ class PankeIndex extends React.Component {
     const upcomingExhibitions = exhibitions.filter(this.filterUpcoming);
 
     // Filter array of events
-    const upcomingEvents = events.filter(this.filterUpcomingEvents);
+//    const upcomingEvents = events.filter(this.filterUpcomingEvents);
+    // Filter by GraphQL
+    const upcomingEvents = events
 
     // Log exhibitions
 //    console.log("Current Exhibitions:", currentExhibitions);
@@ -87,13 +91,16 @@ class PankeIndex extends React.Component {
 
     // Create upcoming events code if there are
     var upcomingEv;
-    if (upcomingEvents.length > 0){
+    if (upcomingEvents.length > 1){
       upcomingEv = (
         <section className="upcoming">
 
           <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
+            <div className="col-md-8 col-sm-8 col-xs-12">
               <h2>Upcoming events</h2>
+            </div>
+            <div className="col-md-4 col-sm-4 col-xs-12 text-sm-right d-none d-sm-block pt-4">
+              <Link to={'events'}><button class="eventSeries">See all events</button></Link>
             </div>
           </div>
 
@@ -189,9 +196,11 @@ class PankeIndex extends React.Component {
 export default PankeIndex
 
 export const pageQuery = graphql`
-  query PankeHomeQuery {
+  query PankeHomeQuery($today: Date!) {
     allContentfulExhibition(
-      sort: { fields: [startDate], order: ASC }
+      sort: { fields: [startDate], order: ASC },
+      # limit: 3,
+      filter: {endDate: {gte: $today}}
       )
      {
       edges {
@@ -218,19 +227,22 @@ export const pageQuery = graphql`
       }
     }
     allContentfulEvent(
-      sort: { fields: [date], order: DESC }
-      )
-     {
+        sort: { fields: [date], order: ASC },
+        limit: 2,
+        filter: {date: {gte: $today}}
+      ){
       edges {
         node {
           title
           slug
           date
-          featuredImage {
-            fluid(maxWidth: 1000) {
-              sizes
-              src
-            }
+          tags {
+            name
+            slug
+          }
+          eventSeries {
+            name
+            slug
           }
           subtitleShortDescription {
             childMarkdownRemark{
@@ -240,7 +252,10 @@ export const pageQuery = graphql`
         }
       }
     }
-    allContentfulContentBlock (filter: {page: {eq: "News"}}, sort: { fields: [updatedAt], order: DESC}){
+    allContentfulContentBlock (
+        filter: {page: {eq: "News"}},
+        sort: { fields: [updatedAt], order: DESC}
+      ){
       edges {
         node {
           id

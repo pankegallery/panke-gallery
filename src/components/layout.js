@@ -7,7 +7,7 @@ import Navigation from '../components/navigation'
 import ColorSwap from '../components/color-swap'
 import Footer from '../components/footer'
 
-import '../styles/panke.css';
+import '../styles/panke.scss';
 
 import {ThemeProvider, ThemeContext} from '../contexts/ThemeContext';
 
