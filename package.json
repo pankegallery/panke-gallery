@@ -36,9 +36,7 @@
     "react-responsive-carousel": "^3.1.50",
     "react-truncate": "^2.4.0",
     "react-twitch-embed": "^2.1.0",
-    "react-youtube": "^7.13.0",
-    "sass-loader": "^11.1.1",
-    "webpack": "^4.44.2"
+    "react-youtube": "^7.13.0"
   },
   "homepage": "https://github.com/crosssenses/panke-gallery#readme",
   "keywords": [
