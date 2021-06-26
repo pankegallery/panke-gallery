@@ -26,12 +26,12 @@ class PankeIndex extends React.Component {
     return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
   }
 
-//  filterUpcomingEvents = (_ev) => {
-//    var currentDate = new Date();
-//    var eventStartDate = new Date(_ev.node.date);
-////    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
-//    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
-//  }
+  filterUpcomingEvents = (_ev) => {
+    var currentDate = new Date();
+    var eventStartDate = new Date(_ev.node.date);
+//    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
+    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
+  }
 
   render() {
 
@@ -53,10 +53,10 @@ class PankeIndex extends React.Component {
     const currentExhibitions = exhibitions.filter(this.filterCurrent);
     const upcomingExhibitions = exhibitions.filter(this.filterUpcoming);
 
-    // Filter array of events
-//    const upcomingEvents = events.filter(this.filterUpcomingEvents);
-    // Filter by GraphQL
-    const upcomingEvents = events
+    // Filter array of events and slice to first 2
+    const upcomingEvents = events.filter(this.filterUpcomingEvents).slice(0,2);
+    // Filter by GraphQL (not working, only updated on rebuild)
+//    const upcomingEvents = events
 
     // Log exhibitions
 //    console.log("Current Exhibitions:", currentExhibitions);
@@ -228,7 +228,7 @@ export const pageQuery = graphql`
     }
     allContentfulEvent(
         sort: { fields: [date], order: ASC },
-        limit: 2,
+        # limit: 2,
         filter: {date: {gte: $today}}
       ){
       edges {
