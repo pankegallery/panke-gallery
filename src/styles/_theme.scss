@@ -72,7 +72,7 @@ body {
     color: theme-color('black');
     text-align: left;
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 300;
     padding: 0;
     margin: 0;
@@ -83,7 +83,7 @@ body {
 
 
 .container{
-    max-width: 900px;
+    max-width: 1080px;
 }
 
 header{
@@ -165,7 +165,7 @@ header nav{
 }
 
 .off-canvas {
-    background: #ccc none repeat scroll 0 0;
+    background: #fff none repeat scroll 0 0;
     box-shadow: 0 0 10px theme-color('lightgrey') inset;
     height: 100%;
     padding: 4em 2em;
@@ -196,6 +196,7 @@ header nav{
 
     nav#nav-main {
         float: none;
+        font-weight: 500;
     }
 
     nav#nav-satellite{
@@ -507,9 +508,10 @@ footer {
 
 @media (max-width: 768px) {
     #color-swap {
-        left: 70%;
+        left: 4%;
         position: absolute;
-        top: 10px;
+        top: 12px;
+        display: none;
     }
 
     #color-swap > div {
