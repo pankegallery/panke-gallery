@@ -44,7 +44,7 @@ export default PankeInfo;
 
 
 export const pageQuery = graphql`
-  query PankeInfoQuery {
+  query PankeRosaQuery {
     allContentfulContentBlock (filter: {page: {eq: "Info"}}, sort: { fields: [slug], order: ASC}){
       edges {
         node {

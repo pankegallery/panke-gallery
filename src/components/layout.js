@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, {useState} from 'react'
 import Helmet from 'react-helmet'
 
 import Header from '../components/header'
@@ -7,19 +6,29 @@ import Navigation from '../components/navigation'
 import ColorSwap from '../components/color-swap'
 import Footer from '../components/footer'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+
 import '../styles/panke.scss';
 
 import {ThemeProvider, ThemeContext} from '../contexts/ThemeContext';
 
 const TemplateWrapper = ({ children }) => {
+
+  const [offCanvas, setOffCanvas] = useState(false);
+
+  const handleClick = () => {
+    setOffCanvas(prevOffCanvas => !prevOffCanvas)
+  }
+
+  let offCanvasClass = `off-canvas ${offCanvas ? 'active' : ''}`
+
   return (
     <ThemeProvider>
       <ThemeContext.Consumer>
         {({color, changeThemeColor}) => (
           <div
             className="pageWrapper"
-            themeColor={color}
-            changeThemeColor={changeThemeColor}
           >
             <Helmet
               titleTemplate='%s · panke.gallery'
@@ -55,16 +64,19 @@ const TemplateWrapper = ({ children }) => {
 
             </Helmet>
 
-            <div className="off-canvas">
+            <div className={offCanvasClass}>
+              <button className="toggle-menu justify-right" onClick={handleClick}>
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
               <Navigation />
             </div>
 
 
                 <div className={'container theme-' + color}>
 
-                  <Header />
+                  <Header handleClick={handleClick} />
 
-                  <main>{children}</main>
+                    <main>{children}</main>
 
                   <Footer />
 
@@ -83,8 +95,8 @@ const TemplateWrapper = ({ children }) => {
   );
 }
 
-TemplateWrapper.propTypes = {
-  children: PropTypes.func,
-}
+//TemplateWrapper.propTypes = {
+//  children: PropTypes.func,
+//}
 
 export default TemplateWrapper;
