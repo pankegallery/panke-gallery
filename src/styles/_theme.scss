@@ -17,6 +17,11 @@ a:focus,
 a:hover {
     color: #000;
     text-decoration: none;
+    outline: none;
+}
+
+button:focus{
+    outline: none;
 }
 
 @each $key, $value in $panke-colors{
@@ -168,30 +173,13 @@ header nav{
     background: #fff none repeat scroll 0 0;
     box-shadow: 0 0 10px theme-color('lightgrey') inset;
     height: 100%;
-    padding: 4em 2em;
+    padding: 55px 15px;
     position: fixed;
-    right: 0;
+    right: -100%;
     top: 0;
-    width: 15.625em;
-    right: -15.625em;
-    -webkit-transform: translate(0px, 0px);
-    -moz-transform: translate(0px, 0px);
-    -o-transform: translate(0px, 0px);
-    -ms-transform: translate(0px, 0px);
-    transform: translate(0px, 0px);
-    -webkit-transition: 0.25s ease;
-    -moz-transition: 0.25s ease;
-    -o-transition: 0.25s ease;
-    transition: 0.25s ease;
-
-    &.menu-active {
-        -webkit-transform: translate(-15.625em, 0px);
-        -moz-transform: translate(-15.625em, 0px);
-        -o-transform: translate(-15.625em, 0px);
-        -ms-transform: translate(-15.625em, 0px);
-        transform: translate(-15.625em, 0px);
-        display: block;
-    }
+    width: 100%;
+    transition: right 0.25s ease;
+    z-index: 100;
 
 
     nav#nav-main {
@@ -222,8 +210,14 @@ header nav{
         }
     }
 
+    &.active{
+        right: 0;
+    }
 
-
+    .toggle-menu {
+        transform: rotate(45deg);
+        margin: 0 0 25px calc(100% - 20px);
+    }
 }
 
 .container {
@@ -450,6 +444,11 @@ section.past, section.currently, section.upcoming, section.editions{
     padding: 0;
 }
 
+// style /rosa address
+.address div {
+    display: inline;
+    background: rgb(0, 239, 0);
+}
 
 /*--  ==================================================  FOOTER */
 
@@ -501,10 +500,6 @@ footer {
 // ============================================================================
 // ============================================================================
 
-
-.off-canvas{
-    display: none;
-}
 
 @media (max-width: 768px) {
     #color-swap {

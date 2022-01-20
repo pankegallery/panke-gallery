@@ -20,7 +20,6 @@ class pankeHeader extends React.Component {
             <div className="col-3 text-right d-block d-sm-none">
               <button className="toggle-menu" onClick={this.props.handleClick}>
                 <FontAwesomeIcon icon={faBars} />
-
               </button>
             </div>
           </div>
