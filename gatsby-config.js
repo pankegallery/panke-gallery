@@ -33,6 +33,14 @@ module.exports = {
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
+    },
+    {
+      resolve: 'gatsby-plugin-matomo',
+      options: {
+        siteId: '2',
+        matomoUrl: 'https://piwik.wunderjewel.de',
+        siteUrl: 'https://www.panke.gallery'
+      }
     }
   ]
 }
