@@ -52,15 +52,16 @@ const TemplateWrapper = ({ children }) => {
               <meta name="msapplication-config" content="favicons/browserconfig.xml" />
               <meta name="theme-color" content="#ffffff" />
 
-              {/* CDN Scripts for Slideshow, Icons and SUPR */}
+              {/* CDN Scripts for Slideshow, Icons and */}
               <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" type="text/javascript" />
               <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript" />
-              {/* <script data-main="https://widget.supr.com/app/main" src="https://widget.supr.com/load.js" type="text/javascript" /> */}
+
               <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" type="style/css" />
 {/*
-              {/* panke.gallery scripts for link color */}
+              {/* panke.gallery scripts for link color
               <script src="scripts/js.cookie.js" type="text/javascript" />
               <script src="scripts/panke.js" type="text/javascript" />
+*/}
 
             </Helmet>
 
