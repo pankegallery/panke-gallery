@@ -14,14 +14,15 @@ class PankeRosa extends React.Component{
 
     let infoBlock = {
       title: 'About',
-      content: '<strong>/rosa is a project space on Rosa-Luxemburg Platz jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery focused on representing net art and net culture in Berlin.</stong>'
+      content: '<strong>/rosa is a project space on Rosa-Luxemburg Platz in Berlin. It is jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery and focuses on researching and exhibiting net art and net culture.</stong>'
     }
 
     let moreBlock = {
       title: 'More',
-      content: `/rosa extends the activities of both spaces and expands their initiatives in maintaining, archiving and reconstructing Internet art culture, and opens an important site for local and international dialogue between researchers, students, net art enthusiasts, established and emerging artists.<br /><br />
-      In addition to the expected formats of exhibiting artworks, /rosa proposes experimental formats of art mediation, lectures, workspace, growing research library for self-study, and offers itself as an open venue for independently organized community events such as reading groups and workshops.`
+      content: `/rosa offers a site for local and international dialogues between researchers, students, net art enthusiasts, and established and emerging artists. In addition to showing artworks, /rosa proposes experimental formats of art mediation, with public lectures and a workspace, as well as a growing research library for self-study. It also  functions as a venue for community events such as reading groups and workshops.`
     }
+
+
 
     let address = `
       <strong>/rosa</strong><br>
