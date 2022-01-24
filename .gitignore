@@ -75,6 +75,13 @@ src/styles/*.map
 
 # Other
 .brackets.json
+<<<<<<< HEAD
 
 # Local Netlify folder
 .netlify
+||||||| ab29aea8
+=======
+
+# Local Netlify folder
+.netlify
+>>>>>>> production
