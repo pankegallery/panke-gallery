@@ -14,7 +14,7 @@ class PankeRosa extends React.Component{
 
     let infoBlock = {
       title: 'About',
-      content: '<strong>/rosa is a project space on Rosa-Luxemburg Platz in Berlin. It is jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery and focuses on researching and exhibiting net art and net culture.</stong>'
+      content: '<strong>/rosa is a project space on Rosa-Luxemburg Platz in Berlin. It is jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery and focuses on researching and exhibiting net art and net culture.</strong>'
     }
 
     let moreBlock = {
