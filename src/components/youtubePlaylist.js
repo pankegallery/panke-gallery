@@ -18,7 +18,7 @@ class YoutubePlaylist extends React.Component{
     const res = await fetch(`${YOUTUBE_PLAYLIST_API}?part=snippet&maxResults=50&playlistId=${playlist_id}&key=${YOUTUBE_API_KEY}`)
     const data = await res.json();
 
-    console.log('data', data);
+    console.log('data: ', data);
 
     this.setState({
       playlistData: data
@@ -26,6 +26,7 @@ class YoutubePlaylist extends React.Component{
   }
 
   componentDidMount(){
+//    console.log('YOUTUBE_PLAYLIST_API', YOUTUBE_PLAYLIST_API)
     this.getPlaylistFromServer(this.props.playlist_id)
   }
 

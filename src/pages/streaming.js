@@ -76,8 +76,8 @@ class PankeStreaming extends React.Component{
         />
 
         <section className="streaming twitch">
-          <div class="row headline">
-            <div class="col-md-12 col-sm-12 col-xs-12">
+          <div className="row headline">
+            <div className="col-md-12 col-sm-12 col-xs-12">
               <h2 ref={this.ref}>panke.gallery Live</h2>
             </div>
           </div>
