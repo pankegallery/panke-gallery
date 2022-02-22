@@ -199,20 +199,20 @@ export const pageQuery = graphql`
 
       }
       featuredImage{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
       }
       exhibitionImpressionsSlideshow{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
         description
       }
       exhibitionDocumentationImagesBelow{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }

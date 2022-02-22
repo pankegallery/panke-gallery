@@ -211,7 +211,7 @@ export const pageQuery = graphql`
           endDate
           dateTbc
           featuredImage {
-            fluid(maxWidth: 1000) {
+            fluid(maxWidth: 1500) {
               sizes
               src
             }

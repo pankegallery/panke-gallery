@@ -184,7 +184,7 @@ export const pageQuery = graphql`
           #startDate(formatString: "DD MMMM YYYY")
           #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
-            fluid(maxWidth: 1000) {
+            fluid(maxWidth: 1500) {
               sizes
               src
             }

@@ -32,7 +32,12 @@ module.exports = {
   plugins: [
     'gatsby-transformer-remark',
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-sharp',
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        quality: 100
+      }
+    },
     'gatsby-plugin-offline',
     'gatsby-plugin-sass',
     {

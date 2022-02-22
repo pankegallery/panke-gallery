@@ -194,20 +194,20 @@ export const pageQuery = graphql`
         }
       }
       featuredImage{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
       }
       eventImpressionsSlideshow{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
         description
       }
       eventDocumentationImagesBelow{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }

@@ -92,7 +92,7 @@ export const pageQuery = graphql`
           title
           slug
           featuredImage {
-            fluid(maxWidth: 1000) {
+            fluid(maxWidth: 1500) {
               sizes
               src
             }

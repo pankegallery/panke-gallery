@@ -164,13 +164,13 @@ export const pageQuery = graphql`
         }
       }
       featuredImage{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
       }
       editionImpressionsSlideshow{
-        fluid(maxWidth: 1000) {
+        fluid(maxWidth: 1500) {
           sizes
           src
         }
