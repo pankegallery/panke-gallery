@@ -98,5 +98,13 @@ exports.onCreatePage = ({ page, actions }) => {
       today: todayDate,
     },
   })
+
+  createPage({
+    path: `/events/:series`,
+    matchPath: `/events/:series`,
+    component: path.resolve(`./src/pages/events.js`),
+  })
 }
+
+
 

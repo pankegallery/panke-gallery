@@ -8,25 +8,19 @@ import EventListItem from '../components/event-list-item'
 
 class PankeEvents extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {isFilterOn: false,
-                 filterby: ''};
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleEventsClick = this.handleEventsClick.bind(this);
+  state = {
+    isFilterOn: false,
+    filterby: ''
   }
 
-  handleEventsClick(tagSlug) {
+  handleEventsClick = (tagSlug) => {
     this.setState(state => ({
-      isFilterOn: !state.isFilterOn
-    }));
-    this.setState(state => ({
+      isFilterOn: !state.isFilterOn,
       filterby: {tagSlug}
     }));
   }
 
-  passFilter(ev){
+  passFilter = (ev) => {
     if (!this.state.isFilterOn) {
       return true;
     }
@@ -38,8 +32,8 @@ class PankeEvents extends React.Component {
     return this.state.filterby.tagSlug === ev.eventSeries.slug
   }
 
-  returnEventListItem(ev){
-    console.log('hä?')
+  returnEventListItem = (ev) => {
+//    console.log('hä?')
     return (
       <EventListItem
         key={ev.slug}
@@ -48,6 +42,13 @@ class PankeEvents extends React.Component {
         filterIsOn={this.state.isFilterOn}
       />
     )
+  }
+
+  componentDidMount = () => {
+    this.props.series && this.setState({
+      isFilterOn: true,
+      filterby: {tagSlug: this.props.series}
+    })
   }
 
   render() {
@@ -181,17 +182,6 @@ export const pageQuery = graphql`
           eventSeries {
             slug
             name
-          }
-          featuredImage {
-            fluid(maxWidth: 1500) {
-              sizes
-              src
-            }
-          }
-          description {
-            childMarkdownRemark {
-              html
-            }
           }
           subtitleShortDescription {
             childMarkdownRemark {

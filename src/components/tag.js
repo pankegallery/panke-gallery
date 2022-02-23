@@ -11,7 +11,7 @@ class Tag extends React.Component {
     this.componentDidUpdate = this.componentDidUpdate.bind(this);
   }
 
-  componentDidUpdate(){
+  componentDidUpdate = () => {
     if (this.state.isToggleOn !== this.props.filterIsOn){
       this.setState(state => ({
         isToggleOn: this.props.filterIsOn
@@ -19,7 +19,7 @@ class Tag extends React.Component {
     }
   }
 
-  handleTagClick() {
+  handleTagClick = () =>  {
     this.props.handleClick(this.props.tag.slug);
 
     this.setState(state => ({
