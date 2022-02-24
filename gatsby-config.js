@@ -35,11 +35,29 @@ module.exports = {
     {
       resolve: `gatsby-plugin-sharp`,
       options: {
-        quality: 100
-      }
+        defaults: {
+          formats: [`auto`, `webp`],
+          placeholder: `dominantColor`,
+          quality: 50,
+          breakpoints: [750, 1080, 1366, 1920],
+          backgroundColor: `transparent`,
+          tracedSVGOptions: {},
+          blurredOptions: {},
+          jpgOptions: {},
+          pngOptions: {},
+          webpOptions: {},
+          avifOptions: {},
+        },
+      },
     },
     'gatsby-plugin-offline',
-    'gatsby-plugin-sass',
+    'gatsby-plugin-image',
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+          implementation: require('sass')
+      },
+    },
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,

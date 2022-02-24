@@ -184,10 +184,10 @@ export const pageQuery = graphql`
           #startDate(formatString: "DD MMMM YYYY")
           #endDate(formatString: "DD MMMM YYYY")
           featuredImage {
-            fluid(maxWidth: 1500) {
-              sizes
-              src
-            }
+            gatsbyImageData(
+              layout: CONSTRAINED,
+              width: 1050
+            )
           }
           description {
             childMarkdownRemark {

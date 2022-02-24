@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
-export default ({ edition }) => (
+const EditionListItem = ({ edition }) => (
   <article className="edition-item">
     <Link to={`/edition/${edition.slug}`}>
-      <Img alt="FeaturedImage" fluid={{...edition.featuredImage.fluid , aspectRatio: 16/9}} />
+      <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} aspectratio={16/9}  />
     </Link>
     <h3>
       <Link to={`/edition/${edition.slug}`}>{edition.title}</Link>
@@ -15,3 +15,4 @@ export default ({ edition }) => (
       }} />
   </article>
 )
+export default EditionListItem

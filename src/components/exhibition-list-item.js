@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import Moment from 'moment'
 
 class exhibitionListItem  extends React.Component{
@@ -25,7 +25,7 @@ class exhibitionListItem  extends React.Component{
     return(
       <article className="exhibition-item">
         <Link to={`/exhibition/${exhibition.slug}`}>
-          <Img alt="FeaturedImage" fluid={{...exhibition.featuredImage.fluid , aspectRatio: 16/9}} />
+          <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} />
         </Link>
         <h3>
           <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>

@@ -87,7 +87,7 @@ class PankeRosa extends React.Component{
 export default PankeRosa;
 
 export const pageQuery = graphql`
-  query PankeInfoQuery {
+  query PankeRosaQuery {
     allContentfulContentBlock (filter: {page: {eq: "/rosa"}}, sort: { fields: [slug], order: ASC}){
       edges {
         node {
@@ -105,5 +105,3 @@ export const pageQuery = graphql`
     }
   }
 `
-
-

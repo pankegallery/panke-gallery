@@ -1,7 +1,7 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
@@ -9,7 +9,6 @@ import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import Moment from 'moment'
-
 
 class ExhibitionTemplate extends React.Component {
   render() {
@@ -30,7 +29,7 @@ class ExhibitionTemplate extends React.Component {
     }
     else{
       ImageOrSlides =(
-        <Img alt="FeaturedImage" fluid={{...exhibition.featuredImage.fluid , aspectRatio: 16/9}} />
+        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} aspectratio={16/9} />
       );
     }
 
@@ -199,23 +198,23 @@ export const pageQuery = graphql`
 
       }
       featuredImage{
-        fluid(maxWidth: 1500) {
-          sizes
-          src
-        }
+        gatsbyImageData(
+          layout: CONSTRAINED,
+          width: 1050
+        )
       }
       exhibitionImpressionsSlideshow{
-        fluid(maxWidth: 1500) {
-          sizes
-          src
-        }
+        gatsbyImageData(
+          layout: CONSTRAINED,
+          width: 1050
+        )
         description
       }
       exhibitionDocumentationImagesBelow{
-        fluid(maxWidth: 1500) {
-          sizes
-          src
-        }
+        gatsbyImageData(
+          layout: CONSTRAINED,
+          width: 1050
+        )
         description
       }
     }

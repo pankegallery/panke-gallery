@@ -2,7 +2,7 @@ import React from 'react'
 import SocialIcons from '../components/social-icons'
 
 
-export default () => (
+const Footer = () => (
       <footer>
         <div className="row">
           <div className="col-sm-8 text-center text-sm-right">© panke.gallery – Verein für künstlerisch-kulturelle Bildung e.V.</div>
@@ -12,3 +12,4 @@ export default () => (
         </div>
       </footer>
 )
+export default Footer

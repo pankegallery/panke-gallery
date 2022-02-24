@@ -7,7 +7,6 @@ import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EditionListItem from '../components/edition-list-item'
 
-
 class PankeEdition extends React.Component{
 
   render() {
@@ -92,10 +91,10 @@ export const pageQuery = graphql`
           title
           slug
           featuredImage {
-            fluid(maxWidth: 1500) {
-              sizes
-              src
-            }
+            gatsbyImageData(
+              layout: CONSTRAINED,
+              width: 1050
+            )
           }
           subtitleShortDescription {
             childMarkdownRemark {

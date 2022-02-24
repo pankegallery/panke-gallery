@@ -1,8 +1,8 @@
 import React from 'react'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 //import Carousel from 'react-responsive-carousel'
 
-export default ({slides, length}) => (
+const Slideshow = ({slides, length}) => (
   <div id="myCarousel" className="row carousel slide" data-ride="carousel">
 
     {/* Indicators */}
@@ -25,7 +25,7 @@ export default ({slides, length}) => (
           <div className={cls}>
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="image-wrapper 3-col">
-                    <Img alt="FeaturedImage" fluid={{...fluid , aspectRatio: 16/9}} />
+                    <GatsbyImage alt="FeaturedImage" image={fluid} aspectratio={16/9} />
                 </div>
                 <p>{description}</p>
             </div>
@@ -50,3 +50,4 @@ export default ({slides, length}) => (
   </div>
 
 )
+export default Slideshow

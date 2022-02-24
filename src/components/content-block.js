@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({ blockTitle, blockContent }) => (
+const ContentBlock = ({ blockTitle, blockContent }) => (
         <section className="further">
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12">
@@ -14,3 +14,5 @@ export default ({ blockTitle, blockContent }) => (
           </div>
         </section>
 )
+
+export default ContentBlock

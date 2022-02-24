@@ -2,7 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Moment from 'moment'
-import { graphql, Link } from 'gatsby'
+import { Link, graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import ExhibitionPreview from '../components/exhibition-preview'
@@ -100,7 +100,7 @@ class PankeIndex extends React.Component {
               <h2>Upcoming events</h2>
             </div>
             <div className="col-md-4 col-sm-4 col-xs-12 text-sm-right d-none d-sm-block pt-4">
-              <Link to={'events'}><button class="eventSeries">See all events</button></Link>
+              <Link to={'events'}><button className="eventSeries">See all events</button></Link>
             </div>
           </div>
 
@@ -108,7 +108,7 @@ class PankeIndex extends React.Component {
             <div className="col-md-12 col-sm-8 col-xs-12">
               {upcomingEvents.map(({ node }) => {
                 return (
-                    <EventPreview key={node.slug} event={node} />
+                    <EventPreview key={node.id} event={node} />
                 )
               })}
             </div>
@@ -211,10 +211,10 @@ export const pageQuery = graphql`
           endDate
           dateTbc
           featuredImage {
-            fluid(maxWidth: 1500) {
-              sizes
-              src
-            }
+            gatsbyImageData(
+              layout: CONSTRAINED,
+              width: 1050
+            )
           }
           openingHours
           vernissageInfos

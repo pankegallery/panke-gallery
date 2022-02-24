@@ -113,7 +113,6 @@ class PankeContact extends React.Component{
 
 export default PankeContact;
 
-
 export const pageQuery = graphql`
   query PankeContactQuery {
     allContentfulContentBlock (filter: {page: {eq: "Contact"}}, sort: { fields: [createdAt], order: ASC}){
@@ -133,4 +132,3 @@ export const pageQuery = graphql`
     }
   }
 `
-

@@ -22,7 +22,7 @@ class EventPreview extends React.Component {
       eventTags =(
         event.tags.map(({slug, name}) => {
           return (
-            <p className="tag">
+            <p className="tag" key={slug}>
               {name}
             </p>
           )

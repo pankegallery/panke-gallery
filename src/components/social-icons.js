@@ -5,7 +5,7 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
-export default () => (
+const SocialIcons = () => (
   <div className="social text-center text-sm-right mt-4 mt-sm-0">
     <a href="https://twitter.com/pankegallery/" className="twitter" target="_blank" rel="noopener noreferrer">
       <FontAwesomeIcon icon={faTwitter} />
@@ -19,3 +19,4 @@ export default () => (
     </a>
   </div>
 )
+export default SocialIcons
