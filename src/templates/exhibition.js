@@ -200,20 +200,26 @@ export const pageQuery = graphql`
       featuredImage{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050
+          width: 1050,
+          placeholder: BLURRED,
+          quality: 100
         )
       }
       exhibitionImpressionsSlideshow{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050
+          width: 1050,
+          placeholder: BLURRED,
+          quality: 100
         )
         description
       }
       exhibitionDocumentationImagesBelow{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050
+          width: 1050,
+          placeholder: BLURRED,
+          quality: 100
         )
         description
       }

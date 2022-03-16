@@ -19,13 +19,13 @@ const Slideshow = ({slides, length}) => (
     {/* Wrapper for slides */}
     <div className="carousel-inner" role="listbox">
 
-      {slides.map(({fluid, description}, index ) => {
+      {slides.map(({gatsbyImageData, description}, index ) => {
         var cls = (index === 0) ? 'carousel-item active' : 'carousel-item';
         return (
           <div className={cls}>
             <div className="col-md-12 col-sm-12 col-xs-12">
                 <div className="image-wrapper 3-col">
-                    <GatsbyImage alt="FeaturedImage" image={fluid} aspectratio={16/9} />
+                    <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16/9} />
                 </div>
                 <p>{description}</p>
             </div>

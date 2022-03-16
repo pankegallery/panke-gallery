@@ -186,7 +186,8 @@ export const pageQuery = graphql`
           featuredImage {
             gatsbyImageData(
               layout: CONSTRAINED,
-              width: 1050
+              width: 1050,
+              placeholder: BLURRED
             )
           }
           description {
@@ -194,7 +195,7 @@ export const pageQuery = graphql`
               html
             }
           }
-          openingHours
+          #openingHours
           subtitleShortDescription {
             childMarkdownRemark {
               html

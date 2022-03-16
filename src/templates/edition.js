@@ -166,13 +166,17 @@ export const pageQuery = graphql`
       featuredImage{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050
+          width: 1050,
+          placeholder: BLURRED,
+          quality: 100
         )
       }
       editionImpressionsSlideshow{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050
+          width: 1050,
+          placeholder: BLURRED,
+          quality: 100
         )
         description
       }

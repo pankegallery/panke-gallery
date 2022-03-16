@@ -29,8 +29,7 @@ class PankeIndex extends React.Component {
   filterUpcomingEvents = (_ev) => {
     var currentDate = new Date();
     var eventStartDate = new Date(_ev.node.date);
-//    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day') && !_ex.node.dateTbc;
-    return Moment(eventStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
+    return Moment(eventStartDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
   }
 
   render() {
@@ -61,7 +60,7 @@ class PankeIndex extends React.Component {
     // Log exhibitions
 //    console.log("Current Exhibitions:", currentExhibitions);
 //    console.log("Upcoming Exhibitions:", upcomingExhibitions);
-    console.log("Upcoming Events:", upcomingEvents);
+//    console.log("Upcoming Events:", upcomingEvents);
 
     // Create news code
     var news;

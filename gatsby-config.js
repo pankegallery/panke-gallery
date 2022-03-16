@@ -37,8 +37,8 @@ module.exports = {
       options: {
         defaults: {
           formats: [`auto`, `webp`],
-          placeholder: `dominantColor`,
-          quality: 50,
+          placeholder: `blurred`,
+          quality: 100,
           breakpoints: [750, 1080, 1366, 1920],
           backgroundColor: `transparent`,
           tracedSVGOptions: {},

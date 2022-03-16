@@ -15,7 +15,6 @@ exports.createPages = ({ graphql, actions }) => {
             allContentfulExhibition {
               edges {
                 node {
-                  title
                   slug
                 }
               }
@@ -23,7 +22,6 @@ exports.createPages = ({ graphql, actions }) => {
             allContentfulEvent {
               edges {
                 node {
-                  title
                   slug
                 }
               }
@@ -31,7 +29,6 @@ exports.createPages = ({ graphql, actions }) => {
             allContentfulEdition {
               edges {
                 node {
-                  title
                   slug
                 }
               }
