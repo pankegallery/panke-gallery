@@ -69,6 +69,7 @@ module.exports = {
         matomoUrl: 'https://piwik.wunderjewel.de',
         siteUrl: 'https://www.panke.gallery'
       }
-    }
+    },
+    'gatsby-plugin-netlify'
   ]
 }

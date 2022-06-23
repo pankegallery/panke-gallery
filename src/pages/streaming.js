@@ -1,77 +1,80 @@
-import React from 'react';
-//import get from 'lodash/get'
-import Helmet from 'react-helmet'
+import React from "react";
+import Helmet from "react-helmet";
 
-import Layout from "../components/layout"
-import YoutubePlaylist from "../components/youtubePlaylist"
+import Layout from "../components/layout";
+import YoutubePlaylist from "../components/youtubePlaylist";
 
-import {TwitchPlayer} from 'react-twitch-embed';
-import YouTube from 'react-youtube';
-//import YouTubePlaylist from 'react-youtube-playlist';
-//import 'react-youtube-playlist/dist/styles'
+import ReactPlayer from "react-player";
 
-class PankeStreaming extends React.Component{
+import YouTube from "react-youtube";
 
+class PankeStreaming extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       streaming: true,
-      video: undefined
+      video: undefined,
     };
     this.ref = React.createRef();
   }
 
   replaceVideoScreen = (videoId) => {
-//    console.log('Update Video')
+    //    console.log('Update Video')
 
     this.setState({
       video: videoId,
-      streaming: false
-    })
+      streaming: false,
+    });
 
-    console.log('ref', this.ref)
+    console.log("ref", this.ref);
     this.ref.current.scrollIntoView();
-    return(null)
-  }
+    return null;
+  };
 
   renderMainPlayer = () => {
     if (this.state.streaming) {
-      return(
-        <TwitchPlayer
-          channel="pankegallery"
-          theme="light"
-          width="100%"
-        />
-      )
-    }
-    else{
+      return (
+        <div class="responsive-video">
+          <ReactPlayer
+            url="https://www.twitch.tv/pankegallery"
+            // width="100%"
+            // height="100%"
+          />
+        </div>
+        // <TwitchPlayer
+        //   channel="pankegallery"
+        //   theme="light"
+        //   width="100%"
+        // />
+      );
+    } else {
       const videoOptions = {
-        width: '100%',
-        height: 'auto'
-      }
-      return(
+        width: "100%",
+        height: "auto",
+      };
+      return (
         <YouTube
           videoId={this.state.video}
           className="video-player"
           containerClassName="responsive-video"
           opts={videoOptions}
         />
-      )
+      );
     }
-  }
-
+  };
 
   render() {
     const mainPlayer = this.renderMainPlayer();
-    return(
+    return (
       <Layout>
         <Helmet
           title="Streaming"
           meta={[
             {
-              name: 'description',
-              content: 'Livestream and more video material from panke.gallery. Join us anytime, from  anywhere.'
-            }
+              name: "description",
+              content:
+                "Livestream and more video material from panke.gallery. Join us anytime, from  anywhere.",
+            },
           ]}
         />
 
@@ -82,14 +85,11 @@ class PankeStreaming extends React.Component{
             </div>
           </div>
           <div className="row main-player">
-            <div className="col">
-              {mainPlayer}
-            </div>
+            <div className="col">{mainPlayer}</div>
           </div>
         </section>
 
         <section className="videos further">
-
           <YoutubePlaylist
             title="panke.gallery Talks"
             playlist_id="PLftbjK2gCCbLQ2QXGuOKylxp9oFQFhIPf"
@@ -100,7 +100,6 @@ class PankeStreaming extends React.Component{
             playlist_id="PLftbjK2gCCbLYlv_Lsl9ONl1Buu8CE5wF"
             replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
           />
-
         </section>
       </Layout>
     );
