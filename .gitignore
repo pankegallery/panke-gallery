@@ -81,3 +81,7 @@ src/styles/*.map
 # @netlify/plugin-gatsby ignores start
 netlify/functions/gatsby
 # @netlify/plugin-gatsby ignores end
+
+# Temporary files
+temp/*
+temp
