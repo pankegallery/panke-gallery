@@ -1,4 +1,4 @@
-[[plugins]]
+# [[plugins]]
 # package = "@netlify/plugin-gatsby"
 
 [build.environment]
