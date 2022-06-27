@@ -1,5 +1,6 @@
 # Delete cache and build
-rm -fr ./.cache && gatsby build
+# rm -fr ./.cache && gatsby build
+netlify build
 
 # Ask for deploy
 read -p "Deploy preview? " -n 1 -r deploy_yes
