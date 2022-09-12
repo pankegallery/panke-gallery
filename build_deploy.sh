@@ -1,3 +1,5 @@
+cd ~/Development/panke-gallery
+
 # Delete cache and build
 # rm -fr ./.cache && gatsby build
 netlify build
