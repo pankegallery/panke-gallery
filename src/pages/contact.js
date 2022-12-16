@@ -83,16 +83,17 @@ class PankeContact extends React.Component{
         <section className="further">  {/*  Imprint and disclaimer */}
           <div className="row">
             <div className="col-sm-4 col-xs-12">
-                <h2>Impressum<br /></h2>
+                <h2>Imprint<br /></h2>
 
                 <h3>panke.gallery – Verein für künstlerisch-kulturelle Bildung e.V.</h3>
                 <p>Gerichtstr. 23 · Hof V<br />
                   13347 Berlin</p>
 
-                <h3>Redaktionell verantwortl. gem. § 5 TMG</h3>
+                <h3>Liability of information according to § 5 TMG
+                </h3>
                 <p>Robert Sakrowski</p>
 
-                <h3>Handelsregisternummer</h3>
+                <h3>Vereinsregisternummer</h3>
                   <p>VR 30390 B</p>
             </div>
             <div className="col-sm-8 col-xs-12">
