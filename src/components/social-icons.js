@@ -14,7 +14,7 @@ const SocialIcons = () => (
     <a href="https://www.instagram.com/panke.gallery/" className="instagram" target="_blank" rel="noopener noreferrer">
       <FontAwesomeIcon icon={faInstagram} />
     </a>
-    <a rel="me" href="https://tldr.nettime.org/@pankegallery" className="mastodon" target="_blank" rel="noopener noreferrer">
+    <a href="https://tldr.nettime.org/@pankegallery" className="mastodon" target="_blank" rel="me noopener noreferrer">
       <FontAwesomeIcon icon={faMastodon} />
     </a>
     <a href="https://twitter.com/pankegallery/" className="twitter" target="_blank" rel="noopener noreferrer">

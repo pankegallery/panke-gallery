@@ -45,7 +45,7 @@ class PankeIndex extends React.Component {
     const newsItems = get(this, 'props.data.allContentfulContentBlock.edges')
 
 //    console.log("Exhibitions:", posts);
-//    console.log("Events:", posts);
+  //  console.log("Events:", posts);
 //    console.log("news:", newsItems);
     
     // Filter array of exhibitions
@@ -60,7 +60,7 @@ class PankeIndex extends React.Component {
     // Log exhibitions
 //    console.log("Current Exhibitions:", currentExhibitions);
 //    console.log("Upcoming Exhibitions:", upcomingExhibitions);
-//    console.log("Upcoming Events:", upcomingEvents);
+   console.log("Upcoming Events:", upcomingEvents);
 
     // Create news code
     var news;
@@ -90,7 +90,7 @@ class PankeIndex extends React.Component {
 
     // Create upcoming events code if there are
     var upcomingEv;
-    if (upcomingEvents.length > 1){
+    if (upcomingEvents.length > 0){
       upcomingEv = (
         <section className="upcoming">
 
@@ -235,6 +235,8 @@ export const pageQuery = graphql`
           title
           slug
           date
+          endTime
+          openEnd
           tags {
             name
             slug
