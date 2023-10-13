@@ -36,7 +36,8 @@
     "react-helmet": "^6.1.0",
     "react-player": "^2.10.1",
     "react-responsive-carousel": "^3.1.50",
-    "react-youtube": "^7.14.0"
+    "react-youtube": "^7.14.0",
+    "sharp": "^0.30.7"
   },
   "homepage": "https://github.com/crosssenses/panke-gallery#readme",
   "keywords": [
@@ -60,6 +61,7 @@
     "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
   },
   "devDependencies": {
+    "netlify-cli": "^16.6.1",
     "sass": "~1.30.0"
   }
 }
