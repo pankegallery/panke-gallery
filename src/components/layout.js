@@ -67,7 +67,7 @@ const TemplateWrapper = ({ children }) => {
 
             <div className={offCanvasClass}>
               <button className="toggle-menu justify-right" onClick={handleClick}>
-                <FontAwesomeIcon icon={faPlus} />
+                <FontAwesomeIcon icon={faPlus} aria-label="Toggle menu" />
               </button>
               <Navigation />
             </div>

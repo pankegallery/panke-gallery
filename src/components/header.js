@@ -19,7 +19,7 @@ class pankeHeader extends React.Component {
             </div>
             <div className="col-3 text-right d-block d-sm-none">
               <button className="toggle-menu" onClick={this.props.handleClick}>
-                <FontAwesomeIcon icon={faBars} />
+                <FontAwesomeIcon icon={faBars} aria-label="Burger menu"/>
               </button>
             </div>
           </div>

@@ -65,6 +65,7 @@ class YoutubePlaylist extends React.Component{
                   <button
                     onClick={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
                     onKeyDown={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
+                    aria-label="Play video"
                    >
                     <p>
                       <img src={snippet.thumbnails.medium.url} alt="" />
