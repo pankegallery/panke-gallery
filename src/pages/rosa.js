@@ -119,7 +119,7 @@ class PankeRosa extends React.Component{
     }
 
     let address = `
-      <strong>/rosa</strong><br>
+      <strong>/rosa</strong<br>
       Heidelberger Str. 28><br>
       12059 Berlin
     `
