@@ -9,6 +9,7 @@ import ContentBlock from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
+import RsvpForm from '../components/rsvp-form'
 
 class EventTemplate extends React.Component {
   render() {
@@ -87,6 +88,49 @@ class EventTemplate extends React.Component {
       );
     }
 
+    // ––– RSVP Form –––
+    var RsvpSection;
+    if (event.rsvpEnabled) {
+      const now = new Date();
+      const eventDate = new Date(event.date);
+      const deadline = event.rsvpDeadline ? new Date(event.rsvpDeadline) : eventDate;
+      const isBeforeDeadline = now < deadline;
+      const capacity = event.rsvpCapacity || 50; // Default capacity if not set
+      
+      if (isBeforeDeadline) {
+        RsvpSection = (
+          <section className="rsvp-section">
+            <div className="row">
+              <div className="col-md-4 col-sm-4 col-xs-12">
+                <h2>RSVP</h2>
+              </div>
+              <div className="col-md-8 col-sm-8 col-xs-12">
+                <RsvpForm 
+                  eventId={event.contentful_id}
+                  eventTitle={event.title}
+                  capacity={capacity}
+                  slug={event.slug}
+                />
+              </div>
+            </div>
+          </section>
+        );
+      } else {
+        RsvpSection = (
+          <section className="rsvp-section">
+            <div className="row">
+              <div className="col-md-4 col-sm-4 col-xs-12">
+                <h2>RSVP</h2>
+              </div>
+              <div className="col-md-8 col-sm-8 col-xs-12">
+                <p className="rsvp-closed">Registration for this event has closed.</p>
+              </div>
+            </div>
+          </section>
+        );
+      }
+    }
+
     //==========================================================================
 
     //                                OUTPUT
@@ -135,6 +179,10 @@ class EventTemplate extends React.Component {
 
         {FurtherContentBlocks}
 
+        {/*  ---- RSVP SECTION ---- */}
+
+        {RsvpSection}
+
         {/*  ---- DOCUMENTATION IMAGES ---- */}
 
         {DocumentationImages}
@@ -159,11 +207,16 @@ export default EventTemplate;
 export const pageQuery = graphql`
   query EventBySlug($slug: String!) {
     contentfulEvent(slug: { eq: $slug }) {
+      contentful_id
       title
+      slug
       date
       endTime
       openEnd
       entryfee
+      rsvpEnabled
+      rsvpCapacity
+      rsvpDeadline
       eventSeries {
         slug
         name
