@@ -35,10 +35,28 @@ function isValidEmail(email) {
 }
 
 exports.handler = async (event, context) => {
+  // CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  // Handle preflight requests
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+
   // Only allow POST
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
@@ -52,6 +70,7 @@ exports.handler = async (event, context) => {
   if (!checkRateLimit(clientIp)) {
     return {
       statusCode: 429,
+      headers,
       body: JSON.stringify({ error: 'Too many requests. Please try again later.' })
     };
   }
@@ -64,6 +83,7 @@ exports.handler = async (event, context) => {
       console.log('Honeypot triggered');
       return {
         statusCode: 200,
+        headers,
         body: JSON.stringify({ message: 'Registration successful' })
       };
     }
@@ -72,6 +92,7 @@ exports.handler = async (event, context) => {
     if (!name || !email || !eventId || !eventTitle || !capacity) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: 'Missing required fields' })
       };
     }
@@ -80,6 +101,7 @@ exports.handler = async (event, context) => {
     if (!isValidEmail(email)) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: 'Invalid email format' })
       };
     }
@@ -93,6 +115,7 @@ exports.handler = async (event, context) => {
       console.error('Missing Baserow configuration');
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({ error: 'Server configuration error' })
       };
     }
@@ -112,6 +135,7 @@ exports.handler = async (event, context) => {
       console.error('Failed to fetch registration count:', await countResponse.text());
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({ error: 'Failed to check registration status' })
       };
     }
@@ -123,6 +147,7 @@ exports.handler = async (event, context) => {
     if (currentCount >= capacity) {
       return {
         statusCode: 409,
+        headers,
         body: JSON.stringify({ error: 'RSVP capacity reached' })
       };
     }
@@ -151,6 +176,7 @@ exports.handler = async (event, context) => {
       console.error('Failed to create registration:', errorText);
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({ error: 'Failed to save registration' })
       };
     }
@@ -159,6 +185,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({ 
         message: 'Registration successful',
         id: registration.id
@@ -169,6 +196,7 @@ exports.handler = async (event, context) => {
     console.error('Error processing RSVP:', error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: 'Internal server error' })
     };
   }
