@@ -53,7 +53,7 @@
     "url": "https://github.com/crosssenses/panke-gallery"
   },
   "scripts": {
-    "dev": "gatsby develop --quiet",
+    "dev": "gatsby develop",
     "build": "CI='' gatsby build",
     "heroku-postbuild": "gatsby build",
     "serve": "gatsby serve",
