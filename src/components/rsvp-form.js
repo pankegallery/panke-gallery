@@ -147,7 +147,7 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
           className="rsvp-submit-button"
           disabled={status === 'submitting'}
         >
-          {status === 'submitting' ? 'Submitting...' : 'Register'}
+          {status === 'submitting' ? 'Submitting...' : 'RSVP'}
         </button>
       </form>
     </div>
