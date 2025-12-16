@@ -54,13 +54,14 @@
     "url": "https://github.com/crosssenses/panke-gallery"
   },
   "scripts": {
-    "dev": "gatsby develop --quiet",
+    "dev": "gatsby develop",
     "build": "CI='' gatsby build",
     "heroku-postbuild": "gatsby build",
     "serve": "gatsby serve",
     "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
   },
   "devDependencies": {
+    "ajv": "^8.17.1",
     "netlify-cli": "^17.11.1",
     "sass": "~1.69.7"
   }
