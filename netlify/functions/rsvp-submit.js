@@ -162,12 +162,12 @@ exports.handler = async (event, context) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: name,
-        email: email,
-        comment: comment || '',
-        eventId: eventId,
-        eventTitle: eventTitle,
-        registeredAt: new Date().toISOString()
+        "Name": name,
+        "Email": email,
+        "Comment": comment || '',
+        "Event ID": eventId,
+        "Event Title": eventTitle,
+        "Registered at": new Date().toISOString()
       })
     });
 
@@ -182,6 +182,7 @@ exports.handler = async (event, context) => {
     }
 
     const registration = await createResponse.json();
+    console.log('Baserow create response', registration);
 
     return {
       statusCode: 200,
