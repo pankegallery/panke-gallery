@@ -60,6 +60,7 @@
     "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
   },
   "devDependencies": {
+    "ajv": "^8.17.1",
     "netlify-cli": "^17.11.1",
     "sass": "~1.69.7"
   }

@@ -70,7 +70,7 @@ class PankeContact extends React.Component{
               })}
             </div>
             <div className="col-sm-8 col-xs-12">
-                <iframe title="Way to panke.gallery" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4852.705252670195!2d13.371589975360076!3d52.545146134369126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a851886a993637%3A0x90bf0ce41c5e7529!2spanke.gallery!5e0!3m2!1sen!2sde!4v1765452085626!5m2!1sen!2sde" width="600" height="350" style="border:0;" className="googleMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe title="Way to panke.gallery" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4852.705252670195!2d13.371589975360076!3d52.545146134369126!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a851886a993637%3A0x90bf0ce41c5e7529!2spanke.gallery!5e0!3m2!1sen!2sde!4v1765452085626!5m2!1sen!2sde" width="600" height="350" className="googleMap" loading="lazy" style={{border: 0}} referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
         </section>
