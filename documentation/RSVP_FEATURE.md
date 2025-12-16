@@ -13,12 +13,12 @@ Add the following fields to your Event content type in Contentful:
 
 ### 2. Baserow Setup
 Create a table in Baserow with the following fields:
-- `name` (Text): Registrant's name
-- `email` (Text): Registrant's email
-- `comment` (Long Text): Optional comment
-- `eventId` (Text): Contentful event ID
-- `eventTitle` (Text): Event title for human readability
-- `registeredAt` (Date): Registration timestamp
+- `Name` (Text): Registrant's name
+- `Email` (Text): Registrant's email
+- `Comment` (Long Text): Optional comment
+- `Event ID` (Text): Contentful event ID
+- `Event Title` (Text): Event title for human readability
+- `Registered at` (Date): Registration timestamp
 
 ### 3. Environment Variables
 Set the following environment variables in your Netlify dashboard:

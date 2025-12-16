@@ -8,12 +8,12 @@ Use this checklist to verify the RSVP feature is working correctly after deploym
 - [ ] Create Baserow account (if not already done)
 - [ ] Create new table called "Event Registrations" or similar
 - [ ] Add the following fields to the table:
-  - [ ] `name` (Text field)
-  - [ ] `email` (Text field)
-  - [ ] `comment` (Long Text field)
-  - [ ] `eventId` (Text field)
-  - [ ] `eventTitle` (Text field)
-  - [ ] `registeredAt` (Date field)
+  - [ ] `Name` (Text field)
+  - [ ] `Email` (Text field)
+  - [ ] `Comment` (Long Text field)
+  - [ ] `Event ID` (Text field)
+  - [ ] `Event Title` (Text field)
+  - [ ] `Registered at` (Date field)
 - [ ] Generate API token in Baserow (Settings > API Tokens)
 - [ ] Note down the table ID from the URL
 
@@ -59,9 +59,9 @@ Use this checklist to verify the RSVP feature is working correctly after deploym
   - [ ] Your name
   - [ ] Your email
   - [ ] Comment (if provided)
-  - [ ] Correct eventId
-  - [ ] Correct eventTitle
-  - [ ] registeredAt timestamp
+  - [ ] Correct Event ID
+  - [ ] Correct Event Title
+  - [ ] Registered at timestamp
 
 ### 7. Validation Testing
 - [ ] Try submitting without name - should show error
@@ -95,7 +95,7 @@ Use this checklist to verify the RSVP feature is working correctly after deploym
 - [ ] Create a second test event with RSVP enabled
 - [ ] Submit registration to second event
 - [ ] Check Baserow - should have rows for both events
-- [ ] Verify you can filter by eventId or eventTitle
+- [ ] Verify you can filter by Event ID or Event Title
 
 ### 13. RSVP Disabled
 - [ ] Create or edit an event with `rsvpEnabled` set to `false`

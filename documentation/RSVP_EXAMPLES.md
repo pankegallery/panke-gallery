@@ -19,12 +19,12 @@
 
 | Field Name | Field Type | Description | Example |
 |------------|------------|-------------|---------|
-| name | Text | Registrant's name | "John Doe" |
-| email | Text | Registrant's email | "john@example.com" |
-| comment | Long Text | Optional comment | "Looking forward to it!" |
-| eventId | Text | Contentful event ID | "5KsDBWseXY6QegucYAoacS" |
-| eventTitle | Text | Event title (for filtering) | "Summer Gallery Opening" |
-| registeredAt | Date | ISO timestamp | "2025-06-15T10:30:00Z" |
+| Name | Text | Registrant's name | "John Doe" |
+| Email | Text | Registrant's email | "john@example.com" |
+| Comment | Long Text | Optional comment | "Looking forward to it!" |
+| Event ID | Text | Contentful event ID | "5KsDBWseXY6QegucYAoacS" |
+| Event Title | Text | Event title (for filtering) | "Summer Gallery Opening" |
+| Registered at | Date | ISO timestamp | "2025-06-15T10:30:00Z" |
 
 ## Example API Request to Serverless Function
 
@@ -114,7 +114,7 @@ Show confirmation message
 
 After some registrations, the Baserow table might look like:
 
-| ID | name | email | comment | eventId | eventTitle | registeredAt |
+| ID | Name | Email | Comment | Event ID | Event Title | Registered at |
 |----|------|-------|---------|---------|------------|--------------|
 | 1 | Jane Smith | jane@example.com | Excited to attend! | 5Ks... | Summer Gallery Opening | 2025-06-15T10:30:00Z |
 | 2 | Bob Johnson | bob@example.com | Can't wait! | 5Ks... | Summer Gallery Opening | 2025-06-15T11:15:00Z |
@@ -122,7 +122,7 @@ After some registrations, the Baserow table might look like:
 | 4 | Carol White | carol@example.com | | 7Xy... | Autumn Exhibition | 2025-09-01T09:00:00Z |
 
 Admins can:
-- Filter by `eventId` to get all registrations for a specific event
-- Use `eventTitle` for quick identification
+- Filter by `Event ID` to get all registrations for a specific event
+- Use `Event Title` for quick identification
 - Export as CSV for email campaigns
 - See timestamps to track registration patterns

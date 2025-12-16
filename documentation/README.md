@@ -32,7 +32,7 @@ This directory contains complete documentation for the RSVP (event registration)
 
 #### Baserow
 1. Create table: "Event Registrations"
-2. Add fields: `name`, `email`, `comment`, `eventId`, `eventTitle`, `registeredAt`
+2. Add fields: `Name`, `Email`, `Comment`, `Event ID`, `Event Title`, `Registered at`
 3. Generate API token
 4. Note table ID from URL
 
@@ -65,7 +65,7 @@ The RSVP form will automatically appear on the event page!
 
 #### View registrations:
 1. Open Baserow table
-2. Filter by `eventId` to see registrations for specific event
+2. Filter by `Event ID` to see registrations for specific event
 3. Export to CSV for email campaigns
 
 ## 🎨 What It Looks Like
@@ -122,13 +122,13 @@ The RSVP form will automatically appear on the event page!
 ## 📊 Baserow Table View
 
 ```
-┌────┬──────────────┬───────────────────┬──────────────┬──────────┬────────────────────┬─────────────────────┐
-│ ID │ name         │ email             │ comment      │ eventId  │ eventTitle         │ registeredAt        │
-├────┼──────────────┼───────────────────┼──────────────┼──────────┼────────────────────┼─────────────────────┤
-│ 1  │ Jane Smith   │ jane@example.com  │ Excited!     │ 5Ks...   │ Summer Opening     │ 2025-06-15T10:30:00 │
-│ 2  │ Bob Johnson  │ bob@example.com   │              │ 5Ks...   │ Summer Opening     │ 2025-06-15T11:15:00 │
-│ 3  │ Alice Brown  │ alice@example.com │ Can't wait!  │ 7Xy...   │ Autumn Exhibition  │ 2025-09-01T09:00:00 │
-└────┴──────────────┴───────────────────┴──────────────┴──────────┴────────────────────┴─────────────────────┘
+┌────┬──────────────┬───────────────────┬──────────────┬───────────┬────────────────────┬──────────────────────┐
+│ ID │ Name         │ Email             │ Comment      │ Event ID  │ Event Title        │ Registered at        │
+├────┼──────────────┼───────────────────┼──────────────┼───────────┼────────────────────┼──────────────────────┤
+│ 1  │ Jane Smith   │ jane@example.com  │ Excited!     │ 5Ks...    │ Summer Opening     │ 2025-06-15T10:30:00  │
+│ 2  │ Bob Johnson  │ bob@example.com   │              │ 5Ks...    │ Summer Opening     │ 2025-06-15T11:15:00  │
+│ 3  │ Alice Brown  │ alice@example.com │ Can't wait!  │ 7Xy...    │ Autumn Exhibition  │ 2025-09-01T09:00:00  │
+└────┴──────────────┴───────────────────┴──────────────┴───────────┴────────────────────┴──────────────────────┘
 ```
 
 ## 🔒 Security Features
