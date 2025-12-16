@@ -99,7 +99,7 @@ class EventTemplate extends React.Component {
       
       if (isBeforeDeadline) {
         RsvpSection = (
-          <section className="rsvp-section">
+          <section className="rsvp-section further">
             <div className="row">
               <div className="col-md-4 col-sm-4 col-xs-12">
                 <h2>RSVP</h2>
@@ -117,7 +117,7 @@ class EventTemplate extends React.Component {
         );
       } else {
         RsvpSection = (
-          <section className="rsvp-section">
+          <section className="rsvp-section further">
             <div className="row">
               <div className="col-md-4 col-sm-4 col-xs-12">
                 <h2>RSVP</h2>

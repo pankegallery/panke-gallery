@@ -550,10 +550,10 @@ footer {
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 400;
             
             .required {
-                color: #d9534f;
+                // color: #d9534f;
             }
         }
         
@@ -562,10 +562,10 @@ footer {
         textarea {
             width: 100%;
             padding: 10px 12px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            font-size: 1em;
-            font-family: inherit;
+            border: 1px solid #000;
+            border-radius: 2px;
+            font-size: 0.9em;
+            font-family: monospace;
             
             &:focus {
                 outline: none;

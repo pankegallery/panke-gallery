@@ -66,14 +66,14 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
     return (
       <div className="rsvp-success">
         <h3>Registration Successful!</h3>
-        <p>Thank you for registering for this event. You should receive a confirmation email shortly.</p>
+        <p>Thank you for registering for this event. We’ve saved your request and will be in touch if anything changes.</p>
       </div>
     );
   }
 
   return (
     <div className="rsvp-form-container">
-      <h3>Register for this event</h3>
+      <p>As capacity is limited, we kindly ask you to register for this event.</p>
       <form onSubmit={handleSubmit} className="rsvp-form">
         <div className="form-group">
           <label htmlFor="name">
