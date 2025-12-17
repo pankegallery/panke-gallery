@@ -64,5 +64,8 @@
     "ajv": "^8.17.1",
     "netlify-cli": "^17.11.1",
     "sass": "~1.69.7"
+  },
+  "optionalDependencies": {
+    "@parcel/watcher": "^2.4.1"
   }
 }
