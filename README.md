@@ -8,8 +8,6 @@ The panke.gallery website runs on Gatsby v2, Contentful and Bootstrap and is ren
 
 Log in to panke.gallery contentful and change content
 
-Trigger a new deploy: [![Trigger button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/pankegallery/panke-gallery)
-
 ### Add exhibition, event, edition
 
 Add content type exhibtion, add content blocks within new item as needed

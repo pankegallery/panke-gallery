@@ -103,5 +103,13 @@ exports.onCreatePage = ({ page, actions }) => {
   })
 }
 
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
 
-
+  createTypes(`
+    type ContentfulEvent implements Node {
+      rsvpCapacity: Int
+      rsvpDeadline: Date @dateformat
+    }
+  `)
+}
