@@ -156,12 +156,12 @@ class PankeRosa extends React.Component{
           <div className="row">
             <div className="col-md-4 col-sm-4 col-xs-12 address">
                {<div dangerouslySetInnerHTML={{
-                __html: address
+                __html: processExternalLinks(address)
               }} />}
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               {<div dangerouslySetInnerHTML={{
-                __html: moreBlock.content
+                __html: processExternalLinks(moreBlock.content)
               }} />}
           </div>
           </div>
