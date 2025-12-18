@@ -97,7 +97,7 @@ class PankeRosa extends React.Component{
                   <div dangerouslySetInnerHTML={{
                       __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
                     }} />
-                  <p c  lassName="meta mb-5"><EventDate event={node} /></p>
+                  <p className="meta mb-5"><EventDate event={node} /></p>
                 </>
               ))}
             </div>
