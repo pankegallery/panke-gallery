@@ -7,6 +7,7 @@ import { Link, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import ExhibitionPreview from '../components/exhibition-preview';
 import EventPreview from '../components/event-preview';
+import { processExternalLinks } from '../utils/processExternalLinks';
 
 const PankeIndex = ({ data }) => {
   const START_DATE = "01/08/2024";
@@ -76,7 +77,7 @@ const PankeIndex = ({ data }) => {
                 </div>
               </div>
               <div className="row">
-                <div className="col-md-12 col-sm-12 col-xs-12" dangerouslySetInnerHTML={{ __html: node.blockContent.childMarkdownRemark.html }} />
+                <div className="col-md-12 col-sm-12 col-xs-12" dangerouslySetInnerHTML={{ __html: processExternalLinks(node.blockContent.childMarkdownRemark.html) }} />
               </div>
             </article>
           ))}

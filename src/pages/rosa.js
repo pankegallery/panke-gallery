@@ -9,6 +9,7 @@ import EventDate from '../components/event-date-time'
 import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EventListItem from '../components/event-list-item'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class PankeRosa extends React.Component{
   
@@ -65,7 +66,7 @@ class PankeRosa extends React.Component{
                     <Link to={`/event/${node.slug}`}>{node.title}</Link>
                   </h3>
                   <div dangerouslySetInnerHTML={{
-                      __html: node.subtitleShortDescription.childMarkdownRemark.html
+                      __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
                     }} />
                   <p className="meta mb-5"><EventDate event={node} /></p>
                 </>
@@ -94,7 +95,7 @@ class PankeRosa extends React.Component{
                     <Link to={`/event/${node.slug}`}>{node.title}</Link>
                   </h3>
                   <div dangerouslySetInnerHTML={{
-                      __html: node.subtitleShortDescription.childMarkdownRemark.html
+                      __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
                     }} />
                   <p c  lassName="meta mb-5"><EventDate event={node} /></p>
                 </>
@@ -145,7 +146,7 @@ class PankeRosa extends React.Component{
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               {<div dangerouslySetInnerHTML={{
-                __html: infoBlock.content
+                __html: processExternalLinks(infoBlock.content)
               }} />}
           </div>
           </div>

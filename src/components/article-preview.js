@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 export default ({ article }) => (
   <div className="preview">
@@ -11,7 +12,7 @@ export default ({ article }) => (
     <small>{article.startDate}</small>
     <div
       dangerouslySetInnerHTML={{
-        __html: article.description.childMarkdownRemark.html
+        __html: processExternalLinks(article.description.childMarkdownRemark.html)
       }}
     />
   </div>
