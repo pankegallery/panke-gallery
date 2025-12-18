@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 //import Img from 'gatsby-image'
 //import Moment from 'moment'
 import EventDate from '../components/event-date-time'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 
 class EventPreview extends React.Component {
@@ -37,7 +38,7 @@ class EventPreview extends React.Component {
               <Link to={`/event/${event.slug}`}>{event.title}</Link>
             </h3>
             <div dangerouslySetInnerHTML={{
-                __html: event.subtitleShortDescription.childMarkdownRemark.html
+                __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
               }} />
             <p className="meta"><EventDate event={event} /></p>
 

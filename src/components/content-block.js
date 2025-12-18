@@ -1,4 +1,5 @@
 import React from 'react'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 const ContentBlock = ({ blockTitle, blockContent }) => (
         <section className="further">
@@ -8,7 +9,7 @@ const ContentBlock = ({ blockTitle, blockContent }) => (
                   </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               {<div dangerouslySetInnerHTML={{
-                __html: blockContent.childMarkdownRemark.html
+                __html: processExternalLinks(blockContent.childMarkdownRemark.html)
               }} />}
           </div>
           </div>

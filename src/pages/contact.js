@@ -5,6 +5,7 @@ import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class PankeContact extends React.Component{
   render() {
@@ -64,7 +65,7 @@ class PankeContact extends React.Component{
               {definedBlocks.visitUs.array.map(({ node }) => {
                 return (
                   <div key={node.slug} dangerouslySetInnerHTML={{
-                    __html: node.blockContent.childMarkdownRemark.html
+                    __html: processExternalLinks(node.blockContent.childMarkdownRemark.html)
                   }} />
                 )
               })}
@@ -100,7 +101,7 @@ class PankeContact extends React.Component{
                 {definedBlocks.disclaimer.array.map(({ node }) => {
                 return (
                   <div key={node.slug} dangerouslySetInnerHTML={{
-                    __html: node.blockContent.childMarkdownRemark.html
+                    __html: processExternalLinks(node.blockContent.childMarkdownRemark.html)
                   }} />
                 )
               })}

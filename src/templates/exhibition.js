@@ -9,6 +9,7 @@ import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import Moment from 'moment'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class ExhibitionTemplate extends React.Component {
   render() {
@@ -108,7 +109,7 @@ class ExhibitionTemplate extends React.Component {
 
               <h1>{exhibition.title}</h1>
               <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
+                  __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
                 }} />
               <p className="meta">
                {metaInfos}
@@ -133,7 +134,7 @@ class ExhibitionTemplate extends React.Component {
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
-                __html: exhibition.description.childMarkdownRemark.html
+                __html: processExternalLinks(exhibition.description.childMarkdownRemark.html)
               }} />
             </div>
           </div>

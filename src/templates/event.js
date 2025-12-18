@@ -10,6 +10,7 @@ import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class EventTemplate extends React.Component {
   render() {
@@ -147,7 +148,7 @@ class EventTemplate extends React.Component {
 
               <h1>{event.title}</h1>
               <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: event.subtitleShortDescription.childMarkdownRemark.html
+                  __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
                 }} />
               {EventDateAndEntryFee}
               {eventCategory}{eventTags}
@@ -169,7 +170,7 @@ class EventTemplate extends React.Component {
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
-                __html: event.description.childMarkdownRemark.html
+                __html: processExternalLinks(event.description.childMarkdownRemark.html)
               }} />
             </div>
           </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 
 class EventListItem extends React.Component {
@@ -34,7 +35,7 @@ class EventListItem extends React.Component {
               <Link to={`/event/${event.slug}`}>{event.title}</Link>
             </h3>
             <div dangerouslySetInnerHTML={{
-                __html: event.subtitleShortDescription.childMarkdownRemark.html
+                __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
               }} />
             <p className="meta"><EventDate event={event} /></p>
           </div>
