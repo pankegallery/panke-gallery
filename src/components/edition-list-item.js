@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 const EditionListItem = ({ edition }) => (
   <article className="edition-item">
@@ -11,7 +12,7 @@ const EditionListItem = ({ edition }) => (
       <Link to={`/edition/${edition.slug}`}>{edition.title}</Link>
     </h3>
     <div dangerouslySetInnerHTML={{
-        __html: edition.subtitleShortDescription.childMarkdownRemark.html
+        __html: processExternalLinks(edition.subtitleShortDescription.childMarkdownRemark.html)
       }} />
   </article>
 )

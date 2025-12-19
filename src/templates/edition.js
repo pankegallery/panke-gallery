@@ -8,6 +8,7 @@ import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class EditionTemplate extends React.Component {
 
@@ -89,7 +90,7 @@ class EditionTemplate extends React.Component {
 
               <h1>{edition.title}</h1>
               <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: edition.subtitleShortDescription.childMarkdownRemark.html
+                  __html: processExternalLinks(edition.subtitleShortDescription.childMarkdownRemark.html)
                 }} />
 
               {/*  ---- FEATURED IMAGE ---- */}
@@ -110,7 +111,7 @@ class EditionTemplate extends React.Component {
             </div>
             <div className="col-md-8 col-sm-8 col-xs-12">
               <div dangerouslySetInnerHTML={{
-                __html: edition.description.childMarkdownRemark.html
+                __html: processExternalLinks(edition.description.childMarkdownRemark.html)
               }} />
             </div>
           </div>

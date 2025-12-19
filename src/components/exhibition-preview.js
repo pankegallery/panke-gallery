@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 //import Img from 'gatsby-image'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import Moment from 'moment'
+import { processExternalLinks } from '../utils/processExternalLinks'
 
 class exhibitionPreview extends React.Component {
 
@@ -40,7 +41,7 @@ class exhibitionPreview extends React.Component {
           <Link to={`/exhibition/${exhibition.slug}`}>{exhibition.title}</Link>
         </h3>
         <div dangerouslySetInnerHTML={{
-            __html: exhibition.subtitleShortDescription.childMarkdownRemark.html
+            __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
           }} />
         <p className="meta">
           {dateDisplayed}
