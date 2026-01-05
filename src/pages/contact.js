@@ -81,7 +81,7 @@ class PankeContact extends React.Component{
           )
         })}
 
-        <section className="further">  {/*  Imprint and disclaimer */}
+        <section className="further" id="imprint">  {/*  Imprint and disclaimer */}
           <div className="row">
             <div className="col-sm-4 col-xs-12">
                 <h2>Imprint<br /></h2>
