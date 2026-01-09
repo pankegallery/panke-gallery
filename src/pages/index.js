@@ -8,6 +8,9 @@ import Layout from '../components/layout';
 import ExhibitionPreview from '../components/exhibition-preview';
 import EventPreview from '../components/event-preview';
 import { processExternalLinks } from '../utils/processExternalLinks';
+import { Row, Col } from '../components/layout/Layout.styles';
+import { NewsSection, Section, Headline, NewsArticle } from '../components/content/Content.styles';
+import { EventSeries } from '../components/content/Content.styles';
 
 const PankeIndex = ({ data }) => {
   const START_DATE = "01/08/2024";
@@ -68,76 +71,84 @@ const PankeIndex = ({ data }) => {
       />
 
       {newsItems.length > 0 && (
-        <section className="news">
+        <NewsSection>
           {newsItems.map(({ node }) => (
-            <article key={node.id} className="news-item">
-              <div className="row headline">
-                <div className="col-md-12 col-sm-12 col-xs-12">
-                  <h2>{node.title}</h2>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 col-sm-12 col-xs-12" dangerouslySetInnerHTML={{ __html: processExternalLinks(node.blockContent.childMarkdownRemark.html) }} />
-              </div>
-            </article>
+            <NewsArticle key={node.id}>
+              <Headline>
+                <Row>
+                  <Col $md={12} $sm={12} $xs={12}>
+                    <h2>{node.title}</h2>
+                  </Col>
+                </Row>
+              </Headline>
+              <Row>
+                <Col $md={12} $sm={12} $xs={12} dangerouslySetInnerHTML={{ __html: processExternalLinks(node.blockContent.childMarkdownRemark.html) }} />
+              </Row>
+            </NewsArticle>
           ))}
-        </section>
+        </NewsSection>
       )}
 
       {!redirectActive && (
         <>
           {upcomingEvents.length > 0 && (
-            <section className="upcoming">
-              <div className="row headline">
-                <div className="col-md-8 col-sm-8 col-xs-12">
-                  <h2>Upcoming events</h2>
-                </div>
-                <div className="col-md-4 col-sm-4 col-xs-12 text-sm-right d-none d-sm-block pt-4">
-                  <Link to={'/events'}><button className="eventSeries">See all events</button></Link>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 col-sm-8 col-xs-12">
+            <Section>
+              <Headline>
+                <Row>
+                  <Col $md={8} $sm={8} $xs={12}>
+                    <h2>Upcoming events</h2>
+                  </Col>
+                  <Col $md={4} $sm={4} $xs={12} style={{textAlign: 'right', paddingTop: '2em'}}>
+                    <Link to={'/events'}><EventSeries>See all events</EventSeries></Link>
+                  </Col>
+                </Row>
+              </Headline>
+              <Row>
+                <Col $md={12} $sm={8} $xs={12}>
                   {upcomingEvents.map(({ node }) => (
                     <EventPreview key={node.id} event={node} />
                   ))}
-                </div>
-              </div>
-            </section>
+                </Col>
+              </Row>
+            </Section>
           )}
 
           {currentExhibitions.length > 0 && (
-            <section className="currently">
-              <div className="row headline">
-                <div className="col-md-12 col-sm-12 col-xs-12">
-                  <h2>Current exhibitions</h2>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 col-sm-8 col-xs-12">
+            <Section>
+              <Headline>
+                <Row>
+                  <Col $md={12} $sm={12} $xs={12}>
+                    <h2>Current exhibitions</h2>
+                  </Col>
+                </Row>
+              </Headline>
+              <Row>
+                <Col $md={12} $sm={8} $xs={12}>
                   {currentExhibitions.map(({ node }) => (
                     <ExhibitionPreview key={node.slug} exhibition={node} />
                   ))}
-                </div>
-              </div>
-            </section>
+                </Col>
+              </Row>
+            </Section>
           )}
 
           {upcomingExhibitions.length > 0 && (
-            <section className="upcoming">
-              <div className="row headline">
-                <div className="col-md-12 col-sm-12 col-xs-12">
-                  <h2>Upcoming exhibitions</h2>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 col-sm-8 col-xs-12">
+            <Section>
+              <Headline>
+                <Row>
+                  <Col $md={12} $sm={12} $xs={12}>
+                    <h2>Upcoming exhibitions</h2>
+                  </Col>
+                </Row>
+              </Headline>
+              <Row>
+                <Col $md={12} $sm={8} $xs={12}>
                   {upcomingExhibitions.map(({ node }) => (
                     <ExhibitionPreview key={node.slug} exhibition={node} />
                   ))}
-                </div>
-              </div>
-            </section>
+                </Col>
+              </Row>
+            </Section>
           )}
         </>
       )}

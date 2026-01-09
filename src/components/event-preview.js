@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'gatsby'
-//import Img from 'gatsby-image'
-//import Moment from 'moment'
 import EventDate from '../components/event-date-time'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { NewsArticle, Meta, Tag } from './content/Content.styles'
 
 
 class EventPreview extends React.Component {
@@ -13,9 +12,9 @@ class EventPreview extends React.Component {
     var eventCategory;
     if (event.eventSeries!=null) {
       eventCategory =(
-        <p className="tag">
+        <Tag>
           {event.eventSeries.name}
-        </p>
+        </Tag>
       );
     }
     var eventTags;
@@ -23,16 +22,16 @@ class EventPreview extends React.Component {
       eventTags =(
         event.tags.map(({slug, name}) => {
           return (
-            <p className="tag" key={slug}>
+            <Tag key={slug}>
               {name}
-            </p>
+            </Tag>
           )
         })
       );
     }
 
     return(
-      <article className="news-item">
+      <NewsArticle>
             <div>{eventCategory}{eventTags}</div>
             <h3>
               <Link to={`/event/${event.slug}`}>{event.title}</Link>
@@ -40,9 +39,9 @@ class EventPreview extends React.Component {
             <div dangerouslySetInnerHTML={{
                 __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
               }} />
-            <p className="meta"><EventDate event={event} /></p>
+            <Meta><EventDate event={event} /></Meta>
 
-      </article>
+      </NewsArticle>
     );
   }
 }
