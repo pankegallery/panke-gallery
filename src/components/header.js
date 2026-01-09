@@ -4,26 +4,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 import Navigation from '../components/navigation'
+import { StyledHeader, Logotype, ToggleMenuButton } from './header/Header.styles'
+import { Row, Col, DSmBlock, DSmNone } from './layout/Layout.styles'
 
 class pankeHeader extends React.Component {
   render () {
     return (
 
-      <header>
-          <div className="row">
-            <div className="col-md-4 col-9">
-                <a href="/" title="Go to Homepage"><p className="logotype">panke.gallery</p></a>
-            </div>
-            <div className="col-md-8 text-right d-none d-sm-block">
-              <Navigation />
-            </div>
-            <div className="col-3 text-right d-block d-sm-none">
-              <button className="toggle-menu" onClick={this.props.handleClick}>
-                <FontAwesomeIcon icon={faBars} aria-label="Burger menu"/>
-              </button>
-            </div>
-          </div>
-        </header>
+      <StyledHeader>
+          <Row>
+            <Col $xs={9} $md={4}>
+                <a href="/" title="Go to Homepage"><Logotype>panke.gallery</Logotype></a>
+            </Col>
+            <Col $md={8} style={{textAlign: 'right'}}>
+              <DSmBlock>
+                <Navigation />
+              </DSmBlock>
+            </Col>
+            <Col $xs={3} style={{textAlign: 'right'}}>
+              <DSmNone>
+                <ToggleMenuButton onClick={this.props.handleClick}>
+                  <FontAwesomeIcon icon={faBars} aria-label="Burger menu"/>
+                </ToggleMenuButton>
+              </DSmNone>
+            </Col>
+          </Row>
+        </StyledHeader>
 
     ); // return
   } // render
