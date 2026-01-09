@@ -2,9 +2,9 @@
 export const theme = {
   colors: {
     panke: {
-      red: 'red',
-      green: 'lime',
-      blue: 'blue',
+      red: '#ff0000',
+      green: '#00ff00',
+      blue: '#0000ff',
       magenta: '#e80f80',
       gold: '#b8a407',
       tropical: '#088a96'

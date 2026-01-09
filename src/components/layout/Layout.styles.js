@@ -5,21 +5,10 @@ export const Container = styled.div`
   max-width: ${props => props.theme.container.maxWidth};
   margin: 0 auto;
   padding: 0 15px;
-  -webkit-transform: translate(0px, 0px);
-  -moz-transform: translate(0px, 0px);
-  -o-transform: translate(0px, 0px);
-  -ms-transform: translate(0px, 0px);
   transform: translate(0px, 0px);
-  -webkit-transition: 0.25s ease;
-  -moz-transition: 0.25s ease;
-  -o-transition: 0.25s ease;
   transition: 0.25s ease;
 
   &.menu-active {
-    -webkit-transform: translate(-15.563em, 0px);
-    -moz-transform: translate(-15.563em, 0px);
-    -o-transform: translate(-15.563em, 0px);
-    -ms-transform: translate(-15.563em, 0px);
     transform: translate(-15.563em, 0px);
   }
 
