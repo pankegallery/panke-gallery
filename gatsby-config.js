@@ -84,7 +84,7 @@ module.exports = {
       resolve: 'gatsby-plugin-matomo',
       options: {
         siteId: '2',
-        matomoUrl: 'https://piwik.wunderjewel.de',
+        matomoUrl: 'https://matomo.crosssenses.de',
         siteUrl: 'https://www.panke.gallery'
       }
     },
