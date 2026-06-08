@@ -180,9 +180,15 @@ export const ImageWrapperVertical = styled.div`
 `;
 
 export const ResponsiveVideo = styled.div`
-height: 0;
-  overflow: hidden;
-  padding-bottom: 56.25%;
-  padding-top: 0;
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
 `;
