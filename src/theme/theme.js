@@ -35,6 +35,7 @@ export const theme = {
     medium: 500
   },
   spacing: {
+    gap: '20px',
     inner: '20px 15px',
     headerTop: '55px'
   },

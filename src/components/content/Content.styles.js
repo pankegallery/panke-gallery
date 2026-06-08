@@ -95,6 +95,8 @@ export const Tag = styled.p`
 
 export const EventSeries = styled(Tag)`
   /* inherits highlight-color and highlight-background from container */
+  border-color: inherit;
+  // color: ${props => props.$themeColor ? props.theme.colors.panke[props.$themeColor] : props.theme.colors.panke.blue};
 `;
 
 export const InfoSection = styled.div`
