@@ -5,40 +5,38 @@ export const Carousel = styled.div`
 `
 
 export const CarouselInner = styled.div`
+  position: relative;
   display: flex;
-  transition: transform 0.5s ease;
+  overflow: hidden;
 `
 
 export const CarouselItem = styled.div`
-align-items: center;
-  backface-visibility: hidden;
-  display: none;
-  perspective: 1000px;
+  align-items: center;
   position: relative;
-  transition: transform .6s ease;
   width: 100%;
-
-  &.active {
-    display: flex;
-  }
+  display: ${({ $active }) => ($active ? 'flex' : 'none')};
 `
 
 export const CarouselControl = styled.div`
   align-items: center;
+  background: transparent;   /* reset, since this now renders as <button> */
+  border: none;
   bottom: 0;
   color: #fff;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   opacity: .5;
+  padding: 0;
   position: absolute;
   text-align: center;
   top: 0;
   width: 15%;
 
+  &:hover { opacity: .8; }
+
   .carousel-control-next-icon, .carousel-control-prev-icon {
     background: transparent no-repeat 50%;
-    background-image: none;
-    background-size: auto;
     background-size: 100% 100%;
     display: inline-block;
     height: 20px;
@@ -54,54 +52,28 @@ export const CarouselControl = styled.div`
   }
 `
 
-export const ControlButton = styled.button`
-  background: rgba(255,255,255,0.5);
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-
-  i {
-    font-size: 1.5em;
-    color: ${props => props.theme.colors.theme.black};
-  }
-`
-
-export const CarouselIndicators = styled.ol`
-  bottom: -10px;
+export const CarouselIndicators = styled.div`
+  bottom: 0px;
   display: flex;
   justify-content: center;
   left: 0;
+  right: 0;
   list-style: none;
-  margin-left: 15%;
-  margin-right: 15%;
+  margin: 0 15%;
   padding-left: 0;
   position: absolute;
-  right: 0;
   z-index: 15;
 
-  li{
+  & button{
     flex: 0 1 auto;
     height: 3px;
-    margin-left: 3px;
-    margin-right: 3px;
-    position: relative;
-    text-indent: -999px;
     width: 30px;
-    background-color: ${props => props.theme.colors.theme.grey};
+    margin: 0 3px;
+    cursor: pointer;
+    text-indent: -999px;
+    overflow: hidden;
+    border: 0;
+    background-color: ${({ theme, $active }) =>
+      $active ? theme.colors.theme.black : theme.colors.theme.lightgrey};
   }
-  
-  & li:after, & li:before {
-
-  content: "";
-  display: inline-block;
-  height: 10px;
-  left: 0;
-  position: absolute;
-  width: 100%;
-
-`;
-
-
-
-
-
+`

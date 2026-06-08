@@ -24,7 +24,7 @@ export const Container = styled.div`
   }
 
   button.tag-selected,
-  .carousel-indicators li.active {
+  .carousel-indicators button.active {
     background: ${props => props.$themeColor ? props.theme.colors.panke[props.$themeColor] : props.theme.colors.panke.blue};
     color: ${props => props.theme.colors.theme.white} !important;
   }
