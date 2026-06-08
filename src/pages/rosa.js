@@ -10,7 +10,7 @@ import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EventListItem from '../components/event-list-item'
 import { processExternalLinks } from '../utils/processExternalLinks'
-import { InfoSection, FurtherSection, Section, Headline, Meta, NewsSection } from '../components/content/Content.styles';
+import { InfoSection, FurtherSection, Meta } from '../components/content/Content.styles';
 import { Row, Col } from '../components/layout/Layout.styles';
 
 class PankeRosa extends React.Component {
