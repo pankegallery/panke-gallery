@@ -69,7 +69,8 @@ Created comprehensive theme system in `src/theme/`:
 
 #### Media Components
 - **Media** (`src/components/media/Media.styles.js`):
-  - CarouselControl and CarouselIndicators
+  - CarouselControl and CarouselIndicators  
+     > moved to Slideshow component styles
   - ResponsiveVideo iframe container
   - VideosButton and Address components
 
@@ -109,9 +110,9 @@ export const StyledComponent = styled.div`
 
 ### Pages Requiring Migration
 The following pages still use Bootstrap class names and need migration:
-- ` src/pages/404.js`
-- `src/pages/contact.js`
-- `src/pages/editions.js`
+- ` src/pages/404.js` √
+- `src/pages/contact.js` √
+- `src/pages/editions.js` √
 - `src/pages/events.js`
 - `src/pages/exhibitions.js`
 - `src/pages/info.js`
@@ -120,18 +121,18 @@ The following pages still use Bootstrap class names and need migration:
 - `src/pages/streaming.js`
 
 ### Templates Requiring Migration
-- `src/templates/edition.js`
-- `src/templates/event.js`
-- `src/templates/exhibition.js`
+- `src/templates/edition.js` √
+- `src/templates/event.js` √
+- `src/templates/exhibition.js` √
 
 ### Components Requiring Migration
-- `src/components/content-block.js`
-- `src/components/documentation-images.js`
-- `src/components/event-list-item.js`
-- `src/components/exhibition-list-item.js`
-- `src/components/slideshow.js`
-- `src/components/social-icons.js`
-- `src/components/youtubePlaylist.js`
+- `src/components/content-block.js` √
+- `src/components/documentation-images.js` √
+- `src/components/event-list-item.js` √
+- `src/components/exhibition-list-item.js` √
+- `src/components/slideshow.js` √
+- `src/components/social-icons.js` √
+- `src/components/youtubePlaylist.js` √
 - Other minor components
 
 ### Migration Guide for Remaining Files

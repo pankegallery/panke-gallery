@@ -1,53 +1,54 @@
 import React from 'react'
 import { GatsbyImage } from 'gatsby-plugin-image'
-//import Carousel from 'react-responsive-carousel'
+import { Carousel, CarouselIndicators, CarouselInner, CarouselItem, CarouselControl } from './slideshow/Slideshow.styles'
+import { Meta } from './content/Content.styles'
 
-const Slideshow = ({slides, length}) => (
-  <div id="myCarousel" className="row carousel slide" data-ride="carousel">
+const Slideshow = ({ slides, length }) => (
+  <Carousel id="myCarousel" className="carousel slide" data-ride="carousel">
 
     {/* Indicators */}
-    <ol className="carousel-indicators">
-      {slides.map(({sizes}, index ) => {
+    <CarouselIndicators className="carousel-indicators">
+      {slides.map(({ sizes }, index) => {
         var sldto = index;
         var cls = (index === 0) ? 'active' : '';
         return (
           <li data-target="#myCarousel" data-slide-to={sldto} className={cls}></li>
         )
       })}
-    </ol>
+    </CarouselIndicators>
 
     {/* Wrapper for slides */}
-    <div className="carousel-inner" role="listbox">
+    <CarouselInner role="listbox">
 
-      {slides.map(({gatsbyImageData, description}, index ) => {
-        var cls = (index === 0) ? 'carousel-item active' : 'carousel-item';
+      {slides.map(({ gatsbyImageData, description }, index) => {
+        var cls = (index === 0) ? 'active' : '';
         return (
-          <div className={cls}>
+          <CarouselItem className={cls}>
             <div className="col-md-12 col-sm-12 col-xs-12">
-                <div className="image-wrapper 3-col">
-                    <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16/9} />
-                </div>
-                <p>{description}</p>
+              <div className="image-wrapper 3-col">
+                <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16 / 9} />
+              </div>
+              <Meta>{description}</Meta>
             </div>
-          </div>
+          </CarouselItem>
         )
       })}
 
 
-
-    </div>
+    </CarouselInner>
 
     {/* Left and right controls */}
 
-    <a className="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+      <CarouselControl className="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="sr-only">Previous</span>
-    </a>
-    <a className="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+      </CarouselControl>
+      <CarouselControl className="carousel-control-next" href="#myCarousel" role="button" data-slide="next" style={{right: '0'}} >
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="sr-only">Next</span>
-    </a>
-  </div>
+      </CarouselControl>
+
+  </Carousel>
 
 )
 export default Slideshow

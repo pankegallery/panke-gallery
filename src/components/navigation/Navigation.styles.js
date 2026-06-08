@@ -1,14 +1,22 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
 
+export const NavWrapper = styled.div`
+display: block;
+  
+  align-items: center;
+  ${media.md} {
+    display: flex;
+  justify-content: space-between;
+  }
+`;
+
 export const Nav = styled.nav`
   margin: 0;
   padding: 1em 0 0;
-  display: inline-block;
 `;
 
 export const NavMain = styled(Nav)`
-  float: left;
 
   ul {
     margin: 0;
@@ -53,9 +61,9 @@ export const OffCanvas = styled.div`
   background: ${props => props.theme.colors.theme.white} none repeat scroll 0 0;
   box-shadow: 0 0 10px ${props => props.theme.colors.theme.lightgrey} inset;
   height: 100%;
-  padding: ${props => props.theme.spacing.headerTop} 15px;
+  padding: ${props => props.theme.spacing.gap} ${props => props.theme.spacing.gap};
   position: fixed;
-  right: -100%;
+  right: calc(-100% - 2 * ${props => props.theme.spacing.gap});
   top: 0;
   width: 100%;
   transition: right 0.25s ease;

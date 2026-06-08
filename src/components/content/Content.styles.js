@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { media } from '../../theme/theme';
 
 export const NewsSection = styled.section`
   &::after {
@@ -17,6 +18,15 @@ export const Section = styled.section`
 `;
 
 export const Headline = styled.div`
+
+  display: block;
+  padding-top: 2em;
+  
+  ${media.md} {
+    display: flex;
+    justify-content: space-between;
+  }
+
   h1, h2 {
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -33,6 +43,7 @@ export const Headline = styled.div`
     padding-bottom: 1.5em;
     padding-top: 2em;
   }
+  
 `;
 
 export const Article = styled.article`
@@ -47,7 +58,7 @@ export const Article = styled.article`
     margin: 1em 0 1em;
     
     small {
-      font-size: 1em;
+      font-size: 1em; !important;
       font-weight: ${props => props.theme.fontWeights.light};
       padding-left: 1em;
     }
@@ -95,8 +106,20 @@ export const Tag = styled.p`
 
 export const EventSeries = styled(Tag)`
   /* inherits highlight-color and highlight-background from container */
-  border-color: inherit;
-  // color: ${props => props.$themeColor ? props.theme.colors.panke[props.$themeColor] : props.theme.colors.panke.blue};
+  
+`;
+
+export const HeadSection = styled.div`
+
+margin: 2em 0 0;
+
+  h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: ${props => props.theme.fontSizes.medium};
+    font-weight: ${props => props.theme.fontWeights.light};
+    margin-bottom: 1em;
+  }
 `;
 
 export const InfoSection = styled.div`
@@ -154,4 +177,12 @@ export const ImageWrapperVertical = styled.div`
   margin-bottom: 30px;
   text-align: center;
   vertical-align: middle;
+`;
+
+export const ResponsiveVideo = styled.div`
+height: 0;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  padding-top: 0;
+  position: relative;
 `;

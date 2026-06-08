@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
-export const CarouselControl = styled.div`
-  background: none !important;
-  text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
-`;
+// export const CarouselControl = styled.div`
+//   background: none !important;
+//   text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+// `;
 
-export const CarouselIndicators = styled.div`
-  bottom: 0px;
+// export const CarouselIndicators = styled.div`
+//   bottom: 0px;
 
-  li {
-    background-color: ${props => props.theme.colors.theme.lightgrey};
-  }
-`;
+//   li {
+//     background-color: ${props => props.theme.colors.theme.lightgrey};
+//   }
+// `;
 
 export const ResponsiveVideo = styled.div`
   position: relative;

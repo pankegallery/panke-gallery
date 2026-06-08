@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { NavMain, NavSatellite, NavList } from './navigation/Navigation.styles'
+import { NavMain, NavSatellite, NavList, NavWrapper } from './navigation/Navigation.styles'
 
 const Navigation = () => (
-  <div>
+  <NavWrapper>
     <NavMain id="nav-main">
       <NavList>
         <li className="live"><Link to="/streaming">Live</Link></li>
@@ -21,6 +21,6 @@ const Navigation = () => (
         <li><a href="http://router.gallery" target="_blank" rel="noopener noreferrer">Router</a></li>
       </NavList>
     </NavSatellite>
-  </div>
+  </NavWrapper>
 )
 export default Navigation

@@ -2,10 +2,11 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { Article } from './content/Content.styles'
 
 export default ({ article }) => (
-  <div className="preview">
-    <Img alt="FeaturedImage" fluid={article.featuredImage.fluid}/>
+  <Article className="preview">
+    <GatsbyImage alt="FeaturedImage" image={article.featuredImage.gatsbyImageData} />
     <h3 className="previewTitle">
       <Link to={`/blog/${article.slug}`}>{article.title}</Link>
     </h3>
@@ -15,5 +16,5 @@ export default ({ article }) => (
         __html: processExternalLinks(article.description.childMarkdownRemark.html)
       }}
     />
-  </div>
+  </Article>
 )

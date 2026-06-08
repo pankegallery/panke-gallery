@@ -32,15 +32,14 @@ class EventPreview extends React.Component {
 
     return(
       <NewsArticle>
-            <div>{eventCategory}{eventTags}</div>
-            <h3>
-              <Link to={`/event/${event.slug}`}>{event.title}</Link>
-            </h3>
-            <div dangerouslySetInnerHTML={{
-                __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
-              }} />
-            <Meta><EventDate event={event} /></Meta>
-
+        <div>{eventCategory}{eventTags}</div>
+        <h3>
+          <Link to={`/event/${event.slug}`}>{event.title}</Link>
+        </h3>
+        <div dangerouslySetInnerHTML={{
+            __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
+          }} />
+        <Meta><EventDate event={event} /></Meta>
       </NewsArticle>
     );
   }

@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import { media } from '../../theme/theme';
 
 export const StyledHeader = styled.header`
-  padding: ${props => props.theme.spacing.headerTop} 0 0;
+  padding: ${props => props.theme.spacing.gap} 0 0;
+
+  ${media.md} {
+    padding: ${props => props.theme.spacing.headerTop} 0  0;
+  }
 
   &::after {
     border-bottom: 1px solid;

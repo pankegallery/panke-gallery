@@ -6,6 +6,7 @@ import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
 import ExhibitionListItem from '../components/exhibition-list-item'
+import { Section, Headline } from '../components/content/Content.styles';
 
 class PankeExhibitions extends React.Component {
 
@@ -61,72 +62,58 @@ class PankeExhibitions extends React.Component {
     var current;
     if (currentExhibitions.length > 0){
       current = (
-        <section className="currently">
+        <Section>
+          <Headline>
+            <h2>Current</h2>
+          </Headline>
 
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Current</h2>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {currentExhibitions.map(({ node }) => {
-                return (
-                  <ExhibitionListItem key={node.slug} exhibition={node} />
-                )
-              })}
-            </div>
-          </div>
-        </section>
+          {currentExhibitions.map(({ node }) => {
+            return (
+              <ExhibitionListItem key={node.slug} exhibition={node} />
+            )
+          })}
+        
+        </Section>
+       
       );
     }
 
     var upcoming;
     if (upcomingExhibitions.length > 0){
       upcoming = (
-        <section className="upcoming">
-
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Upcoming</h2>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {upcomingExhibitions.map(({ node }) => {
-                return (
-                  <ExhibitionListItem key={node.slug} exhibition={node} />
-                )
-              })}
-            </div>
-          </div>
-        </section>
+        <Section>
+          <Headline>
+            <h2>Upcoming</h2>
+          </Headline>
+          
+          {upcomingExhibitions.map(({ node }) => {
+            return (
+              <ExhibitionListItem key={node.slug} exhibition={node} />
+            )
+          })}
+        
+        </Section>
+       
       );
     }
+       
 
     var past;
     if (pastExhibitions.length > 0){
       past = (
-        <section className="past">
+        <Section>
+          <Headline>
+            <h2>Past</h2>
+          </Headline>
 
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Past</h2>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12 col-sm-8 col-xs-12">
-              {pastExhibitions.map(({ node }) => {
-                return (
-                  <ExhibitionListItem key={node.slug} exhibition={node} />
-                )
-              })}
-            </div>
-          </div>
-        </section>
+          {pastExhibitions.map(({ node }) => {
+            return (
+              <ExhibitionListItem key={node.slug} exhibition={node} />
+            )
+          })}
+        
+        </Section>
+       
       );
     }
 

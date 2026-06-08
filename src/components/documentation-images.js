@@ -1,11 +1,11 @@
 import React from 'react'
 import { GatsbyImage } from 'gatsby-plugin-image'
+import { FurtherSection } from './content/Content.styles'
 
 const DocumentationImages = ({images }) => (
 
-  <section className="further">
-    <div className="col-md-12 col-xs-12">
-      {images.map(({gatsbyImageData, description}) => {
+  <FurtherSection>
+    {images.map(({gatsbyImageData, description}) => {
         return (
           <div className="image-wrapper 3col">
             <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16/9}  />
@@ -13,8 +13,8 @@ const DocumentationImages = ({images }) => (
           </div>
         )
       })}
-    </div>
-  </section>
+  </FurtherSection>
+
 
 )
 export default DocumentationImages

@@ -5,7 +5,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 import Navigation from '../components/navigation'
 import { StyledHeader, Logotype, ToggleMenuButton } from './header/Header.styles'
-import { Row, Col, DSmBlock, DSmNone } from './layout/Layout.styles'
+import { Row, Col } from './layout/Layout.styles'
 
 class pankeHeader extends React.Component {
   render () {
@@ -16,17 +16,16 @@ class pankeHeader extends React.Component {
             <Col $xs={9} $md={4}>
                 <a href="/" title="Go to Homepage"><Logotype>panke.gallery</Logotype></a>
             </Col>
-            <Col $md={8} style={{textAlign: 'right'}}>
-              <DSmBlock>
-                <Navigation />
-              </DSmBlock>
+            <Col $md={8} $d={'md lg'}>
+                              <Navigation />
+              
             </Col>
-            <Col $xs={3} style={{textAlign: 'right'}}>
-              <DSmNone>
+            <Col $xs={3} style={{textAlign: 'right'}} $d={'sm'}>
+             
                 <ToggleMenuButton onClick={this.props.handleClick}>
                   <FontAwesomeIcon icon={faBars} aria-label="Burger menu"/>
                 </ToggleMenuButton>
-              </DSmNone>
+             
             </Col>
           </Row>
         </StyledHeader>

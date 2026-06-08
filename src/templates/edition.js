@@ -9,36 +9,38 @@ import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { HeadSection, FurtherSection } from '../components/content/Content.styles'
+import { Row, Col } from '../components/layout/Layout.styles'
 
 class EditionTemplate extends React.Component {
 
   getChechoutStatus = () => {
-//    console.log('location:', window.location)
+    //    console.log('location:', window.location)
     let url = typeof window !== 'undefined' ? window.location.href : '';
-    return (url.indexOf('checkout')>0) ?
-      url.substr(url.indexOf('=')+1) : 'initial'
+    return (url.indexOf('checkout') > 0) ?
+      url.substr(url.indexOf('=') + 1) : 'initial'
   }
 
 
   render() {
 
-//    console.log('props:', window.location)
+    //    console.log('props:', window.location)
 
 
     const edition = get(this.props, 'data.contentfulEdition')
-//    console.log(edition);
+    //    console.log(edition);
 
     // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
-    if (edition.editionImpressionsSlideshow != null){
-      ImageOrSlides =(
+    if (edition.editionImpressionsSlideshow != null) {
+      ImageOrSlides = (
         <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
       );
     }
-    else{
-      ImageOrSlides =(
-        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} aspectratio={16/9} />
+    else {
+      ImageOrSlides = (
+        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
       );
     }
 
@@ -46,11 +48,11 @@ class EditionTemplate extends React.Component {
     // ––– Further Content Blocks –––
 
     var FurtherContentBlocks;
-    if (edition.furtherInformationBlocks){
-      FurtherContentBlocks =(
-        edition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
+    if (edition.furtherInformationBlocks) {
+      FurtherContentBlocks = (
+        edition.furtherInformationBlocks.map(({ id, title, childContentfulContentBlockBlockContentTextNode }) => {
           return (
-              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
+            <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
           )
         })
       );
@@ -61,13 +63,13 @@ class EditionTemplate extends React.Component {
     const checkoutStatus = this.getChechoutStatus()
     var EditionCheckout;
 
-    if (edition.stripePriceId){
-      if (checkoutStatus === 'success'){
-        EditionCheckout=(
+    if (edition.stripePriceId) {
+      if (checkoutStatus === 'success') {
+        EditionCheckout = (
           <div className="alert alert-success"><p><strong>Thank you for your purchase.</strong></p><p>Once we receive your payment, we will contact you for shipping details.</p><p> Enjoy the edition!</p></div>
         )
       }
-      else{
+      else {
         EditionCheckout = (
           <Checkout slug={edition.slug} priceID={edition.stripePriceId} />
         )
@@ -82,46 +84,42 @@ class EditionTemplate extends React.Component {
 
     return (
       <Layout>
-      <main>
-        <Helmet title={`${edition.title}`} />
-        <section className="head">
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
+        <main>
+          <Helmet title={`${edition.title}`} />
+          <HeadSection>
 
-              <h1>{edition.title}</h1>
-              <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(edition.subtitleShortDescription.childMarkdownRemark.html)
+            <h1>{edition.title}</h1>
+            <div className="subtitle" dangerouslySetInnerHTML={{
+              __html: processExternalLinks(edition.subtitleShortDescription.childMarkdownRemark.html)
+            }} />
+
+            {/*  ---- FEATURED IMAGE ---- */}
+
+            {ImageOrSlides}
+
+          </HeadSection>
+
+          {/*  ---- ABOUT ---- */}
+          
+          <FurtherSection className="about-edition">
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
+                <h2>About the edition</h2>
+                {EditionCheckout}
+              </Col>
+              <Col $md={8} $sm={8} $xs={12}>
+                <div dangerouslySetInnerHTML={{
+                  __html: processExternalLinks(edition.description.childMarkdownRemark.html)
                 }} />
+              </Col>
+            </Row>
+          </FurtherSection>
 
-              {/*  ---- FEATURED IMAGE ---- */}
+          {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
-              {ImageOrSlides}
+          {FurtherContentBlocks}
 
-            </div>
-          </div>
-        </section>
-
-        {/*  ---- ABOUT ---- */}
-
-        <section className="further">
-          <div className="row">
-            <div className="col-md-4 col-sm-4 col-xs-12">
-              <h2>About the edition</h2>
-              {EditionCheckout}
-            </div>
-            <div className="col-md-8 col-sm-8 col-xs-12">
-              <div dangerouslySetInnerHTML={{
-                __html: processExternalLinks(edition.description.childMarkdownRemark.html)
-              }} />
-            </div>
-          </div>
-        </section>
-
-        {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
-
-        {FurtherContentBlocks}
-
-      </main>
+        </main>
       </Layout>
     )
   }

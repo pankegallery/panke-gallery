@@ -25,7 +25,7 @@ const PankeIndex = ({ data }) => {
 
     console.log("dates", startDate, currentDate, endDate);
     if (currentDate >= startDate && currentDate <= endDate) {
-      
+
       setRedirectActive(true);
     }
   }, []);
@@ -35,7 +35,7 @@ const PankeIndex = ({ data }) => {
     const exhibitionStartDate = new Date(_ex.node.startDate);
     const exhibitionEndDate = new Date(_ex.node.endDate);
     return Moment(exhibitionStartDate).isSameOrBefore(currentDate, 'day') &&
-           Moment(exhibitionEndDate).isSameOrAfter(currentDate, 'day');
+      Moment(exhibitionEndDate).isSameOrAfter(currentDate, 'day');
   };
 
   const filterUpcoming = (_ex) => {
@@ -59,7 +59,7 @@ const PankeIndex = ({ data }) => {
   const upcomingEvents = events.filter(filterUpcomingEvents).slice(0, 2);
 
   return (
-      <Layout redirectActive={redirectActive}>
+    <Layout redirectActive={redirectActive}>
       <Helmet
         title="Home"
         meta={[
@@ -75,11 +75,7 @@ const PankeIndex = ({ data }) => {
           {newsItems.map(({ node }) => (
             <NewsArticle key={node.id}>
               <Headline>
-                <Row>
-                  <Col $md={12} $sm={12} $xs={12}>
-                    <h2>{node.title}</h2>
-                  </Col>
-                </Row>
+                <h2>{node.title}</h2>
               </Headline>
               <Row>
                 <Col $md={12} $sm={12} $xs={12} dangerouslySetInnerHTML={{ __html: processExternalLinks(node.blockContent.childMarkdownRemark.html) }} />
@@ -93,61 +89,40 @@ const PankeIndex = ({ data }) => {
         <>
           {upcomingEvents.length > 0 && (
             <Section>
-              <Headline>
-                <Row>
-                  <Col $md={8} $sm={8} $xs={12}>
-                    <h2>Upcoming events</h2>
-                  </Col>
-                  <Col $md={4} $sm={4} $xs={12} style={{textAlign: 'right', paddingTop: '2em'}}>
-                    <Link to={'/events'}><EventSeries>See all events</EventSeries></Link>
-                  </Col>
-                </Row>
+              <Headline style={{paddingTop: '2em'}}>
+
+
+                <h2>Upcoming events</h2>
+
+                <Link to={'/events'}><EventSeries className='eventSeries'>See all events</EventSeries></Link>
+
+
               </Headline>
-              <Row>
-                <Col $md={12} $sm={8} $xs={12}>
-                  {upcomingEvents.map(({ node }) => (
+              {upcomingEvents.map(({ node }) => (
                     <EventPreview key={node.id} event={node} />
                   ))}
-                </Col>
-              </Row>
             </Section>
           )}
 
           {currentExhibitions.length > 0 && (
             <Section>
               <Headline>
-                <Row>
-                  <Col $md={12} $sm={12} $xs={12}>
-                    <h2>Current exhibitions</h2>
-                  </Col>
-                </Row>
+                <h2>Current exhibitions</h2>
               </Headline>
-              <Row>
-                <Col $md={12} $sm={8} $xs={12}>
-                  {currentExhibitions.map(({ node }) => (
+               {currentExhibitions.map(({ node }) => (
                     <ExhibitionPreview key={node.slug} exhibition={node} />
                   ))}
-                </Col>
-              </Row>
             </Section>
           )}
 
           {upcomingExhibitions.length > 0 && (
             <Section>
               <Headline>
-                <Row>
-                  <Col $md={12} $sm={12} $xs={12}>
-                    <h2>Upcoming exhibitions</h2>
-                  </Col>
-                </Row>
+               <h2>Upcoming exhibitions</h2>
               </Headline>
-              <Row>
-                <Col $md={12} $sm={8} $xs={12}>
-                  {upcomingExhibitions.map(({ node }) => (
+               {upcomingExhibitions.map(({ node }) => (
                     <ExhibitionPreview key={node.slug} exhibition={node} />
                   ))}
-                </Col>
-              </Row>
             </Section>
           )}
         </>

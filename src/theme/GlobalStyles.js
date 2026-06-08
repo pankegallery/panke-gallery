@@ -41,6 +41,10 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 1rem;
   }
 
+  p{
+    margin: 0 0 1em;
+  }
+    
   small, .small {
     font-size: ${props => props.theme.fontSizes.small};
     color: ${props => props.theme.colors.theme.grey};

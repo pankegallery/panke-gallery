@@ -3,6 +3,8 @@ import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { Col, Row } from './layout/Layout.styles'
+import { NewsArticle } from './content/Content.styles'
 
 
 class EventListItem extends React.Component {
@@ -25,12 +27,12 @@ class EventListItem extends React.Component {
     }
 
     return(
-      <article className="news-item">
-        <div className="row">
-          <div className="col-md-4 col-sm-4 col-xs-12">
+      <NewsArticle>
+        <Row>
+          <Col $md={4} $sm={4} $xs={12}>
               {eventCategory}
-          </div>
-          <div className="col-md-8 col-sm-8 col-xs-12">
+          </Col>
+          <Col $md={8} $sm={8} $xs={12}>
             <h3>
               <Link to={`/event/${event.slug}`}>{event.title}</Link>
             </h3>
@@ -38,9 +40,11 @@ class EventListItem extends React.Component {
                 __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
               }} />
             <p className="meta"><EventDate event={event} /></p>
-          </div>
-        </div>
-      </article>
+          </Col>
+        </Row>
+      </NewsArticle>
+
+      
     );
   }
 }

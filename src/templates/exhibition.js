@@ -10,6 +10,9 @@ import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import Moment from 'moment'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { HeadSection, Meta, InfoSection } from '../components/content/Content.styles'
+import { Row, Col } from '../components/layout/Layout.styles'
+
 
 class ExhibitionTemplate extends React.Component {
   render() {
@@ -103,42 +106,39 @@ class ExhibitionTemplate extends React.Component {
       <Layout>
       <main>
         <Helmet title={`${exhibition.title}`} />
-        <section className="head">
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
+        <HeadSection>
 
-              <h1>{exhibition.title}</h1>
-              <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
-                }} />
-              <p className="meta">
-               {metaInfos}
-              </p>
+          <h1>{exhibition.title}</h1>
+          <div className="subtitle" dangerouslySetInnerHTML={{
+              __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
+            }} />
+          <Meta>
+           {metaInfos}
+          </Meta>
 
-              {exhibitionTags}
+          {exhibitionTags}
 
-              {/*  ---- SLIDESHOW ---- */}
+          {/*  ---- SLIDESHOW ---- */}
 
-              {ImageOrSlides}
+          {ImageOrSlides}
 
-            </div>
-          </div>
-        </section>
+
+        </HeadSection>
 
         {/*  ---- ABOUT ---- */}
 
-        <section className="info">
-          <div className="row">
-            <div className="col-md-4 col-sm-4 col-xs-12">
+        <InfoSection>
+          <Row>
+            <Col $md={4} $sm={4} $xs={12}>
               <h2>About the exhibition</h2>
-            </div>
-            <div className="col-md-8 col-sm-8 col-xs-12">
+            </Col>
+            <Col $md={8} $sm={8} $xs={12}>
               <div dangerouslySetInnerHTML={{
                 __html: processExternalLinks(exhibition.description.childMarkdownRemark.html)
               }} />
-            </div>
-          </div>
-        </section>
+            </Col>  
+          </Row>
+        </InfoSection>
 
         {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 

@@ -2,6 +2,8 @@ import React from "react";
 import Helmet from "react-helmet";
 
 import Layout from "../components/layout";
+import { FurtherSection, InfoSection } from "../components/content/Content.styles";
+import { Row, Col } from "../components/layout/Layout.styles";
 
 class PankePrivacy extends React.Component {
   render() {
@@ -19,13 +21,13 @@ class PankePrivacy extends React.Component {
             ]}
           />
 
-          <section className="info">
-            <div className="row">
-              <div className="col-md-4 col-sm-4 col-xs-12">
+          <InfoSection>
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
                 <h2>Privacy Policy</h2>
-              </div>
-              <div className="col-md-8 col-sm-8 col-xs-12">
-              <p>
+              </Col>
+              <Col $md={8} $sm={8} $xs={12}>
+                <p>
                   We are very delighted that you have shown interest in our
                   enterprise. Data protection is of a particularly high priority
                   for the management of the <em>panke.gallery – Verein für
@@ -38,17 +40,16 @@ class PankePrivacy extends React.Component {
                   such processing, we generally obtain consent from the data
                   subject.
                 </p>
-              </div>
-            </div>
-          </section>
-          <section className="further">
-            <div className="row">
-              <div className="col-md-4 col-sm-4 col-xs-12">
+              </Col>
+            </Row>
+          </InfoSection>
+
+          <FurtherSection>
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
                 <h2>Privacy Notice</h2>
-              </div>
-              <div className="col-md-8 col-sm-8 col-xs-12">
-                
-                
+              </Col> 
+              <Col $md={8} $sm={8} $xs={12}>
 
                 <p>
                   The processing of personal data, such as the name, address,
@@ -992,9 +993,9 @@ class PankePrivacy extends React.Component {
                   </a>{" "}
                   from WBS law.
                 </small>
-              </div>
-            </div>
-          </section>
+              </Col>
+            </Row>
+          </FurtherSection>
         </main>
       </Layout>
     );
