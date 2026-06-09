@@ -1,4 +1,6 @@
 import React from 'react'
+import { ColorSwapContainer, ColorBox } from './color-swap/ColorSwap.styles'
+import { theme } from '../theme/theme'
 
 const colours = [
   'red',
@@ -13,19 +15,19 @@ class PankeColorSwap extends React.Component{
 
   render(){
     return(
-      <div id="color-swap">
+      <ColorSwapContainer>
         {colours.map((c, key) => (
-          <div
+          <ColorBox
             role="button"
             tabIndex={key}
             aria-label={`Change color to ${c}`}
-            className={c}
+            $color={theme.colors.panke[c]}
             key={key}
             onClick={() => this.props.changeThemeColor(c)}
             onKeyDown={() => this.props.changeThemeColor(c)}
           />
         ))}
-      </div>
+      </ColorSwapContainer>
     );
   }
 }

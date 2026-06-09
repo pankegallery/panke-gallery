@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
+import { 
+  RsvpFormContainer, 
+  RsvpForm as StyledRsvpForm,
+  RsvpSubmitButton,
+  RsvpError,
+  RsvpSuccess
+} from './rsvp-form/RsvpForm.styles';
 
 const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     comment: '',
-    honeypot: '' // Anti-spam field
+    honeypot: ''
   });
   
-  const [status, setStatus] = useState('idle'); // idle, submitting, success, error
+  const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
@@ -64,17 +71,17 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
 
   if (status === 'success') {
     return (
-      <div className="rsvp-success">
+      <RsvpSuccess>
         <h3>Registration Successful!</h3>
-        <p>Thank you for registering for this event. We’ve saved your request and will be in touch if anything changes.</p>
-      </div>
+        <p>Thank you for registering for this event. We have saved your request and will be in touch if anything changes.</p>
+      </RsvpSuccess>
     );
   }
 
   return (
-    <div className="rsvp-form-container">
+    <RsvpFormContainer>
       <p>As capacity is limited, we kindly ask you to register for this event.</p>
-      <form onSubmit={handleSubmit} className="rsvp-form">
+      <StyledRsvpForm onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">
             Name <span className="required">*</span>
@@ -122,7 +129,6 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
           />
         </div>
 
-        {/* Honeypot field - hidden from users */}
         <div className="honeypot-field" style={{ display: 'none' }}>
           <label htmlFor="honeypot">Leave this field empty</label>
           <input
@@ -137,20 +143,19 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
         </div>
 
         {status === 'error' && (
-          <div className="rsvp-error">
+          <RsvpError>
             {errorMessage}
-          </div>
+          </RsvpError>
         )}
 
-        <button 
+        <RsvpSubmitButton 
           type="submit" 
-          className="rsvp-submit-button"
           disabled={status === 'submitting'}
         >
           {status === 'submitting' ? 'Submitting...' : 'RSVP'}
-        </button>
-      </form>
-    </div>
+        </RsvpSubmitButton>
+      </StyledRsvpForm>
+    </RsvpFormContainer>
   );
 };
 

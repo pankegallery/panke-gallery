@@ -5,6 +5,8 @@ import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
+import { Section, Headline } from '../components/content/Content.styles';
+
 
 class PankeEvents extends React.Component {
 
@@ -87,13 +89,11 @@ class PankeEvents extends React.Component {
     var upcoming;
     if (upcomingEvents.length > 0){
       upcoming = (
-        <section className="upcoming">
+        <Section className="upcoming">
 
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Upcoming events</h2>
-            </div>
-          </div>
+          <Headline>
+ <h2>Upcoming events</h2>
+          </Headline>
 
           {upcomingEvents.map(({ node }) => {
             if (this.passFilter(node)){
@@ -101,20 +101,19 @@ class PankeEvents extends React.Component {
             }
             return null
           })}
-        </section>
+        </Section>
       );
     }
 
     var past;
     if (pastEvents.length > 0) {
       past = (
-        <section className="past">
+        <Section className="past">
+          <Headline>
+            <h2>Past events</h2>
+          </Headline>
 
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2>Past events</h2>
-            </div>
-          </div>
+
 
           {pastEvents.map(({ node }) => {
             if (this.passFilter(node)){
@@ -122,7 +121,7 @@ class PankeEvents extends React.Component {
             }
             return null
           })}
-        </section>
+        </Section>
       );
     }
 

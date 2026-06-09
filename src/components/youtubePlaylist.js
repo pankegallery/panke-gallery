@@ -1,6 +1,9 @@
 import React from 'react'
 import Moment from 'moment';
 
+import { Row, Col } from './layout/Layout.styles'
+import { Meta } from './content/Content.styles'
+
 const YOUTUBE_PLAYLIST_API = process.env.GATSBY_YOUTUBE_URL;
 const YOUTUBE_API_KEY = process.env.GATSBY_YOUTUBE_API_KEY;
 
@@ -18,7 +21,7 @@ class YoutubePlaylist extends React.Component{
     const res = await fetch(`${YOUTUBE_PLAYLIST_API}?part=snippet&maxResults=50&playlistId=${playlist_id}&key=${YOUTUBE_API_KEY}`)
     const data = await res.json();
 
-//    console.log('data: ', data);
+  //  console.log('data: ', data);
 
     this.setState({
       playlistData: data
@@ -45,23 +48,23 @@ class YoutubePlaylist extends React.Component{
   render(){
 
     const playlistData = this.state.playlistData;
-//    console.log('items', playlistData.items);
+  //  console.log('items', playlistData.items);
 
     if(playlistData.items){
       return(
-        <div className="row">
-          <div className="col-md-4 col-sm-12 col-xs-12">
+        <Row>
+          <Col xs={12} sm={12} md={4}>
             <h2>{this.props.title}</h2>
-          </div>
-          <div className="col-md-8 col-sm-12 col-xs-12">
-            <div className="row">
+          </Col>
+          <Col xs={12} sm={12} md={8}>
+            <Row>
             {
               playlistData.items.map(({id, snippet ={}}) => {
     //          console.log('id', id);
     //          console.log('snippet', snippet);
     //          console.log('title', snippet.title);
                 return (
-                <div key={id} className="col-sm-6 col-xs-12 mb-4">
+                <Col key={id} xs={12} sm={6} md={6}>
                   <button
                     onClick={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
                     onKeyDown={() => this.props.replaceVideoScreen(snippet.resourceId.videoId)}
@@ -73,21 +76,21 @@ class YoutubePlaylist extends React.Component{
                   </button>
                   <h3>{snippet.title}</h3>
                     <p>{this.truncateDescription(snippet.description)}</p>
-                  <p className="meta">{Moment(snippet.publishedAt).format('DD.MM.YYYY')} </p>
-                </div>
+                  <Meta>{Moment(snippet.publishedAt).format('DD.MM.YYYY')} </Meta>
+                </Col>
                 )
               })
             }
-            </div>
-          </div>
-        </div>
+            </Row>
+          </Col>
+        </Row>
       );
     }
-    else{
-      console.log('Playlist loading or loading failed');
-      return (
+    else if(playlistData.loading === false){
+      return(
         <p>Loading videos…</p>
-      )
+
+      );
     }
   }
 }

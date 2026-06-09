@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 
 const SocialIcons = () => (
-  <div className="social text-center text-sm-right mt-4 mt-sm-0">
+  <div className="social" style={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
     <a href="https://www.instagram.com/panke.gallery/" className="instagram" target="_blank" rel="noopener noreferrer">
       <FontAwesomeIcon icon={faInstagram} aria-label="Instagram"/>
     </a>
@@ -33,7 +33,7 @@ const SocialIcons = () => (
     <a href="https://www.tiktok.com/@panke.gallery" className="tiktok" target="_blank" rel="noopener noreferrer">
       <FontAwesomeIcon icon={faTiktok} aria-label="TikTok"/>
     </a>
-    <a href="https://t.me/pankegallery" className="telegram mr-4" target="_blank" rel="noopener noreferrer">
+    <a href="https://t.me/pankegallery" className="telegram" target="_blank" rel="noopener noreferrer" style={{marginRight: '1rem'}}>
       <FontAwesomeIcon icon={faTelegramPlane} aria-label="Telegram"/>
     </a>
     <a href="https://youtube.com/@panke.gallery" className="youtube" target="_blank" rel="noopener noreferrer">

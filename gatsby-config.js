@@ -70,12 +70,7 @@ module.exports = {
     },
     'gatsby-plugin-offline',
     'gatsby-plugin-image',
-    {
-      resolve: `gatsby-plugin-sass`,
-      options: {
-          implementation: require('sass')
-      },
-    },
+    'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
