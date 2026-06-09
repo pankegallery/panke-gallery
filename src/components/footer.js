@@ -8,7 +8,7 @@ const Footer = () => (
       <StyledFooter>
         <Row>
           <Col $sm={8}>
-            <div style={{textAlign: 'center'}}>
+            <div style={{textAlign: 'left'}}>
               <span style={{display: 'inline-block', textAlign: 'left'}}>
                 © panke.gallery – Verein für künstlerisch-kulturelle Bildung e.V. · <a href="/contact#imprint">Imprint</a> · <a href="/privacy">Privacy Policy</a>
               </span>

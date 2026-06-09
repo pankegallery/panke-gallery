@@ -32,7 +32,7 @@ class EventPreview extends React.Component {
 
     return(
       <NewsArticle>
-        <div>{eventCategory}{eventTags}</div>
+        {/* <div>{eventCategory}{eventTags}</div> */}
         <h3>
           <Link to={`/event/${event.slug}`}>{event.title}</Link>
         </h3>

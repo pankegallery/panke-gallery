@@ -39,7 +39,7 @@ const Slideshow = ({ slides, interval = 5000 }) => {
       <CarouselInner role="listbox">
         {slides.map(({ gatsbyImageData, description }, index) => (
           <CarouselItem key={index} $active={index === active} aria-hidden={index !== active}>
-            <div className="col-md-12 col-sm-12 col-xs-12">
+            <div>
               <div className="image-wrapper 3-col">
                 <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16 / 9} />
               </div>
