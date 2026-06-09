@@ -13,6 +13,8 @@
 # - BASEROW_TABLE_ID: The ID of the Baserow table for RSVP registrations
 # - CONTENTFUL_SPACE_ID: Your Contentful space ID
 # - CONTENTFUL_DELIVERY_TOKEN: Your Contentful delivery token
+# - RESEND_API_KEY: Resend API key for confirmation emails
+# - RSVP_FROM_EMAIL: Verified sender, e.g. "panke.gallery <rsvp@panke.gallery>"
 
 [[plugins]]
   package = "@netlify/plugin-gatsby"

@@ -7,7 +7,7 @@ import {
   RsvpSuccess
 } from './rsvp-form/RsvpForm.styles';
 
-const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
+const RsvpForm = ({ eventId, eventTitle, eventDate, capacity, slug }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -43,6 +43,7 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
           comment: formData.comment,
           eventId: eventId,
           eventTitle: eventTitle,
+          eventDate: eventDate,
           capacity: capacity,
           honeypot: formData.honeypot
         })
@@ -72,8 +73,8 @@ const RsvpForm = ({ eventId, eventTitle, capacity, slug }) => {
   if (status === 'success') {
     return (
       <RsvpSuccess>
-        <h3>Registration Successful!</h3>
-        <p>Thank you for registering for this event. We have saved your request and will be in touch if anything changes.</p>
+        <h3>You're on the list!</h3>
+        <p>Thanks, {formData.name} — we've saved your spot for <strong>{eventTitle}</strong>. A confirmation email is on its way. If anything changes, we'll let you know.</p>
       </RsvpSuccess>
     );
   }
