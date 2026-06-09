@@ -111,6 +111,7 @@ class EventTemplate extends React.Component {
                 <RsvpForm 
                   eventId={event.contentful_id}
                   eventTitle={event.title}
+                  eventDate={event.date}
                   capacity={capacity}
                   slug={event.slug}
                 />

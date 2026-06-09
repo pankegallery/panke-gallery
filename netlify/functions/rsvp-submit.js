@@ -13,16 +13,16 @@ const MAX_SUBMISSIONS_PER_IP = 3;
 function checkRateLimit(ip) {
   const now = Date.now();
   const userSubmissions = submissions.get(ip) || [];
-  
+
   // Clean old submissions outside the window
   const recentSubmissions = userSubmissions.filter(
     timestamp => now - timestamp < RATE_LIMIT_WINDOW
   );
-  
+
   if (recentSubmissions.length >= MAX_SUBMISSIONS_PER_IP) {
     return false;
   }
-  
+
   recentSubmissions.push(now);
   submissions.set(ip, recentSubmissions);
   return true;
@@ -32,6 +32,62 @@ function checkRateLimit(ip) {
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+}
+
+// Send a confirmation email via Resend. Returns true on success.
+// Non-fatal: callers should not fail the RSVP if this throws/returns false.
+async function sendConfirmationEmail({ name, email, eventTitle, eventDate }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromAddress = process.env.RSVP_FROM_EMAIL; // e.g. "panke.gallery <rsvp@panke.gallery>"
+
+  if (!apiKey || !fromAddress) {
+    console.warn('Email not sent: RESEND_API_KEY or RSVP_FROM_EMAIL not configured');
+    return false;
+  }
+
+  // Optional human-readable date line
+  let dateLine = '';
+  if (eventDate) {
+    const d = new Date(eventDate);
+    if (!isNaN(d)) {
+      dateLine = `<p><strong>When:</strong> ${d.toLocaleString('en-GB', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+        timeZone: 'Europe/Berlin'
+      })}</p>`;
+    }
+  }
+
+  const html = `
+    <div style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #111;">
+      <p>Hi ${name},</p>
+      <p>Thank you for registering for <strong>${eventTitle}</strong> at panke.gallery.
+         Your spot is reserved.</p>
+      ${dateLine}
+      <p>If you can no longer attend, please contact info@panke.gallery so we can free up your spot.</p>
+      <p>See you soon,<br/>panke.gallery</p>
+    </div>
+  `;
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      from: fromAddress,
+      to: email,
+      subject: `[RSVP] Your registration for ${eventTitle} at panke.gallery`,
+      html
+    })
+  });
+
+  if (!res.ok) {
+    console.error('Resend email failed:', res.status, await res.text());
+    return false;
+  }
+  return true;
 }
 
 exports.handler = async (event, context) => {
@@ -62,11 +118,11 @@ exports.handler = async (event, context) => {
   }
 
   // Check rate limit
-  const clientIp = event.headers['x-forwarded-for'] || 
-                   event.headers['client-ip'] || 
-                   context.clientContext?.ip || 
-                   'unknown';
-  
+  const clientIp = event.headers['x-forwarded-for'] ||
+    event.headers['client-ip'] ||
+    context.clientContext?.ip ||
+    'unknown';
+
   if (!checkRateLimit(clientIp)) {
     return {
       statusCode: 429,
@@ -76,7 +132,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { name, email, comment, eventId, eventTitle, capacity, honeypot } = JSON.parse(event.body);
+    const { name, email, comment, eventId, eventTitle, eventDate, capacity, honeypot } = JSON.parse(event.body);
 
     // Honeypot check - if filled, it's a bot
     if (honeypot) {
@@ -122,7 +178,7 @@ exports.handler = async (event, context) => {
 
     // Get current registration count for this event
     const filterUrl = `${baserowUrl}/api/database/rows/table/${tableId}/?user_field_names=true&filter__field_eventId__equal=${eventId}`;
-    
+
     const countResponse = await fetch(filterUrl, {
       method: 'GET',
       headers: {
@@ -154,7 +210,7 @@ exports.handler = async (event, context) => {
 
     // Create new registration in Baserow
     const createUrl = `${baserowUrl}/api/database/rows/table/${tableId}/?user_field_names=true`;
-    
+
     const createResponse = await fetch(createUrl, {
       method: 'POST',
       headers: {
@@ -184,10 +240,25 @@ exports.handler = async (event, context) => {
     const registration = await createResponse.json();
     console.log('Baserow create response', registration);
 
+    // Send confirmation email — must never fail the RSVP itself
+    try {
+      const emailed = await sendConfirmationEmail({
+        name,
+        email,
+        eventTitle,
+        eventDate // available if you add it to the request payload (step 4)
+      });
+      if (!emailed) {
+        console.warn('Registration saved but confirmation email not sent for', email);
+      }
+    } catch (err) {
+      console.error('Confirmation email threw:', err);
+    }
+    
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         message: 'Registration successful',
         id: registration.id
       })
