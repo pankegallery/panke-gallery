@@ -2,11 +2,13 @@ import React from "react";
 import Helmet from "react-helmet";
 
 import Layout from "../components/layout";
+import { FurtherSection, Headline, ResponsiveVideo } from "../components/content/Content.styles";
 import YoutubePlaylist from "../components/youtubePlaylist";
 
 import ReactPlayer from "react-player";
 
 import YouTube from "react-youtube";
+import { Section } from "../components/content/Content.styles";
 
 class PankeStreaming extends React.Component {
   constructor(props) {
@@ -34,13 +36,13 @@ class PankeStreaming extends React.Component {
   renderMainPlayer = () => {
     if (this.state.streaming) {
       return (
-        <div class="responsive-video">
+        <ResponsiveVideo>
           <ReactPlayer
             url="https://www.twitch.tv/pankegallery"
             // width="100%"
             // height="100%"
           />
-        </div>
+        </ResponsiveVideo>
         // <TwitchPlayer
         //   channel="pankegallery"
         //   theme="light"
@@ -78,18 +80,14 @@ class PankeStreaming extends React.Component {
           ]}
         />
 
-        <section className="streaming twitch">
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h2 ref={this.ref}>panke.gallery Live</h2>
-            </div>
-          </div>
-          <div className="row main-player">
-            <div className="col">{mainPlayer}</div>
-          </div>
-        </section>
+        <Section className="streaming info">
+          <Headline>
+              <h1 ref={this.ref}>panke.gallery Live</h1>
+           </Headline>
+           {mainPlayer}
+        </Section>
 
-        <section className="videos further">
+        <FurtherSection className="videos">
           <YoutubePlaylist
             title="panke.gallery Talks"
             playlist_id="PLftbjK2gCCbLQ2QXGuOKylxp9oFQFhIPf"
@@ -100,7 +98,7 @@ class PankeStreaming extends React.Component {
             playlist_id="PLftbjK2gCCbLYlv_Lsl9ONl1Buu8CE5wF"
             replaceVideoScreen={(v) => this.replaceVideoScreen(v)}
           />
-        </section>
+         </FurtherSection>
       </Layout>
     );
   }

@@ -6,8 +6,10 @@ import { graphql } from 'gatsby'
 import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EditionListItem from '../components/edition-list-item'
+import { FurtherSection,  } from '../components/content/Content.styles';
+import { Row, Col } from '../components/layout/Layout.styles';
 
-class PankeEdition extends React.Component{
+class PankeEdition extends React.Component {
 
   render() {
 
@@ -17,13 +19,13 @@ class PankeEdition extends React.Component{
     // Get array of editions
     const posts = get(this, 'props.data.allContentfulEdition.edges');
 
-//    // Log array of Content Blocks
-//    console.log("Blocks:", blocks);
-//
-//    // Log array of Editions
-//    console.log("Editions:", posts);
+    //    // Log array of Content Blocks
+    //    console.log("Blocks:", blocks);
+    //
+    //    // Log array of Editions
+    //    console.log("Editions:", posts);
 
-    return(
+    return (
       <Layout>
         <Helmet
           title="Edition"
@@ -35,28 +37,27 @@ class PankeEdition extends React.Component{
           ]}
         />
 
-        {blocks.map(({node}) => {
+        {blocks.map(({ node }) => {
           return (
-              <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
+            <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
           )
         })}
 
-        <section className="editions further">
-
-          <div className="row">
-            <div className="col-md-4 col-sm-12 col-xs-12">
+        <FurtherSection className="editions">
+          <Row>
+            <Col $md={4} $sm={4} $xs={12}>
               <h2>Previous editions</h2>
-            </div>
-
-            <div className="col-md-8 col-sm-12 col-xs-12">
+            </Col>
+            <Col $md={8} $sm={8} $xs={12}>
               {posts.map(({ node }) => {
                 return (
-                    <EditionListItem key={node.slug} edition={node} />
+                  <EditionListItem key={node.slug} edition={node} />
                 )
               })}
-            </div>
-          </div>
-        </section>
+            </Col>
+          </Row>
+        </FurtherSection>
+
       </Layout>
     );
   }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
-//import Img from 'gatsby-image'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import Moment from 'moment'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { Article, Meta } from './content/Content.styles'
 
 class exhibitionPreview extends React.Component {
 
@@ -33,7 +33,7 @@ class exhibitionPreview extends React.Component {
     // --- Output --
 
     return(
-      <article className="exhibition-item">
+      <Article className="exhibition-item">
         <Link to={`/exhibition/${exhibition.slug}`}>
           <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} aspectratio={16/9} />
         </Link>
@@ -43,10 +43,10 @@ class exhibitionPreview extends React.Component {
         <div dangerouslySetInnerHTML={{
             __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
           }} />
-        <p className="meta">
+        <Meta>
           {dateDisplayed}
-        </p>
-      </article>
+        </Meta>
+      </Article>
     )
 
   }

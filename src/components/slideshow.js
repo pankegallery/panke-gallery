@@ -1,53 +1,68 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { GatsbyImage } from 'gatsby-plugin-image'
-//import Carousel from 'react-responsive-carousel'
+import { Carousel, CarouselIndicators, CarouselInner, CarouselItem, CarouselControl } from './slideshow/Slideshow.styles'
+import { Meta } from './content/Content.styles'
 
-const Slideshow = ({slides, length}) => (
-  <div id="myCarousel" className="row carousel slide" data-ride="carousel">
+const Slideshow = ({ slides, interval = 5000 }) => {
+  const [active, setActive] = useState(0)
+  const count = slides.length
 
-    {/* Indicators */}
-    <ol className="carousel-indicators">
-      {slides.map(({sizes}, index ) => {
-        var sldto = index;
-        var cls = (index === 0) ? 'active' : '';
-        return (
-          <li data-target="#myCarousel" data-slide-to={sldto} className={cls}></li>
-        )
-      })}
-    </ol>
+  const goTo = useCallback(i => setActive((i + count) % count), [count])
+  const next = useCallback(() => goTo(active + 1), [active, goTo])
+  const prev = useCallback(() => goTo(active - 1), [active, goTo])
 
-    {/* Wrapper for slides */}
-    <div className="carousel-inner" role="listbox">
+  useEffect(() => {
+    if (count <= 1 || !interval) return
+    const id = setTimeout(next, interval)
+    return () => clearTimeout(id)
+  }, [active, count, interval, next])
 
-      {slides.map(({gatsbyImageData, description}, index ) => {
-        var cls = (index === 0) ? 'carousel-item active' : 'carousel-item';
-        return (
-          <div className={cls}>
-            <div className="col-md-12 col-sm-12 col-xs-12">
-                <div className="image-wrapper 3-col">
-                    <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16/9} />
-                </div>
-                <p>{description}</p>
+  if (!count) return null
+
+  return (
+    <Carousel id="myCarousel">
+
+      {/* Indicators */}
+      <CarouselIndicators className="carousel-indicators">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            $active={index === active}
+            onClick={() => goTo(index)}
+            aria-label={`Slide ${index + 1}`}
+            className={index === active ? 'active' : ''}
+          />
+        ))}
+      </CarouselIndicators>
+
+      {/* Wrapper for slides */}
+      <CarouselInner role="listbox">
+        {slides.map(({ gatsbyImageData, description }, index) => (
+          <CarouselItem key={index} $active={index === active} aria-hidden={index !== active}>
+            <div>
+              <div className="image-wrapper 3-col">
+                <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16 / 9} />
+              </div>
+              <Meta style={{ textAlign: 'center', padding: '10px 0' }}>{description}</Meta>
             </div>
-          </div>
-        )
-      })}
+          </CarouselItem>
+        ))}
+      </CarouselInner>
 
+      {/* Controls */}
+      {count > 1 && (
+        <>
+          <CarouselControl as="button" type="button" onClick={prev} aria-label="Previous">
+            <span className="carousel-control-prev-icon" aria-hidden="true" />
+          </CarouselControl>
+          <CarouselControl as="button" type="button" onClick={next} aria-label="Next" style={{ right: 0 }}>
+            <span className="carousel-control-next-icon" aria-hidden="true" />
+          </CarouselControl>
+        </>
+      )}
 
+    </Carousel>
+  )
+}
 
-    </div>
-
-    {/* Left and right controls */}
-
-    <a className="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span className="sr-only">Previous</span>
-    </a>
-    <a className="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-        <span className="sr-only">Next</span>
-    </a>
-  </div>
-
-)
 export default Slideshow

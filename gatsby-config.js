@@ -70,12 +70,7 @@ module.exports = {
     },
     'gatsby-plugin-offline',
     'gatsby-plugin-image',
-    {
-      resolve: `gatsby-plugin-sass`,
-      options: {
-          implementation: require('sass')
-      },
-    },
+    'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
@@ -84,7 +79,7 @@ module.exports = {
       resolve: 'gatsby-plugin-matomo',
       options: {
         siteId: '2',
-        matomoUrl: 'https://piwik.wunderjewel.de',
+        matomoUrl: 'https://matomo.crosssenses.de',
         siteUrl: 'https://www.panke.gallery'
       }
     },

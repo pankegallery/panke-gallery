@@ -1,4 +1,30 @@
 import React from 'react';
+import styled from 'styled-components'
+
+const StyledTag = styled.button`
+  display: inline-block;
+  padding: 4px 8px;
+  border: ${props => props.theme.colors.theme.grey} 2px solid;
+  border-radius: 5px;
+  background: transparent;
+  color: ${props => props.theme.colors.theme.grey};
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: ${props => props.theme.fontSizes.medium};
+  margin-top: 10px;
+  margin-right: 10px;
+
+  &.tag-selected {
+    background: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.white} !important;
+
+    &::before {
+      content: "×";
+      display: inline-block;
+      margin-right: 1em;
+    }
+  }
+`;
 
 class Tag extends React.Component {
 
@@ -26,7 +52,7 @@ class Tag extends React.Component {
       isToggleOn: !state.isToggleOn
     }));
 
-//    this.refs.tag.classList.toggle('tag-selected');
+  //  this.refs.tag.classList.toggle('tag-selected');
   }
 
   render() {
@@ -46,19 +72,19 @@ class Tag extends React.Component {
 
     if (this.props.noClick) {
       return (
-        <button
+        <StyledTag
           ref="tag"
           className={className}
           aria-label={`Tagged with ${thistag.name}`}
           tabindex="-100"
         >
           {thistag.name}
-        </button>
+        </StyledTag>
       );
     }
     else{
       return (
-        <button
+        <StyledTag
           ref="tag"
           className={className}
           onClick={this.handleTagClick}
@@ -67,7 +93,7 @@ class Tag extends React.Component {
           tabindex="-100"
         >
           {thistag.name}
-        </button>
+        </StyledTag>
       );
     }
 

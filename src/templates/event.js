@@ -11,6 +11,8 @@ import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { FurtherSection, HeadSection, Meta, InfoSection, Tag } from '../components/content/Content.styles'
+import { Col, Row } from '../components/layout/Layout.styles'
 
 class EventTemplate extends React.Component {
   render() {
@@ -43,12 +45,12 @@ class EventTemplate extends React.Component {
     var EventDateAndEntryFee;
     if (event.entryfee){
       EventDateAndEntryFee =(
-        <p className="meta"><EventDate event={event} /> | {event.entryfee}</p>
+       <Meta><EventDate event={event} /> | {event.entryfee}</Meta>
       );
     }
     else{
       EventDateAndEntryFee =(
-        <p className="meta"><EventDate event={event} /></p>
+        <Meta><EventDate event={event} /></Meta>
       );
     }
 
@@ -70,9 +72,9 @@ class EventTemplate extends React.Component {
     var eventCategory;
     if (event.eventSeries!=null){
       eventCategory =(
-        <p className="eventSeries">
+        <Tag className="eventSeries tag">
           {event.eventSeries.name}
-        </p>
+        </Tag>
       );
     }
 
@@ -81,9 +83,9 @@ class EventTemplate extends React.Component {
       eventTags =(
         event.tags.map(({slug, name}) => {
           return (
-            <p className="tag">
+            <Tag className="tag">
               {name}
-            </p>
+            </Tag>
           )
         })
       );
@@ -100,36 +102,39 @@ class EventTemplate extends React.Component {
       
       if (isBeforeDeadline) {
         RsvpSection = (
-          <section className="rsvp-section further">
-            <div className="row">
-              <div className="col-md-4 col-sm-4 col-xs-12">
+          <FurtherSection className="rsvp-section">
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
                 <h2>RSVP</h2>
-              </div>
-              <div className="col-md-8 col-sm-8 col-xs-12">
+              </Col>
+              <Col $md={8} $sm={8} $xs={12}>
                 <RsvpForm 
                   eventId={event.contentful_id}
                   eventTitle={event.title}
+                  eventDate={event.date}
                   capacity={capacity}
                   slug={event.slug}
                 />
-              </div>
-            </div>
-          </section>
+              </Col>
+            </Row>
+          </FurtherSection>
         );
+
       } else {
         RsvpSection = (
-          <section className="rsvp-section further">
-            <div className="row">
-              <div className="col-md-4 col-sm-4 col-xs-12">
+          <FurtherSection className="rsvp-section">
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
                 <h2>RSVP</h2>
-              </div>
-              <div className="col-md-8 col-sm-8 col-xs-12">
+              </Col>
+              <Col $md={8} $sm={8} $xs={12}>
                 <p className="rsvp-closed">Registration for this event has closed.</p>
-              </div>
-            </div>
-          </section>
+              </Col>
+            </Row>
+          </FurtherSection>
         );
       }
+         
     }
 
     //==========================================================================
@@ -142,9 +147,7 @@ class EventTemplate extends React.Component {
       <Layout>
       <main>
         <Helmet title={`${event.title}`} />
-        <section className="head">
-          <div className="row headline">
-            <div className="col-md-12 col-sm-12 col-xs-12">
+        <HeadSection>
 
               <h1>{event.title}</h1>
               <div className="subtitle" dangerouslySetInnerHTML={{
@@ -157,24 +160,25 @@ class EventTemplate extends React.Component {
 
               {ImageOrSlides}
 
-            </div>
-          </div>
-        </section>
+        </HeadSection>
 
         {/*  ---- ABOUT ---- */}
 
-        <section className="info">
-          <div className="row">
-            <div className="col-md-4 col-sm-4 col-xs-12">
+        <InfoSection>
+          <Row>
+            <Col $md={4} $sm={4} $xs={12}>
               <h2>About the event</h2>
-            </div>
-            <div className="col-md-8 col-sm-8 col-xs-12">
+            </Col>
+            <Col $md={8} $sm={8} $xs={12}>
               <div dangerouslySetInnerHTML={{
                 __html: processExternalLinks(event.description.childMarkdownRemark.html)
               }} />
-            </div>
-          </div>
-        </section>
+            </Col>
+          </Row>
+         
+
+        </InfoSection>
+       
 
         {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
