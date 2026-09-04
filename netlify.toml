@@ -11,6 +11,8 @@
 # - BASEROW_TOKEN: Your Baserow API token
 # - BASEROW_URL: Base URL for Baserow API (e.g., https://api.baserow.io)
 # - BASEROW_TABLE_ID: The ID of the Baserow table for RSVP registrations
+# - BASEROW_AUDIOGUIDE_TABLE_ID: The ID of the Baserow "Audioguide" table (shares BASEROW_TOKEN/BASEROW_URL above)
+# - SITE_URL: Production origin encoded into audioguide QR codes, e.g. https://www.panke.gallery
 # - CONTENTFUL_SPACE_ID: Your Contentful space ID
 # - CONTENTFUL_DELIVERY_TOKEN: Your Contentful delivery token
 # - RESEND_API_KEY: Resend API key for confirmation emails
