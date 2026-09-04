@@ -54,6 +54,7 @@ class GuideStopTemplate extends React.Component {
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
               <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
+              {/* eslint-disable-next-line jsx-a11y/media-has-caption -- spoken narration; the transcript below is the accessible text alternative */}
               <audio controls src={stop.audioUrl} style={{ width: '100%', marginTop: '1em' }} />
             </Col>
           </Row>
