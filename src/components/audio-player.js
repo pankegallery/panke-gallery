@@ -12,6 +12,7 @@ import {
   Overlay,
   OverlayTop,
   OverlayBody,
+  StopNumber,
   Scrubber,
   TimeRow,
   TranscriptSection,
@@ -24,7 +25,7 @@ const formatTime = seconds => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-const AudioPlayer = ({ audioUrl, title, artist, transcript }) => {
+const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) => {
   const audioRef = useRef(null);
   const [expanded, setExpanded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -103,6 +104,7 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript }) => {
           </OverlayTop>
 
           <OverlayBody onClick={e => e.stopPropagation()}>
+            {referenceNumber && <StopNumber>{referenceNumber}</StopNumber>}
             <h2>{title}</h2>
             {artist && <p className="artist">{artist}</p>}
 

@@ -111,7 +111,7 @@ export const OverlayBody = styled.div`
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   text-align: center;
   max-width: 480px;
   margin: 0 auto;
@@ -131,6 +131,19 @@ export const OverlayBody = styled.div`
   }
 `;
 
+export const StopNumber = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 2.4em;
+  margin: 0 auto auto;
+  border: 1px solid ${props => props.theme.colors.theme.black};
+  border-radius: 50%;
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.medium};
+`;
+
 export const Scrubber = styled.input`
   width: 100%;
   margin: 0.5em 0 0.3em;
@@ -142,7 +155,7 @@ export const TimeRow = styled.div`
   justify-content: space-between;
   font-size: ${props => props.theme.fontSizes.small};
   color: ${props => props.theme.colors.theme.grey};
-  margin-bottom: 2em;
+  margin-bottom: auto;
 `;
 
 export const TranscriptSection = styled.div`

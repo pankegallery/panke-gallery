@@ -21,6 +21,19 @@ const ArtworkImage = styled.img`
   margin: 1.5em 0;
 `
 
+const StopNumber = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4em;
+  height: 2.4em;
+  margin: 1.5em 0 0.8em;
+  border: 1px solid ${props => props.theme.colors.theme.black};
+  border-radius: 50%;
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.medium};
+`
+
 class GuideStopTemplate extends React.Component {
   render() {
 
@@ -32,6 +45,7 @@ class GuideStopTemplate extends React.Component {
 
         <Overview>
           <HeadSection>
+            <StopNumber>{stop.referenceNumber}</StopNumber>
             <h1>{stop.artworkName}</h1>
             {stop.artist && <Meta>{stop.artist}</Meta>}
           </HeadSection>
@@ -48,6 +62,7 @@ class GuideStopTemplate extends React.Component {
           title={stop.artworkName}
           artist={stop.artist}
           transcript={stop.transcript}
+          referenceNumber={stop.referenceNumber}
         />
       </GuideLayout>
     )
