@@ -1,0 +1,36 @@
+import React from 'react';
+import Helmet from 'react-helmet';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+
+import { theme } from '../theme/theme';
+import { GlobalStyles } from '../theme/GlobalStyles';
+import { Logotype } from './header/Header.styles';
+import { GuideShell, GuideHeader, GuideMain } from './guide-layout/GuideLayout.styles';
+
+// A deliberately minimal shell for the audioguide pages — no navigation, no
+// footer, just the wordmark. The guide is meant to be used fullscreen on a
+// phone while walking through the gallery, not as a page within the main site.
+const GuideLayout = ({ children }) => (
+  <StyledThemeProvider theme={theme}>
+    <GlobalStyles />
+    <Helmet>
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
+      <link rel="manifest" href="/favicons/site.webmanifest" />
+      <link rel="shortcut icon" href="/favicons/favicon.ico" />
+      <meta name="theme-color" content="#ffffff" />
+    </Helmet>
+    <GuideShell>
+      <GuideHeader>
+        <a href="/" title="Go to panke.gallery homepage">
+          <Logotype>panke.gallery</Logotype>
+        </a>
+      </GuideHeader>
+      <GuideMain>{children}</GuideMain>
+    </GuideShell>
+  </StyledThemeProvider>
+);
+
+export default GuideLayout;

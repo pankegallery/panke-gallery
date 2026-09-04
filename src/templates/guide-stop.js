@@ -2,70 +2,54 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
+import styled from 'styled-components'
 
-import Layout from '../components/layout'
-import { HeadSection, Meta, InfoSection } from '../components/content/Content.styles'
-import { Row, Col } from '../components/layout/Layout.styles'
+import GuideLayout from '../components/guide-layout'
+import AudioPlayer from '../components/audio-player'
+import { HeadSection, Meta } from '../components/content/Content.styles'
+
+const Overview = styled.section`
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1.25em;
+`
+
+const ArtworkImage = styled.img`
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.5em 0;
+`
 
 class GuideStopTemplate extends React.Component {
   render() {
 
     const stop = get(this.props, 'data.audioguideStop')
 
-    var TranscriptSection;
-    if (stop.transcript) {
-      TranscriptSection = (
-        <InfoSection>
-          <Row>
-            <Col $md={4} $sm={4} $xs={12}>
-              <h2>Transcript</h2>
-            </Col>
-            <Col $md={8} $sm={8} $xs={12}>
-              <p style={{ whiteSpace: 'pre-wrap' }}>{stop.transcript}</p>
-            </Col>
-          </Row>
-        </InfoSection>
-      );
-    }
-
-    //==========================================================================
-
-    //                                OUTPUT
-
-    //==========================================================================
-
     return (
-      <Layout>
-      <main>
+      <GuideLayout>
         <Helmet title={`${stop.artworkName} — Audioguide`} />
-        <HeadSection>
 
-          <h1>{stop.artworkName}</h1>
-          {stop.artist && <Meta>{stop.artist}</Meta>}
+        <Overview>
+          <HeadSection>
+            <h1>{stop.artworkName}</h1>
+            {stop.artist && <Meta>{stop.artist}</Meta>}
+          </HeadSection>
 
-        </HeadSection>
+          {stop.artworkImage && (
+            <ArtworkImage src={stop.artworkImage} alt={stop.artworkName} />
+          )}
 
-        {/*  ---- ABOUT ---- */}
+          <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
+        </Overview>
 
-        <InfoSection>
-          <Row>
-            <Col $md={4} $sm={4} $xs={12}>
-              <h2>About the work</h2>
-            </Col>
-            <Col $md={8} $sm={8} $xs={12}>
-              <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption -- spoken narration; the transcript below is the accessible text alternative */}
-              <audio controls src={stop.audioUrl} style={{ width: '100%', marginTop: '1em' }} />
-            </Col>
-          </Row>
-        </InfoSection>
-
-        {/*  ---- TRANSCRIPT ---- */}
-
-        {TranscriptSection}
-
-      </main>
-      </Layout>
+        <AudioPlayer
+          audioUrl={stop.audioUrl}
+          title={stop.artworkName}
+          artist={stop.artist}
+          transcript={stop.transcript}
+        />
+      </GuideLayout>
     )
   }
 }
@@ -89,6 +73,7 @@ export const pageQuery = graphql`
       description
       audioUrl
       transcript
+      artworkImage
     }
   }
 `

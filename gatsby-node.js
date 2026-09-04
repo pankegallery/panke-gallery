@@ -147,6 +147,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       audioUrl: String
       exhibitionSlug: String
       transcript: String
+      artworkImage: String
       pageUrl: String
       qrCodeSvg: String
     }

@@ -1,0 +1,163 @@
+import styled from 'styled-components';
+
+export const Bar = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: ${props => props.theme.colors.theme.white};
+  border-top: 1px solid ${props => props.theme.colors.theme.black};
+  padding: 0 1.25em calc(1em + env(safe-area-inset-bottom));
+  cursor: pointer;
+`;
+
+export const Progress = styled.div`
+  height: 2px;
+  background: ${props => props.theme.colors.theme.lightgrey};
+
+  span {
+    display: block;
+    height: 100%;
+    background: ${props => props.theme.colors.theme.black};
+    width: ${props => props.$percent || 0}%;
+    transition: width 0.1s linear;
+  }
+`;
+
+export const BarRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  padding: 0.9em 0;
+`;
+
+export const NowPlaying = styled.div`
+  flex: 1 1 auto;
+  min-width: 0;
+
+  h3 {
+    font-size: ${props => props.theme.fontSizes.medium};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  p {
+    font-size: ${props => props.theme.fontSizes.small};
+    color: ${props => props.theme.colors.theme.grey};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+`;
+
+export const PlayButton = styled.button`
+  flex: 0 0 auto;
+  width: ${props => props.$size || '48px'};
+  height: ${props => props.$size || '48px'};
+  border-radius: 50%;
+  border: 0;
+  background: ${props => props.theme.colors.theme.black};
+  color: ${props => props.theme.colors.theme.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    font-size: ${props => props.$iconSize || '1em'};
+    /* optical centering: the play glyph isn't visually centered in its box */
+    margin-left: ${props => (props.$isPlaying ? '0' : '2px')};
+  }
+`;
+
+export const ExpandButton = styled.button`
+  flex: 0 0 auto;
+  border: 0;
+  background: none;
+  color: ${props => props.theme.colors.theme.black};
+  cursor: pointer;
+  padding: 0.5em;
+
+  svg {
+    font-size: 1.2em;
+  }
+`;
+
+export const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: ${props => props.theme.colors.theme.white};
+  display: flex;
+  flex-direction: column;
+  padding: 1.25em;
+  padding-bottom: calc(1.25em + env(safe-area-inset-bottom));
+  overflow-y: auto;
+`;
+
+export const OverlayTop = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const OverlayBody = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+
+  h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: ${props => props.theme.fontSizes.large};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    margin-bottom: 0.2em;
+  }
+
+  .artist {
+    color: ${props => props.theme.colors.theme.grey};
+    margin-bottom: 2em;
+  }
+`;
+
+export const Scrubber = styled.input`
+  width: 100%;
+  margin: 0.5em 0 0.3em;
+  accent-color: ${props => props.theme.colors.theme.black};
+`;
+
+export const TimeRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: ${props => props.theme.fontSizes.small};
+  color: ${props => props.theme.colors.theme.grey};
+  margin-bottom: 2em;
+`;
+
+export const TranscriptSection = styled.div`
+  text-align: left;
+  margin-top: 2em;
+
+  h3 {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: ${props => props.theme.fontSizes.medium};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    white-space: pre-wrap;
+  }
+`;

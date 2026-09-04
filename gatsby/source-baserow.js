@@ -8,7 +8,7 @@
 //
 // Expected Baserow field names (must match exactly, case-sensitive):
 // Reference Number, Artwork Name, Artist, Description, Audio URL,
-// Exhibition Slug, Transcript.
+// Exhibition Slug, Transcript, Artwork Image (optional).
 
 const fetch = require('node-fetch')
 
@@ -40,6 +40,12 @@ const FIELDS = {
   audioUrl: 'Audio URL',
   exhibitionSlug: 'Exhibition Slug',
   transcript: 'Transcript',
+  artworkImage: 'Artwork Image',
+}
+
+// Baserow file fields come back as an array of attachments; take the first one's URL.
+function firstAttachmentUrl(value) {
+  return (Array.isArray(value) && value.length > 0 && value[0].url) || null
 }
 
 exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
@@ -91,6 +97,7 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
       audioUrl: toDirectDownloadUrl(row[FIELDS.audioUrl]),
       exhibitionSlug: row[FIELDS.exhibitionSlug] || '',
       transcript: row[FIELDS.transcript] || null,
+      artworkImage: firstAttachmentUrl(row[FIELDS.artworkImage]),
     }
 
     createNode({
