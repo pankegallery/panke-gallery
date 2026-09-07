@@ -6,7 +6,7 @@ Companion to [SPECS.md](SPECS.md). Split into three phases so work can be picked
 
 ## Phase 1 — Monday deadline (minimal dev time)
 
-Goal: a working `/guide/{reference_number}` page per artwork, a `/print-sheet` with QR codes, plain `<audio>` playback, styled to match the rest of the site. No fancy player, no overview page, no auto-linking yet.
+Goal: a working `/guide/{reference_number}` page per artwork, a `/print-codes` with QR codes, plain `<audio>` playback, styled to match the rest of the site. No fancy player, no overview page, no auto-linking yet.
 
 ### 1.1 Baserow → Gatsby data source
 
@@ -27,10 +27,10 @@ Goal: a working `/guide/{reference_number}` page per artwork, a `/print-sheet` w
 
 - [ ] `npm install qrcode` (MIT, SVG output, no external service — per SPECS §8).
 - [ ] In `gatsby-node.js`, after creating the per-stop pages, generate an SVG string per row with `qrcode`, encoding the **full production page URL** (not the raw Nextcloud link). Before wiring this: check [gatsby-config.js](gatsby-config.js)'s `pathPrefix: '/panke-gallery'` — confirm whether it's active in production (i.e. whether the real URL is `panke.gallery/panke-gallery/guide/03` or `panke.gallery/guide/03`) so the encoded URL is correct the first time.
-- [ ] Pass the generated SVGs + row data (reference number, artwork name) into a new `src/pages/print-sheet.js` via `createPage` context (or a page query against the `AudioguideStop` nodes — pick whichever is less code).
+- [ ] Pass the generated SVGs + row data (reference number, artwork name) into a new `src/pages/print-codes.js` via `createPage` context (or a page query against the `AudioguideStop` nodes — pick whichever is less code).
 - [ ] Print sheet layout: grid of QR codes, each with reference number + artwork name printed beneath, using the existing `Row`/`Col` grid rather than a new grid system.
 - [ ] Add a print stylesheet (`@media print`, `@page { size: A4; }`) so the browser's Print → Save as PDF paginates cleanly.
-- [ ] Acceptance: `/print-sheet/` shows one QR per Baserow row; scanning one with a phone camera opens the correct `/guide/{reference_number}/` page; Print Preview shows a clean A4 grid with no cut-off codes.
+- [ ] Acceptance: `/print-codes/` shows one QR per Baserow row; scanning one with a phone camera opens the correct `/guide/{reference_number}/` page; Print Preview shows a clean A4 grid with no cut-off codes.
 
 ### 1.4 Non-dev, parallel track (editor, not agent)
 
@@ -56,6 +56,6 @@ Not required for the first exhibition to go live; do once Phase 1 is stable and 
 
 - [ ] Audioguide overview page per exhibition: group `AudioguideStop` nodes by `exhibition_slug`, pull the exhibition's title/dates from Contentful (same query shape as `exhibition.js`), list all stops with links. Route suggestion: `/guide/{exhibition_slug}/` as an index, with individual stops staying at `/guide/{reference_number}/` (already unique per SPECS §5.1 — no collision).
 - [ ] Auto-link from the exhibition page: in `src/templates/exhibition.js`, if any `AudioguideStop` exists with a matching `exhibition_slug` and non-empty `audio_url`, render a link/button to the guide overview page. Needs the `exhibition_slug` cross-reference from Phase 1 — already in the data model, no Baserow schema change needed.
-- [ ] Print-sheet access control decision (SPECS §10): Netlify basic auth vs. leaving it unlinked/unindexed. Low priority since it has no visitor-facing value, but worth closing out before it's forgotten.
+- [ ] print-codes access control decision (SPECS §10): Netlify basic auth vs. leaving it unlinked/unindexed. Low priority since it has no visitor-facing value, but worth closing out before it's forgotten.
 - [ ] Multilingual support if/when `language` rows start being used — likely just a filter on the overview page plus a language switcher on stop pages, no data model change needed.
 - [ ] Usage stats, only if requested: self-hosted/privacy-respecting option (Plausible or GoatCounter), scoped to `/guide/*` and `/exhibition/*` pages only — no tracking scripts anywhere else per SPECS §9.

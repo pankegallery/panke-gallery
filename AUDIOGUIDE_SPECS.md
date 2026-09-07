@@ -23,7 +23,7 @@ Add a self-guided audioguide to the panke.gallery exhibition site. Requirements:
 | Audio files | Nextcloud | Public share links, pasted into Baserow |
 | Site + player | Gatsby | New page template, generated per stop |
 | Hosting | Netlify | Unchanged — audio never passes through Netlify's bandwidth |
-| QR codes | Generated at Gatsby build time from Baserow data | Rendered on a `/print-sheet` page |
+| QR codes | Generated at Gatsby build time from Baserow data | Rendered on a `/print-codes` page |
 
 Key design decision: **audio bytes are never served through Netlify or Contentful.** Both have free-tier bandwidth ceilings (Netlify: reduced/credit-based free bandwidth as of 2026; Contentful Community: 50GB/month CDN bandwidth with a hard cutoff on delivery API when exceeded) that a popular audioguide could realistically hit. Routing audio through self-hosted Nextcloud removes this risk entirely and keeps the gallery in full control of its own media.
 
@@ -74,7 +74,7 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 
 ### 5.2 Print sheet page
 
-- Route: `panke.gallery/print-sheet` (see §8 for full QR/print-sheet spec).
+- Route: `panke.gallery/print-codes` (see §8 for full QR/print-codes spec).
 - Not intended for visitors — used internally to produce printed labels. Consider gating with Netlify basic-auth/password protection (free feature) since it has no visitor-facing value.
 
 ## 6. Audio file preparation
@@ -104,9 +104,9 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 - **Each QR code encodes the Gatsby page URL** (`https://panke.gallery/guide/03`), **not** the raw Nextcloud file link. This indirection means:
   - Audio files can be replaced/moved/re-encoded in Nextcloud without reprinting any QR code — only the Baserow row's `audio_url` needs updating.
   - The page provides visitor context (title, description, transcript) that a bare file link cannot.
-- All generated SVGs are rendered together on the `/print-sheet` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
+- All generated SVGs are rendered together on the `/print-codes` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
 - A print stylesheet (`@media print`, `@page { size: A4; }`) makes the page paginate correctly onto A4 sheets via the browser's own Print → Save as PDF / print dialog — no PDF-generation library needed.
-- Regenerating labels is just: edit Baserow → rebuild site → reopen `/print-sheet` → print. Always in sync with current data, no manual export step to forget.
+- Regenerating labels is just: edit Baserow → rebuild site → reopen `/print-codes` → print. Always in sync with current data, no manual export step to forget.
 
 ## 9. Privacy & accessibility
 
@@ -121,7 +121,7 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 - [ ] Decide plain `<audio>` vs. AudioGuideKit component adoption (§7).
 - [ ] Confirm Baserow API token/auth approach for build-time fetch (no official Gatsby-Baserow source plugin exists; plan is a custom `sourceNodes` function using Baserow's REST API, ~30 lines).
 - [ ] Decide whether tour order/navigation (next/previous) is needed for v1 or can be added later.
-- [ ] Decide print-sheet access control (basic auth vs. build-only/branch-only).
+- [ ] Decide print-codes access control (basic auth vs. build-only/branch-only).
 - [ ] Confirm target audio bitrate/format with whoever records narration.
 - [ ] Decide whether to auto-add an audioguide link on the matching exhibition page (via `exhibition_slug`) when at least one stop with an `audio_url` exists for that exhibition.
 - [ ] Decide whether to build an audioguide overview page per exhibition (grouping stops by `exhibition_slug`, pulling exhibition title/dates from Contentful).
@@ -134,7 +134,7 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 4. Implement audio player (plain `<audio>` for v1; evaluate AudioGuideKit component later).
 5. Add transcript rendering + basic accessibility pass.
 6. Implement QR generation step in `gatsby-node.js` (`qrcode` package).
-7. Build `/print-sheet` page + print stylesheet.
+7. Build `/print-codes` page + print stylesheet.
 8. Test Nextcloud Range-header behavior; adjust player strategy if needed.
 9. Populate Baserow with real content + Nextcloud audio links for the first exhibition.
 10. Print and place labels; QA end-to-end (scan → page → playback) in the gallery space.
