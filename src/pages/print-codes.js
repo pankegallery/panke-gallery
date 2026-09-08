@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
 
-import Layout from "../components/layout"
+import PrintLayout from '../components/print-layout'
 import PrintSheet from '../components/print-sheet'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
@@ -46,11 +46,11 @@ class PrintSheetPage extends React.Component {
     const title = 'Audioguide — Print Sheet — All'
 
     return (
-      <Layout>
+      <PrintLayout>
         <Helmet title={title} />
 
         <PrintSheet pageTitle={title} sections={sections} />
-      </Layout>
+      </PrintLayout>
     );
   }
 }

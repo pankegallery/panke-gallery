@@ -7,10 +7,14 @@ export const PrintStyles = createGlobalStyle`
       margin: 1.5cm;
     }
 
-    header, footer, nav {
-      display: none !important;
-    }
+
+    
   }
+
+  body{
+    padding: 2vw;
+  }
+
 `;
 
 export const PrintSection = styled.section`
