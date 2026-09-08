@@ -6,13 +6,12 @@ export const PrintStyles = createGlobalStyle`
       size: A4;
       margin: 1.5cm;
     }
-
-
     
   }
 
   body{
     padding: 2vw;
+    width: calc(100% - 4vw);
   }
 
 `;

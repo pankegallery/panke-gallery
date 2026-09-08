@@ -8,7 +8,7 @@ import PrintSheet from '../components/print-sheet'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
-const UNASSIGNED_EXHIBITION_SLUG = 'general'
+const UNASSIGNED_EXHIBITION_SLUG = 'stop'
 
 class PrintSheetPage extends React.Component {
   render() {

@@ -11,7 +11,7 @@ import { HeadSection, Meta } from '../components/content/Content.styles'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
-const UNASSIGNED_EXHIBITION_SLUG = 'general'
+const UNASSIGNED_EXHIBITION_SLUG = 'stop'
 
 const Overview = styled.section`
   max-width: 640px;

@@ -12,8 +12,8 @@ const SITE_URL = process.env.SITE_URL || 'https://www.panke.gallery'
 // dropped. Picked to read plainly in a URL — rename freely, nothing's been
 // printed yet — but keep it in sync with the same constant in
 // src/components/guide-stop-list.js, src/templates/guide-exhibition.js and
-// src/templates/print-codes-exhibition.js if it ever changes.
-const UNASSIGNED_EXHIBITION_SLUG = 'general'
+// src/templates/codes-exhibition.js if it ever changes.
+const UNASSIGNED_EXHIBITION_SLUG = 'stop'
 
 exports.sourceNodes = require('./gatsby/source-baserow.js').sourceNodes
 
@@ -26,7 +26,7 @@ exports.createPages = ({ graphql, actions }) => {
     const edition = path.resolve('./src/templates/edition.js');
     const guideStop = path.resolve('./src/templates/guide-stop.js');
     const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
-    const printCodesExhibition = path.resolve('./src/templates/print-codes-exhibition.js');
+    const codesExhibition = path.resolve('./src/templates/codes-exhibition.js');
     resolve(
       graphql(
         `
@@ -141,7 +141,7 @@ exports.createPages = ({ graphql, actions }) => {
               exhibitionSlug,
               referenceNumber,
               // The actual stored value to query by — an unassigned stop's
-              // AudioguideStop node has exhibitionSlug: "", not "general",
+              // AudioguideStop node has exhibitionSlug: "", not "stop",
               // so the page query can't filter on the bucket name above.
               rawExhibitionSlug,
             },
@@ -178,8 +178,8 @@ exports.createPages = ({ graphql, actions }) => {
           })
 
           createPage({
-            path: `/print-codes/${slug}/`,
-            component: printCodesExhibition,
+            path: `/codes/${slug}/`,
+            component: codesExhibition,
             context,
           })
         })

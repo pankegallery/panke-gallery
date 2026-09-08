@@ -23,7 +23,7 @@ Add a self-guided audioguide to the panke.gallery exhibition site. Requirements:
 | Audio files | Nextcloud | Public share links, pasted into Baserow |
 | Site + player | Gatsby | New page template, generated per stop |
 | Hosting | Netlify | Unchanged — audio never passes through Netlify's bandwidth |
-| QR codes | Generated at Gatsby build time from Baserow data | Rendered on a `/print-codes` page |
+| QR codes | Generated at Gatsby build time from Baserow data | Rendered on a `/codes` page |
 
 Key design decision: **audio bytes are never served through Netlify or Contentful.** Both have free-tier bandwidth ceilings (Netlify: reduced/credit-based free bandwidth as of 2026; Contentful Community: 50GB/month CDN bandwidth with a hard cutoff on delivery API when exceeded) that a popular audioguide could realistically hit. Routing audio through self-hosted Nextcloud removes this risk entirely and keeps the gallery in full control of its own media.
 
@@ -74,7 +74,7 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 
 ### 5.2 Print sheet page
 
-- Route: `panke.gallery/print-codes` (see §8 for full QR/print-codes spec).
+- Route: `panke.gallery/codes` (see §8 for full QR/print-sheet spec).
 - Not intended for visitors — used internally to produce printed labels. Consider gating with Netlify basic-auth/password protection (free feature) since it has no visitor-facing value.
 
 ## 6. Audio file preparation
@@ -104,9 +104,9 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 - **Each QR code encodes the Gatsby page URL** (`https://panke.gallery/guide/spring-2026/03`), **not** the raw Nextcloud file link. This indirection means:
   - Audio files can be replaced/moved/re-encoded in Nextcloud without reprinting any QR code — only the Baserow row's `audio_url` needs updating.
   - The page provides visitor context (title, description, transcript) that a bare file link cannot.
-- All generated SVGs are rendered together on the `/print-codes` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
+- All generated SVGs are rendered together on the `/codes` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
 - A print stylesheet (`@media print`, `@page { size: A4; }`) makes the page paginate correctly onto A4 sheets via the browser's own Print → Save as PDF / print dialog — no PDF-generation library needed.
-- Regenerating labels is just: edit Baserow → rebuild site → reopen `/print-codes` → print. Always in sync with current data, no manual export step to forget.
+- Regenerating labels is just: edit Baserow → rebuild site → reopen `/codes` → print. Always in sync with current data, no manual export step to forget.
 
 ## 9. Privacy & accessibility
 
@@ -121,7 +121,8 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 - [ ] Decide plain `<audio>` vs. AudioGuideKit component adoption (§7).
 - [x] Confirm Baserow API token/auth approach for build-time fetch — custom `sourceNodes` function shipped in [gatsby/source-baserow.js](gatsby/source-baserow.js).
 - [ ] Decide whether tour order/navigation (next/previous) is needed for v1 or can be added later.
-- [ ] Decide print-codes access control (basic auth vs. build-only/branch-only) — and, now that stops are exhibition-scoped, whether `/print-codes` stays one global page or splits into `/print-codes/{exhibition_slug}/` per show.
+- [ ] Decide `/codes` access control (basic auth vs. build-only/branch-only) — still undecided, see AUDIOGUIDE_TASKS.md §3.4 for a pros/cons write-up.
+- [x] Decide whether `/codes` stays one global page or splits per exhibition — resolved to do both: the global page stays, and `/codes/{exhibition_slug}/` pages were added per show.
 - [ ] Confirm target audio bitrate/format with whoever records narration.
 - [x] Decide whether to auto-add an audioguide link on the matching exhibition page — yes, see task breakdown item 3.
 - [x] Decide whether to build an audioguide overview page per exhibition — yes, see task breakdown item 3.
@@ -138,7 +139,7 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 - Implement audio player (plain `<audio>` for v1; evaluate AudioGuideKit component later). *(done)*
 - Add transcript rendering + basic accessibility pass. *(transcript rendering done; accessibility pass outstanding)*
 - Implement QR generation step in `gatsby-node.js` (`qrcode` package). *(done — needs re-pointing at the new URLs from item 3)*
-- Build `/print-codes` page + print stylesheet. *(done)*
+- Build `/codes` page + print stylesheet. *(done)*
 - Test Nextcloud Range-header behavior; adjust player strategy if needed.
 - Populate Baserow with real content + Nextcloud audio links for the first exhibition. *(in progress — first exhibition's rows already exist)*
 - Print and place labels; QA end-to-end (scan → page → playback) in the gallery space.
