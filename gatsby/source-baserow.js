@@ -8,7 +8,7 @@
 //
 // Expected Baserow field names (must match exactly, case-sensitive):
 // Reference Number, Artwork Name, Artist, Description, Audio URL,
-// Exhibition Slug, Transcript, Artwork Image (optional).
+// Exhibition Slug, Transcript, Artwork Image, Language (optional).
 
 const fetch = require('node-fetch')
 
@@ -41,6 +41,7 @@ const FIELDS = {
   exhibitionSlug: 'Exhibition Slug',
   transcript: 'Transcript',
   artworkImage: 'Artwork Image',
+  language: 'Language',
 }
 
 // Baserow file fields come back as an array of attachments; take the first one's URL.
@@ -114,6 +115,10 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
       exhibitionSlug: row[FIELDS.exhibitionSlug] || '',
       transcript: normalizeLineBreaks(row[FIELDS.transcript]) || null,
       artworkImage: firstAttachmentUrl(row[FIELDS.artworkImage]),
+      // Free text, matched exactly (like Exhibition Slug) — the same value
+      // must be typed consistently across rows for the language picker to
+      // group them together.
+      language: String(row[FIELDS.language] || '').trim() || null,
     }
 
     createNode({

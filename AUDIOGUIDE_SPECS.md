@@ -56,7 +56,7 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 | `transcript` | Long text | Recommended | Accessibility — always ship a transcript alongside audio |
 | `duration` | Text | No | Display only, e.g. "4:30" |
 | `room` / `order` | Number/Text | No | For sequential tour ordering, if desired |
-| `language` | Text | No | If multilingual guides are planned |
+| `language` | Text | No | Free text, matched exactly like `exhibition_slug` — same value must be typed consistently across rows. Drives the language picker on the exhibition overview page (see §5.3) once an exhibition has 2+ distinct values; a blank value is treated as language-agnostic and always shown |
 | `artwork_image` | Image | No | Optional artwork image for display |
 
 ## 5. Site structure
@@ -76,6 +76,15 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 
 - Route: `panke.gallery/codes` (see §8 for full QR/print-sheet spec).
 - Not intended for visitors — used internally to produce printed labels. Consider gating with Netlify basic-auth/password protection (free feature) since it has no visitor-facing value.
+
+### 5.3 Language picker (exhibition overview page)
+
+- Only appears when an exhibition's stops carry 2+ distinct `language` values — a single-language (or no-language-data) exhibition shows its stop list directly, no picker step.
+- Shown centered, above the stop list, before anything else on `/guide/{exhibition_slug}/` — one button per distinct language value present among that exhibition's stops.
+- Choosing a language stores it in `localStorage` (key `audioguide-language`, per device, not per exhibition) and immediately shows that exhibition's stop list filtered to that language (stops with no `language` set are treated as language-agnostic and always included).
+- On a later visit — to the same exhibition or a different one — if the stored language matches one of that exhibition's available values, the picker is skipped and the filtered list shows directly.
+- A "change language" control beneath the list clears the current selection and re-shows the picker, without touching the stored value until a new one is chosen.
+- Not yet implemented: a persistent language indicator in the shared guide header (see AUDIOGUIDE_TASKS.md §3.7 for the evaluated proposal) — for now, changing language only happens from within an exhibition's own overview page.
 
 ## 6. Audio file preparation
 

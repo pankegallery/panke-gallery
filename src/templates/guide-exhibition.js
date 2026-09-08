@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
@@ -7,7 +7,9 @@ import Moment from 'moment'
 
 import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
+import LanguagePicker from '../components/language-picker'
 import { HeadSection, Meta } from '../components/content/Content.styles'
+import { getStoredLanguage, setStoredLanguage } from '../utils/audioguide-language'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
@@ -19,41 +21,96 @@ const Overview = styled.section`
   padding: 0 1.25em;
 `
 
-class GuideExhibitionOverview extends React.Component {
-  render() {
+const ChangeLanguage = styled.button`
+  display: block;
+  margin: 0 auto 1em;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: ${props => props.theme.colors.theme.grey};
+  text-decoration: underline;
+  font-size: ${props => props.theme.fontSizes.small};
+  cursor: pointer;
+`
 
-    const exhibition = get(this.props, 'data.contentfulExhibition')
-    const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
-    const stops = get(this.props, 'data.allAudioguideStop.edges', [])
+const GuideExhibitionOverview = props => {
+  const exhibition = get(props, 'data.contentfulExhibition')
+  const exhibitionSlug = get(props, 'pageContext.exhibitionSlug')
+  const stops = get(props, 'data.allAudioguideStop.edges', [])
 
-    const heading = exhibition
-      ? exhibition.title
-      : exhibitionSlug === UNASSIGNED_EXHIBITION_SLUG
-        ? 'Other stops'
-        : exhibitionSlug
+  // Stops with no language set are treated as language-agnostic and always
+  // shown, regardless of which language is picked.
+  const languages = useMemo(
+    () => Array.from(new Set(stops.map(({ node }) => node.language).filter(Boolean))).sort(),
+    [stops]
+  )
+  const needsLanguagePicker = languages.length > 1
 
-    let dateDisplayed
-    if (exhibition) {
-      dateDisplayed = exhibition.dateTbc
-        ? 'Date to be confirmed'
-        : Moment(exhibition.startDate).format('DD MMMM') + ' – ' + Moment(exhibition.endDate).format('DD MMMM YYYY')
-    }
+  const [language, setLanguage] = useState(null)
+  const [checkedStorage, setCheckedStorage] = useState(false)
 
-    return (
-      <GuideLayout showOverviewLink={false}>
-        <Helmet title={`${heading} — Audioguide`} />
+  useEffect(() => {
+    const stored = getStoredLanguage()
+    if (stored && languages.includes(stored)) setLanguage(stored)
+    setCheckedStorage(true)
+    // Only re-check on mount — languages is derived from the page's own
+    // (static) data and won't meaningfully change after that.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-        <Overview>
-          <HeadSection>
-            <h1>{heading}</h1>
-            {exhibition && <Meta>{dateDisplayed}</Meta>}
-          </HeadSection>
-        </Overview>
-
-        <GuideStopList stops={stops} />
-      </GuideLayout>
-    )
+  const chooseLanguage = selected => {
+    setStoredLanguage(selected)
+    setLanguage(selected)
   }
+
+  const visibleStops = needsLanguagePicker
+    ? stops.filter(({ node }) => !node.language || node.language === language)
+    : stops
+
+  const heading = exhibition
+    ? exhibition.title
+    : exhibitionSlug === UNASSIGNED_EXHIBITION_SLUG
+      ? 'Other stops'
+      : exhibitionSlug
+
+  let dateDisplayed
+  if (exhibition) {
+    dateDisplayed = exhibition.dateTbc
+      ? 'Date to be confirmed'
+      : Moment(exhibition.startDate).format('DD MMMM') + ' – ' + Moment(exhibition.endDate).format('DD MMMM YYYY')
+  }
+
+  // Gate both the picker and the list behind checkedStorage so a returning
+  // visitor with a remembered language doesn't see the picker flash before
+  // localStorage is read (client-only — there's nothing to check at build time).
+  const showPicker = needsLanguagePicker && checkedStorage && !language
+  const showStops = !needsLanguagePicker || (checkedStorage && language)
+
+  return (
+    <GuideLayout showOverviewLink={false}>
+      <Helmet title={`${heading} — Audioguide`} />
+
+      <Overview>
+        <HeadSection>
+          <h1>{heading}</h1>
+          {exhibition && <Meta>{dateDisplayed}</Meta>}
+        </HeadSection>
+      </Overview>
+
+      {showPicker && <LanguagePicker languages={languages} onSelect={chooseLanguage} />}
+
+      {showStops && (
+        <>
+          {needsLanguagePicker && (
+            <ChangeLanguage type="button" onClick={() => setLanguage(null)}>
+              {language} · change language
+            </ChangeLanguage>
+          )}
+          <GuideStopList stops={visibleStops} />
+        </>
+      )}
+    </GuideLayout>
+  )
 }
 
 export default GuideExhibitionOverview;
@@ -83,6 +140,7 @@ export const pageQuery = graphql`
           exhibitionSlug
           artworkName
           artist
+          language
         }
       }
     }

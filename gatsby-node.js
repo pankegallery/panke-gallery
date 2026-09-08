@@ -231,6 +231,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       exhibitionSlug: String
       transcript: String
       artworkImage: String
+      language: String
       pageUrl: String
       qrCodeSvg: String
     }

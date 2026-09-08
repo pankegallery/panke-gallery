@@ -108,5 +108,29 @@ Leaning recommendation if/when this gets decided: Basic Auth (real access contro
 
 ### 3.5 Other ideas
 
-- [ ] Multilingual support if/when `language` rows start being used — likely just a filter on the overview page plus a language switcher on stop pages, no data model change needed.
 - [ ] Usage stats, only if requested: self-hosted/privacy-respecting option (Plausible or GoatCounter), scoped to `/guide/*` and `/exhibition/*` pages only — no tracking scripts anywhere else per SPECS §9.
+
+### 3.6 Multilingual support — language picker on the exhibition overview
+
+- [x] `language` sourced from Baserow (`Language` column, optional, free text matched exactly like `exhibition_slug`) — [gatsby/source-baserow.js](gatsby/source-baserow.js) `FIELDS` map + `AudioguideStop.language` in `gatsby-node.js`'s schema.
+- [x] `src/templates/guide-exhibition.js` computes the distinct `language` values among that exhibition's stops; if there are 2+, a centered `LanguagePicker` ([src/components/language-picker.js](src/components/language-picker.js)) shows before the stop list instead of it. A single (or no) language value skips the picker entirely.
+- [x] Choosing a language stores it via a new shared helper, [src/utils/audioguide-language.js](src/utils/audioguide-language.js) (`getStoredLanguage`/`setStoredLanguage`/`clearStoredLanguage`, `localStorage` key `audioguide-language`) — deliberately **not** scoped per exhibition, so picking "English" on one show also applies automatically to any other exhibition that offers "English", per the ask. SSR-safe (`typeof window` guard) and wrapped in try/catch (private browsing can throw on `localStorage` access).
+- [x] Stops with no `language` value are always shown regardless of the selected language (treated as language-agnostic), rather than being hidden by a language filter they don't participate in.
+- [x] A "change language" text control below the list clears the in-memory selection (not the stored value) so the picker re-shows; picking again overwrites the stored value.
+- [ ] Not yet verified against a real `gatsby build` with live Baserow data carrying actual `Language` values (same standing caveat as the rest of Phase 3).
+
+### 3.7 Persistent language indicator in the guide header — proposed, not built
+
+Suggestion evaluated: shrink the logo in `GuideLayout`'s header and show the current language centered there instead, clickable to reopen the picker — available from any guide page (overview, exhibition, or stop page), not just from within an exhibition's own overview.
+
+**Assessment:** worth doing, but not as a trivial prop addition — `GuideLayout` is currently a dumb, data-agnostic shell (it only knows `showOverviewLink`/`overviewHref`, no audioguide data). Making it language-aware runs into a real design question: *which* exhibition's language list does the header refer to?
+- On a stop page or that exhibition's own overview page, the answer is obvious — that exhibition's language set.
+- On the global `/guide/` overview, which spans every exhibition (plus the `stop` bucket), there's no single "current exhibition" — showing a switcher there would need either the union of every exhibition's languages (confusing: not all shown to be relevant to whichever exhibition the visitor picks next) or just a plain read-only label with no active switching (simplest).
+
+**Recommended approach if this gets built:**
+1. Keep `GuideLayout` itself data-agnostic — add a small optional header slot (e.g. a `headerCenter` node prop) rather than teaching it about languages directly, consistent with how it already just takes `overviewHref` rather than knowing about exhibitions.
+2. On `guide-exhibition.js` and `guide-stop.js` (which would need its query extended to also fetch sibling stops' `language` values, since today it only queries its own stop), read the stored language via the existing `src/utils/audioguide-language.js` helper and pass a small `<LanguageLabel>` into that slot — click clears the stored value (`clearStoredLanguage()`) and, on the exhibition page, re-shows the picker in place; on a stop page, most simply navigates back to `/guide/{exhibitionSlug}/` where the picker can re-show cleanly (a stop page mid-scroll is an awkward place to re-render a full picker inline).
+3. On the global `/guide/` overview and the `stop` bucket, keep it simple: show the stored language (if any) as a small label with no active re-pick affordance there — re-selecting only happens from within a specific exhibition's page, where a real language list exists to choose from.
+4. Shrinking the logo is a pure CSS change to `Logotype`/`GuideHeader`, independent of the above — low risk either way.
+
+Not implemented pending confirmation this approach (in particular point 3 — a read-only label on the global overview) matches what's actually wanted, since it's a visible compromise on the original "click to retrigger… anywhere" idea rather than a full implementation of it everywhere.
