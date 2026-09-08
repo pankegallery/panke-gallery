@@ -48,6 +48,22 @@ function firstAttachmentUrl(value) {
   return (Array.isArray(value) && value.length > 0 && value[0].url) || null
 }
 
+// Long-text fields pasted from another source (a word processor, a PDF)
+// sometimes carry a hard line break in the middle of a sentence rather than
+// only at paragraph boundaries, which then renders as a stray line break
+// wherever the description/transcript is shown with `white-space: pre-wrap`.
+// Collapse single line breaks into spaces but keep real paragraph breaks
+// (two or more newlines in a row) intact.
+function normalizeLineBreaks(text) {
+  if (!text) return text
+  return String(text)
+    .replace(/\r\n?/g, '\n')
+    .split(/\n{2,}/)
+    .map(paragraph => paragraph.replace(/\n/g, ' ').replace(/[ \t]+/g, ' ').trim())
+    .join('\n\n')
+    .trim()
+}
+
 exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions
 
@@ -93,10 +109,10 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
       referenceNumber,
       artworkName: row[FIELDS.artworkName] || '',
       artist: row[FIELDS.artist] || '',
-      description: row[FIELDS.description] || '',
+      description: normalizeLineBreaks(row[FIELDS.description]) || '',
       audioUrl: toDirectDownloadUrl(row[FIELDS.audioUrl]),
       exhibitionSlug: row[FIELDS.exhibitionSlug] || '',
-      transcript: row[FIELDS.transcript] || null,
+      transcript: normalizeLineBreaks(row[FIELDS.transcript]) || null,
       artworkImage: firstAttachmentUrl(row[FIELDS.artworkImage]),
     }
 

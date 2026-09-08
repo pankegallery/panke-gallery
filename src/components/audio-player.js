@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPause, faChevronUp, faChevronDown, faFileLines } from '@fortawesome/free-solid-svg-icons';
 
 import {
   Bar,
@@ -16,6 +16,8 @@ import {
   Scrubber,
   TimeRow,
   TranscriptSection,
+  TranscriptToggle,
+  ErrorNote,
 } from './audio-player/AudioPlayer.styles';
 
 const formatTime = seconds => {
@@ -28,9 +30,11 @@ const formatTime = seconds => {
 const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) => {
   const audioRef = useRef(null);
   const [expanded, setExpanded] = useState(false);
+  const [showTranscript, setShowTranscript] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playbackError, setPlaybackError] = useState(false);
 
   useEffect(() => {
     if (!('mediaSession' in navigator)) return;
@@ -43,10 +47,22 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
 
   const togglePlay = e => {
     e.stopPropagation();
+    if (playbackError) return;
     const audio = audioRef.current;
     if (!audio) return;
-    if (audio.paused) audio.play();
-    else audio.pause();
+    if (audio.paused) {
+      // audio.play() rejects (rather than throwing) when the src is missing,
+      // unreachable, or an unsupported format — catch it so a bad Baserow
+      // "Audio URL" doesn't surface as an unhandled runtime error.
+      audio.play().catch(() => setPlaybackError(true));
+    } else {
+      audio.pause();
+    }
+  };
+
+  const handleAudioError = () => {
+    console.warn(`Audioguide: failed to load audio for "${title}" (${audioUrl})`);
+    setPlaybackError(true);
   };
 
   const handleSeek = e => {
@@ -70,6 +86,7 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
         onEnded={() => setIsPlaying(false)}
         onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
         onLoadedMetadata={e => setDuration(e.target.duration)}
+        onError={handleAudioError}
       />
 
       <Bar onClick={() => setExpanded(true)}>
@@ -80,6 +97,7 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
           <PlayButton
             type="button"
             onClick={togglePlay}
+            disabled={playbackError}
             $isPlaying={isPlaying}
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
@@ -87,7 +105,7 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
           </PlayButton>
           <NowPlaying>
             <h3>{title}</h3>
-            {artist && <p>{artist}</p>}
+            {playbackError ? <p>Audio unavailable</p> : artist && <p>{artist}</p>}
           </NowPlaying>
           <ExpandButton type="button" aria-label="Expand player">
             <FontAwesomeIcon icon={faChevronUp} />
@@ -111,6 +129,7 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
             <PlayButton
               type="button"
               onClick={togglePlay}
+              disabled={playbackError}
               $isPlaying={isPlaying}
               $size="72px"
               $iconSize="1.4em"
@@ -120,23 +139,41 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
               <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
             </PlayButton>
 
-            <Scrubber
-              type="range"
-              min={0}
-              max={duration || 0}
-              value={currentTime}
-              onChange={handleSeek}
-            />
-            <TimeRow>
-              <span>{formatTime(currentTime)}</span>
-              <span>{formatTime(duration)}</span>
-            </TimeRow>
+            {playbackError ? (
+              <ErrorNote>Audio for this stop isn't available right now.</ErrorNote>
+            ) : (
+              <>
+                <Scrubber
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  value={currentTime}
+                  onChange={handleSeek}
+                />
+                <TimeRow>
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </TimeRow>
+              </>
+            )}
 
             {transcript && (
-              <TranscriptSection>
-                <h3>Transcript</h3>
-                <p>{transcript}</p>
-              </TranscriptSection>
+              <>
+                <TranscriptToggle
+                  type="button"
+                  onClick={() => setShowTranscript(v => !v)}
+                  aria-expanded={showTranscript}
+                >
+                  <FontAwesomeIcon icon={faFileLines} />
+                  {showTranscript ? 'Hide transcript' : 'Read transcript'}
+                </TranscriptToggle>
+
+                {showTranscript && (
+                  <TranscriptSection>
+                    <p>{transcript}</p>
+                  </TranscriptSection>
+                )}
+              </>
             )}
           </OverlayBody>
         </Overlay>

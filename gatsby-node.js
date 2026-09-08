@@ -3,8 +3,8 @@ const path = require('path')
 
 // The site is built without `--prefix-paths` (see the `build` script in
 // package.json), so the configured `pathPrefix` in gatsby-config.js is not
-// applied to production URLs — pages live at panke.gallery/guide/03, not
-// panke.gallery/panke-gallery/guide/03. QR codes must encode the former.
+// applied to production URLs — pages live at panke.gallery/guide/{slug}/03,
+// not panke.gallery/panke-gallery/guide/{slug}/03. QR codes must encode the former.
 const SITE_URL = process.env.SITE_URL || 'https://www.panke.gallery'
 
 exports.sourceNodes = require('./gatsby/source-baserow.js').sourceNodes
@@ -17,6 +17,7 @@ exports.createPages = ({ graphql, actions }) => {
     const event = path.resolve('./src/templates/event.js');
     const edition = path.resolve('./src/templates/edition.js');
     const guideStop = path.resolve('./src/templates/guide-stop.js');
+    const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
     resolve(
       graphql(
         `
@@ -46,6 +47,7 @@ exports.createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   referenceNumber
+                  exhibitionSlug
                 }
               }
             }
@@ -91,12 +93,61 @@ exports.createPages = ({ graphql, actions }) => {
           })
         })
 
+        // referenceNumber is only unique per exhibition (it's the number on the
+        // physical wall label, restarting for each show), so pages are keyed
+        // by (exhibitionSlug, referenceNumber) — not by referenceNumber alone.
+        const seenGuideStopKeys = new Set()
+
         guideStops.forEach((entry, index) => {
+          const { referenceNumber, exhibitionSlug } = entry.node
+
+          if (!exhibitionSlug) {
+            console.warn(
+              `Audioguide: skipping guide page for reference number "${referenceNumber}" — missing exhibitionSlug.`
+            )
+            return
+          }
+
+          const key = `${exhibitionSlug}/${referenceNumber}`
+
+          if (seenGuideStopKeys.has(key)) {
+            console.warn(
+              `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — only the first matching row got a page.`
+            )
+            return
+          }
+
+          seenGuideStopKeys.add(key)
+
           createPage({
-            path: `/guide/${entry.node.referenceNumber}/`,
+            path: `/guide/${exhibitionSlug}/${referenceNumber}/`,
             component: guideStop,
             context: {
-              referenceNumber: entry.node.referenceNumber
+              exhibitionSlug,
+              referenceNumber,
+            },
+          })
+        })
+
+        // One overview page per exhibition that has at least one guide stop,
+        // pulling the exhibition's own title/dates in from Contentful.
+        const contentfulExhibitionSlugs = new Set(exhibitions.map(entry => entry.node.slug))
+        const guideExhibitionSlugs = new Set(
+          guideStops.map(entry => entry.node.exhibitionSlug).filter(Boolean)
+        )
+
+        guideExhibitionSlugs.forEach(slug => {
+          if (!contentfulExhibitionSlugs.has(slug)) {
+            console.warn(
+              `Audioguide: exhibitionSlug "${slug}" doesn't match any Contentful Exhibition slug — /guide/${slug}/ will build but won't show the exhibition's title/dates. Check it's an exact copy of that Exhibition's slug field.`
+            )
+          }
+
+          createPage({
+            path: `/guide/${slug}/`,
+            component: guideExhibition,
+            context: {
+              exhibitionSlug: slug,
             },
           })
         })
@@ -160,14 +211,18 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers({
     AudioguideStop: {
       pageUrl: {
-        resolve: source => `${SITE_URL}/guide/${source.referenceNumber}/`,
+        resolve: source =>
+          `${SITE_URL}/guide/${source.exhibitionSlug}/${source.referenceNumber}/`,
       },
       qrCodeSvg: {
         resolve: source =>
-          QRCode.toString(`${SITE_URL}/guide/${source.referenceNumber}/`, {
-            type: 'svg',
-            margin: 1,
-          }),
+          QRCode.toString(
+            `${SITE_URL}/guide/${source.exhibitionSlug}/${source.referenceNumber}/`,
+            {
+              type: 'svg',
+              margin: 1,
+            }
+          ),
       },
     },
   })

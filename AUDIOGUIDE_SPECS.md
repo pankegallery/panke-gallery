@@ -47,7 +47,7 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `reference_number` | Text/Number | Yes | Stable ID, used in URL path and printed on labels (e.g. `03`) |
+| `reference_number` | Text/Number | Yes | Stable ID per exhibition, printed on labels (e.g. `03`); combined with `exhibition_slug` in the URL path since numbering restarts per exhibition (see §5.1) |
 | `artwork_name` | Text | Yes | |
 | `artist` | Text | No | |
 | `description` | Long text | Yes | Shown on the stop page |
@@ -65,7 +65,7 @@ No git, no code, no CMS-specific training beyond "add a row to this table" is re
 
 - New Gatsby page template: `src/templates/guide-stop.js`
 - Generated once per Baserow row via `createPages` in `gatsby-node.js` (standard Gatsby CMS-to-pages pattern, same shape as how Contentful pages are already generated).
-- Route: `panke.gallery/guide/{reference_number}` (e.g. `/guide/03`) — **not** a slugified title, so the URL and printed QR code stay stable even if the artwork name/description is edited later.
+- Route: `panke.gallery/guide/{exhibition_slug}/{reference_number}` (e.g. `/guide/spring-2026/03`) — **not** a slugified title, so the URL and printed QR code stay stable even if the artwork name/description is edited later. Reference numbers restart per exhibition (they're printed on physical wall labels per show), so they're only unique combined with `exhibition_slug`, not globally — an earlier global `/guide/{reference_number}` scheme collided as soon as a second exhibition reused `01`.
 - Page contents:
   - Artwork name, artist, description
   - `<audio>` element (or richer player component, see §7), `src` = the Nextcloud `audio_url`
@@ -101,7 +101,7 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 
 - Library: `qrcode` (npm, open source), generating SVG strings directly — no external QR-generator service.
 - Generated at build time in `gatsby-node.js`, looping over the same Baserow rows used to create the `/guide/{reference_number}` pages.
-- **Each QR code encodes the Gatsby page URL** (`https://panke.gallery/guide/03`), **not** the raw Nextcloud file link. This indirection means:
+- **Each QR code encodes the Gatsby page URL** (`https://panke.gallery/guide/spring-2026/03`), **not** the raw Nextcloud file link. This indirection means:
   - Audio files can be replaced/moved/re-encoded in Nextcloud without reprinting any QR code — only the Baserow row's `audio_url` needs updating.
   - The page provides visitor context (title, description, transcript) that a bare file link cannot.
 - All generated SVGs are rendered together on the `/print-codes` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
@@ -119,22 +119,26 @@ Two viable approaches — decide based on desired feature set vs. build effort:
 
 - [ ] Confirm Nextcloud Range-header support on current instance/version (§7).
 - [ ] Decide plain `<audio>` vs. AudioGuideKit component adoption (§7).
-- [ ] Confirm Baserow API token/auth approach for build-time fetch (no official Gatsby-Baserow source plugin exists; plan is a custom `sourceNodes` function using Baserow's REST API, ~30 lines).
+- [x] Confirm Baserow API token/auth approach for build-time fetch — custom `sourceNodes` function shipped in [gatsby/source-baserow.js](gatsby/source-baserow.js).
 - [ ] Decide whether tour order/navigation (next/previous) is needed for v1 or can be added later.
-- [ ] Decide print-codes access control (basic auth vs. build-only/branch-only).
+- [ ] Decide print-codes access control (basic auth vs. build-only/branch-only) — and, now that stops are exhibition-scoped, whether `/print-codes` stays one global page or splits into `/print-codes/{exhibition_slug}/` per show.
 - [ ] Confirm target audio bitrate/format with whoever records narration.
-- [ ] Decide whether to auto-add an audioguide link on the matching exhibition page (via `exhibition_slug`) when at least one stop with an `audio_url` exists for that exhibition.
-- [ ] Decide whether to build an audioguide overview page per exhibition (grouping stops by `exhibition_slug`, pulling exhibition title/dates from Contentful).
+- [x] Decide whether to auto-add an audioguide link on the matching exhibition page — yes, see task breakdown item 3.
+- [x] Decide whether to build an audioguide overview page per exhibition — yes, see task breakdown item 3.
 
 ## 11. Suggested task breakdown
 
-1. Create Baserow "Audioguide" table with schema from §4.
-2. Write custom Gatsby source function to fetch Baserow rows at build time.
-3. Build `src/templates/guide-stop.js` page template + `createPages` wiring.
-4. Implement audio player (plain `<audio>` for v1; evaluate AudioGuideKit component later).
-5. Add transcript rendering + basic accessibility pass.
-6. Implement QR generation step in `gatsby-node.js` (`qrcode` package).
-7. Build `/print-codes` page + print stylesheet.
-8. Test Nextcloud Range-header behavior; adjust player strategy if needed.
-9. Populate Baserow with real content + Nextcloud audio links for the first exhibition.
-10. Print and place labels; QA end-to-end (scan → page → playback) in the gallery space.
+1. Create Baserow "Audioguide" table with schema from §4. *(done)*
+2. Write custom Gatsby source function to fetch Baserow rows at build time. *(done)*
+3. **Scope stops by exhibition**: restructure stop URLs (and their QR codes) from the global `/guide/{reference_number}/` to `/guide/{exhibition_slug}/{reference_number}/` — reference numbers only restart per exhibition, not globally, and a real duplicate (two `01` rows in different exhibitions) has already turned up in the Baserow table. Add a build-time warning for rows missing `exhibition_slug` and for any remaining `(exhibition_slug, reference_number)` duplicates. Add an exhibition-scoped overview page (`/guide/{exhibition_slug}/`) and an auto-linked "Listen to the audioguide" button on the matching `exhibition.js` page.
+
+### Later
+
+- Build `src/templates/guide-stop.js` page template + `createPages` wiring. *(done — shipped with the old global URL scheme; needs the path/query update from item 3)*
+- Implement audio player (plain `<audio>` for v1; evaluate AudioGuideKit component later). *(done)*
+- Add transcript rendering + basic accessibility pass. *(transcript rendering done; accessibility pass outstanding)*
+- Implement QR generation step in `gatsby-node.js` (`qrcode` package). *(done — needs re-pointing at the new URLs from item 3)*
+- Build `/print-codes` page + print stylesheet. *(done)*
+- Test Nextcloud Range-header behavior; adjust player strategy if needed.
+- Populate Baserow with real content + Nextcloud audio links for the first exhibition. *(in progress — first exhibition's rows already exist)*
+- Print and place labels; QA end-to-end (scan → page → playback) in the gallery space.

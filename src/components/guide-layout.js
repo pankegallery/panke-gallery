@@ -11,7 +11,7 @@ import { GuideShell, GuideHeader, GuideMain, OverviewLink, DashboardIcon } from 
 // A deliberately minimal shell for the audioguide pages — no navigation, no
 // footer, just the wordmark. The guide is meant to be used fullscreen on a
 // phone while walking through the gallery, not as a page within the main site.
-const GuideLayout = ({ children, showOverviewLink = true }) => (
+const GuideLayout = ({ children, showOverviewLink = true, overviewHref = '/guide/' }) => (
   <StyledThemeProvider theme={theme}>
     <GlobalStyles />
     <Helmet>
@@ -29,7 +29,7 @@ const GuideLayout = ({ children, showOverviewLink = true }) => (
           <Logotype>panke.gallery</Logotype>
         </a>
         {showOverviewLink && (
-          <OverviewLink as={Link} to="/guide/" title="All audioguide stops" aria-label="All audioguide stops">
+          <OverviewLink as={Link} to={overviewHref} title="All audioguide stops" aria-label="All audioguide stops">
             <DashboardIcon>
               <span />
               <span />

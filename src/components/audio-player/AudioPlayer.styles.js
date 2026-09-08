@@ -75,6 +75,16 @@ export const PlayButton = styled.button`
     /* optical centering: the play glyph isn't visually centered in its box */
     margin-left: ${props => (props.$isPlaying ? '0' : '2px')};
   }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+`;
+
+export const ErrorNote = styled.p`
+  color: ${props => props.theme.colors.theme.grey};
+  font-size: ${props => props.theme.fontSizes.small};
 `;
 
 export const ExpandButton = styled.button`
@@ -160,17 +170,28 @@ export const TimeRow = styled.div`
 
 export const TranscriptSection = styled.div`
   text-align: left;
-  margin-top: 2em;
-
-  h3 {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.medium};
-    margin-bottom: 0.5em;
-  }
+  margin-top: 1em;
 
   p {
     white-space: pre-wrap;
+  }
+`;
+
+export const TranscriptToggle = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  margin: 1.5em auto 0;
+  padding: 0.6em 1.1em;
+  border: 1px solid ${props => props.theme.colors.theme.black};
+  border-radius: 999px;
+  background: none;
+  color: ${props => props.theme.colors.theme.black};
+  font-size: ${props => props.theme.fontSizes.small};
+  cursor: pointer;
+
+  svg {
+    font-size: 1em;
   }
 `;

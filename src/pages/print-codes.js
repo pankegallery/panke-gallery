@@ -75,10 +75,11 @@ class PrintSheet extends React.Component {
 
           <QrGrid>
             {stops.map(({ node }) => (
-              <QrCard key={node.referenceNumber}>
+              <QrCard key={`${node.exhibitionSlug}-${node.referenceNumber}`}>
                 <div dangerouslySetInnerHTML={{ __html: node.qrCodeSvg }} />
                 <h3>{node.referenceNumber}</h3>
                 <p>{node.artworkName}</p>
+                <p>{node.exhibitionSlug}</p>
               </QrCard>
             ))}
           </QrGrid>
@@ -104,6 +105,7 @@ export const pageQuery = graphql`
       edges {
         node {
           referenceNumber
+          exhibitionSlug
           artworkName
           qrCodeSvg
         }
