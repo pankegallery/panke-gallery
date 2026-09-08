@@ -13,7 +13,19 @@ export const StopItem = styled.li`
     display: flex;
     align-items: center;
     gap: 1em;
-    padding: 1.1em 0;
+    margin: 0 -1.25em;
+    padding: 1.1em 1.25em;
+    transition: background-color 0.15s ease;
+
+    @media (hover: hover) {
+      &:hover {
+        background: ${props => props.theme.colors.theme.lightgrey};
+      }
+    }
+
+    &:active {
+      background: ${props => props.theme.colors.theme.lightgrey};
+    }
   }
 `
 

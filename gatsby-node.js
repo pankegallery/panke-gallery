@@ -57,6 +57,7 @@ exports.createPages = ({ graphql, actions }) => {
                 node {
                   referenceNumber
                   exhibitionSlug
+                  language
                 }
               }
             }
@@ -103,36 +104,48 @@ exports.createPages = ({ graphql, actions }) => {
         })
 
         // referenceNumber is only unique per exhibition (it's the number on the
-        // physical wall label, restarting for each show), so pages are keyed
-        // by (exhibitionSlug, referenceNumber) — not by referenceNumber alone.
-        // Stops with no exhibitionSlug are filed under UNASSIGNED_EXHIBITION_SLUG
-        // instead of being dropped, so they still get a working page.
-        const seenGuideStopKeys = new Set()
+        // physical wall label, restarting for each show), so stops are grouped
+        // into pages by (exhibitionSlug, referenceNumber) — not by
+        // referenceNumber alone. Stops with no exhibitionSlug are filed under
+        // UNASSIGNED_EXHIBITION_SLUG instead of being dropped.
+        //
+        // One physical position can legitimately have more than one row — a
+        // language variant of the same artwork, sharing the same reference
+        // number and QR code/page. `guide-stop.js` queries all rows at that
+        // position itself and picks the right one client-side; this loop only
+        // needs to create the page once per position, and to tell a genuine
+        // data-entry duplicate (rows that aren't distinguishable by language)
+        // apart from an intentional multi-language position.
+        const positions = new Map()
 
-        guideStops.forEach((entry, index) => {
-          const { referenceNumber } = entry.node
+        guideStops.forEach(entry => {
+          const { referenceNumber, language } = entry.node
           const rawExhibitionSlug = entry.node.exhibitionSlug
           const hasExhibition = Boolean(rawExhibitionSlug)
           const exhibitionSlug = rawExhibitionSlug || UNASSIGNED_EXHIBITION_SLUG
 
+          const key = `${exhibitionSlug}/${referenceNumber}`
+
+          if (!positions.has(key)) {
+            positions.set(key, { exhibitionSlug, rawExhibitionSlug, referenceNumber, hasExhibition, languages: [] })
+          }
+          positions.get(key).languages.push(language || '')
+        })
+
+        positions.forEach(({ exhibitionSlug, rawExhibitionSlug, referenceNumber, hasExhibition, languages }) => {
           if (!hasExhibition) {
             console.warn(
               `Audioguide: reference number "${referenceNumber}" has no exhibitionSlug — filed under /guide/${UNASSIGNED_EXHIBITION_SLUG}/.`
             )
           }
 
-          const key = `${exhibitionSlug}/${referenceNumber}`
-
-          if (seenGuideStopKeys.has(key)) {
+          if (languages.length > 1 && new Set(languages).size !== languages.length) {
             console.warn(
               hasExhibition
-                ? `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — only the first matching row got a page.`
-                : `Audioguide: duplicate reference number "${referenceNumber}" among stops with no exhibitionSlug — only the first matching row got a page.`
+                ? `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — rows aren't distinguishable by language, only one will be shown.`
+                : `Audioguide: duplicate reference number "${referenceNumber}" among stops with no exhibitionSlug — rows aren't distinguishable by language, only one will be shown.`
             )
-            return
           }
-
-          seenGuideStopKeys.add(key)
 
           createPage({
             path: `/guide/${exhibitionSlug}/${referenceNumber}/`,

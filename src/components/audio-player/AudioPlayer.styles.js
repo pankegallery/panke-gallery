@@ -69,11 +69,22 @@ export const PlayButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: opacity 0.15s ease;
 
   svg {
     font-size: ${props => props.$iconSize || '1em'};
     /* optical centering: the play glyph isn't visually centered in its box */
     margin-left: ${props => (props.$isPlaying ? '0' : '2px')};
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+    }
+  }
+
+  &:active:not(:disabled) {
+    opacity: 0.7;
   }
 
   &:disabled {
@@ -90,13 +101,25 @@ export const ErrorNote = styled.p`
 export const ExpandButton = styled.button`
   flex: 0 0 auto;
   border: 0;
+  border-radius: 50%;
   background: none;
   color: ${props => props.theme.colors.theme.black};
   cursor: pointer;
   padding: 0.5em;
+  transition: background-color 0.15s ease;
 
   svg {
     font-size: 1.2em;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: ${props => props.theme.colors.theme.lightgrey};
+    }
+  }
+
+  &:active {
+    background: ${props => props.theme.colors.theme.lightgrey};
   }
 `;
 
@@ -190,8 +213,19 @@ export const TranscriptToggle = styled.button`
   color: ${props => props.theme.colors.theme.black};
   font-size: ${props => props.theme.fontSizes.small};
   cursor: pointer;
+  transition: background-color 0.15s ease;
 
   svg {
     font-size: 1em;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: ${props => props.theme.colors.theme.lightgrey};
+    }
+  }
+
+  &:active {
+    background: ${props => props.theme.colors.theme.lightgrey};
   }
 `;

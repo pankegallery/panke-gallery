@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
@@ -6,7 +6,10 @@ import styled from 'styled-components'
 
 import GuideLayout from '../components/guide-layout'
 import AudioPlayer from '../components/audio-player'
+import LanguagePicker from '../components/language-picker'
+import LanguageLabel from '../components/language-label'
 import { HeadSection, Meta } from '../components/content/Content.styles'
+import { getStoredLanguage, setStoredLanguage } from '../utils/audioguide-language'
 
 const Overview = styled.section`
   max-width: 640px;
@@ -34,40 +37,92 @@ const StopNumber = styled.p`
   font-weight: ${props => props.theme.fontWeights.medium};
 `
 
-class GuideStopTemplate extends React.Component {
-  render() {
+const GuideStopTemplate = props => {
+  const exhibitionSlug = get(props, 'pageContext.exhibitionSlug')
+  // A wall position can be more than one row — language variants of the same
+  // artwork, sharing this same reference number, page, and QR code. A QR scan
+  // always lands here directly (it's the only entry point some visitors use),
+  // so the language choice has to be made on this page too, not just from
+  // the exhibition overview.
+  const rows = get(props, 'data.allAudioguideStop.edges', []).map(({ node }) => node)
 
-    const stop = get(this.props, 'data.audioguideStop')
-    const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
+  const languages = useMemo(
+    () => Array.from(new Set(rows.map(row => row.language).filter(Boolean))).sort(),
+    [rows]
+  )
+  const needsLanguagePicker = languages.length > 1
 
+  const [language, setLanguage] = useState(null)
+  const [checkedStorage, setCheckedStorage] = useState(false)
+
+  useEffect(() => {
+    if (needsLanguagePicker) {
+      const stored = getStoredLanguage()
+      if (stored && languages.includes(stored)) setLanguage(stored)
+    }
+    setCheckedStorage(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const chooseLanguage = selected => {
+    setStoredLanguage(selected)
+    setLanguage(selected)
+  }
+
+  // Which row to actually render: the one matching the chosen language, or —
+  // if this position mixes a language-agnostic row in with language variants
+  // (e.g. a silent/visual-only piece) — that row as a fallback.
+  const stop = needsLanguagePicker
+    ? rows.find(row => row.language === language) || rows.find(row => !row.language)
+    : rows[0]
+
+  const showPicker = needsLanguagePicker && checkedStorage && !language
+  const showStop = !needsLanguagePicker || (checkedStorage && language)
+
+  if (showPicker) {
     return (
       <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`}>
-        <Helmet title={`${stop.artworkName} — Audioguide`} />
-
-        <Overview>
-          <HeadSection>
-            <StopNumber>{stop.referenceNumber}</StopNumber>
-            <h1>{stop.artworkName}</h1>
-            {stop.artist && <Meta>{stop.artist}</Meta>}
-          </HeadSection>
-
-          {stop.artworkImage && (
-            <ArtworkImage src={stop.artworkImage} alt={stop.artworkName} />
-          )}
-
-          <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
-        </Overview>
-
-        <AudioPlayer
-          audioUrl={stop.audioUrl}
-          title={stop.artworkName}
-          artist={stop.artist}
-          transcript={stop.transcript}
-          referenceNumber={stop.referenceNumber}
-        />
+        <LanguagePicker languages={languages} onSelect={chooseLanguage} />
       </GuideLayout>
     )
   }
+
+  if (!showStop || !stop) return null
+
+  return (
+    <GuideLayout
+      overviewHref={`/guide/${exhibitionSlug}/`}
+      headerAction={
+        needsLanguagePicker ? (
+          <LanguageLabel language={language} onClick={() => setLanguage(null)} />
+        ) : null
+      }
+    >
+      <Helmet title={`${stop.artworkName} — Audioguide`} />
+
+      <Overview>
+        <HeadSection>
+          <StopNumber>{stop.referenceNumber}</StopNumber>
+          <h1>{stop.artworkName}</h1>
+          {stop.artist && <Meta>{stop.artist}</Meta>}
+        </HeadSection>
+
+        {stop.artworkImage && (
+          <ArtworkImage src={stop.artworkImage} alt={stop.artworkName} />
+        )}
+
+        <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
+      </Overview>
+
+      <AudioPlayer
+        audioUrl={stop.audioUrl}
+        title={stop.artworkName}
+        artist={stop.artist}
+        transcript={stop.transcript}
+        referenceNumber={stop.referenceNumber}
+      />
+    </GuideLayout>
+  )
 }
 
 export default GuideStopTemplate;
@@ -82,17 +137,24 @@ export default GuideStopTemplate;
 
 export const pageQuery = graphql`
   query AudioguideStopByReference($rawExhibitionSlug: String!, $referenceNumber: String!) {
-    audioguideStop(
-      exhibitionSlug: { eq: $rawExhibitionSlug }
-      referenceNumber: { eq: $referenceNumber }
+    allAudioguideStop(
+      filter: {
+        exhibitionSlug: { eq: $rawExhibitionSlug }
+        referenceNumber: { eq: $referenceNumber }
+      }
     ) {
-      referenceNumber
-      artworkName
-      artist
-      description
-      audioUrl
-      transcript
-      artworkImage
+      edges {
+        node {
+          referenceNumber
+          artworkName
+          artist
+          description
+          audioUrl
+          transcript
+          artworkImage
+          language
+        }
+      }
     }
   }
 `

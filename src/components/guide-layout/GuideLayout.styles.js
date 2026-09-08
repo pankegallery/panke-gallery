@@ -13,6 +13,11 @@ export const GuideHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75em;
+  /* Fixed regardless of what's in the right-hand slot (nothing, the overview
+     icon, or the language button) — without this the header's height "jumps"
+     between pages depending on which one is taller. */
+  min-height: 48px;
   padding: 1em 1.25em;
   border-bottom: 1px solid ${props => props.theme.colors.theme.lightgrey};
 
@@ -21,10 +26,29 @@ export const GuideHeader = styled.header`
   }
 `;
 
+export const HeaderActions = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+`;
+
 export const OverviewLink = styled.a`
   flex: 0 0 auto;
   padding: 0.4em;
   margin: -0.4em;
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      background: ${props => props.theme.colors.theme.lightgrey};
+    }
+  }
+
+  &:active {
+    background: ${props => props.theme.colors.theme.lightgrey};
+  }
 `;
 
 export const DashboardIcon = styled.span`

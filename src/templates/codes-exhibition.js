@@ -5,6 +5,7 @@ import { graphql } from 'gatsby'
 
 import PrintLayout from '../components/print-layout'
 import PrintSheet from '../components/print-sheet'
+import { dedupeStopsByPosition } from '../utils/dedupe-stops-by-position'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
@@ -15,7 +16,9 @@ class PrintSheetExhibitionPage extends React.Component {
 
     const exhibition = get(this.props, 'data.contentfulExhibition')
     const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
-    const stops = get(this.props, 'data.allAudioguideStop.edges', [])
+    // A position with multiple language-variant rows shares one QR code —
+    // only one entry should be printed for it.
+    const stops = dedupeStopsByPosition(get(this.props, 'data.allAudioguideStop.edges', []))
     const unassignedOverviewQrCodeSvg = get(this.props, 'data.audioguideUnassignedOverviewQrCodeSvg')
 
     const exhibitionName = exhibition

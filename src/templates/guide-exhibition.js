@@ -8,6 +8,7 @@ import Moment from 'moment'
 import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import LanguagePicker from '../components/language-picker'
+import LanguageLabel from '../components/language-label'
 import { HeadSection, Meta } from '../components/content/Content.styles'
 import { getStoredLanguage, setStoredLanguage } from '../utils/audioguide-language'
 
@@ -19,18 +20,6 @@ const Overview = styled.section`
   max-width: 640px;
   margin: 0 auto;
   padding: 0 1.25em;
-`
-
-const ChangeLanguage = styled.button`
-  display: block;
-  margin: 0 auto 1em;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: ${props => props.theme.colors.theme.grey};
-  text-decoration: underline;
-  font-size: ${props => props.theme.fontSizes.small};
-  cursor: pointer;
 `
 
 const GuideExhibitionOverview = props => {
@@ -87,7 +76,14 @@ const GuideExhibitionOverview = props => {
   const showStops = !needsLanguagePicker || (checkedStorage && language)
 
   return (
-    <GuideLayout showOverviewLink={false}>
+    <GuideLayout
+      showOverviewLink={false}
+      headerAction={
+        needsLanguagePicker && showStops ? (
+          <LanguageLabel language={language} onClick={() => setLanguage(null)} />
+        ) : null
+      }
+    >
       <Helmet title={`${heading} — Audioguide`} />
 
       <Overview>
@@ -99,16 +95,7 @@ const GuideExhibitionOverview = props => {
 
       {showPicker && <LanguagePicker languages={languages} onSelect={chooseLanguage} />}
 
-      {showStops && (
-        <>
-          {needsLanguagePicker && (
-            <ChangeLanguage type="button" onClick={() => setLanguage(null)}>
-              {language} · change language
-            </ChangeLanguage>
-          )}
-          <GuideStopList stops={visibleStops} />
-        </>
-      )}
+      {showStops && <GuideStopList stops={visibleStops} />}
     </GuideLayout>
   )
 }
