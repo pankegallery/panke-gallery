@@ -6,6 +6,13 @@
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--legacy-peer-deps"
+  # Gatsby 5.12+ tries to auto-install its own native Netlify "adapter" on
+  # every Netlify build, on top of the @netlify/plugin-gatsby build plugin
+  # already configured below. It can't safely reconcile the two (especially
+  # with a custom function already in netlify/functions/) and aborts the
+  # build defensively rather than risk a broken deploy. This keeps the
+  # existing, working build-plugin setup and skips that auto-adapter attempt.
+  GATSBY_CONTINUE_BUILD_ON_MISSING_ADAPTER = "true"
 
 # Environment variables that need to be set in Netlify UI:
 # - BASEROW_TOKEN: Your Baserow API token
@@ -17,6 +24,11 @@
 # - CONTENTFUL_DELIVERY_TOKEN: Your Contentful delivery token
 # - RESEND_API_KEY: Resend API key for confirmation emails
 # - RSVP_FROM_EMAIL: Verified sender, e.g. "panke.gallery <rsvp@panke.gallery>"
+# - CODES_PASSWORD: Password for the /codes print sheets (checked server-side
+#   by netlify/functions/codes-auth-check.js) — deliberately NOT GATSBY_-
+#   prefixed, so it never gets inlined into the client bundle. Remember to
+#   also set this for the "Local development" context (or a local .env file)
+#   if testing /codes via `netlify dev` — see AUDIOGUIDE_TASKS.md §3.4.
 
 [[plugins]]
   package = "@netlify/plugin-gatsby"
