@@ -16,6 +16,7 @@ class PrintSheetExhibitionPage extends React.Component {
     const exhibition = get(this.props, 'data.contentfulExhibition')
     const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
     const stops = get(this.props, 'data.allAudioguideStop.edges', [])
+    const unassignedOverviewQrCodeSvg = get(this.props, 'data.audioguideUnassignedOverviewQrCodeSvg')
 
     const exhibitionName = exhibition
       ? exhibition.title
@@ -23,13 +24,26 @@ class PrintSheetExhibitionPage extends React.Component {
         ? 'Other stops'
         : exhibitionSlug
 
+    const overviewQrCodeSvg = exhibition
+      ? exhibition.audioguideOverviewQrCodeSvg
+      : unassignedOverviewQrCodeSvg
+
     const title = `Audioguide — Print Sheet — ${exhibitionName}`
+
+    const sections = [
+      {
+        key: exhibitionSlug,
+        title: exhibitionName,
+        overviewQrCodeSvg,
+        stops,
+      },
+    ]
 
     return (
       <Layout>
         <Helmet title={title} />
 
-        <PrintSheet title={title} stops={stops} />
+        <PrintSheet pageTitle={title} sections={sections} />
       </Layout>
     );
   }
@@ -48,7 +62,9 @@ export const pageQuery = graphql`
   query PrintSheetExhibitionQuery($exhibitionSlug: String!, $exhibitionSlugValues: [String]) {
     contentfulExhibition(slug: { eq: $exhibitionSlug }) {
       title
+      audioguideOverviewQrCodeSvg
     }
+    audioguideUnassignedOverviewQrCodeSvg
     allAudioguideStop(
       filter: { exhibitionSlug: { in: $exhibitionSlugValues } }
       sort: { referenceNumber: ASC }

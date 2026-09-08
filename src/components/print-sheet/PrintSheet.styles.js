@@ -13,6 +13,12 @@ export const PrintStyles = createGlobalStyle`
   }
 `;
 
+export const PrintSection = styled.section`
+  & + & {
+    page-break-before: always;
+  }
+`;
+
 export const QrGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);

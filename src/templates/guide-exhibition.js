@@ -40,7 +40,7 @@ class GuideExhibitionOverview extends React.Component {
     }
 
     return (
-      <GuideLayout>
+      <GuideLayout showOverviewLink={false}>
         <Helmet title={`${heading} — Audioguide`} />
 
         <Overview>

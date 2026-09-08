@@ -6,17 +6,50 @@ import { graphql } from 'gatsby'
 import Layout from "../components/layout"
 import PrintSheet from '../components/print-sheet'
 
+// Kept in sync with the same reserved bucket in gatsby-node.js — stops with
+// no exhibitionSlug in Baserow get filed here instead of being dropped.
+const UNASSIGNED_EXHIBITION_SLUG = 'general'
+
 class PrintSheetPage extends React.Component {
   render() {
 
     const stops = get(this.props, 'data.allAudioguideStop.edges', [])
+    const exhibitions = get(this.props, 'data.allContentfulExhibition.edges', []).map(({ node }) => node)
+    const unassignedOverviewQrCodeSvg = get(this.props, 'data.audioguideUnassignedOverviewQrCodeSvg')
+
+    const stopsBySlug = new Map()
+    stops.forEach(edge => {
+      const slug = edge.node.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG
+      if (!stopsBySlug.has(slug)) stopsBySlug.set(slug, [])
+      stopsBySlug.get(slug).push(edge)
+    })
+
+    const sections = exhibitions
+      .filter(exhibition => stopsBySlug.has(exhibition.slug))
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map(exhibition => ({
+        key: exhibition.slug,
+        title: exhibition.title,
+        overviewQrCodeSvg: exhibition.audioguideOverviewQrCodeSvg,
+        stops: stopsBySlug.get(exhibition.slug),
+      }))
+
+    if (stopsBySlug.has(UNASSIGNED_EXHIBITION_SLUG)) {
+      sections.push({
+        key: UNASSIGNED_EXHIBITION_SLUG,
+        title: 'Other stops',
+        overviewQrCodeSvg: unassignedOverviewQrCodeSvg,
+        stops: stopsBySlug.get(UNASSIGNED_EXHIBITION_SLUG),
+      })
+    }
+
     const title = 'Audioguide — Print Sheet — All'
 
     return (
       <Layout>
         <Helmet title={title} />
 
-        <PrintSheet title={title} stops={stops} />
+        <PrintSheet pageTitle={title} sections={sections} />
       </Layout>
     );
   }
@@ -43,5 +76,15 @@ export const pageQuery = graphql`
         }
       }
     }
+    allContentfulExhibition {
+      edges {
+        node {
+          slug
+          title
+          audioguideOverviewQrCodeSvg
+        }
+      }
+    }
+    audioguideUnassignedOverviewQrCodeSvg
   }
 `

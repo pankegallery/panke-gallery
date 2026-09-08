@@ -234,11 +234,22 @@ exports.createSchemaCustomization = ({ actions }) => {
       pageUrl: String
       qrCodeSvg: String
     }
+
+    type ContentfulExhibition implements Node {
+      audioguideOverviewUrl: String
+      audioguideOverviewQrCodeSvg: String
+    }
+
+    type Query {
+      audioguideUnassignedOverviewUrl: String
+      audioguideUnassignedOverviewQrCodeSvg: String
+    }
   `)
 }
 
 exports.createResolvers = ({ createResolvers }) => {
   const QRCode = require('qrcode')
+  const qrCodeSvgFor = url => QRCode.toString(url, { type: 'svg', margin: 1 })
 
   createResolvers({
     AudioguideStop: {
@@ -248,13 +259,30 @@ exports.createResolvers = ({ createResolvers }) => {
       },
       qrCodeSvg: {
         resolve: source =>
-          QRCode.toString(
-            `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`,
-            {
-              type: 'svg',
-              margin: 1,
-            }
+          qrCodeSvgFor(
+            `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`
           ),
+      },
+    },
+    // A QR code for the exhibition's own audioguide overview page (as opposed
+    // to one specific stop) — for signage at the entrance of a show, or the
+    // top of its print sheet.
+    ContentfulExhibition: {
+      audioguideOverviewUrl: {
+        resolve: source => `${SITE_URL}/guide/${source.slug}/`,
+      },
+      audioguideOverviewQrCodeSvg: {
+        resolve: source => qrCodeSvgFor(`${SITE_URL}/guide/${source.slug}/`),
+      },
+    },
+    // Same, for the fallback bucket — it has no ContentfulExhibition node to
+    // hang a resolver off, so this is exposed as a root field instead.
+    Query: {
+      audioguideUnassignedOverviewUrl: {
+        resolve: () => `${SITE_URL}/guide/${UNASSIGNED_EXHIBITION_SLUG}/`,
+      },
+      audioguideUnassignedOverviewQrCodeSvg: {
+        resolve: () => qrCodeSvgFor(`${SITE_URL}/guide/${UNASSIGNED_EXHIBITION_SLUG}/`),
       },
     },
   })
