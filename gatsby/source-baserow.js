@@ -49,6 +49,17 @@ function firstAttachmentUrl(value) {
   return (Array.isArray(value) && value.length > 0 && value[0].url) || null
 }
 
+// A Baserow "Single select" field (a dropdown) returns { id, value, color }
+// instead of a plain string — switching a column from Text to a dropdown
+// (e.g. to prevent spelling mistakes) silently changes the API shape.
+// String(theWholeObject) would otherwise coerce to the literal text
+// "[object Object]" for every row, making every language look identical.
+// Plain Text fields still come through as a string and pass through as-is.
+function selectValue(value) {
+  if (value && typeof value === 'object' && 'value' in value) return value.value
+  return value
+}
+
 // Long-text fields pasted from another source (a word processor, a PDF)
 // sometimes carry a hard line break in the middle of a sentence rather than
 // only at paragraph boundaries, which then renders as a stray line break
@@ -115,10 +126,11 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
       exhibitionSlug: row[FIELDS.exhibitionSlug] || '',
       transcript: normalizeLineBreaks(row[FIELDS.transcript]) || null,
       artworkImage: firstAttachmentUrl(row[FIELDS.artworkImage]),
-      // Free text, matched exactly (like Exhibition Slug) — the same value
-      // must be typed consistently across rows for the language picker to
-      // group them together.
-      language: String(row[FIELDS.language] || '').trim() || null,
+      // Matched exactly across rows for the language picker to group them —
+      // a dropdown (Single select) already enforces consistent spelling;
+      // selectValue() also still accepts a plain Text field, in case it's
+      // ever switched back.
+      language: String(selectValue(row[FIELDS.language]) || '').trim() || null,
     }
 
     createNode({

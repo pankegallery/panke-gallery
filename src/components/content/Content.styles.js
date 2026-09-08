@@ -109,6 +109,35 @@ export const EventSeries = styled(Tag)`
   
 `;
 
+// Generic outlined CTA button (fills on hover) — same style as the RSVP
+// form's submit button (src/components/rsvp-form/RsvpForm.styles.js), kept
+// as a separate, generically-named copy here so pages outside the RSVP flow
+// (e.g. a "listen to the audioguide" link) aren't importing something named
+// for an unrelated feature.
+export const Button = styled.button`
+  font-size: ${props => props.theme.fontSizes.medium};
+  text-align: center;
+  color: ${props => props.theme.colors.theme.black};
+  padding: 10px 20px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: ${props => props.theme.colors.theme.black} 2px solid;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: ${props => props.theme.colors.theme.black};
+    color: ${props => props.theme.colors.theme.white};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
 export const HeadSection = styled.div`
 
 margin: 2em 0 0;
