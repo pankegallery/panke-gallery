@@ -153,11 +153,13 @@ class ExhibitionTemplate extends React.Component {
           <InfoSection>
             <Row>
               <Col $md={4} $sm={4} $xs={12}>
-                <h2>Audioguide</h2>
+                <h2>Audio guide</h2>
               </Col>
               <Col $md={8} $sm={8} $xs={12}>
-                <p>This exhibition has a free audioguide — listen on your phone as you walk through, or scan the code at each artwork. Don't forget your headphones!</p>
-                <Button as={Link} to={`/guide/${exhibition.slug}/`}>Open the audioguide</Button>
+                <p>This exhibition has a free audio guide.</p>
+                <p style={{fontWeight: "normal"}}>Listen on your phone as you walk through, or scan the code at each artwork. <br />
+                We kindly ask you to bring your own headphones.</p>
+                <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{margin: "10px 0", display: "inline-block"}}>Open the audioguide</Button>
               </Col>
             </Row>
           </InfoSection>

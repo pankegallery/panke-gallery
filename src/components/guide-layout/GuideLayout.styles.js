@@ -26,11 +26,13 @@ export const GuideHeader = styled.header`
   }
 `;
 
-export const HeaderActions = styled.div`
+// Always rendered on both sides (even empty) so `justify-content:
+// space-between` keeps the language action pinned left and the overview
+// icon pinned right regardless of which one (if either) is present.
+export const HeaderSlot = styled.div`
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 0.5em;
 `;
 
 export const OverviewLink = styled.a`
