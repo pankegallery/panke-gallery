@@ -7,6 +7,14 @@ const path = require('path')
 // not panke.gallery/panke-gallery/guide/{slug}/03. QR codes must encode the former.
 const SITE_URL = process.env.SITE_URL || 'https://www.panke.gallery'
 
+// Stops with no exhibitionSlug in Baserow (e.g. a piece that isn't tied to
+// any temporary show) are filed under this reserved bucket instead of being
+// dropped. Picked to read plainly in a URL — rename freely, nothing's been
+// printed yet — but keep it in sync with the same constant in
+// src/components/guide-stop-list.js, src/templates/guide-exhibition.js and
+// src/templates/print-codes-exhibition.js if it ever changes.
+const UNASSIGNED_EXHIBITION_SLUG = 'general'
+
 exports.sourceNodes = require('./gatsby/source-baserow.js').sourceNodes
 
 exports.createPages = ({ graphql, actions }) => {
@@ -18,6 +26,7 @@ exports.createPages = ({ graphql, actions }) => {
     const edition = path.resolve('./src/templates/edition.js');
     const guideStop = path.resolve('./src/templates/guide-stop.js');
     const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
+    const printCodesExhibition = path.resolve('./src/templates/print-codes-exhibition.js');
     resolve(
       graphql(
         `
@@ -96,23 +105,29 @@ exports.createPages = ({ graphql, actions }) => {
         // referenceNumber is only unique per exhibition (it's the number on the
         // physical wall label, restarting for each show), so pages are keyed
         // by (exhibitionSlug, referenceNumber) — not by referenceNumber alone.
+        // Stops with no exhibitionSlug are filed under UNASSIGNED_EXHIBITION_SLUG
+        // instead of being dropped, so they still get a working page.
         const seenGuideStopKeys = new Set()
 
         guideStops.forEach((entry, index) => {
-          const { referenceNumber, exhibitionSlug } = entry.node
+          const { referenceNumber } = entry.node
+          const rawExhibitionSlug = entry.node.exhibitionSlug
+          const hasExhibition = Boolean(rawExhibitionSlug)
+          const exhibitionSlug = rawExhibitionSlug || UNASSIGNED_EXHIBITION_SLUG
 
-          if (!exhibitionSlug) {
+          if (!hasExhibition) {
             console.warn(
-              `Audioguide: skipping guide page for reference number "${referenceNumber}" — missing exhibitionSlug.`
+              `Audioguide: reference number "${referenceNumber}" has no exhibitionSlug — filed under /guide/${UNASSIGNED_EXHIBITION_SLUG}/.`
             )
-            return
           }
 
           const key = `${exhibitionSlug}/${referenceNumber}`
 
           if (seenGuideStopKeys.has(key)) {
             console.warn(
-              `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — only the first matching row got a page.`
+              hasExhibition
+                ? `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — only the first matching row got a page.`
+                : `Audioguide: duplicate reference number "${referenceNumber}" among stops with no exhibitionSlug — only the first matching row got a page.`
             )
             return
           }
@@ -125,30 +140,47 @@ exports.createPages = ({ graphql, actions }) => {
             context: {
               exhibitionSlug,
               referenceNumber,
+              // The actual stored value to query by — an unassigned stop's
+              // AudioguideStop node has exhibitionSlug: "", not "general",
+              // so the page query can't filter on the bucket name above.
+              rawExhibitionSlug,
             },
           })
         })
 
-        // One overview page per exhibition that has at least one guide stop,
-        // pulling the exhibition's own title/dates in from Contentful.
+        // One overview page and one print sheet per exhibition that has at
+        // least one guide stop (plus the fallback bucket, if used), pulling
+        // the exhibition's own title in from Contentful where available.
+        // exhibitionSlugValues is how each page's own query finds its stops —
+        // the fallback bucket's stops are stored with an empty exhibitionSlug,
+        // not the literal bucket name, so its query can't just do `eq: slug`.
         const contentfulExhibitionSlugs = new Set(exhibitions.map(entry => entry.node.slug))
         const guideExhibitionSlugs = new Set(
-          guideStops.map(entry => entry.node.exhibitionSlug).filter(Boolean)
+          guideStops.map(entry => entry.node.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG)
         )
 
         guideExhibitionSlugs.forEach(slug => {
-          if (!contentfulExhibitionSlugs.has(slug)) {
+          if (slug !== UNASSIGNED_EXHIBITION_SLUG && !contentfulExhibitionSlugs.has(slug)) {
             console.warn(
               `Audioguide: exhibitionSlug "${slug}" doesn't match any Contentful Exhibition slug — /guide/${slug}/ will build but won't show the exhibition's title/dates. Check it's an exact copy of that Exhibition's slug field.`
             )
           }
 
+          const context = {
+            exhibitionSlug: slug,
+            exhibitionSlugValues: slug === UNASSIGNED_EXHIBITION_SLUG ? [''] : [slug],
+          }
+
           createPage({
             path: `/guide/${slug}/`,
             component: guideExhibition,
-            context: {
-              exhibitionSlug: slug,
-            },
+            context,
+          })
+
+          createPage({
+            path: `/print-codes/${slug}/`,
+            component: printCodesExhibition,
+            context,
           })
         })
 
@@ -212,12 +244,12 @@ exports.createResolvers = ({ createResolvers }) => {
     AudioguideStop: {
       pageUrl: {
         resolve: source =>
-          `${SITE_URL}/guide/${source.exhibitionSlug}/${source.referenceNumber}/`,
+          `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`,
       },
       qrCodeSvg: {
         resolve: source =>
           QRCode.toString(
-            `${SITE_URL}/guide/${source.exhibitionSlug}/${source.referenceNumber}/`,
+            `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`,
             {
               type: 'svg',
               margin: 1,

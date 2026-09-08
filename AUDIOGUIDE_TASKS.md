@@ -76,8 +76,9 @@ Reference numbers restart per exhibition (they're printed on physical wall label
 ### 3.2 Audioguide overview page per exhibition
 
 - [x] Group `AudioguideStop` nodes by `exhibitionSlug`, pull the exhibition's title/dates from Contentful (same query shape as `exhibition.js`), list all stops with links. Route: `/guide/{exhibitionSlug}/` as an index (distinct from the per-stop `/guide/{exhibitionSlug}/{referenceNumber}/` pages from 3.1) — new template [src/templates/guide-exhibition.js](src/templates/guide-exhibition.js), wired up in `gatsby-node.js`'s `createPages` for every distinct `exhibitionSlug` seen among guide stops. Falls back to showing just the slug as a heading (no dates) if the slug doesn't match a Contentful exhibition, with a build warning in that case. The stop list itself was extracted into a shared `GuideStopList` component (`src/components/guide-stop-list.js`) so this page and the existing global `/guide/` page don't duplicate the same markup/styles.
-- [x] The global `/guide/` page still lists every stop across all exhibitions unfiltered, as before — the exhibition-scoped view is additive, not a replacement.
+- [x] The global `/guide/` page no longer lists a flat mix of every stop — it now shows two sections: "Exhibitions" (one entry per exhibition that has stops, title/dates pulled from Contentful, linking to `/guide/{exhibitionSlug}/`) and "Other stops" (any stop with no `exhibitionSlug` at all, listed directly since there's no exhibition to group it under).
 - [x] Per-stop pages now link "back to overview" to their own exhibition's `/guide/{exhibitionSlug}/` page instead of the global `/guide/` list (`GuideLayout`'s `overviewHref` prop, set from `guide-stop.js`).
+- [x] Stops with no `exhibitionSlug` are no longer skipped/orphaned: they're filed under a reserved bucket (`general`, defined once in `gatsby-node.js` as `UNASSIGNED_EXHIBITION_SLUG` — a placeholder name, easy to rename in the handful of places that reference it, listed in that file's comment). They get real pages at `/guide/general/{referenceNumber}/`, and `/guide/general/` is their own overview page (heading "Other stops" instead of a real exhibition title, since there's no Contentful entry to pull from — the "doesn't match any Contentful Exhibition slug" build warning is suppressed specifically for this bucket, since that mismatch is expected here).
 - [ ] Not yet verified against a real `gatsby build` with live Baserow/Contentful data (same caveat as 3.1's acceptance line).
 
 ### 3.3 Auto-link from the exhibition page — on hold
@@ -88,8 +89,20 @@ No decision yet on whether a link from the exhibition page to the audioguide mak
 
 ### 3.4 Print-codes access & scope
 
-- [ ] print-codes access control decision (SPECS §10): Netlify basic auth vs. leaving it unlinked/unindexed. Low priority since it has no visitor-facing value, but worth closing out before it's forgotten.
-- [ ] Decide whether `/print-codes` stays one global page (as now, with exhibition captions from 3.1) or splits into `/print-codes/{exhibitionSlug}/` pages mirroring 3.2's overview split.
+- [ ] print-codes access control decision (SPECS §10) — still undecided; see the pros/cons write-up below. Low priority since it has no visitor-facing value, but worth closing out before it's forgotten.
+- [x] `/print-codes` now does both: the original global page still exists (all stops, one sheet), and `/print-codes/{exhibitionSlug}/` pages were added for a single show's print run (including `/print-codes/general/` for stops with no exhibition) — new template [src/templates/print-codes-exhibition.js](src/templates/print-codes-exhibition.js), wired up the same way as 3.2's overview pages. The shared QR-grid markup/styles were extracted into `src/components/print-sheet.js` so the two page types (and any future ones) don't duplicate it.
+
+**Print-codes access control options considered (no decision made):**
+
+| Option | Pros | Cons |
+|---|---|---|
+| Netlify Basic Auth | Zero code, built into hosting, blocks crawlers and casual visitors alike | Shared single password to distribute/rotate; blocks the editor too without credentials handy; unpolished browser prompt |
+| `robots.txt` disallow + `<meta name="robots" content="noindex,nofollow">` | Trivial to add; keeps it out of Google/well-behaved crawlers | Doesn't stop a human with the URL, or a non-compliant scraper; not real access control, just discouragement |
+| Obscurity (unlinked, unguessable path) | No extra config; no login friction | Not real security — leaks via browser history, server logs, an accidental share; same URL forever unless rotated |
+| IP allowlist | No password to share; tight control if printing always happens from one known network | Breaks the moment someone needs it from a different network; more upkeep as IPs change; overkill for a low-stakes internal page |
+| Keep off production entirely (deploy-preview/branch only) | Never reachable at the production domain | Real added complexity — a second build pipeline just for this page, awkward to keep in sync with live Baserow data |
+
+Leaning recommendation if/when this gets decided: Basic Auth (real access control, no code) plus `robots`/`noindex` as a free extra layer — skip IP allowlisting or a separate deploy pipeline as overkill for an internal print tool.
 
 ### 3.5 Other ideas
 

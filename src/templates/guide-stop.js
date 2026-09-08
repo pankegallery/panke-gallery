@@ -38,9 +38,10 @@ class GuideStopTemplate extends React.Component {
   render() {
 
     const stop = get(this.props, 'data.audioguideStop')
+    const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
 
     return (
-      <GuideLayout overviewHref={`/guide/${stop.exhibitionSlug}/`}>
+      <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`}>
         <Helmet title={`${stop.artworkName} — Audioguide`} />
 
         <Overview>
@@ -80,13 +81,12 @@ export default GuideStopTemplate;
 
 
 export const pageQuery = graphql`
-  query AudioguideStopByReference($exhibitionSlug: String!, $referenceNumber: String!) {
+  query AudioguideStopByReference($rawExhibitionSlug: String!, $referenceNumber: String!) {
     audioguideStop(
-      exhibitionSlug: { eq: $exhibitionSlug }
+      exhibitionSlug: { eq: $rawExhibitionSlug }
       referenceNumber: { eq: $referenceNumber }
     ) {
       referenceNumber
-      exhibitionSlug
       artworkName
       artist
       description

@@ -9,6 +9,10 @@ import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import { HeadSection, Meta } from '../components/content/Content.styles'
 
+// Kept in sync with the same reserved bucket in gatsby-node.js — stops with
+// no exhibitionSlug in Baserow get filed here instead of being dropped.
+const UNASSIGNED_EXHIBITION_SLUG = 'general'
+
 const Overview = styled.section`
   max-width: 640px;
   margin: 0 auto;
@@ -22,6 +26,12 @@ class GuideExhibitionOverview extends React.Component {
     const exhibitionSlug = get(this.props, 'pageContext.exhibitionSlug')
     const stops = get(this.props, 'data.allAudioguideStop.edges', [])
 
+    const heading = exhibition
+      ? exhibition.title
+      : exhibitionSlug === UNASSIGNED_EXHIBITION_SLUG
+        ? 'Other stops'
+        : exhibitionSlug
+
     let dateDisplayed
     if (exhibition) {
       dateDisplayed = exhibition.dateTbc
@@ -31,11 +41,11 @@ class GuideExhibitionOverview extends React.Component {
 
     return (
       <GuideLayout>
-        <Helmet title={exhibition ? `${exhibition.title} — Audioguide` : 'Audioguide'} />
+        <Helmet title={`${heading} — Audioguide`} />
 
         <Overview>
           <HeadSection>
-            <h1>{exhibition ? exhibition.title : exhibitionSlug}</h1>
+            <h1>{heading}</h1>
             {exhibition && <Meta>{dateDisplayed}</Meta>}
           </HeadSection>
         </Overview>
@@ -56,7 +66,7 @@ export default GuideExhibitionOverview;
 //==========================================================================
 
 export const pageQuery = graphql`
-  query AudioguideExhibitionOverview($exhibitionSlug: String!) {
+  query AudioguideExhibitionOverview($exhibitionSlug: String!, $exhibitionSlugValues: [String]) {
     contentfulExhibition(slug: { eq: $exhibitionSlug }) {
       title
       startDate
@@ -64,7 +74,7 @@ export const pageQuery = graphql`
       dateTbc
     }
     allAudioguideStop(
-      filter: { exhibitionSlug: { eq: $exhibitionSlug } }
+      filter: { exhibitionSlug: { in: $exhibitionSlugValues } }
       sort: { referenceNumber: ASC }
     ) {
       edges {
