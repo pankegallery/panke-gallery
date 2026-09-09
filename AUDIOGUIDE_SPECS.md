@@ -1,154 +1,159 @@
-# Audioguide — Project Specification
+# Audioguide — Specification
 
-Status: draft, for task breakdown
-Owner: panke.gallery
-Last updated: 2026-09-04
+**Status:** implemented and live · a handful of open decisions remain — jump to [Open decisions](#open-decisions)
+**Last updated:** 2026-09-09 · **Companion doc:** [AUDIOGUIDE_TASKS.md](AUDIOGUIDE_TASKS.md) (implementation reference, file by file)
 
-## 1. Goal
+A self-guided audioguide for the panke.gallery exhibition site: visitors scan a QR code next to an artwork and get a page with the audio, a transcript, and the curatorial text.
 
-Add a self-guided audioguide to the panke.gallery exhibition site. Requirements:
+<br>
+
+## Goal
 
 - Free / open-source only — no paid services, no per-visitor fees, no vendor lock-in.
-- Built on top of existing infrastructure: Gatsby (site), Netlify (hosting), Contentful (main site CMS), Nextcloud (self-hosted file storage), Baserow (self-hosted database).
-- Usable, accessible, and privacy-respecting (no tracking, no login, no unnecessary third-party requests).
-- Low admin overhead — content editors should not need to touch code or use git.
-- Audience is technically literate and privacy-conscious; open-source and self-hosted choices are a feature, not just a cost-saving measure.
+- Built on infrastructure the gallery already runs: Gatsby (site), Netlify (hosting), Contentful (main site CMS), Nextcloud (self-hosted files), Baserow (self-hosted database).
+- Privacy-respecting — no tracking, no login, no unnecessary third-party requests.
+- Low admin overhead — an editor adds rows to a table; no code or git for day-to-day changes.
 
-## 2. Architecture overview
+<br>
+
+## Architecture
 
 | Layer | Tool | Notes |
 |---|---|---|
 | Main site content | Contentful | Unchanged, existing pipeline |
-| Audioguide stop data | Baserow | New table, one row per artwork/stop |
+| Audioguide stop data | Baserow | One table, one row per artwork/stop *per language* |
 | Audio files | Nextcloud | Public share links, pasted into Baserow |
-| Site + player | Gatsby | New page template, generated per stop |
-| Hosting | Netlify | Unchanged — audio never passes through Netlify's bandwidth |
-| QR codes | Generated at Gatsby build time from Baserow data | Rendered on a `/codes` page |
+| Site + player | Gatsby | Pages generated per stop / exhibition at build time |
+| Hosting | Netlify | Audio never passes through Netlify's bandwidth |
+| QR codes | Generated at build time | Rendered on `/codes` pages |
 
-Key design decision: **audio bytes are never served through Netlify or Contentful.** Both have free-tier bandwidth ceilings (Netlify: reduced/credit-based free bandwidth as of 2026; Contentful Community: 50GB/month CDN bandwidth with a hard cutoff on delivery API when exceeded) that a popular audioguide could realistically hit. Routing audio through self-hosted Nextcloud removes this risk entirely and keeps the gallery in full control of its own media.
+> [!IMPORTANT]
+> **Audio bytes are never served through Netlify or Contentful.** Both have free-tier bandwidth ceilings a popular audioguide could realistically hit. Self-hosted Nextcloud removes that risk and keeps the gallery in control of its own media.
 
-## 3. Content workflow (editorial)
+<br>
 
-1. Editor records/prepares audio file (see §6 for format guidance).
-2. Editor uploads file to a Nextcloud folder (e.g. via desktop sync client or web upload) and creates a public share link.
-3. Editor adds/edits a row in the Baserow "Audioguide" table with:
-   - Reference number (stable identifier, printed on wall labels — see §5)
-   - Artwork name
-   - Artist
-   - Description / curatorial text
-   - Nextcloud public share link (audio file URL)
-   - Exhibition slug (relates the stop to its Contentful exhibition — see §4)
-   - Optional: artwork image, transcript, duration, room/order, language
-4. Next Gatsby build/deploy picks up the new/changed row automatically — no manual step beyond triggering a Netlify build (or wait for scheduled/webhook build).
+## Editorial workflow
 
-No git, no code, no CMS-specific training beyond "add a row to this table" is required for day-to-day content changes.
+1. Editor records/prepares an audio file — see [Audio file preparation](#audio-file-preparation).
+2. Uploads it to Nextcloud, creates a public share link.
+3. Adds/edits a row in the Baserow `Audioguide` table — see [Data model](#data-model).
+4. Next Gatsby build picks the change up automatically.
 
-## 4. Data model (Baserow table: `Audioguide`)
+No git, no code, no CMS training required for day-to-day content changes.
+
+<br>
+
+## Data model
+
+Baserow table: `Audioguide`
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| `reference_number` | Text/Number | Yes | Stable ID per exhibition, printed on labels (e.g. `03`); combined with `exhibition_slug` in the URL path since numbering restarts per exhibition (see §5.1) |
-| `artwork_name` | Text | Yes | |
+| `reference_number` | Text/Number | Yes | Stable ID *per exhibition*, printed on the wall label (e.g. `03`) |
+| `artwork_name` | Text | Yes | May differ per language row |
 | `artist` | Text | No | |
-| `description` | Long text | Yes | Shown on the stop page |
-| `audio_url` | URL | Yes | Nextcloud public share/direct-download link |
-| `exhibition_slug` | Text | Yes | Contentful `Exhibition.slug` this stop belongs to (matches the field used to build `/exhibitions/{slug}` pages, e.g. `src/templates/exhibition.js`). Populate now for the upcoming exhibition even though the automated link/overview page (below) is deferred. |
-| `transcript` | Long text | Recommended | Accessibility — always ship a transcript alongside audio |
-| `duration` | Text | No | Display only, e.g. "4:30" |
-| `room` / `order` | Number/Text | No | For sequential tour ordering, if desired |
-| `language` | Text | No | Free text, matched exactly like `exhibition_slug` — same value must be typed consistently across rows. Drives the language picker on the exhibition overview page (see §5.3) once an exhibition has 2+ distinct values; a blank value is treated as language-agnostic and always shown |
-| `artwork_image` | Image | No | Optional artwork image for display |
+| `description` | Long text | Yes | May differ per language row |
+| `audio_url` | URL | Yes | Nextcloud public share link |
+| `exhibition_slug` | Text | Yes | Must exactly match the Contentful `Exhibition.slug` |
+| `transcript` | Long text | Recommended | Ship one alongside every audio file |
+| `artwork_image` | Image | No | |
+| `language` | Single select | No | See [Multi-language stops](#multi-language-stops) |
+| `duration` | Text | No | Display only — not currently rendered |
+| `room` / `order` | Number/Text | No | For tour ordering — not currently used |
 
-## 5. Site structure
+> [!NOTE]
+> **"Position"** = `exhibition_slug` + `reference_number` — one wall label, one QR code, one URL. Normally one row. It's more than one row **only** when it has language variants (same slug + reference number, different `language`) — and every field can differ between those rows, not just the audio: name and description are free to be fully translated, not merely narrated differently.
 
-### 5.1 Per-stop pages
+> [!WARNING]
+> `exhibition_slug` must be typed identically to Contentful's slug, character for character — a mismatch silently produces an exhibition page with no title/dates (falls back to showing the raw slug) rather than an error. A `Single select` field is recommended for `language` specifically because free text drifted (`"english"` vs `"English"`) in testing.
 
-- New Gatsby page template: `src/templates/guide-stop.js`
-- Generated once per Baserow row via `createPages` in `gatsby-node.js` (standard Gatsby CMS-to-pages pattern, same shape as how Contentful pages are already generated).
-- Route: `panke.gallery/guide/{exhibition_slug}/{reference_number}` (e.g. `/guide/spring-2026/03`) — **not** a slugified title, so the URL and printed QR code stay stable even if the artwork name/description is edited later. Reference numbers restart per exhibition (they're printed on physical wall labels per show), so they're only unique combined with `exhibition_slug`, not globally — an earlier global `/guide/{reference_number}` scheme collided as soon as a second exhibition reused `01`.
-- Page contents:
-  - Artwork name, artist, description
-  - `<audio>` element (or richer player component, see §7), `src` = the Nextcloud `audio_url`
-  - Transcript (visible or expandable)
-  - Optional: link back to the exhibition page, next/previous stop navigation
+<br>
 
-### 5.2 Print sheet page
+## Routes
 
-- Route: `panke.gallery/codes` (see §8 for full QR/print-sheet spec).
-- Not intended for visitors — used internally to produce printed labels. Consider gating with Netlify basic-auth/password protection (free feature) since it has no visitor-facing value.
+| Route | Renders |
+|---|---|
+| `/guide/` | Every exhibition with stops (title/dates from Contentful) + an "Other stops" list |
+| `/guide/{exhibition_slug}/` | That exhibition's stop list, name/dates in the header |
+| `/guide/{exhibition_slug}/{reference_number}/` | One stop — name, artist, description, image, player |
+| `/guide/stop/{reference_number}/` | Same, for a stop with no `exhibition_slug` |
+| `/codes` | Print sheet, every stop grouped by exhibition — password-protected |
+| `/codes/{exhibition_slug}/` | Print sheet for one exhibition only |
 
-### 5.3 Language picker (exhibition overview page)
+> [!NOTE]
+> Reference numbers are only unique *within* an exhibition (they're renumbered per show) — never used alone in a URL. An earlier flat `/guide/{reference_number}/` scheme collided the moment two exhibitions both used `01`.
+>
+> The `stop` segment is a placeholder (`UNASSIGNED_EXHIBITION_SLUG` in `gatsby-node.js`) — renamed freely, nothing physical has been printed with it yet.
 
-- Only appears when an exhibition's stops carry 2+ distinct `language` values — a single-language (or no-language-data) exhibition shows its stop list directly, no picker step.
-- Shown centered, above the stop list, before anything else on `/guide/{exhibition_slug}/` — one button per distinct language value present among that exhibition's stops.
-- Choosing a language stores it in `localStorage` (key `audioguide-language`, per device, not per exhibition) and immediately shows that exhibition's stop list filtered to that language (stops with no `language` set are treated as language-agnostic and always included).
-- On a later visit — to the same exhibition or a different one — if the stored language matches one of that exhibition's available values, the picker is skipped and the filtered list shows directly.
-- A "change language" control beneath the list clears the current selection and re-shows the picker, without touching the stored value until a new one is chosen.
-- Not yet implemented: a persistent language indicator in the shared guide header (see AUDIOGUIDE_TASKS.md §3.7 for the evaluated proposal) — for now, changing language only happens from within an exhibition's own overview page.
+<br>
 
-## 6. Audio file preparation
+## Multi-language stops
 
-- Format: Opus or AAC, **mono**, 64–96 kbps — sufficient quality for spoken narration at roughly a third the file size of a default 128kbps stereo MP3 export.
-- Tooling: `ffmpeg` (open source) for encoding/compression.
-- Keep individual files well under any platform limits (not a practical concern at these bitrates for typical stop lengths).
+A position becomes multi-language by adding a second Baserow row with the same `exhibition_slug` + `reference_number` and a different `language`.
 
-## 7. Player implementation
+**Visitor flow:**
+1. Landing on a position with 2+ distinct languages → a full-screen prompt shows immediately, before anything else renders. Not gated behind tapping play.
+2. Choosing a language affects **everything** for that position — name, description, image, audio, transcript.
+3. The choice is remembered on-device (not scoped per exhibition) — picking "English" once carries over anywhere else "English" is offered.
+4. A control in the player lets a visitor change the language later.
 
-Two viable approaches — decide based on desired feature set vs. build effort:
+> [!NOTE]
+> Rows with no `language` set are language-agnostic — always shown, and used as a fallback if the chosen language isn't available at a given position.
+>
+> Overview lists show one entry per position: whichever row matches the already-chosen language, or the first row before any choice is made.
 
-**A. Plain `<audio>` element inside the Gatsby page template**
-- Minimal effort, full control, no new dependency.
-- No offline caching or advanced UI out of the box.
+<br>
 
-**B. Adopt [AudioGuideKit](https://audioguidekit.org/) (MIT-licensed React player) component(s) inside the same Gatsby page template**
-- Provides: offline caching (service worker), fullscreen player, transcript display, progress tracking — without adopting its whole separate app scaffold.
-- Worth it primarily if offline playback (weak/no signal in parts of the gallery) is a priority; can be added later without changing the URL structure or data model.
+## Audio file preparation
 
-**Action item:** verify Nextcloud's HTTP `Range` header support on the actual instance/version before finalizing the player (`curl -I -H "Range: bytes=100-200" <share-link>/download` should return `206 Partial Content`). If unsupported, seeking will restart playback from the beginning rather than jumping — a UX tradeoff, not a blocker. A prefetch-to-blob approach (fetch full file once, play from memory) sidesteps this entirely and is what AudioGuideKit's offline mode effectively does anyway.
+Format: Opus or AAC, **mono**, 64–96 kbps — good spoken-word quality at roughly a third the size of a default 128kbps stereo MP3. Encode with `ffmpeg`.
 
-## 8. QR code generation
+<br>
 
-- Library: `qrcode` (npm, open source), generating SVG strings directly — no external QR-generator service.
-- Generated at build time in `gatsby-node.js`, looping over the same Baserow rows used to create the `/guide/{reference_number}` pages.
-- **Each QR code encodes the Gatsby page URL** (`https://panke.gallery/guide/spring-2026/03`), **not** the raw Nextcloud file link. This indirection means:
-  - Audio files can be replaced/moved/re-encoded in Nextcloud without reprinting any QR code — only the Baserow row's `audio_url` needs updating.
-  - The page provides visitor context (title, description, transcript) that a bare file link cannot.
-- All generated SVGs are rendered together on the `/codes` page, laid out in a grid with each artwork's reference number and name printed beneath its code.
-- A print stylesheet (`@media print`, `@page { size: A4; }`) makes the page paginate correctly onto A4 sheets via the browser's own Print → Save as PDF / print dialog — no PDF-generation library needed.
-- Regenerating labels is just: edit Baserow → rebuild site → reopen `/codes` → print. Always in sync with current data, no manual export step to forget.
+## Player
 
-## 9. Privacy & accessibility
+Custom-built (`src/components/audio-player.js`) — not the third-party AudioGuideKit library originally considered, for full control and no new dependency. Play/pause, scrubber, expandable transcript, language switcher when relevant, all within a full-screen view reachable from a persistent mini bar.
 
-- No login, no cookies, no autoplay permission prompts.
-- No third-party analytics/tracking scripts on guide pages. If usage stats are wanted later, use a self-hostable/privacy-respecting option (e.g. Plausible, GoatCounter) rather than anything that fingerprints visitors.
-- Every audio stop ships with a text transcript (accessibility for deaf/hard-of-hearing visitors, and usable without headphones/audio).
-- No new external dependency is introduced beyond what the gallery already runs (Nextcloud) and free npm packages resolved at build time.
+> [!WARNING]
+> **Open:** Nextcloud's `Range` header support hasn't been verified on the real instance:
+> ```
+> curl -I -H "Range: bytes=100-200" <share-link>/download
+> ```
+> expect `206 Partial Content`. If unsupported, seeking restarts playback from the beginning — a UX tradeoff, not a blocker.
 
-## 10. Open items / decisions needed before implementation
+<br>
 
-- [ ] Confirm Nextcloud Range-header support on current instance/version (§7).
-- [ ] Decide plain `<audio>` vs. AudioGuideKit component adoption (§7).
-- [x] Confirm Baserow API token/auth approach for build-time fetch — custom `sourceNodes` function shipped in [gatsby/source-baserow.js](gatsby/source-baserow.js).
-- [ ] Decide whether tour order/navigation (next/previous) is needed for v1 or can be added later.
-- [ ] Decide `/codes` access control (basic auth vs. build-only/branch-only) — still undecided, see AUDIOGUIDE_TASKS.md §3.4 for a pros/cons write-up.
-- [x] Decide whether `/codes` stays one global page or splits per exhibition — resolved to do both: the global page stays, and `/codes/{exhibition_slug}/` pages were added per show.
-- [ ] Confirm target audio bitrate/format with whoever records narration.
-- [x] Decide whether to auto-add an audioguide link on the matching exhibition page — yes, see task breakdown item 3.
-- [x] Decide whether to build an audioguide overview page per exhibition — yes, see task breakdown item 3.
+## QR codes & print sheets
 
-## 11. Suggested task breakdown
+- Generated at build time with `qrcode` (SVG, no external service).
+- Each QR encodes the stop's **page URL**, not the raw Nextcloud link — audio can be replaced without reprinting, and the page gives context a bare file link can't.
+- Each exhibition also gets an **entrance QR** (its overview page), separate from per-artwork codes.
+- `/codes` (global) and `/codes/{exhibition_slug}/` (one show) both exist.
 
-1. Create Baserow "Audioguide" table with schema from §4. *(done)*
-2. Write custom Gatsby source function to fetch Baserow rows at build time. *(done)*
-3. **Scope stops by exhibition**: restructure stop URLs (and their QR codes) from the global `/guide/{reference_number}/` to `/guide/{exhibition_slug}/{reference_number}/` — reference numbers only restart per exhibition, not globally, and a real duplicate (two `01` rows in different exhibitions) has already turned up in the Baserow table. Add a build-time warning for rows missing `exhibition_slug` and for any remaining `(exhibition_slug, reference_number)` duplicates. Add an exhibition-scoped overview page (`/guide/{exhibition_slug}/`) and an auto-linked "Listen to the audioguide" button on the matching `exhibition.js` page.
+> [!CAUTION]
+> **Password-protected, but not real access control** — `/codes` is a statically-generated page, so its rendered HTML (and Gatsby's own page-data JSON) exists as a plain file on the CDN regardless of the gate. It stops a casual visitor or a crawler that only looks at what's rendered/linked — which is the actual bar this needed to clear — but not a request that fetches the static files directly.
+>
+> The password check itself is server-side (a Netlify Function, `CODES_PASSWORD` env var) — never in the repo or the client bundle. Remembered per device for 30 days. Netlify Basic Auth is the next step up if this ever proves insufficient.
 
-### Later
+<br>
 
-- Build `src/templates/guide-stop.js` page template + `createPages` wiring. *(done — shipped with the old global URL scheme; needs the path/query update from item 3)*
-- Implement audio player (plain `<audio>` for v1; evaluate AudioGuideKit component later). *(done)*
-- Add transcript rendering + basic accessibility pass. *(transcript rendering done; accessibility pass outstanding)*
-- Implement QR generation step in `gatsby-node.js` (`qrcode` package). *(done — needs re-pointing at the new URLs from item 3)*
-- Build `/codes` page + print stylesheet. *(done)*
-- Test Nextcloud Range-header behavior; adjust player strategy if needed.
-- Populate Baserow with real content + Nextcloud audio links for the first exhibition. *(in progress — first exhibition's rows already exist)*
-- Print and place labels; QA end-to-end (scan → page → playback) in the gallery space.
+## Privacy & accessibility
+
+- No login, no cookies, no autoplay, no third-party analytics on guide pages.
+- Every stop ships with a text transcript.
+- Keyboard-operable controls, visible `:focus-visible` states.
+- Subtle hover (mouse-only) and `:active` (touch) feedback throughout.
+
+<br>
+
+## Open decisions
+
+| # | Decision | Status |
+|---|---|---|
+| 1 | Nextcloud `Range` header support | Not verified |
+| 2 | Tour order / next-previous navigation | Not built — `room`/`order` not even sourced from Baserow yet |
+| 3 | Is the `/codes` password gate sufficient long-term, or worth Netlify Basic Auth | Password gate shipped; upgrade not decided |
+| 4 | Usage stats | Only if requested — self-hosted option (Plausible/GoatCounter), scoped to `/guide/*` + `/exhibition/*` |
+| 5 | No way back to the main site from the guide UI | Logo was removed to fix a layout issue; replacement not decided |
+
+For how each of these — and everything already shipped — is actually implemented, see [AUDIOGUIDE_TASKS.md](AUDIOGUIDE_TASKS.md).
