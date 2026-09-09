@@ -67,13 +67,13 @@ activeRow = row matching the chosen language, else a language-agnostic row
 
 Takes plain `audioUrl`/`transcript`/`title`/`artist` props — language was resolved by the caller before this component ever mounts. `language`/`onChangeLanguage` props are display-only (the footer button), not player-managed state.
 
-**Fullscreen overlay layout:** `OverlayCenter` (reference number, title, artist, play button, scrubber) is its own flex region, `flex: 1 1 auto` + `justify-content: center`, so it stays centered regardless of what else is showing. `OverlayFooter` (transcript toggle + language button, when relevant) is always last.
+**Fullscreen overlay layout: three regions, one scrollable.** `Overlay` itself is `overflow: hidden` and never scrolls. `OverlayTop` (stop number centered, collapse icon right) and `OverlayFooter` (transcript/language pill buttons) are fixed-size flex children that can never be scrolled out of view; `OverlayCenter` (title, artist, play button, scrubber, and — when open — the transcript) is the *only* scrollable region (`min-height: 0; overflow-y: auto`), vertically centered when its content fits.
+
+> [!WARNING]
+> **Earlier version had two nested scrollable regions** (the whole overlay, plus `TranscriptSection`'s own `max-height`/`overflow-y: auto`) inside a shared `OverlayBody` wrapper. On a two-line title this pushed content taller than the viewport, which broke centering, produced visible double-scrolling, and let the top row's collapse button scroll out of reach entirely. Fixed by removing `OverlayBody`, making `Overlay` itself non-scrolling, and giving `OverlayCenter` sole ownership of scrolling — `TranscriptSection` now just flows inside it rather than scrolling on its own.
 
 > [!WARNING]
 > **Changing `<audio src>` reactively doesn't reliably make the browser switch sources** once it's already loaded one — confirmed live (kept playing the first-resolved language regardless of what was picked). Fixed with an explicit `audioRef.current.load()` in a `useEffect` keyed on `audioUrl`, which also resets `currentTime` and any stale error state.
-
-> [!NOTE]
-> **`position: sticky` on the footer left a visible gap** — the transcript text bled through below the "Hide transcript" button because the `Overlay`'s own safe-area bottom padding wasn't covered by the sticky element's background. Fixed by dropping `sticky` entirely: the transcript section is capped (`max-height: 40vh`) and scrolls independently, so the footer just sits in normal flow right after it and never needs pinning.
 
 > [!NOTE]
 > **A missing/broken `audio_url` used to surface as an uncaught runtime error** (`audio.play()` rejecting). Both the rejected promise and the `<audio>` element's own `error` event are now caught — the play button disables and the player shows "Audio unavailable" instead. The transcript toggle still works, so there's still an accessible fallback with no audio.
@@ -123,5 +123,6 @@ Queries `allAudioguideStop(filter: { exhibitionSlug: { eq: $slug } })` for just 
 ## Accessibility & interaction polish
 
 - **Site-wide focus outline was actually broken**, not just unstyled — `GlobalStyles.js` had `button:focus { outline: none; }` / `a:focus { outline: none; }` with no replacement, so keyboard users had no focus indicator *anywhere on the site*. Fixed with `:focus-visible` (outline hidden for mouse clicks, shown for keyboard focus).
-- Subtle hover (`@media (hover: hover)`, so it only triggers for mouse-type input) and `:active` (touch tap) feedback added across list rows, buttons, and the language picker.
+- Subtle hover (`@media (hover: hover)`, so it only triggers for mouse-type input) and `:active` (touch tap) feedback added across list rows, icon buttons, and the language picker.
 - **iOS Safari doesn't apply `:active` styles at all** unless a touch listener exists somewhere on the page — a one-time no-op `touchstart` listener in `GuideLayout` unlocks it site-wide.
+- **Player pill buttons (transcript/language) and `LanguagePicker`'s buttons share one feedback pattern**: a filled black-background/white-text swap on hover and on press (`PillButton`, `LanguageButton`). Two of these also carry a *persistent* version of that same fill, independent of hover/press — the transcript toggle (`$active`, filled while the transcript is showing) and the language picker's already-chosen option (`$selected`, filled when reopened via the player's "change language" control) — so "current state," not just "being interacted with," is visible at a glance.

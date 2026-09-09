@@ -11,7 +11,6 @@ import {
   ExpandButton,
   Overlay,
   OverlayTop,
-  OverlayBody,
   OverlayCenter,
   OverlayFooter,
   StopNumber,
@@ -135,80 +134,79 @@ const AudioPlayer = ({ audioUrl, transcript, title, artist, referenceNumber, lan
       {expanded && (
         <Overlay onClick={() => setExpanded(false)}>
           <OverlayTop>
+            {referenceNumber && <StopNumber>{referenceNumber}</StopNumber>}
             <ExpandButton type="button" aria-label="Collapse player">
               <FontAwesomeIcon icon={faChevronDown} />
             </ExpandButton>
           </OverlayTop>
 
-          <OverlayBody onClick={e => e.stopPropagation()}>
-            <OverlayCenter>
-              {referenceNumber && <StopNumber>{referenceNumber}</StopNumber>}
-              <h2>{title}</h2>
-              {artist && <p className="artist">{artist}</p>}
+          <OverlayCenter onClick={e => e.stopPropagation()}>
+            <h2>{title}</h2>
+            {artist && <p className="artist">{artist}</p>}
 
-              <PlayButton
-                type="button"
-                onClick={togglePlay}
-                disabled={playbackError}
-                $isPlaying={isPlaying}
-                $size="72px"
-                $iconSize="1.4em"
-                aria-label={isPlaying ? 'Pause' : 'Play'}
-              >
-                <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-              </PlayButton>
+            <PlayButton
+              type="button"
+              onClick={togglePlay}
+              disabled={playbackError}
+              $isPlaying={isPlaying}
+              $size="72px"
+              $iconSize="1.4em"
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+            >
+              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+            </PlayButton>
 
-              {playbackError ? (
-                <ErrorNote>Audio for this stop isn't available right now.</ErrorNote>
-              ) : (
-                <>
-                  <Scrubber
-                    type="range"
-                    min={0}
-                    max={duration || 0}
-                    value={currentTime}
-                    onChange={handleSeek}
-                  />
-                  <TimeRow>
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
-                  </TimeRow>
-                </>
-              )}
-            </OverlayCenter>
+            {playbackError ? (
+              <ErrorNote>Audio for this stop isn't available right now.</ErrorNote>
+            ) : (
+              <>
+                <Scrubber
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  value={currentTime}
+                  onChange={handleSeek}
+                />
+                <TimeRow>
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </TimeRow>
+              </>
+            )}
 
             {showTranscript && transcript && (
               <TranscriptSection>
                 <p>{transcript}</p>
               </TranscriptSection>
             )}
+          </OverlayCenter>
 
-            {(onChangeLanguage || transcript) && (
-              <OverlayFooter>
-                {onChangeLanguage && (
-                  <PillButton
-                    type="button"
-                    onClick={onChangeLanguage}
-                    aria-label={`Change language (current: ${language})`}
-                  >
-                    <FontAwesomeIcon icon={faLanguage} />
-                    {language}
-                  </PillButton>
-                )}
+          {(onChangeLanguage || transcript) && (
+            <OverlayFooter onClick={e => e.stopPropagation()}>
+              {onChangeLanguage && (
+                <PillButton
+                  type="button"
+                  onClick={onChangeLanguage}
+                  aria-label={`Change language (current: ${language})`}
+                >
+                  <FontAwesomeIcon icon={faLanguage} />
+                  {language}
+                </PillButton>
+              )}
 
-                {transcript && (
-                  <PillButton
-                    type="button"
-                    onClick={() => setShowTranscript(v => !v)}
-                    aria-expanded={showTranscript}
-                  >
-                    <FontAwesomeIcon icon={faFileLines} />
-                    {showTranscript ? 'Hide transcript' : 'Read transcript'}
-                  </PillButton>
-                )}
-              </OverlayFooter>
-            )}
-          </OverlayBody>
+              {transcript && (
+                <PillButton
+                  type="button"
+                  $active={showTranscript}
+                  onClick={() => setShowTranscript(v => !v)}
+                  aria-expanded={showTranscript}
+                >
+                  <FontAwesomeIcon icon={faFileLines} />
+                  {showTranscript ? 'Hide transcript' : 'Read transcript'}
+                </PillButton>
+              )}
+            </OverlayFooter>
+          )}
         </Overlay>
       )}
     </>

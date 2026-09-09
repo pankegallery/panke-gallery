@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { artworkTitleStyle } from '../guide-layout/GuideLayout.styles';
+
 export const Bar = styled.div`
   position: fixed;
   left: 0;
@@ -37,10 +39,8 @@ export const NowPlaying = styled.div`
   min-width: 0;
 
   h3 {
+    ${artworkTitleStyle}
     font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.medium};
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -123,6 +123,12 @@ export const ExpandButton = styled.button`
   }
 `;
 
+// Three independent regions stacked in a column that itself never scrolls
+// (overflow: hidden) — only OverlayCenter does. Previously the whole Overlay
+// scrolled AND TranscriptSection had its own internal scroll, which produced
+// visible double-scrolling and let OverlayTop's collapse button scroll out
+// of view; now there is exactly one scrollable region, and the top/bottom
+// rows are structurally unable to scroll away.
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
@@ -130,45 +136,50 @@ export const Overlay = styled.div`
   background: ${props => props.theme.colors.theme.white};
   display: flex;
   flex-direction: column;
-  padding: 1.25em;
-  padding-bottom: calc(1.25em + env(safe-area-inset-bottom));
-  overflow-y: auto;
+  height: 100%;
+  overflow: hidden;
+  padding: 0 calc(1.25em + env(safe-area-inset-right)) 0 calc(1.25em + env(safe-area-inset-left));
 `;
 
+// Anchored to the screen's own edges (not the 480px reading column below) —
+// position: relative so StopNumber can center itself independent of
+// whatever width the collapse button takes up.
 export const OverlayTop = styled.div`
+  flex: 0 0 auto;
+  position: relative;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 1em 0;
 `;
 
-export const OverlayBody = styled.div`
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
-`;
-
-// Title, artist, play button and scrubber — always vertically centered in
-// whatever space is left above OverlayFooter, regardless of whether the
-// transcript is open or the footer has one button or two. Kept as its own
-// flex region specifically so those things DON'T shift around as sibling
-// content (transcript text, footer buttons) appears/disappears.
+// Title, artist, play button, scrubber, and (when open) the transcript —
+// the one scrollable region. Centered vertically when it fits; once the
+// transcript makes it taller than the available space, "safe center" (where
+// supported) keeps the top of the content reachable by scrolling instead of
+// clipping it above an unreachable scroll position — the plain `center`
+// above it is the fallback for browsers that don't understand `safe`.
 export const OverlayCenter = styled.div`
   flex: 1 1 auto;
   min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  justify-content: safe center;
   gap: 0.6em;
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em 0;
 
   h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: ${props => props.theme.fontSizes.large};
-    font-weight: ${props => props.theme.fontWeights.medium};
+    ${artworkTitleStyle}
+    font-size: ${props => props.theme.fontSizes.medium};
   }
 
   .artist {
@@ -176,11 +187,8 @@ export const OverlayCenter = styled.div`
   }
 `;
 
-// Always the last thing in OverlayBody, in normal flow (not sticky/fixed —
-// that combined with the Overlay's own safe-area bottom padding left a gap
-// below the footer where scrolled transcript text showed through). Staying
-// reachable without scrolling past a long transcript is instead handled by
-// capping TranscriptSection's own height below.
+// Always the last region, its own fixed-height flex child (not nested inside
+// the scrollable OverlayCenter) so it can never be scrolled out of view.
 export const OverlayFooter = styled.div`
   flex: 0 0 auto;
   display: flex;
@@ -188,16 +196,21 @@ export const OverlayFooter = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.75em;
-  padding-top: 1.5em;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1em 0 calc(1em + env(safe-area-inset-bottom));
+  border-top: 1px solid ${props => props.theme.colors.theme.lightgrey};
 `;
 
+// Positioned in OverlayTop, centered independent of the collapse button.
 export const StopNumber = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 2.4em;
   height: 2.4em;
-  margin: 0 auto auto;
+  margin: 0;
   border: 1px solid ${props => props.theme.colors.theme.black};
   border-radius: 50%;
   font-size: ${props => props.theme.fontSizes.medium};
@@ -218,14 +231,13 @@ export const TimeRow = styled.div`
   color: ${props => props.theme.colors.theme.grey};
 `;
 
-// Capped and independently scrollable, rather than growing to fit the whole
-// text — that way OverlayFooter always stays reachable right below it
-// instead of being pushed arbitrarily far down by a long transcript.
+// Flows inside OverlayCenter (the single scrollable region) rather than
+// scrolling on its own — nesting a second scrollable region here was what
+// produced the double-scrolling bug. Needs its own explicit width because
+// OverlayCenter's align-items: center otherwise shrinks unwidthed children
+// to fit their content (the same issue TimeRow had).
 export const TranscriptSection = styled.div`
-  flex: 0 1 auto;
-  max-height: 40vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
   text-align: left;
   margin-top: 1em;
 
@@ -235,7 +247,11 @@ export const TranscriptSection = styled.div`
 `;
 
 // Shared pill-button style for both the transcript toggle and the language
-// toggle in OverlayFooter — same look, different icon/label.
+// toggle in OverlayFooter — same look, different icon/label. Hover (mouse
+// only) and touch :active both swap to a filled black/white treatment,
+// matching LanguagePicker's buttons. $active additionally makes that filled
+// state persistent — used on the transcript toggle so "showing" looks
+// visually different from "hidden", not just on hover/press.
 export const PillButton = styled.button`
   display: flex;
   align-items: center;
@@ -244,13 +260,13 @@ export const PillButton = styled.button`
   padding: 0.6em 1.1em;
   border: 1px solid ${props => props.theme.colors.theme.black};
   border-radius: 999px;
-  background: none;
-  color: ${props => props.theme.colors.theme.black};
+  background: ${props => (props.$active ? props.theme.colors.theme.black : 'none')};
+  color: ${props => (props.$active ? props.theme.colors.theme.white : props.theme.colors.theme.black)};
   font-size: ${props => props.theme.fontSizes.small};
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
   svg {
     font-size: 1em;
@@ -258,11 +274,13 @@ export const PillButton = styled.button`
 
   @media (hover: hover) {
     &:hover {
-      background: ${props => props.theme.colors.theme.lightgrey};
+      background: ${props => props.theme.colors.theme.black};
+      color: ${props => props.theme.colors.theme.white};
     }
   }
 
   &:active {
-    background: ${props => props.theme.colors.theme.lightgrey};
+    background: ${props => props.theme.colors.theme.black};
+    color: ${props => props.theme.colors.theme.white};
   }
 `;

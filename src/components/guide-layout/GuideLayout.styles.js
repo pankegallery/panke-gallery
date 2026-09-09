@@ -1,4 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+// Shared typographic treatment for an artwork title, wherever it's shown
+// (mini player bar, fullscreen player, stop lists) — kept as-authored casing
+// rather than force-uppercased, unlike exhibition names/section headings
+// elsewhere in the guide. Centralised here so changing it once (e.g. the
+// casing/letter-spacing choice) doesn't require editing every place an
+// artwork title is rendered.
+export const artworkTitleStyle = css`
+  letter-spacing: 0.02em;
+  font-weight: ${props => props.theme.fontWeights.medium};
+`;
 
 export const GuideShell = styled.div`
   display: flex;

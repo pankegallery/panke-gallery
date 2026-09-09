@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { artworkTitleStyle } from '../guide-layout/GuideLayout.styles';
+
 export const List = styled.ul`
   list-style: none;
   margin: 0;
@@ -47,9 +49,7 @@ export const Titles = styled.span`
 
   strong {
     display: block;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: ${props => props.theme.fontWeights.medium};
+    ${artworkTitleStyle}
   }
 
   small {

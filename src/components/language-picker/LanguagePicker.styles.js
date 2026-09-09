@@ -30,12 +30,16 @@ export const Buttons = styled.div`
   }
 `;
 
+// $selected makes the already-chosen language look persistently filled
+// (not just on hover/press) — relevant when a visitor reopens this picker
+// via the player's "change language" control, so it's clear which one is
+// currently active rather than presenting a blank set of options again.
 export const LanguageButton = styled.button`
   padding: 0.9em 1.8em;
   border: 1px solid ${props => props.theme.colors.theme.black};
   border-radius: 999px;
-  background: none;
-  color: ${props => props.theme.colors.theme.black};
+  background: ${props => (props.$selected ? props.theme.colors.theme.black : 'none')};
+  color: ${props => (props.$selected ? props.theme.colors.theme.white : props.theme.colors.theme.black)};
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: ${props => props.theme.fontSizes.medium};

@@ -54,6 +54,11 @@ const GuideStopTemplate = props => {
 
   const [language, setLanguage] = useState(null)
   const [checkedStorage, setCheckedStorage] = useState(false)
+  // Separate from `language` itself so re-opening the picker (via the
+  // player's "change language" control) doesn't lose track of the previous
+  // choice — LanguagePicker highlights it as already-selected instead of
+  // presenting a blank set of options again.
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   useEffect(() => {
     if (needsLanguagePicker) {
@@ -69,6 +74,7 @@ const GuideStopTemplate = props => {
   const chooseLanguage = selected => {
     setStoredLanguage(selected)
     setLanguage(selected)
+    setPickerOpen(false)
   }
 
   // Which row to actually show: the one matching the chosen language, or —
@@ -78,8 +84,8 @@ const GuideStopTemplate = props => {
     ? rows.find(row => row.language === language) || rows.find(row => !row.language)
     : rows[0]
 
-  const showPicker = needsLanguagePicker && checkedStorage && !language
-  const showStop = !needsLanguagePicker || (checkedStorage && language)
+  const showPicker = needsLanguagePicker && checkedStorage && (!language || pickerOpen)
+  const showStop = !needsLanguagePicker || (checkedStorage && language && !pickerOpen)
 
   if (rows.length === 0) return null
 
@@ -92,7 +98,7 @@ const GuideStopTemplate = props => {
   if (showPicker) {
     return (
       <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`} headerAction={headerAction}>
-        <LanguagePicker languages={languages} onSelect={chooseLanguage} />
+        <LanguagePicker languages={languages} selectedLanguage={language} onSelect={chooseLanguage} />
       </GuideLayout>
     )
   }
@@ -124,7 +130,7 @@ const GuideStopTemplate = props => {
         artist={activeRow.artist}
         referenceNumber={activeRow.referenceNumber}
         language={needsLanguagePicker ? language : null}
-        onChangeLanguage={needsLanguagePicker ? () => setLanguage(null) : undefined}
+        onChangeLanguage={needsLanguagePicker ? () => setPickerOpen(true) : undefined}
       />
     </GuideLayout>
   )
