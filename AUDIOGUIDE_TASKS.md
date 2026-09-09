@@ -1,61 +1,128 @@
-# Audioguide — Task Breakdown
+# Audioguide — Implementation Reference
 
-Companion to [SPECS.md](SPECS.md). Split into three phases so work can be picked up by an AI coding agent one phase at a time. Each task lists the files it touches and how to tell it's done. Phase 1 is scoped tightly to ship by Monday; phases 2–3 are follow-ups, not blockers for the first exhibition.
+**Companion to:** [AUDIOGUIDE_SPECS.md](AUDIOGUIDE_SPECS.md) (what it is / how it's meant to work) — this doc is **how each piece is actually built**, file by file, plus the non-obvious bugs found along the way.
 
----
+**Status:** shipped and live. Open decisions are tracked in [AUDIOGUIDE_SPECS.md § Open decisions](AUDIOGUIDE_SPECS.md#open-decisions), not duplicated here.
 
-## Phase 1 — Monday deadline (minimal dev time)
+<br>
 
-Goal: a working `/guide/{reference_number}` page per artwork, a `/print-sheet` with QR codes, plain `<audio>` playback, styled to match the rest of the site. No fancy player, no overview page, no auto-linking yet.
+## Data sourcing — Baserow → Gatsby
 
-### 1.1 Baserow → Gatsby data source
+| File | Role |
+|---|---|
+| `gatsby/source-baserow.js` | Custom `sourceNodes`, fetches the Baserow table, creates one `AudioguideStop` node per row |
+| `gatsby-node.js` | `AudioguideStop` schema (`createSchemaCustomization`), `pageUrl`/`qrCodeSvg` resolvers |
 
-- [ ] Add a Baserow API token as an env var, following the existing Contentful pattern in [gatsby-config.js](gatsby-config.js) (`.env.${NODE_ENV}`, read via `dotenv`). Name it `BASEROW_API_TOKEN`; also add `BASEROW_AUDIOGUIDE_TABLE_ID`.
-- [ ] Write a custom `sourceNodes` function (in `gatsby-node.js` or a new `gatsby/source-baserow.js` required from it) that fetches all rows from the Baserow "Audioguide" table via its REST API (`node-fetch` is already a dependency — no new HTTP client needed) and creates a Gatsby node per row, typed e.g. `AudioguideStop`.
-- [ ] Fields to bring in at minimum: `reference_number`, `artwork_name`, `artist`, `description`, `audio_url`, `exhibition_slug`, `transcript` (nullable — don't fail the build if empty).
-- [ ] Acceptance: `gatsby develop` runs without errors and `AudioguideStop` nodes are queryable in GraphiQL (`http://localhost:8000/___graphql`).
+> [!WARNING]
+> **Baserow "Single select" fields don't return a plain string.** Switching `language` from Text to a dropdown (recommended in the spec, to stop spelling drift) changes the API shape to `{ id, value, color }`. `String(thatObject)` silently coerces to the literal text `"[object Object]"` for *every* row — all languages then look identical, and multi-language detection (`languages.length > 1`) never fires. Fixed with a `selectValue()` helper that unwraps `.value` from the dropdown shape while still accepting a plain string, so switching field types again doesn't silently break this a second time.
 
-### 1.2 Per-stop page template
+> [!NOTE]
+> **Pasted long text can carry stray line breaks mid-sentence** (a hard wrap from a word processor, not a real paragraph break) which then render literally wherever `white-space: pre-wrap` is used. `normalizeLineBreaks()` collapses single line breaks into spaces while preserving real paragraph breaks (2+ newlines), applied to both `description` and `transcript` at the source.
 
-- [ ] Create `src/templates/guide-stop.js`, modeled on `src/templates/exhibition.js` (same `Layout` wrapper, same `Helmet` title pattern, same `get(this.props, 'data...')` style).
-- [ ] Wire it up in `gatsby-node.js`'s `createPages`: one `createPage` call per `AudioguideStop` node, `path: /guide/${reference_number}/`, `context: { reference_number }` (mirror how exhibitions/events/editions are created in the same file).
-- [ ] Page content, in order: artwork name (`h1`), artist, description, a plain `<audio controls src={audio_url} />`, transcript below the player if present (plain text block, not expandable yet — that's phase 2).
-- [ ] Reuse existing styled-components rather than inventing new ones: `HeadSection` / `InfoSection` / `Meta` from [Content.styles.js](src/components/content/Content.styles.js) for headings and layout rhythm, `Row`/`Col` from [Layout.styles.js](src/components/layout/Layout.styles.js) for the two-column about-style layout. Match the uppercase-letter-spaced `h1`/`h2` treatment already used on the exhibition template — don't introduce new type scale.
-- [ ] Acceptance: visiting `/guide/{reference_number}/` for a real Baserow row renders a page that looks like a sibling of `/exhibition/{slug}/` (same header, footer, color-swap, container width), not a bare unstyled page.
+<br>
 
-### 1.3 QR code generator + print sheet
+## URL structure & page generation
 
-- [ ] `npm install qrcode` (MIT, SVG output, no external service — per SPECS §8).
-- [ ] In `gatsby-node.js`, after creating the per-stop pages, generate an SVG string per row with `qrcode`, encoding the **full production page URL** (not the raw Nextcloud link). Before wiring this: check [gatsby-config.js](gatsby-config.js)'s `pathPrefix: '/panke-gallery'` — confirm whether it's active in production (i.e. whether the real URL is `panke.gallery/panke-gallery/guide/03` or `panke.gallery/guide/03`) so the encoded URL is correct the first time.
-- [ ] Pass the generated SVGs + row data (reference number, artwork name) into a new `src/pages/print-sheet.js` via `createPage` context (or a page query against the `AudioguideStop` nodes — pick whichever is less code).
-- [ ] Print sheet layout: grid of QR codes, each with reference number + artwork name printed beneath, using the existing `Row`/`Col` grid rather than a new grid system.
-- [ ] Add a print stylesheet (`@media print`, `@page { size: A4; }`) so the browser's Print → Save as PDF paginates cleanly.
-- [ ] Acceptance: `/print-sheet/` shows one QR per Baserow row; scanning one with a phone camera opens the correct `/guide/{reference_number}/` page; Print Preview shows a clean A4 grid with no cut-off codes.
+| File | Role |
+|---|---|
+| `gatsby-node.js` (`createPages`) | Groups stops into pages by **position** (`exhibitionSlug` + `referenceNumber`), not by reference number alone |
 
-### 1.4 Non-dev, parallel track (editor, not agent)
+A position is grouped from potentially several `AudioguideStop` rows (language variants). One page is created per position regardless of row count — the stop page itself queries all rows at that position and resolves which one to show (see [Guide pages](#guide-pages) below).
 
-- [ ] Editor populates the Baserow "Audioguide" table for the upcoming exhibition's artworks, including `exhibition_slug` (must match the Contentful `Exhibition.slug` for that show exactly — check `/exhibition/{slug}/` in the live site or Contentful entry).
-- [ ] Nextcloud share links created and pasted into `audio_url` before the Monday build.
+> [!NOTE]
+> **Telling a genuine duplicate apart from a language variant:** two rows sharing a position used to always mean a data-entry mistake (the original bug this whole scheme fixes — two exhibitions both using reference number `01`). Now that two rows at the *same* position can be legitimate (one per language), the check groups by position first and only warns when the rows there **aren't** distinguishable by `language` (e.g. both blank, or both `"English"`) — a real language variant no longer trips a false warning.
 
----
+<br>
 
-## Phase 2 — Neat-looking stop page, fancy player
+## Guide pages
 
-Not required for the first exhibition to go live; do once Phase 1 is stable and there's a signal that the guide is actually being used.
+| File | Route | Role |
+|---|---|---|
+| `src/pages/guide.js` | `/guide/` | Every exhibition with stops + "Other stops" |
+| `src/templates/guide-exhibition.js` | `/guide/{slug}/` | One exhibition's stop list |
+| `src/templates/guide-stop.js` | `/guide/{slug}/{ref}/` | One stop — owns the language decision (below) |
+| `src/components/guide-stop-list.js` | — | Shared list markup, used by both overview types |
+| `src/components/guide-layout.js` | — | Shared header/shell — data-agnostic, just renders whatever `headerAction` node it's given |
 
-- [ ] Decide plain-`<audio>`-with-custom-UI vs. adopting [AudioGuideKit](https://audioguidekit.org/) components (SPECS §7, option B) — evaluate bundle size / integration effort vs. building a custom player with play/pause, scrubber, and elapsed/remaining time using the native `<audio>` element's API.
-- [ ] Verify Nextcloud's `Range` header support on the real instance (`curl -I -H "Range: bytes=100-200" <share-link>/download`, expect `206 Partial Content`) — determines whether seeking works or whether a prefetch-to-blob approach is needed (SPECS §7 action item).
-- [ ] Build the chosen player as a component (e.g. `src/components/audio-player.js` + `.styles.js`) so `guide-stop.js` stays a thin page shell — keep it in the panke.gallery visual language (theme colors/fonts from `src/theme/theme.js`), not a copy of AudioGuideKit's default skin.
-- [ ] Make the transcript expandable/collapsible instead of always-visible plain text.
-- [ ] Add next/previous stop navigation if `room`/`order` is populated in Baserow (SPECS §10 open item — confirm with editorial whether this is wanted before building it).
-- [ ] Accessibility pass: keyboard-operable player controls, visible focus states, transcript reachable without audio.
+**Header:** left side shows exhibition context (name on a stop page; name + dates on that exhibition's own overview); right side is the "back to this exhibition's overview" icon, when relevant. No logo — see [SPECS § Open decisions](AUDIOGUIDE_SPECS.md#open-decisions) item 5.
 
----
+**Language resolution lives in `guide-stop.js`**, not the audio player:
 
-## Phase 3 — Exhibition overview page + other ideas
+```
+rows = all AudioguideStop rows at this position
+languages = distinct rows[].language
+activeRow = row matching the chosen language, else a language-agnostic row
+```
 
-- [ ] Audioguide overview page per exhibition: group `AudioguideStop` nodes by `exhibition_slug`, pull the exhibition's title/dates from Contentful (same query shape as `exhibition.js`), list all stops with links. Route suggestion: `/guide/{exhibition_slug}/` as an index, with individual stops staying at `/guide/{reference_number}/` (already unique per SPECS §5.1 — no collision).
-- [ ] Auto-link from the exhibition page: in `src/templates/exhibition.js`, if any `AudioguideStop` exists with a matching `exhibition_slug` and non-empty `audio_url`, render a link/button to the guide overview page. Needs the `exhibition_slug` cross-reference from Phase 1 — already in the data model, no Baserow schema change needed.
-- [ ] Print-sheet access control decision (SPECS §10): Netlify basic auth vs. leaving it unlinked/unindexed. Low priority since it has no visitor-facing value, but worth closing out before it's forgotten.
-- [ ] Multilingual support if/when `language` rows start being used — likely just a filter on the overview page plus a language switcher on stop pages, no data model change needed.
-- [ ] Usage stats, only if requested: self-hosted/privacy-respecting option (Plausible or GoatCounter), scoped to `/guide/*` and `/exhibition/*` pages only — no tracking scripts anywhere else per SPECS §9.
+`activeRow` supplies *everything* rendered for the stop — name, artist, description, image, and the `audioUrl`/`transcript` handed to `AudioPlayer`. Picking a language re-renders the page with a **freshly-mounted** player (so it starts collapsed, not mid-overlay); "change language" in the player's footer resets the choice and swaps back to the full-page picker.
+
+> [!IMPORTANT]
+> **This was tried the other way first** — language living entirely inside `AudioPlayer` (a `tracks` prop, its own picker) — on the theory that language only ever affects which audio file plays. That's wrong whenever the *name itself* is translated (confirmed with test data: `"To test"`/English vs `"Testen"`/Deutsch at the same position) — a player-scoped picker has no way to affect the page's own `<h1>`. Both overview lists (`guide.js`'s "Other stops", `guide-exhibition.js`'s stop list) need the identical fix: group by position, prefer the row matching the stored language, not a plain first-match dedupe.
+
+<br>
+
+## Audio player
+
+**File:** `src/components/audio-player.js` + `audio-player/AudioPlayer.styles.js`
+
+Takes plain `audioUrl`/`transcript`/`title`/`artist` props — language was resolved by the caller before this component ever mounts. `language`/`onChangeLanguage` props are display-only (the footer button), not player-managed state.
+
+**Fullscreen overlay layout: three regions, one scrollable.** `Overlay` itself is `overflow: hidden` and never scrolls. `OverlayTop` (stop number centered, collapse icon right) and `OverlayFooter` (transcript/language pill buttons) are fixed-size flex children that can never be scrolled out of view; `OverlayCenter` (title, artist, play button, scrubber, and — when open — the transcript) is the *only* scrollable region (`min-height: 0; overflow-y: auto`), vertically centered when its content fits.
+
+> [!WARNING]
+> **Earlier version had two nested scrollable regions** (the whole overlay, plus `TranscriptSection`'s own `max-height`/`overflow-y: auto`) inside a shared `OverlayBody` wrapper. On a two-line title this pushed content taller than the viewport, which broke centering, produced visible double-scrolling, and let the top row's collapse button scroll out of reach entirely. Fixed by removing `OverlayBody`, making `Overlay` itself non-scrolling, and giving `OverlayCenter` sole ownership of scrolling — `TranscriptSection` now just flows inside it rather than scrolling on its own.
+
+> [!WARNING]
+> **Changing `<audio src>` reactively doesn't reliably make the browser switch sources** once it's already loaded one — confirmed live (kept playing the first-resolved language regardless of what was picked). Fixed with an explicit `audioRef.current.load()` in a `useEffect` keyed on `audioUrl`, which also resets `currentTime` and any stale error state.
+
+> [!NOTE]
+> **A missing/broken `audio_url` used to surface as an uncaught runtime error** (`audio.play()` rejecting). Both the rejected promise and the `<audio>` element's own `error` event are now caught — the play button disables and the player shows "Audio unavailable" instead. The transcript toggle still works, so there's still an accessible fallback with no audio.
+
+<br>
+
+## Print sheets (`/codes`)
+
+| File | Role |
+|---|---|
+| `src/pages/codes.js` | Global sheet, all stops grouped by exhibition |
+| `src/templates/codes-exhibition.js` | One exhibition's sheet |
+| `src/components/print-sheet.js` | Shared QR-grid rendering for both |
+| `src/components/print-layout.js` | Bare wrapper (no site chrome) + the password gate |
+| `src/components/password-gate.js`, `src/utils/codes-auth.js` | Full-screen password prompt; 30-day device-remembered unlock |
+| `netlify/functions/codes-auth-check.js` | Server-side password check — real value lives only in `CODES_PASSWORD`, never client-side |
+
+Each sheet's sections carry an **entrance QR** (linking to the exhibition's own overview page) ahead of the per-artwork codes — sourced from an `audioguideOverviewQrCodeSvg` resolver on `ContentfulExhibition` (and a root-level equivalent for the unassigned bucket, which has no Contentful node to hang a resolver off).
+
+> [!NOTE]
+> **Language variants share one QR code** (same position → same `pageUrl`/`qrCodeSvg`) — printing one card per row would print the same code twice. `src/utils/dedupe-stops-by-position.js` keeps one row per position before rendering; used here and nowhere else, since the print sheet doesn't need to reflect a language *preference* the way the guide pages do — the physical QR code is identical regardless.
+
+**`/codes` access control — options considered before choosing the password gate:**
+
+| Option | Pros | Cons |
+|---|---|---|
+| **Password prompt, server-side check (chosen)** | No hosting/dashboard config beyond one env var; works the same everywhere | Still not real access control on a static site (SPECS §9); needs `netlify dev`, not plain `gatsby develop`, to test locally |
+| Netlify Basic Auth | Real CDN-level access control, zero code | Netlify dashboard/plan config; shared password to distribute/rotate |
+| `robots.txt` + `noindex` | Trivial, keeps well-behaved crawlers out | Not real access control — done anyway, alongside the password prompt, since it's free |
+| Obscurity (unlinked path) | No config | Leaks via history/logs/an accidental share |
+| IP allowlist | No password to share | Breaks the moment printing happens from a different network |
+| Keep off production (branch/preview only) | Never reachable at the real domain | A second build pipeline just for this page |
+
+<br>
+
+## Exhibition-page audioguide link
+
+**File:** `src/templates/exhibition.js`, `src/components/content/Content.styles.js` (new `Button` export)
+
+Queries `allAudioguideStop(filter: { exhibitionSlug: { eq: $slug } })` for just `audioUrl`; if any row has a non-empty one, a section renders between the further-content-blocks and the documentation images — short explanation + an "Open the audioguide" button to `/guide/{slug}/`. Reuses the `Row`/`Col`/`InfoSection` layout already used by "About the exhibition" above it.
+
+> [!NOTE]
+> No canonical site-wide button component existed. The closest reusable style was the RSVP form's own submit button — its CSS was copied into a generically-named `Button` in `Content.styles.js` rather than importing something named `RsvpSubmitButton` into an unrelated page. The RSVP form itself is untouched.
+
+<br>
+
+## Accessibility & interaction polish
+
+- **Site-wide focus outline was actually broken**, not just unstyled — `GlobalStyles.js` had `button:focus { outline: none; }` / `a:focus { outline: none; }` with no replacement, so keyboard users had no focus indicator *anywhere on the site*. Fixed with `:focus-visible` (outline hidden for mouse clicks, shown for keyboard focus).
+- Subtle hover (`@media (hover: hover)`, so it only triggers for mouse-type input) and `:active` (touch tap) feedback added across list rows, icon buttons, and the language picker.
+- **iOS Safari doesn't apply `:active` styles at all** unless a touch listener exists somewhere on the page — a one-time no-op `touchstart` listener in `GuideLayout` unlocks it site-wide.
+- **Player pill buttons (transcript/language) and `LanguagePicker`'s buttons share one feedback pattern**: a filled black-background/white-text swap on hover and on press (`PillButton`, `LanguageButton`). Two of these also carry a *persistent* version of that same fill, independent of hover/press — the transcript toggle (`$active`, filled while the transcript is showing) and the language picker's already-chosen option (`$selected`, filled when reopened via the player's "change language" control) — so "current state," not just "being interacted with," is visible at a glance.

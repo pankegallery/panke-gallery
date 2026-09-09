@@ -2,7 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
@@ -10,7 +10,7 @@ import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import Moment from 'moment'
 import { processExternalLinks } from '../utils/processExternalLinks'
-import { HeadSection, Meta, InfoSection } from '../components/content/Content.styles'
+import { HeadSection, Meta, InfoSection, Button } from '../components/content/Content.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
 
 
@@ -19,6 +19,9 @@ class ExhibitionTemplate extends React.Component {
 
     const exhibition = get(this.props, 'data.contentfulExhibition')
     console.log(exhibition);
+
+    const audioguideStops = get(this.props, 'data.allAudioguideStop.edges', [])
+    const hasAudioguide = audioguideStops.some(({ node }) => node.audioUrl)
 
     const siteTitle = get(this.props, 'data.site.siteMetadata.title')
     console.log(siteTitle);
@@ -144,6 +147,24 @@ class ExhibitionTemplate extends React.Component {
 
         {FurtherContentBlocks}
 
+        {/*  ---- AUDIOGUIDE ---- */}
+
+        {hasAudioguide && (
+          <InfoSection>
+            <Row>
+              <Col $md={4} $sm={4} $xs={12}>
+                <h2>Audio guide</h2>
+              </Col>
+              <Col $md={8} $sm={8} $xs={12}>
+                <p>This exhibition has a free audio guide.</p>
+                <p style={{fontWeight: "normal"}}>Listen on your phone as you walk through, or scan the code at each artwork. <br />
+                We kindly ask you to bring your own headphones.</p>
+                <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{margin: "10px 0", display: "inline-block"}}>Open the audioguide</Button>
+              </Col>
+            </Row>
+          </InfoSection>
+        )}
+
         {/*  ---- DOCUMENTATION IMAGES ---- */}
 
         {DocumentationImages}
@@ -167,6 +188,7 @@ export default ExhibitionTemplate;
 export const pageQuery = graphql`
   query ExhibitionsBySlug($slug: String!) {
     contentfulExhibition(slug: { eq: $slug }) {
+      slug
       title
       startDate
       endDate
@@ -223,6 +245,13 @@ export const pageQuery = graphql`
           quality: 100
         )
         description
+      }
+    }
+    allAudioguideStop(filter: { exhibitionSlug: { eq: $slug } }) {
+      edges {
+        node {
+          audioUrl
+        }
       }
     }
   }
