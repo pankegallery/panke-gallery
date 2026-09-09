@@ -31,7 +31,7 @@ class PrintSheetExhibitionPage extends React.Component {
       ? exhibition.audioguideOverviewQrCodeSvg
       : unassignedOverviewQrCodeSvg
 
-    const title = `Audioguide — Print Sheet — ${exhibitionName}`
+    const title = `Audioguide — Print Sheet`
 
     const sections = [
       {
