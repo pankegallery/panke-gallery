@@ -213,9 +213,9 @@ export const Scrubber = styled.input`
 export const TimeRow = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
   font-size: ${props => props.theme.fontSizes.small};
   color: ${props => props.theme.colors.theme.grey};
-  margin-bottom: auto;
 `;
 
 // Capped and independently scrollable, rather than growing to fit the whole
