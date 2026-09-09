@@ -17,6 +17,7 @@ const RsvpForm = ({ eventId, eventTitle, eventDate, capacity, slug }) => {
   
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [submittedName, setSubmittedName] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +53,7 @@ const RsvpForm = ({ eventId, eventTitle, eventDate, capacity, slug }) => {
       const data = await response.json();
 
       if (response.ok) {
+        setSubmittedName(formData.name);
         setStatus('success');
         setFormData({
           name: '',
@@ -74,7 +76,7 @@ const RsvpForm = ({ eventId, eventTitle, eventDate, capacity, slug }) => {
     return (
       <RsvpSuccess>
         <h3>You're on the list!</h3>
-        <p>Thanks, {formData.name} — we've saved your spot for <strong>{eventTitle}</strong>. A confirmation email is on its way. If anything changes, we'll let you know.</p>
+        <p>Thanks, {submittedName} — we've saved your spot for <strong>{eventTitle}</strong>. A confirmation email is on its way. If anything changes, we'll let you know.</p>
       </RsvpSuccess>
     );
   }

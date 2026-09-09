@@ -20,15 +20,20 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a,
-  a:focus,
   a:hover {
     color: ${props => props.theme.colors.theme.black};
     text-decoration: none;
+  }
+
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible) {
     outline: none;
   }
 
-  button:focus {
-    outline: none;
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid ${props => props.theme.colors.theme.black};
+    outline-offset: 2px;
   }
 
   h1, .h1, h2, .h2, h3, .h3 {

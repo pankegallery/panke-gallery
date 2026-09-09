@@ -1,6 +1,22 @@
 const Promise = require('bluebird')
 const path = require('path')
 
+// The site is built without `--prefix-paths` (see the `build` script in
+// package.json), so the configured `pathPrefix` in gatsby-config.js is not
+// applied to production URLs — pages live at panke.gallery/guide/{slug}/03,
+// not panke.gallery/panke-gallery/guide/{slug}/03. QR codes must encode the former.
+const SITE_URL = process.env.SITE_URL || 'https://www.panke.gallery'
+
+// Stops with no exhibitionSlug in Baserow (e.g. a piece that isn't tied to
+// any temporary show) are filed under this reserved bucket instead of being
+// dropped. Picked to read plainly in a URL — rename freely, nothing's been
+// printed yet — but keep it in sync with the same constant in
+// src/components/guide-stop-list.js, src/templates/guide-exhibition.js and
+// src/templates/codes-exhibition.js if it ever changes.
+const UNASSIGNED_EXHIBITION_SLUG = 'stop'
+
+exports.sourceNodes = require('./gatsby/source-baserow.js').sourceNodes
+
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
@@ -8,6 +24,9 @@ exports.createPages = ({ graphql, actions }) => {
     const exhibition = path.resolve('./src/templates/exhibition.js');
     const event = path.resolve('./src/templates/event.js');
     const edition = path.resolve('./src/templates/edition.js');
+    const guideStop = path.resolve('./src/templates/guide-stop.js');
+    const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
+    const codesExhibition = path.resolve('./src/templates/codes-exhibition.js');
     resolve(
       graphql(
         `
@@ -16,6 +35,7 @@ exports.createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   slug
+                  title
                 }
               }
             }
@@ -33,6 +53,15 @@ exports.createPages = ({ graphql, actions }) => {
                 }
               }
             }
+            allAudioguideStop {
+              edges {
+                node {
+                  referenceNumber
+                  exhibitionSlug
+                  language
+                }
+              }
+            }
           }`
       ).then(result => {
         if (result.errors) {
@@ -43,6 +72,7 @@ exports.createPages = ({ graphql, actions }) => {
         const exhibitions = result.data.allContentfulExhibition.edges;
         const events = result.data.allContentfulEvent.edges;
         const editions = result.data.allContentfulEdition.edges;
+        const guideStops = result.data.allAudioguideStop.edges;
 
         exhibitions.forEach((entry, index) => {
           createPage({
@@ -71,6 +101,110 @@ exports.createPages = ({ graphql, actions }) => {
             context: {
               slug: entry.node.slug
             },
+          })
+        })
+
+        // referenceNumber is only unique per exhibition (it's the number on the
+        // physical wall label, restarting for each show), so stops are grouped
+        // into pages by (exhibitionSlug, referenceNumber) — not by
+        // referenceNumber alone. Stops with no exhibitionSlug are filed under
+        // UNASSIGNED_EXHIBITION_SLUG instead of being dropped.
+        //
+        // One physical position can legitimately have more than one row — a
+        // language variant of the same artwork, sharing the same reference
+        // number and QR code/page. `guide-stop.js` queries all rows at that
+        // position itself and picks the right one client-side; this loop only
+        // needs to create the page once per position, and to tell a genuine
+        // data-entry duplicate (rows that aren't distinguishable by language)
+        // apart from an intentional multi-language position.
+        // Looked up per position below so the stop page's header can show
+        // the exhibition's real title without its own extra query.
+        const exhibitionTitleBySlug = new Map(exhibitions.map(entry => [entry.node.slug, entry.node.title]))
+
+        const positions = new Map()
+
+        guideStops.forEach(entry => {
+          const { referenceNumber, language } = entry.node
+          const rawExhibitionSlug = entry.node.exhibitionSlug
+          const hasExhibition = Boolean(rawExhibitionSlug)
+          const exhibitionSlug = rawExhibitionSlug || UNASSIGNED_EXHIBITION_SLUG
+
+          const key = `${exhibitionSlug}/${referenceNumber}`
+
+          if (!positions.has(key)) {
+            positions.set(key, { exhibitionSlug, rawExhibitionSlug, referenceNumber, hasExhibition, languages: [] })
+          }
+          positions.get(key).languages.push(language || '')
+        })
+
+        positions.forEach(({ exhibitionSlug, rawExhibitionSlug, referenceNumber, hasExhibition, languages }) => {
+          if (!hasExhibition) {
+            console.warn(
+              `Audioguide: reference number "${referenceNumber}" has no exhibitionSlug — filed under /guide/${UNASSIGNED_EXHIBITION_SLUG}/.`
+            )
+          }
+
+          if (languages.length > 1 && new Set(languages).size !== languages.length) {
+            console.warn(
+              hasExhibition
+                ? `Audioguide: duplicate reference number "${referenceNumber}" for exhibition "${exhibitionSlug}" — rows aren't distinguishable by language, only one will be shown.`
+                : `Audioguide: duplicate reference number "${referenceNumber}" among stops with no exhibitionSlug — rows aren't distinguishable by language, only one will be shown.`
+            )
+          }
+
+          createPage({
+            path: `/guide/${exhibitionSlug}/${referenceNumber}/`,
+            component: guideStop,
+            context: {
+              exhibitionSlug,
+              referenceNumber,
+              // The actual stored value to query by — an unassigned stop's
+              // AudioguideStop node has exhibitionSlug: "", not "stop",
+              // so the page query can't filter on the bucket name above.
+              rawExhibitionSlug,
+              // For the stop page's header — same fallback as guide-exhibition.js's
+              // own heading, so a mismatched/missing exhibitionSlug reads the same
+              // way in both places.
+              exhibitionTitle: hasExhibition
+                ? exhibitionTitleBySlug.get(rawExhibitionSlug) || rawExhibitionSlug
+                : 'panke.gallery',
+            },
+          })
+        })
+
+        // One overview page and one print sheet per exhibition that has at
+        // least one guide stop (plus the fallback bucket, if used), pulling
+        // the exhibition's own title in from Contentful where available.
+        // exhibitionSlugValues is how each page's own query finds its stops —
+        // the fallback bucket's stops are stored with an empty exhibitionSlug,
+        // not the literal bucket name, so its query can't just do `eq: slug`.
+        const contentfulExhibitionSlugs = new Set(exhibitions.map(entry => entry.node.slug))
+        const guideExhibitionSlugs = new Set(
+          guideStops.map(entry => entry.node.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG)
+        )
+
+        guideExhibitionSlugs.forEach(slug => {
+          if (slug !== UNASSIGNED_EXHIBITION_SLUG && !contentfulExhibitionSlugs.has(slug)) {
+            console.warn(
+              `Audioguide: exhibitionSlug "${slug}" doesn't match any Contentful Exhibition slug — /guide/${slug}/ will build but won't show the exhibition's title/dates. Check it's an exact copy of that Exhibition's slug field.`
+            )
+          }
+
+          const context = {
+            exhibitionSlug: slug,
+            exhibitionSlugValues: slug === UNASSIGNED_EXHIBITION_SLUG ? [''] : [slug],
+          }
+
+          createPage({
+            path: `/guide/${slug}/`,
+            component: guideExhibition,
+            context,
+          })
+
+          createPage({
+            path: `/codes/${slug}/`,
+            component: codesExhibition,
+            context,
           })
         })
 
@@ -111,5 +245,70 @@ exports.createSchemaCustomization = ({ actions }) => {
       rsvpCapacity: Int
       rsvpDeadline: Date @dateformat
     }
+
+    type AudioguideStop implements Node {
+      referenceNumber: String!
+      artworkName: String!
+      artist: String
+      description: String
+      audioUrl: String
+      exhibitionSlug: String
+      transcript: String
+      artworkImage: String
+      language: String
+      pageUrl: String
+      qrCodeSvg: String
+    }
+
+    type ContentfulExhibition implements Node {
+      audioguideOverviewUrl: String
+      audioguideOverviewQrCodeSvg: String
+    }
+
+    type Query {
+      audioguideUnassignedOverviewUrl: String
+      audioguideUnassignedOverviewQrCodeSvg: String
+    }
   `)
+}
+
+exports.createResolvers = ({ createResolvers }) => {
+  const QRCode = require('qrcode')
+  const qrCodeSvgFor = url => QRCode.toString(url, { type: 'svg', margin: 1 })
+
+  createResolvers({
+    AudioguideStop: {
+      pageUrl: {
+        resolve: source =>
+          `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`,
+      },
+      qrCodeSvg: {
+        resolve: source =>
+          qrCodeSvgFor(
+            `${SITE_URL}/guide/${source.exhibitionSlug || UNASSIGNED_EXHIBITION_SLUG}/${source.referenceNumber}/`
+          ),
+      },
+    },
+    // A QR code for the exhibition's own audioguide overview page (as opposed
+    // to one specific stop) — for signage at the entrance of a show, or the
+    // top of its print sheet.
+    ContentfulExhibition: {
+      audioguideOverviewUrl: {
+        resolve: source => `${SITE_URL}/guide/${source.slug}/`,
+      },
+      audioguideOverviewQrCodeSvg: {
+        resolve: source => qrCodeSvgFor(`${SITE_URL}/guide/${source.slug}/`),
+      },
+    },
+    // Same, for the fallback bucket — it has no ContentfulExhibition node to
+    // hang a resolver off, so this is exposed as a root field instead.
+    Query: {
+      audioguideUnassignedOverviewUrl: {
+        resolve: () => `${SITE_URL}/guide/${UNASSIGNED_EXHIBITION_SLUG}/`,
+      },
+      audioguideUnassignedOverviewQrCodeSvg: {
+        resolve: () => qrCodeSvgFor(`${SITE_URL}/guide/${UNASSIGNED_EXHIBITION_SLUG}/`),
+      },
+    },
+  })
 }
