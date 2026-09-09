@@ -144,24 +144,51 @@ export const OverlayBody = styled.div`
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   text-align: center;
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
+`;
+
+// Title, artist, play button and scrubber — always vertically centered in
+// whatever space is left above OverlayFooter, regardless of whether the
+// transcript is open or the footer has one button or two. Kept as its own
+// flex region specifically so those things DON'T shift around as sibling
+// content (transcript text, footer buttons) appears/disappears.
+export const OverlayCenter = styled.div`
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
 
   h2 {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: ${props => props.theme.fontSizes.large};
     font-weight: ${props => props.theme.fontWeights.medium};
-    margin-bottom: 0.2em;
   }
 
   .artist {
     color: ${props => props.theme.colors.theme.grey};
-    margin-bottom: 2em;
   }
+`;
+
+// Always the last thing in OverlayBody, in normal flow (not sticky/fixed —
+// that combined with the Overlay's own safe-area bottom padding left a gap
+// below the footer where scrolled transcript text showed through). Staying
+// reachable without scrolling past a long transcript is instead handled by
+// capping TranscriptSection's own height below.
+export const OverlayFooter = styled.div`
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75em;
+  padding-top: 1.5em;
 `;
 
 export const StopNumber = styled.p`
@@ -191,7 +218,14 @@ export const TimeRow = styled.div`
   margin-bottom: auto;
 `;
 
+// Capped and independently scrollable, rather than growing to fit the whole
+// text — that way OverlayFooter always stays reachable right below it
+// instead of being pushed arbitrarily far down by a long transcript.
 export const TranscriptSection = styled.div`
+  flex: 0 1 auto;
+  max-height: 40vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   text-align: left;
   margin-top: 1em;
 
@@ -200,18 +234,21 @@ export const TranscriptSection = styled.div`
   }
 `;
 
-export const TranscriptToggle = styled.button`
+// Shared pill-button style for both the transcript toggle and the language
+// toggle in OverlayFooter — same look, different icon/label.
+export const PillButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  margin: 1.5em auto 0;
   padding: 0.6em 1.1em;
   border: 1px solid ${props => props.theme.colors.theme.black};
   border-radius: 999px;
   background: none;
   color: ${props => props.theme.colors.theme.black};
   font-size: ${props => props.theme.fontSizes.small};
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   cursor: pointer;
   transition: background-color 0.15s ease;
 

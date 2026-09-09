@@ -7,14 +7,15 @@ import Moment from 'moment'
 
 import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
-import LanguageLabel from '../components/language-label'
 import { List } from '../components/guide-stop-list/GuideStopList.styles'
+import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage } from '../utils/audioguide-language'
 
 const SectionHeading = styled.h2`
   padding: 1.5em 1.25em 0.5em;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-align: center;
   font-size: ${props => props.theme.fontSizes.medium};
   font-weight: ${props => props.theme.fontWeights.medium};
 `
@@ -69,19 +70,37 @@ const GuideOverview = props => {
   const exhibitionsWithStops = exhibitions.filter(exhibition =>
     exhibitionSlugsWithStops.has(exhibition.slug)
   )
-  const unassignedStops = stops.filter(({ node }) => !node.exhibitionSlug)
-
-  // Read-only here — this page spans every exhibition, each with its own
-  // (possibly different) language list, so there's no single picker to
-  // re-open from this level. Changing language happens from within a
-  // specific exhibition's own overview page.
-  const [language, setLanguage] = useState(null)
+  // A position can have more than one row (language variants sharing the
+  // same reference number/page) — show each position once, preferring the
+  // row matching the visitor's already-chosen language.
+  const [preferredLanguage, setPreferredLanguage] = useState(null)
   useEffect(() => {
-    setLanguage(getStoredLanguage())
+    setPreferredLanguage(getStoredLanguage())
   }, [])
 
+  const unassignedByPosition = new Map()
+  stops.forEach(edge => {
+    if (edge.node.exhibitionSlug) return
+    const key = edge.node.referenceNumber
+    if (!unassignedByPosition.has(key)) unassignedByPosition.set(key, [])
+    unassignedByPosition.get(key).push(edge)
+  })
+
+  const unassignedStops = Array.from(unassignedByPosition.values()).map(group =>
+    group.length === 1
+      ? group[0]
+      : group.find(edge => edge.node.language === preferredLanguage) || group[0]
+  )
+
   return (
-    <GuideLayout showOverviewLink={false} headerAction={<LanguageLabel language={language} />}>
+    <GuideLayout 
+      showOverviewLink={false}
+      headerAction={
+        <HeaderTitle>
+          <strong>Overview of audio guide stops</strong>
+        </HeaderTitle>
+      }
+    >
       <Helmet title="Audioguide — Overview" />
 
       {exhibitionsWithStops.length > 0 && (
@@ -120,27 +139,28 @@ export default GuideOverview;
 //=========================================================================
 
 export const pageQuery = graphql`
-  query AudioguideOverviewQuery {
-    allAudioguideStop(sort: { referenceNumber: ASC }) {
-      edges {
+      query AudioguideOverviewQuery {
+        allAudioguideStop(sort: {referenceNumber: ASC }) {
+        edges {
         node {
-          referenceNumber
+        referenceNumber
           exhibitionSlug
-          artworkName
-          artist
+      artworkName
+      artist
+      language
         }
       }
     }
-    allContentfulExhibition {
-      edges {
+      allContentfulExhibition {
+        edges {
         node {
-          slug
+        slug
           title
-          startDate
-          endDate
-          dateTbc
+      startDate
+      endDate
+      dateTbc
         }
       }
     }
   }
-`
+      `

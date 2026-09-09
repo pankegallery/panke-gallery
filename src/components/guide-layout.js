@@ -9,7 +9,6 @@ import {
   GuideShell,
   GuideHeader,
   GuideMain,
-  HeaderSlot,
   OverviewLink,
   DashboardIcon,
 } from './guide-layout/GuideLayout.styles';
@@ -17,8 +16,10 @@ import {
 // A deliberately minimal shell for the audioguide pages — no navigation, no
 // footer, no logo. The guide is meant to be used fullscreen on a phone while
 // walking through the gallery, not as a page within the main site — the
-// header is just the language action (left, when relevant) and the way back
-// to the exhibition's overview (right, when relevant).
+// header is just the exhibition name (left, via headerAction — typically a
+// <HeaderTitle> from GuideLayout.styles) and the way back to the exhibition's
+// overview (right, when relevant). Data-agnostic on purpose: this component
+// doesn't know what headerAction contains, callers build it themselves.
 const GuideLayout = ({
   children,
   showOverviewLink = true,
@@ -46,20 +47,17 @@ const GuideLayout = ({
       </Helmet>
       <GuideShell>
         <GuideHeader>
-          <HeaderSlot>{headerAction}</HeaderSlot>
-
-          <HeaderSlot>
-            {showOverviewLink && (
-              <OverviewLink as={Link} to={overviewHref} title="All audioguide stops" aria-label="All audioguide stops">
-                <DashboardIcon>
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </DashboardIcon>
-              </OverviewLink>
-            )}
-          </HeaderSlot>
+          {headerAction}
+          {showOverviewLink && (
+            <OverviewLink as={Link} to={overviewHref} title="All audioguide stops" aria-label="All audioguide stops">
+              <DashboardIcon>
+                <span />
+                <span />
+                <span />
+                <span />
+              </DashboardIcon>
+            </OverviewLink>
+          )}
         </GuideHeader>
         <GuideMain>{children}</GuideMain>
       </GuideShell>

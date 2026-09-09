@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import GuideLayout from '../components/guide-layout'
 import AudioPlayer from '../components/audio-player'
 import LanguagePicker from '../components/language-picker'
-import LanguageLabel from '../components/language-label'
 import { HeadSection, Meta } from '../components/content/Content.styles'
+import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage, setStoredLanguage } from '../utils/audioguide-language'
 
 const Overview = styled.section`
@@ -39,11 +39,11 @@ const StopNumber = styled.p`
 
 const GuideStopTemplate = props => {
   const exhibitionSlug = get(props, 'pageContext.exhibitionSlug')
+  const exhibitionTitle = get(props, 'pageContext.exhibitionTitle')
   // A wall position can be more than one row — language variants of the same
-  // artwork, sharing this same reference number, page, and QR code. A QR scan
-  // always lands here directly (it's the only entry point some visitors use),
-  // so the language choice has to be made on this page too, not just from
-  // the exhibition overview.
+  // artwork, sharing this same reference number, page, and QR code. Which
+  // row is shown (name, description, audio, transcript — all of it) depends
+  // on the chosen language, resolved here before anything renders.
   const rows = get(props, 'data.allAudioguideStop.edges', []).map(({ node }) => node)
 
   const languages = useMemo(
@@ -61,6 +61,8 @@ const GuideStopTemplate = props => {
       if (stored && languages.includes(stored)) setLanguage(stored)
     }
     setCheckedStorage(true)
+    // Only re-check on mount — languages is derived from this page's own
+    // (static) data and won't meaningfully change after that.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -69,57 +71,60 @@ const GuideStopTemplate = props => {
     setLanguage(selected)
   }
 
-  // Which row to actually render: the one matching the chosen language, or —
-  // if this position mixes a language-agnostic row in with language variants
-  // (e.g. a silent/visual-only piece) — that row as a fallback.
-  const stop = needsLanguagePicker
+  // Which row to actually show: the one matching the chosen language, or —
+  // if this position mixes a language-agnostic row in with variants (e.g. a
+  // silent/visual-only piece) — that row as a fallback.
+  const activeRow = needsLanguagePicker
     ? rows.find(row => row.language === language) || rows.find(row => !row.language)
     : rows[0]
 
   const showPicker = needsLanguagePicker && checkedStorage && !language
   const showStop = !needsLanguagePicker || (checkedStorage && language)
 
+  if (rows.length === 0) return null
+
+  const headerAction = (
+    <HeaderTitle>
+      <strong>{exhibitionTitle}</strong>
+    </HeaderTitle>
+  )
+
   if (showPicker) {
     return (
-      <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`}>
+      <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`} headerAction={headerAction}>
         <LanguagePicker languages={languages} onSelect={chooseLanguage} />
       </GuideLayout>
     )
   }
 
-  if (!showStop || !stop) return null
+  if (!showStop || !activeRow) return null
 
   return (
-    <GuideLayout
-      overviewHref={`/guide/${exhibitionSlug}/`}
-      headerAction={
-        needsLanguagePicker ? (
-          <LanguageLabel language={language} onClick={() => setLanguage(null)} />
-        ) : null
-      }
-    >
-      <Helmet title={`${stop.artworkName} — Audioguide`} />
+    <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`} headerAction={headerAction}>
+      <Helmet title={`${activeRow.artworkName} — Audioguide`} />
 
       <Overview>
         <HeadSection>
-          <StopNumber>{stop.referenceNumber}</StopNumber>
-          <h1>{stop.artworkName}</h1>
-          {stop.artist && <Meta>{stop.artist}</Meta>}
+          <StopNumber>{activeRow.referenceNumber}</StopNumber>
+          <h1>{activeRow.artworkName}</h1>
+          {activeRow.artist && <Meta>{activeRow.artist}</Meta>}
         </HeadSection>
 
-        {stop.artworkImage && (
-          <ArtworkImage src={stop.artworkImage} alt={stop.artworkName} />
+        {activeRow.artworkImage && (
+          <ArtworkImage src={activeRow.artworkImage} alt={activeRow.artworkName} />
         )}
 
-        <p style={{ whiteSpace: 'pre-wrap' }}>{stop.description}</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{activeRow.description}</p>
       </Overview>
 
       <AudioPlayer
-        audioUrl={stop.audioUrl}
-        title={stop.artworkName}
-        artist={stop.artist}
-        transcript={stop.transcript}
-        referenceNumber={stop.referenceNumber}
+        audioUrl={activeRow.audioUrl}
+        transcript={activeRow.transcript}
+        title={activeRow.artworkName}
+        artist={activeRow.artist}
+        referenceNumber={activeRow.referenceNumber}
+        language={needsLanguagePicker ? language : null}
+        onChangeLanguage={needsLanguagePicker ? () => setLanguage(null) : undefined}
       />
     </GuideLayout>
   )

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faChevronUp, faChevronDown, faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faPause, faChevronUp, faChevronDown, faFileLines, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
 import {
   Bar,
@@ -12,11 +12,13 @@ import {
   Overlay,
   OverlayTop,
   OverlayBody,
+  OverlayCenter,
+  OverlayFooter,
   StopNumber,
   Scrubber,
   TimeRow,
   TranscriptSection,
-  TranscriptToggle,
+  PillButton,
   ErrorNote,
 } from './audio-player/AudioPlayer.styles';
 
@@ -27,7 +29,12 @@ const formatTime = seconds => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) => {
+// language/onChangeLanguage are purely for display here — which language is
+// active was already decided by the caller (guide-stop.js), before this
+// component ever mounts with a given audioUrl/transcript. onChangeLanguage
+// just needs to reset that decision upstream; this component doesn't manage
+// language state itself.
+const AudioPlayer = ({ audioUrl, transcript, title, artist, referenceNumber, language, onChangeLanguage }) => {
   const audioRef = useRef(null);
   const [expanded, setExpanded] = useState(false);
   const [showTranscript, setShowTranscript] = useState(false);
@@ -35,6 +42,18 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playbackError, setPlaybackError] = useState(false);
+
+  useEffect(() => {
+    // Changing the `src` attribute reactively doesn't reliably make an
+    // already-initialized <audio> element switch to the new resource once
+    // it's loaded one already (e.g. after a language change upstream) —
+    // without an explicit load(), it kept playing the previous source.
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.load();
+    setCurrentTime(0);
+    setPlaybackError(false);
+  }, [audioUrl]);
 
   useEffect(() => {
     if (!('mediaSession' in navigator)) return;
@@ -122,58 +141,72 @@ const AudioPlayer = ({ audioUrl, title, artist, transcript, referenceNumber }) =
           </OverlayTop>
 
           <OverlayBody onClick={e => e.stopPropagation()}>
-            {referenceNumber && <StopNumber>{referenceNumber}</StopNumber>}
-            <h2>{title}</h2>
-            {artist && <p className="artist">{artist}</p>}
+            <OverlayCenter>
+              {referenceNumber && <StopNumber>{referenceNumber}</StopNumber>}
+              <h2>{title}</h2>
+              {artist && <p className="artist">{artist}</p>}
 
-            <PlayButton
-              type="button"
-              onClick={togglePlay}
-              disabled={playbackError}
-              $isPlaying={isPlaying}
-              $size="72px"
-              $iconSize="1.4em"
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-              style={{ margin: '0 auto 1.5em' }}
-            >
-              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-            </PlayButton>
+              <PlayButton
+                type="button"
+                onClick={togglePlay}
+                disabled={playbackError}
+                $isPlaying={isPlaying}
+                $size="72px"
+                $iconSize="1.4em"
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+              </PlayButton>
 
-            {playbackError ? (
-              <ErrorNote>Audio for this stop isn't available right now.</ErrorNote>
-            ) : (
-              <>
-                <Scrubber
-                  type="range"
-                  min={0}
-                  max={duration || 0}
-                  value={currentTime}
-                  onChange={handleSeek}
-                />
-                <TimeRow>
-                  <span>{formatTime(currentTime)}</span>
-                  <span>{formatTime(duration)}</span>
-                </TimeRow>
-              </>
+              {playbackError ? (
+                <ErrorNote>Audio for this stop isn't available right now.</ErrorNote>
+              ) : (
+                <>
+                  <Scrubber
+                    type="range"
+                    min={0}
+                    max={duration || 0}
+                    value={currentTime}
+                    onChange={handleSeek}
+                  />
+                  <TimeRow>
+                    <span>{formatTime(currentTime)}</span>
+                    <span>{formatTime(duration)}</span>
+                  </TimeRow>
+                </>
+              )}
+            </OverlayCenter>
+
+            {showTranscript && transcript && (
+              <TranscriptSection>
+                <p>{transcript}</p>
+              </TranscriptSection>
             )}
 
-            {transcript && (
-              <>
-                <TranscriptToggle
-                  type="button"
-                  onClick={() => setShowTranscript(v => !v)}
-                  aria-expanded={showTranscript}
-                >
-                  <FontAwesomeIcon icon={faFileLines} />
-                  {showTranscript ? 'Hide transcript' : 'Read transcript'}
-                </TranscriptToggle>
-
-                {showTranscript && (
-                  <TranscriptSection>
-                    <p>{transcript}</p>
-                  </TranscriptSection>
+            {(onChangeLanguage || transcript) && (
+              <OverlayFooter>
+                {onChangeLanguage && (
+                  <PillButton
+                    type="button"
+                    onClick={onChangeLanguage}
+                    aria-label={`Change language (current: ${language})`}
+                  >
+                    <FontAwesomeIcon icon={faLanguage} />
+                    {language}
+                  </PillButton>
                 )}
-              </>
+
+                {transcript && (
+                  <PillButton
+                    type="button"
+                    onClick={() => setShowTranscript(v => !v)}
+                    aria-expanded={showTranscript}
+                  >
+                    <FontAwesomeIcon icon={faFileLines} />
+                    {showTranscript ? 'Hide transcript' : 'Read transcript'}
+                  </PillButton>
+                )}
+              </OverlayFooter>
             )}
           </OverlayBody>
         </Overlay>

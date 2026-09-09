@@ -12,11 +12,10 @@ export const GuideHeader = styled.header`
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.75em;
-  /* Fixed regardless of what's in the right-hand slot (nothing, the overview
-     icon, or the language button) — without this the header's height "jumps"
-     between pages depending on which one is taller. */
+  /* Fixed regardless of what's in the header (nothing, a title, or a title
+     plus the overview icon) — without this the header's height "jumps"
+     between pages depending on what's shown. */
   min-height: 48px;
   padding: 1em 1.25em;
   border-bottom: 1px solid ${props => props.theme.colors.theme.lightgrey};
@@ -26,13 +25,29 @@ export const GuideHeader = styled.header`
   }
 `;
 
-// Always rendered on both sides (even empty) so `justify-content:
-// space-between` keeps the language action pinned left and the overview
-// icon pinned right regardless of which one (if either) is present.
-export const HeaderSlot = styled.div`
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
+// The exhibition name (+ date, on the overview page) shown in the header.
+// flex: 1 1 auto so it fills the space and truncates rather than pushing the
+// overview icon off the right edge or wrapping onto a second line, which
+// would change the header's height depending on content.
+export const HeaderTitle = styled.div`
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+  font-size: ${props => props.theme.fontSizes.small};
+
+  strong {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: ${props => props.theme.fontWeights.medium};
+  }
+
+  .date {
+    color: ${props => props.theme.colors.theme.grey};
+    margin-left: 0.6em;
+  }
 `;
 
 export const OverviewLink = styled.a`

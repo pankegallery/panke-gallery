@@ -35,6 +35,7 @@ exports.createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   slug
+                  title
                 }
               }
             }
@@ -116,6 +117,10 @@ exports.createPages = ({ graphql, actions }) => {
         // needs to create the page once per position, and to tell a genuine
         // data-entry duplicate (rows that aren't distinguishable by language)
         // apart from an intentional multi-language position.
+        // Looked up per position below so the stop page's header can show
+        // the exhibition's real title without its own extra query.
+        const exhibitionTitleBySlug = new Map(exhibitions.map(entry => [entry.node.slug, entry.node.title]))
+
         const positions = new Map()
 
         guideStops.forEach(entry => {
@@ -157,6 +162,12 @@ exports.createPages = ({ graphql, actions }) => {
               // AudioguideStop node has exhibitionSlug: "", not "stop",
               // so the page query can't filter on the bucket name above.
               rawExhibitionSlug,
+              // For the stop page's header — same fallback as guide-exhibition.js's
+              // own heading, so a mismatched/missing exhibitionSlug reads the same
+              // way in both places.
+              exhibitionTitle: hasExhibition
+                ? exhibitionTitleBySlug.get(rawExhibitionSlug) || rawExhibitionSlug
+                : 'panke.gallery',
             },
           })
         })
