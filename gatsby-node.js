@@ -274,7 +274,10 @@ exports.createSchemaCustomization = ({ actions }) => {
 
 exports.createResolvers = ({ createResolvers }) => {
   const QRCode = require('qrcode')
-  const qrCodeSvgFor = url => QRCode.toString(url, { type: 'svg', margin: 1 })
+  // errorCorrectionLevel: 'H' (~30% of the code can be damaged/obscured and
+  // still scan) — needed headroom for the reference-number badge printed
+  // over the middle of each per-stop code, see PrintSheet's QrNumberBadge.
+  const qrCodeSvgFor = url => QRCode.toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'H' })
 
   createResolvers({
     AudioguideStop: {
