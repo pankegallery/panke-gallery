@@ -12,7 +12,15 @@
   # with a custom function already in netlify/functions/) and aborts the
   # build defensively rather than risk a broken deploy. This keeps the
   # existing, working build-plugin setup and skips that auto-adapter attempt.
+  #
+  # NOTE: Gatsby's own panic message here is wrong — it tells you to set
+  # GATSBY_CONTINUE_BUILD_ON_MISSING_ADAPTER, but as of gatsby@5.15.0 the
+  # actual check in node_modules/gatsby/dist/utils/adapter/init.js only reads
+  # GATSBY_CONTINUE_BUILD_ON_ADAPTER_MISMATCH — the name in the message is
+  # never read anywhere. Kept both set in case a future Gatsby release
+  # reverts to the name it currently tells you to use.
   GATSBY_CONTINUE_BUILD_ON_MISSING_ADAPTER = "true"
+  GATSBY_CONTINUE_BUILD_ON_ADAPTER_MISMATCH = "true"
 
 # Environment variables that need to be set in Netlify UI:
 # - BASEROW_TOKEN: Your Baserow API token

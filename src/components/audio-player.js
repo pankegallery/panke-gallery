@@ -20,6 +20,7 @@ import {
   PillButton,
   ErrorNote,
 } from './audio-player/AudioPlayer.styles';
+import { linkify } from '../utils/linkify';
 
 const formatTime = seconds => {
   if (!isFinite(seconds) || seconds < 0) return '0:00';
@@ -176,7 +177,7 @@ const AudioPlayer = ({ audioUrl, transcript, title, artist, referenceNumber, lan
 
             {showTranscript && transcript && (
               <TranscriptSection>
-                <p>{transcript}</p>
+                <p>{linkify(transcript)}</p>
               </TranscriptSection>
             )}
           </OverlayCenter>

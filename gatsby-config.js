@@ -1,8 +1,21 @@
 let contentfulConfig;
 
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`,
-})
+// Force-override process.env with .env.{NODE_ENV}'s values, rather than
+// dotenv.config()'s own precedence rule (skip any key already present in
+// process.env) — Netlify CLI pre-populates process.env for local `netlify
+// build`/`netlify dev` before this file ever runs, including a redacted
+// placeholder in place of any variable marked "secret" on Netlify's
+// dashboard (real content, literal asterisks and all — not just masked
+// display). dotenv does have an `override` option for exactly this, but the
+// installed version here is 8.6.0, which predates that option (added in
+// v16) and silently ignores it — so this bypasses dotenv.config() and does
+// the override manually via dotenv.parse() + Object.assign instead.
+const fs = require('fs')
+const path = require('path')
+const envPath = path.resolve(__dirname, `.env.${process.env.NODE_ENV}`)
+if (fs.existsSync(envPath)) {
+  Object.assign(process.env, require('dotenv').parse(fs.readFileSync(envPath)))
+}
 
 
 try {
