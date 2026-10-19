@@ -3,13 +3,13 @@ import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql, Link } from 'gatsby'
 import styled from 'styled-components'
-import Moment from 'moment'
 
 import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import { List } from '../components/guide-stop-list/GuideStopList.styles'
 import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage } from '../utils/audioguide-language'
+import { formatDateRange } from '../utils/formatDateRange'
 
 const SectionHeading = styled.h2`
   padding: 1.5em 1.25em 0.5em;
@@ -52,11 +52,6 @@ const ExhibitionItem = styled.li`
     color: ${props => props.theme.colors.theme.date};
   }
 `
-
-const formatDates = exhibition =>
-  exhibition.dateTbc
-    ? 'Date to be confirmed'
-    : Moment(exhibition.startDate).format('DD MMMM') + ' – ' + Moment(exhibition.endDate).format('DD MMMM YYYY')
 
 const GuideOverview = props => {
   const stops = get(props, 'data.allAudioguideStop.edges', [])
@@ -111,7 +106,7 @@ const GuideOverview = props => {
               <ExhibitionItem key={exhibition.slug}>
                 <Link to={`/guide/${exhibition.slug}/`}>
                   <strong>{exhibition.title}</strong>
-                  <small>{formatDates(exhibition)}</small>
+                  <small>{formatDateRange(exhibition.startDate, exhibition.endDate, { tbc: exhibition.dateTbc })}</small>
                 </Link>
               </ExhibitionItem>
             ))}

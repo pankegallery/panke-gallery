@@ -8,7 +8,7 @@ import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
-import Moment from 'moment'
+import { formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { HeadSection, Meta, InfoSection, Button } from '../components/content/Content.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
@@ -79,18 +79,9 @@ class ExhibitionTemplate extends React.Component {
     }
 
 
-        // --- Date or to be confirmed plus other meta--
+    // --- Date or to be confirmed plus other meta--
 
-    let dateDisplayed
-
-    if (exhibition.dateTbc){
-      dateDisplayed = "Date to be confirmed"
-    }
-    else{
-      dateDisplayed = Moment(exhibition.startDate).format('DD MMMM') + '\u2009\u2013\u2009' + Moment(exhibition.endDate).format('DD MMMM YYYY')
-    }
-
-    let metaInfos = dateDisplayed
+    let metaInfos = formatDateRange(exhibition.startDate, exhibition.endDate, { tbc: exhibition.dateTbc })
 
     if (exhibition.vernissageInfos){
       metaInfos += ' | ' + exhibition.openingHours
