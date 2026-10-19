@@ -4,7 +4,7 @@ Guidance for AI assistants working in this repository.
 
 **Follow `CONTRIBUTING.md`.** It defines branch names, the commit and pull-request workflow, and the code conventions. The essentials:
 
-- **Branches:** `<type>/<issue-number>-<meaningful-slug>`, with type `feature/`, `bug/`, `refactor/` or `chore/`. No leading slash and no random or auto-generated names. Branch from `development`, and open pull requests into `development`.
+- **Branches:** `<type>/<issue-number>-<meaningful-slug>`, with type `feature/`, `bugfix/`, `refactor/` or `chore/`. No leading slash and no random or auto-generated names. Branch from `development`, and open pull requests into `development`.
 - **Components:** reuse or extend existing components in `src/components/` before adding new ones, and merge near-duplicates. Say in the pull request why a new component was unavoidable.
 - **Conventions:**
   - kebab-case component files, with styles in a matching folder as PascalCase `*.styles.js` (styled-components)

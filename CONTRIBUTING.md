@@ -18,18 +18,18 @@ Format: `<type>/<issue-number>-<meaningful-slug>`
 | Type | Use for | Matching label |
 | --- | --- | --- |
 | `feature/` | New features and visible UI changes | `c _ feature`, `x _ UI/X enhancement` |
-| `bug/` | Fixes for something that is broken | `c _ bug` |
+| `bugfix/` | Fixes for something that is broken | `c _ bug` |
 | `refactor/` | Code clean-ups without visible change (e.g. merging components) | `x _ code enhancement` |
 | `chore/` | Maintenance: dependencies, build, tooling, docs | – |
 
 Rules:
-- Always start with the type, **without a leading slash**. Git rejects names like `/bug/…`.
+- Always start with the type, **without a leading slash**. Git rejects names like `/bugfix/…`.
 - Put the issue number right after the slash when there is an issue. Without an issue, use the slug only.
 - Use a lowercase slug of a few words, separated by hyphens, that says what the branch does.
 - No random or auto-generated names (e.g. `copilot/…`). Rename such branches before opening a pull request.
 
 Examples:
-- `bug/58-mailerlite-newsletter`
+- `bugfix/58-mailerlite-newsletter`
 - `feature/67-exhibitions-archive`
 - `refactor/66-exhibition-item`
 - `chore/60-self-host-fonts`
