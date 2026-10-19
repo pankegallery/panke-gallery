@@ -1,104 +1,44 @@
-import React from 'react';
-import styled from 'styled-components'
+import React from 'react'
+import { Link } from 'gatsby'
+import { Tag as StyledTag } from './content/Content.styles'
 
-const StyledTag = styled.button`
-  display: inline-block;
-  padding: 4px 8px;
-  border: ${props => props.theme.colors.theme.grey} 2px solid;
-  border-radius: 5px;
-  background: transparent;
-  color: ${props => props.theme.colors.theme.grey};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: ${props => props.theme.fontSizes.medium};
-  margin-top: 10px;
-  margin-right: 10px;
+/**
+ * A rounded, outlined label for a tag or an event series.
+ *
+ * Props:
+ * - `tag` – `{ slug, name }`; `name` is the visible label.
+ * - `type` – `'eventSeries'` adds the `eventSeries` class, which picks up the
+ *   page's highlight colour (see `Container` in Layout.styles.js).
+ * - `to` – optional link target. With it the tag is a Gatsby `<Link>`, so it
+ *   works without JavaScript and can be opened in a new tab; without it the
+ *   tag is a plain label (the `<p>` from Content.styles.js).
+ * - `selected` – renders the filled `tag-selected` state with a "×", used on
+ *   /events/ for the series that is currently filtered by.
+ * - `label` – optional accessible name, e.g. to say what clicking the link does.
+ *
+ * The selected state comes only from props: the caller derives it from the
+ * URL, so the tag never holds a copy of it that could get out of sync.
+ */
+const Tag = ({ tag, type, to, selected = false, label }) => {
+  const className = [
+    'tag',
+    type === 'eventSeries' && 'eventSeries',
+    selected && 'tag-selected',
+  ].filter(Boolean).join(' ')
 
-  &.tag-selected {
-    background: ${props => props.theme.colors.theme.grey};
-    color: ${props => props.theme.colors.theme.white} !important;
+  // Only pass `to` along with `as={Link}`: styled-components v6 forwards
+  // unknown props, so a plain label would otherwise get a stray `to` attribute.
+  const linkProps = to ? { as: Link, to } : {}
 
-    &::before {
-      content: "×";
-      display: inline-block;
-      margin-right: 1em;
-    }
-  }
-`;
-
-class Tag extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {isToggleOn: false};
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleTagClick = this.handleTagClick.bind(this);
-    this.componentDidUpdate = this.componentDidUpdate.bind(this);
-  }
-
-  componentDidUpdate = () => {
-    if (this.state.isToggleOn !== this.props.filterIsOn){
-      this.setState(state => ({
-        isToggleOn: this.props.filterIsOn
-      }));
-    }
-  }
-
-  handleTagClick = () =>  {
-    this.props.handleClick(this.props.tag.slug);
-
-    this.setState(state => ({
-      isToggleOn: !state.isToggleOn
-    }));
-
-  //  this.refs.tag.classList.toggle('tag-selected');
-  }
-
-  render() {
-    const thistag = this.props.tag;
-    const type = this.props.type;
-    const toogle = this.state.isToggleOn
-
-    if (type === 'eventSeries' && toogle) {
-      var className = 'tag eventSeries tag-selected';
-    }
-    else if (type === 'eventSeries' && !toogle) {
-      className = 'tag eventSeries';
-    }
-    else{
-      className = 'tag';
-    }
-
-    if (this.props.noClick) {
-      return (
-        <StyledTag
-          ref="tag"
-          className={className}
-          aria-label={`Tagged with ${thistag.name}`}
-          tabindex="-100"
-        >
-          {thistag.name}
-        </StyledTag>
-      );
-    }
-    else{
-      return (
-        <StyledTag
-          ref="tag"
-          className={className}
-          onClick={this.handleTagClick}
-          onKeyDown={this.handleTagClick}
-          aria-label={`Tagged with ${thistag.name}`}
-          tabindex="-100"
-        >
-          {thistag.name}
-        </StyledTag>
-      );
-    }
-
-
-  }
+  return (
+    <StyledTag
+      {...linkProps}
+      className={className}
+      aria-label={label}
+    >
+      {tag.name}
+    </StyledTag>
+  )
 }
 
-export default Tag;
+export default Tag
