@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledFooter = styled.footer`
-  color: ${props => props.theme.colors.theme.grey};
+  color: ${props => props.theme.colors.theme.date};
   font-size: 0.7em;
   padding: 100px 0 30px;
 

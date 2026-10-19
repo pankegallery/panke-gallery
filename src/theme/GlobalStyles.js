@@ -52,7 +52,7 @@ export const GlobalStyles = createGlobalStyle`
     
   small, .small {
     font-size: ${props => props.theme.fontSizes.small};
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
   }
 
   strong {
