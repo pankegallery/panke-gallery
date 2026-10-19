@@ -5,7 +5,7 @@ import Moment from 'moment';
 import { Link, graphql } from 'gatsby';
 
 import Layout from '../components/layout';
-import ExhibitionPreview from '../components/exhibition-preview';
+import ExhibitionItem from '../components/exhibition-item';
 import EventPreview from '../components/event-preview';
 import { processExternalLinks } from '../utils/processExternalLinks';
 import { Row, Col } from '../components/layout/Layout.styles';
@@ -110,7 +110,7 @@ const PankeIndex = ({ data }) => {
                 <h2>Current exhibitions</h2>
               </Headline>
                {currentExhibitions.map(({ node }) => (
-                    <ExhibitionPreview key={node.slug} exhibition={node} />
+                    <ExhibitionItem key={node.slug} exhibition={node} variant="feature" />
                   ))}
             </Section>
           )}
@@ -121,7 +121,7 @@ const PankeIndex = ({ data }) => {
                <h2>Upcoming exhibitions</h2>
               </Headline>
                {upcomingExhibitions.map(({ node }) => (
-                    <ExhibitionPreview key={node.slug} exhibition={node} />
+                    <ExhibitionItem key={node.slug} exhibition={node} variant="feature-small" />
                   ))}
             </Section>
           )}
@@ -151,12 +151,18 @@ export const pageQuery = graphql`
               layout: CONSTRAINED,
               width: 1050
             )
+            description
           }
           openingHours
           vernissageInfos
           subtitleShortDescription {
             childMarkdownRemark {
               html
+            }
+          }
+          description {
+            childMarkdownRemark {
+              excerpt(pruneLength: 1200)
             }
           }
         }

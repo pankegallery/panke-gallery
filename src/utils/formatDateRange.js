@@ -3,7 +3,8 @@ import Moment from 'moment'
 export const DATE_TBC = 'Date to be confirmed'
 
 // En dash between thin spaces (U+2009), as the site has always used.
-const DASH = ' – '
+// Exported for components that render the parts of `dateRangeParts` themselves.
+export const DASH = ' – '
 
 /**
  * Splits an exhibition's date range into the text before and after the dash.
