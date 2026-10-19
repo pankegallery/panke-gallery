@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 
 export const Container = styled.div`
@@ -7,6 +7,11 @@ export const Container = styled.div`
   padding: 0 15px;
   transform: translate(0px, 0px);
   transition: 0.25s ease;
+
+  /* Pages with grids of images (/exhibitions) use the wide container. */
+  ${props => props.$wide && css`
+    ${media.xl} { max-width: ${props.theme.container.maxWidthWide}; }
+  `}
 
   &.menu-active {
     transform: translate(-15.563em, 0px);
@@ -93,6 +98,59 @@ export const Col = styled.div`
   }};
 
   
+`;
+
+const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
+
+/**
+ * The page column grid: `theme.grid.columns` columns per breakpoint (1 on
+ * phones, 3 from `breakpoints.sm`, 4 from `breakpoints.xl`) with the theme
+ * gap. On /exhibitions the features, the Recent cards and the archive rows
+ * all sit on it, and ExhibitionItem lays its parts out on these columns
+ * through `subgrid`, so every image and text edge on the page lines up.
+ * The tracks are `minmax(0, 1fr)` so long titles or nowrap dates can't widen
+ * a column. The gutter is `spacing.gapPhone` on phones, `spacing.gap` from
+ * `breakpoints.sm`.
+ *
+ * `$rowGap` replaces the row gap, e.g. the wider gap between the lines of
+ * Recent cards.
+ */
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: ${props => gridColumns(props.theme.grid.columns.sm)};
+  gap: ${props => props.theme.spacing.gapPhone};
+
+  ${media.md} {
+    grid-template-columns: ${props => gridColumns(props.theme.grid.columns.md)};
+    gap: ${props => props.theme.spacing.gap};
+  }
+
+  ${media.xl} {
+    grid-template-columns: ${props => gridColumns(props.theme.grid.columns.xl)};
+  }
+
+  /* styled-components moves the media queries after this rule, so the
+     override needs the doubled class to beat their gap. */
+  ${props => props.$rowGap && css`
+    && { row-gap: ${props.$rowGap}; }
+  `}
+`;
+
+/**
+ * Style helper that hides an element on part of the range:
+ * `$hideBelow="md"` hides it below `media.md`, `$hideFrom="xl"` from
+ * `media.xl` up. Keys are those of `media` (`md` or `xl`). Being CSS, it
+ * works in the server-rendered HTML, so nothing changes on hydration.
+ *
+ * @param {{$hideBelow?: 'md'|'xl', $hideFrom?: 'md'|'xl'}} props
+ */
+export const breakpointDisplay = ({ $hideBelow, $hideFrom }) => css`
+  ${$hideBelow && css`
+    ${$hideBelow === 'md' ? media.belowMd : media.belowXl} { display: none; }
+  `}
+  ${$hideFrom && css`
+    ${media[$hideFrom]} { display: none; }
+  `}
 `;
 
 // Utility classes

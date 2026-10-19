@@ -1,200 +1,206 @@
-import React from 'react';
+import React from 'react'
 import Helmet from 'react-helmet'
-import get from 'lodash/get'
 import Moment from 'moment'
 import { graphql } from 'gatsby'
 
-import Layout from "../components/layout"
-import ExhibitionItem, { ItemGrid } from '../components/exhibition-item'
-import { Section, Headline } from '../components/content/Content.styles';
+import Layout from '../components/layout'
+import ExhibitionItem from '../components/exhibition-item'
+import YearIndex from '../components/year-index'
+import { Grid } from '../components/layout/Layout.styles'
+import { Section, Headline, YearSection, YearHeading } from '../components/content/Content.styles'
+import { theme } from '../theme/theme'
+import { groupByOpeningYear } from '../utils/group-by-opening-year'
 
+// Compare whole days in Berlin summer time, as the page always has.
+const day = (date) => Moment(new Date(date)).utcOffset(120)
+const isCurrent = ({ startDate, endDate }) =>
+  day(startDate).isSameOrBefore(new Date(), 'day') && day(endDate).isSameOrAfter(new Date(), 'day')
+const isUpcoming = ({ startDate }) => day(startDate).isAfter(new Date(), 'day')
+const isPast = ({ endDate }) => day(endDate).isBefore(new Date(), 'day')
 
-class PankeExhibitions extends React.Component {
+// Recent shows 4 shows on phones (one full-width column), then two lines of
+// the page grid: 6 from `breakpoints.sm`, 8 from `breakpoints.xl`. All 8 are
+// rendered and CSS hides
+// the ones that don't fit, while the archive renders the same shows with the
+// opposite visibility. So each past show appears exactly once at every width,
+// and the server-rendered HTML already matches the screen (no width check in
+// JS, no layout jump on hydration).
+const RECENT_COUNT = { sm: 4, md: 6, xl: 8 }
 
-  filterCurrent = (_ex) => {
-    var currentDate = new Date();
-    var exhibtionStartDate = new Date(_ex.node.startDate);
-    var exhibtionEndDate = new Date(_ex.node.endDate);
-    return Moment(exhibtionStartDate, 'day').utcOffset(120).isSameOrBefore(currentDate, 'day') && Moment(exhibtionEndDate, 'day').utcOffset(120).isSameOrAfter(currentDate, 'day');
-  }
+/**
+ * Where the past show at `index` (newest first) is a Recent card:
+ * `'always'`, from a `media` breakpoint (`'md'` or `'xl'`), or `null` for
+ * never. Below that breakpoint it is an archive row instead.
+ */
+const recentFrom = (index) => {
+  if (index < RECENT_COUNT.sm) return 'always'
+  if (index < RECENT_COUNT.md) return 'md'
+  if (index < RECENT_COUNT.xl) return 'xl'
+  return null
+}
 
-  filterUpcoming = (_ex) => {
-    var currentDate = new Date();
-    var exhibtionStartDate = new Date(_ex.node.startDate);
-    return Moment(exhibtionStartDate, 'day').utcOffset(120).isAfter(currentDate, 'day');
-  }
+/**
+ * A year is hidden where all of its shows are hidden, i.e. in Recent: from
+ * the latest breakpoint any of them is hidden from, or never if one of them
+ * is always in the archive.
+ */
+const yearHideFrom = (entries) => {
+  if (entries.some(({ hideFrom }) => !hideFrom)) return undefined
+  return entries.some(({ hideFrom }) => hideFrom === 'xl') ? 'xl' : 'md'
+}
 
-  filterPast = (_ex) => {
-    var currentDate = new Date();
-    var exhibtionEndDate = new Date(_ex.node.endDate);
-    return Moment(exhibtionEndDate, 'day').utcOffset(120).isBefore(currentDate, 'day');
-  }
+/**
+ * /exhibitions: current and upcoming shows large, then the Recent grid of
+ * the latest past shows, then the archive of all other past shows by
+ * opening year, with a year index on top. Everything sits on the page
+ * `Grid`, so features, cards and rows share their column edges.
+ *
+ * @param {Object} props
+ * @param {Object} props.data - Page query result: all exhibitions, newest first.
+ */
+const PankeExhibitions = ({ data }) => {
+  const exhibitions = data.allContentfulExhibition.nodes
 
-  render() {
+  // The query sorts newest first; current and upcoming read soonest first.
+  const current = exhibitions.filter(isCurrent).reverse()
+  const upcoming = exhibitions.filter(isUpcoming).reverse()
+  const past = exhibitions.filter(isPast)
 
-    // Get array of exhibitions
-    const posts = get(this, 'props.data.allContentfulExhibition.edges')
+  const recent = past.slice(0, RECENT_COUNT.xl)
 
-    // Log array of exhibitions
-    console.log("Posts:", posts);
+  // Every past show that isn't always in Recent, hidden from where it is.
+  const archiveEntries = past.flatMap((exhibition, index) => {
+    const from = recentFrom(index)
+    return from === 'always' ? [] : [{ exhibition, hideFrom: from || undefined }]
+  })
+  const archive = groupByOpeningYear(archiveEntries, ({ exhibition }) => exhibition.startDate)
+    .map(({ year, items }) => ({ year, entries: items, hideFrom: yearHideFrom(items) }))
 
-    // Filter array of exhibitions
+  return (
+    <Layout wide>
+      <Helmet
+        title="Exhibitions"
+        meta={[
+          {
+            name: 'description',
+            content: 'Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
+          }
+        ]}
+      />
 
-    const currentExhibitions = posts.filter(this.filterCurrent);
-    currentExhibitions.reverse();
-
-    const upcomingExhibitions = posts.filter(this.filterUpcoming);
-    upcomingExhibitions.reverse();
-
-    const pastExhibitions = posts.filter(this.filterPast);
-
-    // Log array of current exhibitions
-    console.log("Current Exhibitions:");
-    console.log(currentExhibitions);
-
-    // Log array of upcoming exhibitions
-    console.log("Upcoming Exhibitions:");
-    console.log(upcomingExhibitions);
-
-    // Log array of past exhibitions
-    console.log("Past Exhibitions:");
-    console.log(pastExhibitions);
-
-    var current;
-    if (currentExhibitions.length > 0){
-      current = (
+      {current.length > 0 && (
         <Section>
           <Headline>
             <h2>Current</h2>
           </Headline>
-
-          {currentExhibitions.map(({ node }) => {
-            return (
-              <ExhibitionItem key={node.slug} exhibition={node} variant="feature" />
-            )
-          })}
-        
+          <Grid>
+            {current.map((exhibition) => (
+              <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature" />
+            ))}
+          </Grid>
         </Section>
-       
-      );
-    }
+      )}
 
-    var upcoming;
-    if (upcomingExhibitions.length > 0){
-      upcoming = (
+      {upcoming.length > 0 && (
         <Section>
           <Headline>
             <h2>Upcoming</h2>
           </Headline>
-          
-          {upcomingExhibitions.map(({ node }) => {
-            return (
-              <ExhibitionItem key={node.slug} exhibition={node} variant="feature-small" />
-            )
-          })}
-        
+          <Grid>
+            {upcoming.map((exhibition) => (
+              <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature-small" />
+            ))}
+          </Grid>
         </Section>
-       
-      );
-    }
-       
+      )}
 
-    var past;
-    if (pastExhibitions.length > 0){
-      past = (
+      {recent.length > 0 && (
         <Section>
           <Headline>
-            <h2>Past</h2>
+            <h2>Recent</h2>
           </Headline>
-
-          <ItemGrid>
-            {pastExhibitions.map(({ node }) => {
+          <Grid $rowGap={theme.spacing.cardLineGap}>
+            {recent.map((exhibition, index) => {
+              const from = recentFrom(index)
               return (
-                <ExhibitionItem key={node.slug} exhibition={node} variant="card" />
+                <ExhibitionItem
+                  key={exhibition.slug}
+                  exhibition={exhibition}
+                  variant="card"
+                  hideBelow={from === 'always' ? undefined : from}
+                />
               )
             })}
-          </ItemGrid>
-        
+          </Grid>
         </Section>
-       
-      );
-    }
+      )}
 
-    //==========================================================================
+      {archive.length > 0 && (
+        <Section>
+          <Headline>
+            <h2>Archive</h2>
+          </Headline>
+          <YearIndex years={archive.map(({ year, hideFrom }) => ({ year, hideFrom }))} />
 
-    //                                OUTPUT
-
-    //==========================================================================
-
-    return (
-      <Layout>
-        <Helmet
-          title="Exhibitions"
-          meta={[
-            {
-              name: 'description',
-              content: 'Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
-            }
-          ]}
-        />
-
-        {current}
-
-        {upcoming}
-
-        {past}
-
-      </Layout>
-    );
-  }
+          {archive.map(({ year, entries, hideFrom }) => (
+            <YearSection key={year} id={String(year)} $hideFrom={hideFrom} aria-labelledby={`year-${year}`}>
+              <YearHeading id={`year-${year}`}>{year}</YearHeading>
+              <Grid>
+                {entries.map(({ exhibition, hideFrom }) => (
+                  <ExhibitionItem
+                    key={exhibition.slug}
+                    exhibition={exhibition}
+                    variant="row"
+                    headingLevel={4}
+                    hideFrom={hideFrom}
+                  />
+                ))}
+              </Grid>
+            </YearSection>
+          ))}
+        </Section>
+      )}
+    </Layout>
+  )
 }
 
-export default PankeExhibitions;
-
-
-//=========================================================================
-
-//                                QUERY
-
-//=========================================================================
+export default PankeExhibitions
 
 export const pageQuery = graphql`
   query PankeExhibitionsQuery {
-    allContentfulExhibition(
-      sort: { fields: [startDate], order: DESC }
-
-    ) {
-      edges {
-        node {
-          title
-          slug
-          startDate
-          endDate
-          dateTbc
-          #startDate(formatString: "DD MMMM YYYY")
-          #endDate(formatString: "DD MMMM YYYY")
-          featuredImage {
-            gatsbyImageData(
-              layout: CONSTRAINED,
-              width: 1050,
-              placeholder: BLURRED
-            )
-            description
+    allContentfulExhibition(sort: { startDate: DESC }) {
+      nodes {
+        title
+        slug
+        startDate
+        endDate
+        dateTbc
+        # Every image on the page is shown at 16:10, cropped around the
+        # centre by Contentful, as in the archive prototype.
+        featuredImage {
+          gatsbyImageData(
+            layout: CONSTRAINED,
+            width: 1050,
+            aspectRatio: 1.6,
+            resizingBehavior: FILL,
+            cropFocus: CENTER,
+            placeholder: BLURRED
+          )
+          description
+        }
+        description {
+          childMarkdownRemark {
+            excerpt(pruneLength: 1200)
           }
-          description {
-            childMarkdownRemark {
-              excerpt(pruneLength: 1200)
-            }
-          }
-          #openingHours
-          subtitleShortDescription {
-            childMarkdownRemark {
-              html
-            }
+        }
+        openingHours
+        vernissageInfos
+        subtitleShortDescription {
+          childMarkdownRemark {
+            html
           }
         }
       }
     }
   }
 `
-

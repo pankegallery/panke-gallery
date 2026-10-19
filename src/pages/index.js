@@ -8,7 +8,7 @@ import Layout from '../components/layout';
 import ExhibitionItem from '../components/exhibition-item';
 import EventPreview from '../components/event-preview';
 import { processExternalLinks } from '../utils/processExternalLinks';
-import { Row, Col } from '../components/layout/Layout.styles';
+import { Row, Col, Grid } from '../components/layout/Layout.styles';
 import { NewsSection, Section, Headline, NewsArticle } from '../components/content/Content.styles';
 import { EventSeries } from '../components/content/Content.styles';
 
@@ -109,9 +109,11 @@ const PankeIndex = ({ data }) => {
               <Headline>
                 <h2>Current exhibitions</h2>
               </Headline>
-               {currentExhibitions.map(({ node }) => (
-                    <ExhibitionItem key={node.slug} exhibition={node} variant="feature" />
-                  ))}
+              <Grid>
+                {currentExhibitions.map(({ node }) => (
+                  <ExhibitionItem key={node.slug} exhibition={node} variant="feature" />
+                ))}
+              </Grid>
             </Section>
           )}
 
@@ -120,9 +122,11 @@ const PankeIndex = ({ data }) => {
               <Headline>
                <h2>Upcoming exhibitions</h2>
               </Headline>
-               {upcomingExhibitions.map(({ node }) => (
-                    <ExhibitionItem key={node.slug} exhibition={node} variant="feature-small" />
-                  ))}
+              <Grid>
+                {upcomingExhibitions.map(({ node }) => (
+                  <ExhibitionItem key={node.slug} exhibition={node} variant="feature-small" />
+                ))}
+              </Grid>
             </Section>
           )}
         </>

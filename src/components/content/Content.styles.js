@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
+import { breakpointDisplay } from '../layout/Layout.styles';
 
 export const NewsSection = styled.section`
   &::after {
@@ -44,6 +45,25 @@ export const Headline = styled.div`
     padding-top: 2em;
   }
   
+`;
+
+// One year of the exhibitions archive; its id is the year, the target of
+// the year index. From `breakpoints.sm` the index sticks to the top, so a
+// jump stops below it. Takes `$hideFrom` / `$hideBelow` (see
+// `breakpointDisplay`).
+export const YearSection = styled.section`
+  ${media.md} {
+    scroll-margin-top: ${props => props.theme.spacing.yearScrollMargin};
+  }
+
+  ${breakpointDisplay}
+`;
+
+export const YearHeading = styled.h3`
+  margin: ${props => props.theme.spacing.yearHeadingTop} 0 ${props => props.theme.spacing.yearHeadingBottom};
+  font-size: ${props => props.theme.fontSizes.yearTitle};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  font-variant-numeric: tabular-nums;
 `;
 
 export const Article = styled.article`

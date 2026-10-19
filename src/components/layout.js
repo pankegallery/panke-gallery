@@ -14,7 +14,17 @@ import { ToggleMenuButton } from "./header/Header.styles";
 import Header from "./header";
 import Navigation from "./navigation";
 
-const Layout = ({ children, redirectActive }) => {
+/**
+ * Page frame: theme providers, global styles, header, off-canvas menu and
+ * footer around the page content.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - The page content.
+ * @param {boolean} [props.redirectActive] - Hides header, menu and footer.
+ * @param {boolean} [props.wide] - Use `container.maxWidthWide` from
+ *   `breakpoints.xl` up, for pages built on the 4-column grid.
+ */
+const Layout = ({ children, redirectActive, wide }) => {
   const [offCanvas, setOffCanvas] = useState(false);
 
   const handleClick = () => {
@@ -95,7 +105,7 @@ const Layout = ({ children, redirectActive }) => {
                   <Navigation />
                 </OffCanvas>
               )}
-              <Container className={offCanvas ? "menu-active" : ""} $themeColor={color}>
+              <Container className={offCanvas ? "menu-active" : ""} $themeColor={color} $wide={wide}>
                 {!redirectActive && <Header handleClick={handleClick} />}
                 <Main>{children}</Main>
                 {!redirectActive && <Footer />}
