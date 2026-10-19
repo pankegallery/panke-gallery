@@ -39,23 +39,26 @@ export const joinEmail = (user, domain) => `${user}@${domain}`
 export function linkObfuscatedEmails(root) {
   if (!root) return
 
-  const textNodes = []
+  // Only matchAll touches the shared global regex. It starts at the regex's
+  // lastIndex, which test() or exec() would leave at the end of a match, so
+  // an address in the last text node of the block would never be linked.
+  const found = []
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
   while (walker.nextNode()) {
     const node = walker.currentNode
-    OBFUSCATED_EMAIL.lastIndex = 0
+    const matches = [...node.nodeValue.matchAll(OBFUSCATED_EMAIL)]
     // Leave text alone that editors already put inside a link.
-    if (OBFUSCATED_EMAIL.test(node.nodeValue) && !node.parentElement.closest('a')) {
-      textNodes.push(node)
+    if (matches.length && !node.parentElement.closest('a')) {
+      found.push({ node, matches })
     }
   }
 
-  textNodes.forEach((node) => {
+  found.forEach(({ node, matches }) => {
     const text = node.nodeValue
     const fragment = document.createDocumentFragment()
     let last = 0
 
-    for (const match of text.matchAll(OBFUSCATED_EMAIL)) {
+    for (const match of matches) {
       const [whole, user, domain] = match
       const email = joinEmail(user, domain)
       const link = document.createElement('a')
