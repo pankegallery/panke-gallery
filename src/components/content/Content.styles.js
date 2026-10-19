@@ -76,7 +76,7 @@ export const NewsArticle = styled(Article)`
 `;
 
 export const Meta = styled.p`
-  color: ${props => props.theme.colors.theme.grey};
+  color: ${props => props.theme.colors.theme.date};
 `;
 
 export const Tag = styled.p`
@@ -142,8 +142,9 @@ export const HeadSection = styled.div`
 
 margin: 2em 0 0;
 
+  /* No uppercase: exhibition titles keep the artists' own casing (#65).
+     Section labels such as "About the exhibition" stay uppercase. */
   h1 {
-    text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: ${props => props.theme.fontSizes.medium};
     font-weight: ${props => props.theme.fontWeights.light};
