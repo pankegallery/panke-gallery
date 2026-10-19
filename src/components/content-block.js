@@ -16,14 +16,15 @@ const stripScripts = (html) => html && html.replace(/<script[\s\S]*?<\/script>/g
  * turns `name [at] domain` into a mailto link (#62).
  *
  * @param {object} props
- * @param {string} [props.html] - `blockContent.childMarkdownRemark.html`.
+ * @param {string} [props.html] - `childMarkdownRemark.html` of a Contentful long text.
+ * @param {string} [props.className] - Class for the wrapper div, e.g. `subtitle`.
  */
-export const ContentHtml = ({ html }) => {
+export const ContentHtml = ({ html, className }) => {
   const ref = useLinkedEmails(html)
 
   if (!html) return null
 
-  return <div ref={ref} dangerouslySetInnerHTML={{
+  return <div ref={ref} className={className} dangerouslySetInnerHTML={{
     __html: processExternalLinks(stripScripts(html))
   }} />
 }

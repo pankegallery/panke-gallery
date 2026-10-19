@@ -5,12 +5,11 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
-import ContentBlock from '../components/content-block'
+import ContentBlock, { ContentHtml } from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
-import { processExternalLinks } from '../utils/processExternalLinks'
 import { FurtherSection, HeadSection, Meta, InfoSection, Tag } from '../components/content/Content.styles'
 import { Col, Row } from '../components/layout/Layout.styles'
 
@@ -150,9 +149,7 @@ class EventTemplate extends React.Component {
         <HeadSection>
 
               <h1>{event.title}</h1>
-              <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
-                }} />
+              <ContentHtml className="subtitle" html={event.subtitleShortDescription.childMarkdownRemark.html} />
               {EventDateAndEntryFee}
               {eventCategory}{eventTags}
 
@@ -170,9 +167,7 @@ class EventTemplate extends React.Component {
               <h2>About the event</h2>
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
-              <div dangerouslySetInnerHTML={{
-                __html: processExternalLinks(event.description.childMarkdownRemark.html)
-              }} />
+              <ContentHtml html={event.description.childMarkdownRemark.html} />
             </Col>
           </Row>
          
