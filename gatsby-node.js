@@ -214,33 +214,32 @@ exports.createPages = ({ graphql, actions }) => {
   })
 }
 
+// Pages that also answer to the URLs below them and read the rest of the
+// URL as a parameter (`params['*']`, see src/utils/use-route-param.js):
+// /events/<series-slug>/ filters the events by series (#64), and
+// /exhibitions/<year>/ opens the archive at that year (#68). The matchPath
+// sits on the page itself, so each is registered once, there is one page to
+// build, and moving between these URLs doesn't remount the page.
+const MATCH_PATHS = {
+  '/events/': '/events/*',
+  '/exhibitions/': '/exhibitions/*',
+}
+
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions
 
   var todayDate = new Date().toISOString()
 
-
   deletePage(page)
   // You can access the variable "house" in your page queries now
   createPage({
     ...page,
+    matchPath: MATCH_PATHS[page.path] || page.matchPath,
     context: {
       ...page.context,
       today: todayDate,
     },
   })
-
-  // /events/<series-slug>/ shows the events page filtered by that series.
-  // It's a client-only route: the page reads the slug from `params.series`.
-  // onCreatePage runs for every page, so only add the route once, alongside
-  // the /events/ page it belongs to.
-  if (page.path === '/events/') {
-    createPage({
-      path: '/events/:series',
-      matchPath: '/events/:series',
-      component: page.component,
-    })
-  }
 }
 
 exports.createSchemaCustomization = ({ actions }) => {

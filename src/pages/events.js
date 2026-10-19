@@ -1,32 +1,25 @@
-import React, { useSyncExternalStore } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
 import { Section, Headline } from '../components/content/Content.styles';
-
-// Whether the page has hydrated never changes once it's true, so there is
-// nothing to subscribe to.
-const subscribeToNothing = () => () => {}
+import { useRouteParam } from '../utils/use-route-param';
 
 /**
  * /events/ – upcoming and past events, optionally filtered by event series.
  *
- * The filter lives only in the URL: `/events/<series-slug>/` is a client-only
- * route (see `onCreatePage` in gatsby-node.js) that renders this page with
- * `params.series` set. The series tags are links to those URLs, so a filter
- * can be shared, bookmarked and undone with the back button, and the page
- * keeps no filter state of its own that could disagree with the address bar.
+ * The filter lives only in the URL: this page also answers to
+ * `/events/<series-slug>/` (`MATCH_PATHS` in gatsby-node.js) and reads the
+ * slug with `useRouteParam`, so the static HTML is the full list and the
+ * filter applies right after hydration. The series tags are links to those
+ * URLs, so a filter can be shared, bookmarked and undone with the back
+ * button, and the page keeps no filter state of its own that could disagree
+ * with the address bar.
  */
 const PankeEvents = ({ data, params }) => {
-  // The static HTML for /events/<slug>/ is built without a slug, i.e. the
-  // full list. When such a URL is opened directly, React's first render must
-  // match that HTML, or hydration fails (React errors #418/#423). React uses
-  // the third argument while hydrating and the second otherwise, so the
-  // filter applies right after hydration, and immediately on in-app clicks.
-  const isHydrated = useSyncExternalStore(subscribeToNothing, () => true, () => false)
-  const activeSeries = (isHydrated && params?.series) || ''
+  const activeSeries = useRouteParam(params)
 
   const passFilter = (ev) => !activeSeries || ev.eventSeries?.slug === activeSeries
 
