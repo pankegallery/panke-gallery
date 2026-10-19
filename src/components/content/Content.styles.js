@@ -208,10 +208,13 @@ export const ImageWrapperVertical = styled.div`
   vertical-align: middle;
 `;
 
+// Scales an embedded iframe to the column width at a fixed aspect ratio.
+// Defaults to 16:9 for video; pass `$ratio` (a CSS aspect-ratio value) for
+// other embeds such as the contact page map.
 export const ResponsiveVideo = styled.div`
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: ${props => props.$ratio || '16 / 9'};
 
   iframe {
     position: absolute;
