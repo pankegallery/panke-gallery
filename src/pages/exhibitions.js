@@ -5,7 +5,7 @@ import Moment from 'moment'
 import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
-import ExhibitionListItem from '../components/exhibition-list-item'
+import ExhibitionItem, { ItemGrid } from '../components/exhibition-item'
 import { Section, Headline } from '../components/content/Content.styles';
 
 
@@ -70,7 +70,7 @@ class PankeExhibitions extends React.Component {
 
           {currentExhibitions.map(({ node }) => {
             return (
-              <ExhibitionListItem key={node.slug} exhibition={node} />
+              <ExhibitionItem key={node.slug} exhibition={node} variant="feature" />
             )
           })}
         
@@ -89,7 +89,7 @@ class PankeExhibitions extends React.Component {
           
           {upcomingExhibitions.map(({ node }) => {
             return (
-              <ExhibitionListItem key={node.slug} exhibition={node} />
+              <ExhibitionItem key={node.slug} exhibition={node} variant="feature-small" />
             )
           })}
         
@@ -107,11 +107,13 @@ class PankeExhibitions extends React.Component {
             <h2>Past</h2>
           </Headline>
 
-          {pastExhibitions.map(({ node }) => {
-            return (
-              <ExhibitionListItem key={node.slug} exhibition={node} />
-            )
-          })}
+          <ItemGrid>
+            {pastExhibitions.map(({ node }) => {
+              return (
+                <ExhibitionItem key={node.slug} exhibition={node} variant="card" />
+              )
+            })}
+          </ItemGrid>
         
         </Section>
        
@@ -177,10 +179,11 @@ export const pageQuery = graphql`
               width: 1050,
               placeholder: BLURRED
             )
+            description
           }
           description {
             childMarkdownRemark {
-              html
+              excerpt(pruneLength: 1200)
             }
           }
           #openingHours
