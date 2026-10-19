@@ -2,6 +2,7 @@ import React from "react";
 import Helmet from "react-helmet";
 
 import Layout from "../components/layout";
+import EmailLink from "../components/email-link";
 import { FurtherSection, InfoSection } from "../components/content/Content.styles";
 import { Row, Col } from "../components/layout/Layout.styles";
 
@@ -235,7 +236,7 @@ class PankePrivacy extends React.Component {
                   panke.gallery – Verein für künstlerisch-kulturelle Bildung
                   e.V.
                   <br/>Gerichtstr. 23, 13347 Berlin, Germany</p>
-                <p>info@panke.gallery · www.panke.gallery</p>
+                <p><EmailLink user="info" domain="panke.gallery" /> · www.panke.gallery</p>
 
                 <h3>3. Collection of general data and information</h3>
                 <p>

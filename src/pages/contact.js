@@ -4,10 +4,10 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
-import ContentBlock from '../components/content-block'
+import ContentBlock, { ContentHtml } from '../components/content-block'
+import EmailLink from '../components/email-link'
 import ConsentEmbed from '../components/consent-embed'
 import NewsletterForm from '../components/newsletter-form'
-import { processExternalLinks } from '../utils/processExternalLinks'
 import { FurtherSection } from '../components/content/Content.styles';
 import { Col, Row } from '../components/layout/Layout.styles';
 
@@ -66,13 +66,9 @@ class PankeContact extends React.Component{
         <FurtherSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
-              {definedBlocks.visitUs.array.map(({ node }) => {
-                return (
-                  <div key={node.slug} dangerouslySetInnerHTML={{
-                    __html: processExternalLinks(node.blockContent.childMarkdownRemark.html)
-                  }} />
-                )
-              })}
+              {definedBlocks.visitUs.array.map(({ node }) => (
+                <ContentHtml key={node.slug} html={node.blockContent?.childMarkdownRemark?.html} />
+              ))}
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
                 {/* Google is only contacted after the visitor clicks (#60). */}
@@ -112,6 +108,9 @@ class PankeContact extends React.Component{
                 <p>Gerichtstr. 23 · Hof V<br />
                   13347 Berlin</p>
 
+                <h3>Email</h3>
+                <p><EmailLink user="info" domain="panke.gallery" /></p>
+
                 <h3>Liability of information according to § 5 TMG
                 </h3>
                 <p>Robert Sakrowski</p>
@@ -120,13 +119,9 @@ class PankeContact extends React.Component{
                   <p>VR 30390 B</p>
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
-                {definedBlocks.disclaimer.array.map(({ node }) => {
-                return (
-                  <div key={node.slug} dangerouslySetInnerHTML={{
-                    __html: processExternalLinks(node.blockContent.childMarkdownRemark.html)
-                  }} />
-                )
-              })}
+                {definedBlocks.disclaimer.array.map(({ node }) => (
+                  <ContentHtml key={node.slug} html={node.blockContent?.childMarkdownRemark?.html} />
+                ))}
             </Col>
           </Row>
         </FurtherSection>
