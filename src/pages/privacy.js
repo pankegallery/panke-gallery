@@ -318,8 +318,9 @@ class PankePrivacy extends React.Component {
                   newsletter service or a registration in question, as this
                   could be the case in the event of modifications to the
                   newsletter offer, or in the event of a change in technical
-                  circumstances. There will be no transfer of personal data
-                  collected by the newsletter service to third parties. The
+                  circumstances. Apart from MailerLite as our processor (see
+                  below), there will be no transfer of personal data collected
+                  by the newsletter service to third parties. The
                   subscription to our newsletter may be terminated by the data
                   subject at any time. The consent to the storage of personal
                   data, which the data subject has given for shipping the
@@ -329,6 +330,18 @@ class PankePrivacy extends React.Component {
                   newsletter at any time directly on the website of the
                   controller, or to communicate this to the controller in a
                   different way.
+                </p>
+
+                <p>
+                  We send our newsletter with MailerLite, which processes the
+                  data listed above on our behalf under a data processing
+                  agreement (Art. 28 GDPR). Our signup form loads nothing from
+                  MailerLite: your e-mail address and IP address are only
+                  transmitted to MailerLite when you submit the form. For
+                  details, see MailerLite's{' '}
+                  <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>
+                  {' '}and{' '}
+                  <a href="https://www.mailerlite.com/legal/data-processing-agreement" target="_blank" rel="noopener noreferrer">data processing agreement</a>.
                 </p>
 
                 <h3>5. Newsletter-Tracking</h3>
