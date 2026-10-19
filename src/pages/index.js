@@ -97,7 +97,7 @@ const ExhibitionSection = ({ label, exhibitions, variant }) => {
 const IntroVisitSection = ({ visitHtml }) => (
   <IntroSection>
     <Grid>
-      <Intro>panke.gallery shows digital or net-based art in Berlin-Wedding since 2017.</Intro>
+      <Intro>panke.gallery shows digital and net&#8209;based art in Berlin&#8209;Wedding since 2017.</Intro>
       {visitHtml && (
         <Visit>
           <ContentHtml html={visitHtml} />

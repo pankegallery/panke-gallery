@@ -256,7 +256,10 @@ export const Intro = styled.p`
   line-height: ${props => props.theme.lineHeight.intro};
   text-wrap: balance;
 
-  ${media.md} { font-size: ${props => props.theme.fontSizes.intro}; }
+  ${media.md} { 
+    font-size: ${props => props.theme.fontSizes.intro};
+    padding-right: ${props => props.theme.spacing.gap};
+  }
 `;
 
 // Address and opening hours: the Contact page's "visitUs" block from
