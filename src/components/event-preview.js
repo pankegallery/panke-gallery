@@ -1,26 +1,23 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
-import { processExternalLinks } from '../utils/processExternalLinks'
+import { ContentHtml } from './content-block'
 import { NewsArticle, Meta } from './content/Content.styles'
 
-
-class EventPreview extends React.Component {
-  render() {
-    var event = this.props.event;
-
-    return(
-      <NewsArticle>
-        <h3>
-          <Link to={`/event/${event.slug}`}>{event.title}</Link>
-        </h3>
-        <div dangerouslySetInnerHTML={{
-            __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
-          }} />
-        <Meta><EventDate event={event} /></Meta>
-      </NewsArticle>
-    );
-  }
-}
+/**
+ * Short event teaser on the home page: title, short description and date.
+ *
+ * @param {object} props
+ * @param {object} props.event - The Contentful event node.
+ */
+const EventPreview = ({ event }) => (
+  <NewsArticle>
+    <h3>
+      <Link to={`/event/${event.slug}`}>{event.title}</Link>
+    </h3>
+    <ContentHtml html={event.subtitleShortDescription.childMarkdownRemark.html} />
+    <Meta><EventDate event={event} /></Meta>
+  </NewsArticle>
+)
 
 export default EventPreview

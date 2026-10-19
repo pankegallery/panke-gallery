@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
-import { processExternalLinks } from '../utils/processExternalLinks'
+import { ContentHtml } from './content-block'
 import { Col, Row } from './layout/Layout.styles'
 import { NewsArticle } from './content/Content.styles'
 
@@ -39,9 +39,7 @@ const EventListItem = ({ event, activeSeries }) => {
           <h3>
             <Link to={`/event/${event.slug}`}>{event.title}</Link>
           </h3>
-          <div dangerouslySetInnerHTML={{
-              __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
-            }} />
+          <ContentHtml html={event.subtitleShortDescription.childMarkdownRemark.html} />
           <p className="meta"><EventDate event={event} /></p>
         </Col>
       </Row>
