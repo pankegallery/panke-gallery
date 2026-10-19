@@ -163,7 +163,7 @@ export const Artist = styled.div`
     : css`
       font-family: ${theme.fonts.mono};
       font-size: ${theme.fontSizes.artistMono};
-      font-weight: ${theme.fontWeights.light};
+      font-weight: ${theme.fontWeights.normal};
       color: ${theme.colors.theme.black};
     `}
 
@@ -177,6 +177,7 @@ export const ItemDate = styled.p`
   font-size: ${props => props.theme.fontSizes.date};
   font-weight: ${props => props.theme.fontWeights.light};
   color: ${props => props.theme.colors.theme.date};
+  letter-spacing: ${props => props.theme.letterSpacing.date};
 `;
 
 // Each half of a range is one unbreakable piece, so a long range such as

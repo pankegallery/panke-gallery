@@ -50,7 +50,7 @@ export const theme = {
     date: '13px',          // Dates everywhere, Light 300
     itemTitle: '15px',     // Titles in grids and archive rows, Medium 500
     artist: '14px',        // Artist line in the Recent grid, Regular 400
-    artistMono: '13px',    // Artist line set in `fonts.mono`, Light 300
+    artistMono: '13px',    // Artist line set in `fonts.mono`, Regular 400
     teaser: '14px',        // Teaser text, Light 300
     // Feature titles (Medium 500). The `Wide` variants apply from
     // `breakpoints.xl`; the exhibition page title stays 34px throughout.
@@ -60,6 +60,10 @@ export const theme = {
     upcomingTitleWide: '26px',
     yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
     pageTitle: '34px'
+  },
+  letterSpacing: {
+    // Opens up the small light grey dates a little, so they read more easily.
+    date: '0.02em'
   },
   fontWeights: {
     light: 300,
