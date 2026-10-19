@@ -153,6 +153,23 @@ export const breakpointDisplay = ({ $hideBelow, $hideFrom }) => css`
   `}
 `;
 
+/**
+ * Style helper for the short rule under the logo: a 40px line that sticks
+ * out to the left of the text edge, `spacing.shortRuleSpace` below what is
+ * above it. Put it on a pseudo-element (`&::after { ${shortRule} }`). The
+ * header, the news on the homepage and the homepage's intro/Visit row use it
+ * in place of full-width lines (#69). The line takes the text colour.
+ */
+export const shortRule = ({ theme }) => css`
+  content: "";
+  display: inline-block;
+  clear: both;
+  width: ${theme.sizes.shortRule};
+  height: ${theme.spacing.shortRuleSpace};
+  margin-left: -${theme.spacing.shortRuleOutdent};
+  border-bottom: 1px solid;
+`;
+
 // Utility classes
 export const TextRight = styled.span`
   text-align: right;
