@@ -65,8 +65,8 @@ export const Col = styled.div`
   ${media.md} {
 
     grid-column: span ${props => {
-    if (props.$sm) return `0 0 ${(props.$sm / 12) * 100}%`;
-    if (props.$xs) return `0 0 ${(props.$xs / 12) * 100}%`;
+    if (props.$sm) return `${(props.$sm)}`;
+    if (props.$xs) return `${(props.$xs)}`;
     return '12';
   }};
     display: ${props => {
