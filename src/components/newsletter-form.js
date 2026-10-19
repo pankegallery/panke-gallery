@@ -29,7 +29,6 @@ const SUBSCRIBE_URL = 'https://assets.mailerlite.com/jsonp/805672/forms/11188364
  */
 const NewsletterForm = () => {
   const [email, setEmail] = useState('');
-  const [consent, setConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -110,19 +109,6 @@ const NewsletterForm = () => {
         />
       </div>
 
-      <div className="form-group">
-        <label>
-          <input
-            type="checkbox"
-            checked={consent}
-            onChange={(e) => setConsent(e.target.checked)}
-            required
-            disabled={submitting}
-          />{' '}
-          Yes, send me the panke.gallery newsletter. I can unsubscribe at any time.
-        </label>
-      </div>
-
       <div className="honeypot-field" aria-hidden="true">
         <label htmlFor="newsletter-website">Leave this field empty</label>
         <input
@@ -148,9 +134,12 @@ const NewsletterForm = () => {
         </Button>
       </div>
 
+      {/* No consent checkbox: the form does nothing but subscribe, and the
+          double opt-in mail is the proof of consent. This note covers what
+          visitors need to know before submitting. */}
       <Notice>
-        Your email address is sent to our newsletter service MailerLite only when you subscribe.
-        See our <Link to="/privacy/">privacy policy</Link>.
+        You can unsubscribe at any time. Your email address is sent to our newsletter
+        service MailerLite only when you subscribe. See our <Link to="/privacy/">privacy policy</Link>.
       </Notice>
     </Form>
   );
