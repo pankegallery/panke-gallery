@@ -6,6 +6,9 @@ import { useEffect, useRef } from 'react'
 // (#62). Without JavaScript the `[at]` text stays as a readable fallback.
 
 // `info [at] panke.gallery`, with or without spaces around `[at]`.
+// Only use it with matchAll and replace. replace resets lastIndex itself, but
+// matchAll starts at it, and test() or exec() would leave it at the end of a
+// match, so an address in the last text node of a block would not be linked.
 const OBFUSCATED_EMAIL = /([\w.+-]+)\s*\[at\]\s*([\w-]+(?:\.[\w-]+)+)/g
 
 /**
@@ -27,27 +30,36 @@ export const obfuscateEmail = (user, domain) => `${user} [at] ${domain}`
 export const joinEmail = (user, domain) => `${user}@${domain}`
 
 /**
- * Turns every `name [at] domain` in the text of `root` into a mailto link.
+ * Replaces every `name [at] domain` in a string with the real address.
+ *
+ * @param {string} text - e.g. `write to info [at] panke.gallery`.
+ * @returns {string} e.g. `write to info@panke.gallery`
+ */
+const revealEmails = (text) =>
+  text.replace(OBFUSCATED_EMAIL, (whole, user, domain) => joinEmail(user, domain))
+
+/**
+ * Turns every `name [at] domain` in the text of `root` into a mailto link,
+ * and repairs mailto links whose address editors wrote with `[at]`, e.g.
+ * `mailto:info[at]panke.gallery?subject=…`, keeping subject and body.
  *
  * For HTML from Contentful, which React renders with dangerouslySetInnerHTML
  * and never diffs inside, so changing those nodes after hydration is safe.
  * Do not run it on markup React renders itself; use EmailLink there.
- * Running it twice is harmless: linked text no longer contains `[at]`.
+ * Running it twice is harmless: linked text and repaired links no longer
+ * contain `[at]`.
  *
  * @param {HTMLElement} root - Container of the Contentful HTML.
  */
 export function linkObfuscatedEmails(root) {
   if (!root) return
 
-  // Only matchAll touches the shared global regex. It starts at the regex's
-  // lastIndex, which test() or exec() would leave at the end of a match, so
-  // an address in the last text node of the block would never be linked.
   const found = []
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
   while (walker.nextNode()) {
     const node = walker.currentNode
     const matches = [...node.nodeValue.matchAll(OBFUSCATED_EMAIL)]
-    // Leave text alone that editors already put inside a link.
+    // Text inside links is handled with its link below.
     if (matches.length && !node.parentElement.closest('a')) {
       found.push({ node, matches })
     }
@@ -71,6 +83,35 @@ export function linkObfuscatedEmails(root) {
 
     fragment.append(text.slice(last))
     node.replaceWith(fragment)
+  })
+
+  // Mailto links written with `[at]`: only the address before the `?` is
+  // decoded and replaced, the query (subject, body) stays byte for byte.
+  // Without JavaScript the link still opens the mail client with subject and
+  // body, but the recipient reads `info[at]panke.gallery`.
+  root.querySelectorAll('a[href^="mailto:" i]').forEach((link) => {
+    const href = link.getAttribute('href')
+    const queryStart = href.indexOf('?')
+    const addressEnd = queryStart === -1 ? href.length : queryStart
+
+    let address
+    try {
+      // remark encodes markdown link URLs, e.g. `info%5Bat%5Dpanke.gallery`.
+      address = decodeURIComponent(href.slice('mailto:'.length, addressEnd))
+    } catch {
+      return // Malformed escape: leave the link as the editor wrote it.
+    }
+    if (!address.includes('[at]')) return
+
+    link.setAttribute('href', `mailto:${revealEmails(address.trim())}${href.slice(addressEnd)}`)
+
+    // Link text that is an `[at]` address shows the real one; other text,
+    // e.g. "contact us", stays.
+    const linkWalker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT)
+    while (linkWalker.nextNode()) {
+      const node = linkWalker.currentNode
+      node.nodeValue = revealEmails(node.nodeValue)
+    }
   })
 }
 
