@@ -83,7 +83,7 @@ class ExhibitionTemplate extends React.Component {
 
     let metaInfos = formatDateRange(exhibition.startDate, exhibition.endDate, { tbc: exhibition.dateTbc })
 
-    if (exhibition.vernissageInfos){
+    if (exhibition.openingHours){
       metaInfos += ' | ' + exhibition.openingHours
     }
 
