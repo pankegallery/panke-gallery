@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { Link } from 'gatsby';
 import { media } from '../../theme/theme';
 import { breakpointDisplay } from '../layout/Layout.styles';
 
@@ -88,7 +87,7 @@ const variantLayout = ({ $variant, theme }) => {
       row-gap: ${theme.spacing.textGap};
       align-content: start;
 
-      > ${ImageLink} {
+      > ${ItemImage} {
         grid-row: 1;
         margin-bottom: calc(${theme.spacing.cardImageGap} - ${theme.spacing.textGap});
       }
@@ -119,8 +118,8 @@ const variantLayout = ({ $variant, theme }) => {
       }
       ${media.xl} { grid-column: span 2; }
 
-      > ${ImageLink} { grid-column: 1; grid-row: 1 / -1; }
-      > :not(${ImageLink}) { grid-column: 2 / -1; }
+      > ${ItemImage} { grid-column: 1; grid-row: 1 / -1; }
+      > :not(${ItemImage}) { grid-column: 2 / -1; }
       ${textRows(1)}
     `;
   }
@@ -138,7 +137,7 @@ const variantLayout = ({ $variant, theme }) => {
     align-items: start;
 
     > * { grid-column: 1 / -1; }
-    > ${ImageLink} {
+    > ${ItemImage} {
       grid-row: 1;
       /* Together with the row gap: splitGap between image and date. */
       margin-bottom: calc(${theme.spacing.splitGap} - ${theme.spacing.textGap});
@@ -148,19 +147,21 @@ const variantLayout = ({ $variant, theme }) => {
     ${media.md} {
       grid-template-rows: auto auto auto auto 1fr;
 
-      > ${ImageLink} { grid-column: ${md.image}; grid-row: 1 / -1; margin-bottom: 0; }
-      > :not(${ImageLink}) { grid-column: ${md.text}; }
+      > ${ItemImage} { grid-column: ${md.image}; grid-row: 1 / -1; margin-bottom: 0; }
+      > :not(${ItemImage}) { grid-column: ${md.text}; }
       ${textRows(1)}
     }
 
     ${media.xl} {
-      > ${ImageLink} { grid-column: ${xl.image}; }
-      > :not(${ImageLink}) { grid-column: ${xl.text}; }
+      > ${ItemImage} { grid-column: ${xl.image}; }
+      > :not(${ItemImage}) { grid-column: ${xl.text}; }
     }
   `;
 };
 
 export const Item = styled.article`
+  /* Holds the title link's click area, which covers the whole item. */
+  position: relative;
   /* Artist lines may hold bare URLs, which can't wrap in a half-width
      column on phones and would widen the page. */
   overflow-wrap: anywhere;
@@ -169,7 +170,7 @@ export const Item = styled.article`
   ${breakpointDisplay}
 `;
 
-export const ImageLink = styled(Link)`
+export const ItemImage = styled.div`
   display: block;
 `;
 
@@ -181,6 +182,27 @@ export const Title = styled.h3`
   line-height: ${props => props.theme.lineHeight.headings};
   text-wrap: balance;
   ${titleSize}
+
+  /* The whole item is clickable, as in the archive prototype, through the
+     title link: its ::after covers the item. The link text stays just the
+     title for screen readers, and there is one tab stop per show. Hovering
+     anywhere on the item hovers the link, so the title takes the accent
+     colour (the a:hover rule in Layout.styles.js), and the focus ring
+     goes around the whole item. */
+  a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  a:focus-visible {
+    outline: none;
+  }
+
+  a:focus-visible::after {
+    outline: ${props => props.theme.sizes.focusRing} solid ${props => props.theme.colors.theme.black};
+    outline-offset: ${props => props.theme.sizes.focusRing};
+  }
 `;
 
 // The artist line is the short subtitle from Contentful, rendered as HTML.
@@ -204,6 +226,13 @@ export const Artist = styled.div`
 
   p {
     margin: 0;
+  }
+
+  /* Links in an artist line (e.g. an artist's website) stay clickable
+     above the title link's click area. */
+  a {
+    position: relative;
+    z-index: 1;
   }
 `;
 

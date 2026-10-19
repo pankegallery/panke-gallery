@@ -6,7 +6,7 @@ import { processExternalLinks } from '../utils/processExternalLinks'
 import { theme } from '../theme/theme'
 import {
   Item,
-  ImageLink,
+  ItemImage,
   Title,
   Artist,
   ItemDate,
@@ -16,8 +16,8 @@ import {
   Teaser,
 } from './exhibition-item/ExhibitionItem.styles'
 
-// Variants whose image only repeats the linked title next to it, so it
-// gets `alt=""` and stays out of the tab order.
+// Variants whose image only repeats the title next to it, so it gets
+// `alt=""`. Their dates also leave out opening hours and vernissage info.
 const COMPACT_VARIANTS = ['card', 'row']
 // Variants whose dates switch to short months on phones (see `LongDate` /
 // `ShortDate`): archive rows, whose text column is narrow there. Recent
@@ -84,7 +84,9 @@ const DateRange = ({ parts }) =>
  *   heading may have scrolled away), title, mono artist line, and a
  *   three-line teaser from `breakpoints.sm` up.
  *
- * Artist lines stop after two lines in every variant. Images are cropped to
+ * The whole item links to the exhibition page through its title link, and
+ * hovering it colours the title (see `Title` in the styles). Artist lines
+ * stop after two lines in every variant. Images are cropped to
  * the aspect ratio the page queries (16:10 on /exhibitions).
  *
  * `row` shows abbreviated months on phones. `card` and `row` use `alt=""`,
@@ -132,17 +134,13 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
 
   return (
     <Item $variant={variant} $hideBelow={hideBelow} $hideFrom={hideFrom}>
-      {/* In compact variants the title link is the one to announce and tab to;
-          the image link is a mouse shortcut to the same page. */}
-      <ImageLink
-        to={path}
-        {...(isCompact && { tabIndex: -1, 'aria-hidden': true })}
-      >
+      {/* Not a link of its own: the title link covers the whole item. */}
+      <ItemImage>
         <GatsbyImage
           image={withSizes(featuredImage.gatsbyImageData, IMAGE_SIZES[variant])}
           alt={isCompact ? '' : featuredImage.description || title}
         />
-      </ImageLink>
+      </ItemImage>
 
       <Title as={`h${headingLevel}`} $variant={variant}>
         <Link to={path}>{title}</Link>

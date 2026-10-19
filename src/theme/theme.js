@@ -90,7 +90,9 @@ export const theme = {
     // Teasers stop at a readable line length in wide text columns.
     teaserMaxWidth: '60ch',
     // Rounded ends for pill shapes such as the year chips.
-    pillRadius: '999px'
+    pillRadius: '999px',
+    // Width and offset of keyboard focus outlines, as in GlobalStyles.
+    focusRing: '2px'
   },
   spacing: {
     gap: '20px',
