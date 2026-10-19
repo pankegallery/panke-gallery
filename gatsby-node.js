@@ -1,4 +1,5 @@
 const Promise = require('bluebird')
+const fs = require('fs')
 const path = require('path')
 
 // The site is built without `--prefix-paths` (see the `build` script in
@@ -17,7 +18,72 @@ const UNASSIGNED_EXHIBITION_SLUG = 'stop'
 
 exports.sourceNodes = require('./gatsby/source-baserow.js').sourceNodes
 
-exports.createPages = ({ graphql, actions }) => {
+// The first day of the oldest archive year whose images /exhibitions carries
+// in its own page data (see `imagesSince` in src/utils/exhibition-archive.mjs).
+// Set in createPages, which runs before the pages in src/pages are created,
+// and passed to the page's query in onCreatePage.
+let exhibitionImagesSince = null
+
+/**
+ * Writes the featured images of every exhibition into one JSON file per
+ * opening year (`yearImagesPath`), for the archive on /exhibitions to load
+ * when a year is needed, and works out `exhibitionImagesSince`.
+ *
+ * Files in `public/`, written at build time, rather than Gatsby page data:
+ * a page's data always loads in full, while these load one year at a time,
+ * and `gatsby develop` serves `public/` as well.
+ */
+const writeExhibitionYearImages = async (graphql) => {
+  // .mjs, imported: Node 18 (Netlify) can't require() an ES module.
+  const { groupByOpeningYear } = await import('./src/utils/group-by-opening-year.mjs')
+  const { imagesSince, yearImagesPath } = await import('./src/utils/exhibition-archive.mjs')
+
+  // Same image arguments as the query in src/pages/exhibitions.js, so a
+  // year's images are the same files whether they come with the page or later.
+  const result = await graphql(`
+    {
+      allContentfulExhibition(sort: { startDate: DESC }) {
+        nodes {
+          slug
+          startDate
+          endDate
+          featuredImage {
+            gatsbyImageData(
+              layout: CONSTRAINED,
+              width: 1050,
+              aspectRatio: 1.6,
+              resizingBehavior: FILL,
+              cropFocus: CENTER,
+              placeholder: BLURRED
+            )
+          }
+        }
+      }
+    }
+  `)
+  if (result.errors) throw result.errors
+
+  const exhibitions = result.data.allContentfulExhibition.nodes
+  exhibitionImagesSince = imagesSince(exhibitions)
+
+  groupByOpeningYear(exhibitions).forEach(({ year, items }) => {
+    const images = Object.fromEntries(
+      items
+        .filter(({ featuredImage }) => featuredImage?.gatsbyImageData)
+        .map(({ slug, featuredImage }) => [slug, featuredImage.gatsbyImageData])
+    )
+    const file = path.join(__dirname, 'public', yearImagesPath(year))
+    fs.mkdirSync(path.dirname(file), { recursive: true })
+    fs.writeFileSync(file, JSON.stringify(images))
+  })
+}
+
+exports.createPages = async ({ graphql, actions }) => {
+  await writeExhibitionYearImages(graphql)
+  return createContentPages({ graphql, actions })
+}
+
+const createContentPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
   return new Promise((resolve, reject) => {
@@ -238,6 +304,7 @@ exports.onCreatePage = ({ page, actions }) => {
     context: {
       ...page.context,
       today: todayDate,
+      ...(page.path === '/exhibitions/' && { imagesSince: exhibitionImagesSince }),
     },
   })
 }

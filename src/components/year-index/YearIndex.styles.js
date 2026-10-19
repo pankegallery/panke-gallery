@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'gatsby';
 import { media } from '../../theme/theme';
 import { breakpointDisplay } from '../layout/Layout.styles';
 
@@ -39,7 +40,7 @@ export const ChipItem = styled.li`
 
 // A pill-shaped link, at least `sizes.tapTarget` tall so it is easy to hit
 // on a phone. The year in view gets a 2px border in the accent colour.
-export const Chip = styled.a`
+export const Chip = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
