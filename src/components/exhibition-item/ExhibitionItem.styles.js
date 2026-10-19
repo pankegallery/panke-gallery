@@ -174,6 +174,13 @@ export const ItemImage = styled.div`
   display: block;
 `;
 
+// Stands in for an image that is still loading (#68), in the shape every
+// image on /exhibitions is cropped to, so the item keeps its height.
+export const ImagePending = styled.div`
+  aspect-ratio: ${props => props.theme.sizes.exhibitionImageRatio};
+  background: ${props => props.theme.colors.theme.tint};
+`;
+
 export const Title = styled.h3`
   /* The global reset covers h1–h3 only; archive rows use h4. */
   margin: 0;

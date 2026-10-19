@@ -23,7 +23,10 @@ export const theme = {
       // while staying quieter than the black titles.
       quiet: '#5f5f66',
       // Thin lines around the year index and the chip outlines (#67).
-      rule: '#d9d9de'
+      rule: '#d9d9de',
+      // Image boxes in the archive while their year's images load (#68),
+      // as in the archive prototype.
+      tint: '#f1f1f4'
     }
   },
   breakpoints: {
@@ -92,7 +95,10 @@ export const theme = {
     // Rounded ends for pill shapes such as the year chips.
     pillRadius: '999px',
     // Width and offset of keyboard focus outlines, as in GlobalStyles.
-    focusRing: '2px'
+    focusRing: '2px',
+    // Every image on /exhibitions is cropped to 16:10 (`aspectRatio: 1.6` in
+    // its query); boxes waiting for their image keep that shape (#68).
+    exhibitionImageRatio: '16 / 10'
   },
   spacing: {
     gap: '20px',

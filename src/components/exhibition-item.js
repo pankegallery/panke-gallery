@@ -7,6 +7,7 @@ import { theme } from '../theme/theme'
 import {
   Item,
   ItemImage,
+  ImagePending,
   Title,
   Artist,
   ItemDate,
@@ -89,6 +90,11 @@ const DateRange = ({ parts }) =>
  * stop after two lines in every variant. Images are cropped to
  * the aspect ratio the page queries (16:10 on /exhibitions).
  *
+ * An archive row may come without its image: /exhibitions loads the images
+ * of older years only when they are needed (#68). Until then the row shows
+ * an empty box of the same 16:10 shape, so nothing moves when the image
+ * arrives.
+ *
  * `row` shows abbreviated months on phones. `card` and `row` use `alt=""`,
  * since their image only repeats the linked title. The feature variants describe
  * the image with the Contentful asset description.
@@ -96,7 +102,8 @@ const DateRange = ({ parts }) =>
  * @param {Object} props
  * @param {Object} props.exhibition - A `ContentfulExhibition` node with `slug`,
  *   `title`, `startDate`, `endDate`, `dateTbc`,
- *   `featuredImage { gatsbyImageData description }`,
+ *   `featuredImage { gatsbyImageData description }` (may be missing while a
+ *   row's image loads),
  *   `subtitleShortDescription.childMarkdownRemark.html` (the artist line) and,
  *   for a teaser, `description.childMarkdownRemark.excerpt(pruneLength: 1200)`.
  *   The feature variants also show `openingHours` and `vernissageInfos` when
@@ -136,10 +143,14 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
     <Item $variant={variant} $hideBelow={hideBelow} $hideFrom={hideFrom}>
       {/* Not a link of its own: the title link covers the whole item. */}
       <ItemImage>
-        <GatsbyImage
-          image={withSizes(featuredImage.gatsbyImageData, IMAGE_SIZES[variant])}
-          alt={isCompact ? '' : featuredImage.description || title}
-        />
+        {featuredImage?.gatsbyImageData ? (
+          <GatsbyImage
+            image={withSizes(featuredImage.gatsbyImageData, IMAGE_SIZES[variant])}
+            alt={isCompact ? '' : featuredImage.description || title}
+          />
+        ) : (
+          <ImagePending />
+        )}
       </ItemImage>
 
       <Title as={`h${headingLevel}`} $variant={variant}>

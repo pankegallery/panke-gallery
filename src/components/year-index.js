@@ -58,10 +58,12 @@ const useActiveYear = (ids) => {
 
 /**
  * The year index of the exhibitions archive: a line of year chips between
- * two thin lines, each linking to the section whose id is the year. The
- * line scrolls sideways on phones and sticks to the top of the viewport
- * from `breakpoints.sm`. The chip of the year in view gets a 2px border in
- * the accent colour (the colour picked in the colour swap).
+ * two thin lines. Each chip links to `/exhibitions/<year>/`, which the page
+ * answers by scrolling to the section whose id is the year and loading its
+ * images (#68), so a year can be shared and the back button returns to the
+ * year before. The line scrolls sideways on phones and sticks to the top of
+ * the viewport from `breakpoints.sm`. The chip of the year in view gets a
+ * 2px border in the accent colour (the colour picked in the colour swap).
  *
  * @param {Object} props
  * @param {{year: number, hideFrom?: 'md'|'xl'}[]} props.years - The years
@@ -80,7 +82,10 @@ const YearIndex = ({ years }) => {
           return (
             <ChipItem key={year} $hideFrom={hideFrom}>
               <Chip
-                href={`#${year}`}
+                to={`/exhibitions/${year}/`}
+                // Tells the page the reader picked this year, so it moves
+                // the keyboard focus there too (not on a URL opened directly).
+                state={{ fromYearIndex: true }}
                 $active={isActive}
                 $accent={getPankeColor(color)}
                 aria-current={isActive ? 'true' : undefined}

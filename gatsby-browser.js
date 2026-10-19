@@ -30,3 +30,12 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 
 config.autoAddCss = false;
+
+// /exhibitions/<year>/ scrolls to its year itself, also on back and forward
+// (src/pages/exhibitions.js), so Gatsby mustn't scroll to the top or to a
+// saved position there. Everywhere else Gatsby keeps its own behaviour:
+// `undefined` leaves the decision to it.
+const EXHIBITIONS_YEAR = /^\/exhibitions\/[^/]+\/?$/;
+
+export const shouldUpdateScroll = ({ routerProps: { location } }) =>
+  EXHIBITIONS_YEAR.test(location.pathname) ? false : undefined;
