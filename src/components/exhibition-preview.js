@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
-import Moment from 'moment'
+import { formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { Article, Meta } from './content/Content.styles'
 
@@ -11,16 +11,7 @@ class exhibitionPreview extends React.Component {
 
     const exhibition = this.props.exhibition
 
-    // --- Date or to be confirmed --
-
-    let dateDisplayed
-
-    if (exhibition.dateTbc){
-      dateDisplayed = "Date to be confirmed"
-    }
-    else{
-      dateDisplayed = Moment(exhibition.startDate).format('DD MMMM') + '\u2009\u2013\u2009' + Moment(exhibition.endDate).format('DD MMMM YYYY')
-    }
+    let dateDisplayed = formatDateRange(exhibition.startDate, exhibition.endDate, { tbc: exhibition.dateTbc })
 
     if (exhibition.openingHours){
       dateDisplayed = dateDisplayed + ' | ' + exhibition.openingHours
