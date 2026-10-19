@@ -112,8 +112,8 @@ const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
  * a column. The gutter is `spacing.gapPhone` on phones, `spacing.gap` from
  * `breakpoints.sm`.
  *
- * `$rowGap` replaces the row gap, e.g. for the Recent cards, whose four
- * subgrid rows each are one line of text.
+ * `$rowGap` replaces the row gap, e.g. the wider gap between the lines of
+ * Recent cards.
  */
 export const Grid = styled.div`
   display: grid;

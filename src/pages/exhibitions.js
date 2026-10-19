@@ -119,7 +119,7 @@ const PankeExhibitions = ({ data }) => {
           <Headline>
             <h2>Recent</h2>
           </Headline>
-          <Grid $rowGap={theme.spacing.textGap}>
+          <Grid $rowGap={theme.spacing.cardLineGap}>
             {recent.map((exhibition, index) => {
               const from = recentFrom(index)
               return (

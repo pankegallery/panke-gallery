@@ -77,8 +77,7 @@ const DateRange = ({ parts }) =>
  * - `feature-small`: upcoming shows. Like `feature` with a smaller title and
  *   a shorter teaser; the image takes 1 of 3, then 2 of 4 columns.
  * - `card`: the Recent grid. One column: image, date, title and a grey
- *   artist line. Cards share the grid rows through `subgrid` (see the
- *   styles).
+ *   artist line, which follows its own title directly.
  * - `row`: archive rows. Image and text side by side: 2 : 3 on phones, then
  *   image 1 column and text 2; from `breakpoints.xl` a row spans two columns,
  *   so two sit side by side. Date (always with the year, since the year

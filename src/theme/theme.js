@@ -111,7 +111,7 @@ export const theme = {
     // Recent cards: image to date, and end of a card's text to the next
     // line of cards. The text must sit visibly closer to its own image than
     // to the cards below, or a line of text reads as the caption of the
-    // image under it. Both are the full distances (row gap included).
+    // image under it. `cardLineGap` is the Recent grid's row gap.
     cardImageGap: '6px',
     cardLineGap: '48px',
     // Archive year index: above and below the chips, inside a chip, and

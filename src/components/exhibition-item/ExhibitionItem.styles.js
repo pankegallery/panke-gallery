@@ -76,23 +76,17 @@ const textRows = (first) => css`
 // cards next to them.
 const variantLayout = ({ $variant, theme }) => {
   if ($variant === 'card') {
-    // The card spans four rows of its grid parent (the Recent grid) and
-    // shares them with its neighbours, so image, date, title and artist line
-    // line up across each line of cards even when one date wraps to two
-    // lines. It needs that grid parent: without one, Chrome collapses the
-    // last subgrid row and hides the artist line.
-    // The text sits close to its own image (`cardImageGap`) and far from the
-    // next line of cards (`cardLineGap`), so it can't be read as belonging
-    // to the image below. Both margins subtract the row gap that the grid
-    // adds anyway. The bottom margin is on the card, not on the artist line,
-    // so the distance holds when a show has no artist line.
+    // Each card stacks its own text: the artist line follows its title
+    // directly. (Sharing rows with the neighbours through `subgrid` left a
+    // gap under every one-line title next to a two-line one.) Images and
+    // one-line dates still line up, since all images are 16:10. The text
+    // sits close to its own image (`cardImageGap`), and the Recent grid's
+    // row gap (`cardLineGap`) keeps it far from the next line of cards, so
+    // it can't be read as belonging to the image below.
     return css`
       display: grid;
-      grid-row: span 4;
-      grid-template-rows: subgrid;
       row-gap: ${theme.spacing.textGap};
       align-content: start;
-      margin-bottom: calc(${theme.spacing.cardLineGap} - ${theme.spacing.textGap});
 
       > ${ImageLink} {
         grid-row: 1;
