@@ -92,7 +92,7 @@ class ExhibitionTemplate extends React.Component {
 
     let metaInfos = dateDisplayed
 
-    if (exhibition.vernissageInfos){
+    if (exhibition.openingHours){
       metaInfos += ' | ' + exhibition.openingHours
     }
 
