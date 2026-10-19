@@ -49,7 +49,7 @@ const ExhibitionItem = styled.li`
 
   small {
     display: block;
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
   }
 `
 

@@ -56,7 +56,7 @@ export const QrCard = styled.div`
 
   p {
     font-size: ${props => props.theme.fontSizes.small};
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
     margin: 2em 0 2em;
   }
 `;
