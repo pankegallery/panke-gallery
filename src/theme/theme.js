@@ -68,6 +68,10 @@ export const theme = {
     upcomingTitleWide: '26px',
     yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
     yearChip: '14px',      // Year chips in the archive index, Regular 400
+    // The one-line intro on the homepage, Light 300: `Phone` below
+    // `breakpoints.sm`, the plain value from there (#69).
+    introPhone: '17px',
+    intro: '19px',
     pageTitle: '34px'
   },
   letterSpacing: {
@@ -98,7 +102,10 @@ export const theme = {
     focusRing: '2px',
     // Every image on /exhibitions is cropped to 16:10 (`aspectRatio: 1.6` in
     // its query); boxes waiting for their image keep that shape (#68).
-    exhibitionImageRatio: '16 / 10'
+    exhibitionImageRatio: '16 / 10',
+    // The short rule under the logo, which also marks the intro/Visit row on
+    // the homepage instead of a full-width line (#69).
+    shortRule: '40px'
   },
   spacing: {
     gap: '20px',
@@ -130,12 +137,19 @@ export const theme = {
     yearHeadingBottom: '14px',
     // Where a jump to a year stops from `breakpoints.sm`, below the sticky
     // year index (chip, padding and lines, plus some air).
-    yearScrollMargin: '72px'
+    yearScrollMargin: '72px',
+    // Short rule (`shortRule` in Layout.styles.js): the space above its
+    // line, how far it sticks out left of the text edge, and the space
+    // between it and the content it introduces.
+    shortRuleSpace: '32px',
+    shortRuleOutdent: '20px',
+    shortRuleGap: '24px'
   },
   lineHeight: {
     base: '1.4em',
     headings: '1.3em',
-    teaser: '1.5'
+    teaser: '1.5',
+    intro: '1.45'
   },
   container: {
     // Default content width.

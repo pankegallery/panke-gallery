@@ -1,16 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
-import { breakpointDisplay } from '../layout/Layout.styles';
+import { breakpointDisplay, shortRule } from '../layout/Layout.styles';
+
+// Uppercase section labels such as "Upcoming events", "Current" or
+// "About the exhibition".
+const sectionLabel = ({ theme }) => css`
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: ${theme.fontSizes.medium};
+  font-weight: ${theme.fontWeights.light};
+  margin-bottom: 1em;
+`;
 
 export const NewsSection = styled.section`
   &::after {
-    border-bottom: 1px solid #333;
-    content: "";
-    width: 40px;
-    clear: both;
-    display: inline-block;
-    height: 32px;
-    margin-left: -20px;
+    ${shortRule}
   }
 `;
 
@@ -29,11 +33,7 @@ export const Headline = styled.div`
   }
 
   h1, h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   h1 {
@@ -176,11 +176,7 @@ export const InfoSection = styled.div`
   margin: 3em 0 0;
 
   h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   p {
@@ -196,11 +192,7 @@ export const FurtherSection = styled.div`
   margin: 3em 0 0;
 
   h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   h4 {
@@ -243,5 +235,41 @@ export const ResponsiveVideo = styled.div`
     width: 100%;
     height: 100%;
     border: 0;
+  }
+`;
+// The homepage's last row (#69): the one-line intro in the first column of
+// the page `Grid` and the Visit block beside it, from the same column edge
+// as the exhibition text above. The short rule from the header marks the
+// row instead of a full-width line.
+export const IntroSection = styled.section`
+  &::before {
+    ${shortRule}
+    display: block;
+    margin-bottom: ${props => props.theme.spacing.shortRuleGap};
+  }
+`;
+
+export const Intro = styled.p`
+  margin: 0;
+  font-size: ${props => props.theme.fontSizes.introPhone};
+  font-weight: ${props => props.theme.fontWeights.light};
+  line-height: ${props => props.theme.lineHeight.intro};
+  text-wrap: balance;
+
+  ${media.md} { 
+    font-size: ${props => props.theme.fontSizes.intro};
+    padding-right: ${props => props.theme.spacing.gap};
+  }
+`;
+
+// Address and opening hours: the Contact page's "visitUs" block from
+// Contentful, so the hours are kept in one place. Its headings are section
+// labels here, as on the Contact page.
+export const Visit = styled.div`
+  ${media.md} { grid-column: 2 / -1; }
+  ${media.xl} { grid-column: 2 / span 2; }
+
+  h2 {
+    ${sectionLabel}
   }
 `;
