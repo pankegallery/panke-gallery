@@ -83,20 +83,6 @@ const Layout = ({ children, redirectActive }) => {
                   content="/favicons/browserconfig.xml"
                 />
                 <meta name="theme-color" content="#ffffff" />
-                {/* CDN Scripts for Slideshow, Icons */}
-                <script
-                  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                  type="text/javascript"
-                />
-                <script
-                  src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-                  type="text/javascript"
-                />
-                <link
-                  rel="stylesheet"
-                  href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-                  type="text/css"
-                />
               </Helmet>
               {!redirectActive && (
                 <OffCanvas className={offCanvasClass}>

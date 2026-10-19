@@ -8,8 +8,8 @@ import PasswordGate from './password-gate';
 
 // Deliberately bare — no header, nav, or footer. This wraps internal
 // print-only pages (the QR code sheets), which have no visitor-facing
-// purpose and shouldn't carry the full site chrome (or its jQuery/Bootstrap/
-// FontAwesome CDN scripts) just to get styled-components theme access.
+// purpose and shouldn't carry the full site chrome just to get
+// styled-components theme access.
 //
 // Gated by a simple password prompt (PasswordGate) — not real access
 // control on a statically-generated site (the page's own HTML is still
