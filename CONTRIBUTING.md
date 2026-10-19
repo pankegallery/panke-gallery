@@ -18,7 +18,7 @@ Format: `<type>/<issue-number>-<meaningful-slug>`
 | Type | Use for | Matching label |
 | --- | --- | --- |
 | `feature/` | New features and visible UI changes | `c _ feature`, `x _ UI/X enhancement` |
-| `bug/` | Fixes for something that is broken | `c _ bug` |
+| `bugfix/` | Fixes for something that is broken | `c _ bug` |
 | `refactor/` | Code clean-ups without visible change (e.g. merging components) | `x _ code enhancement` |
 | `chore/` | Maintenance: dependencies, build, tooling, docs | – |
 
