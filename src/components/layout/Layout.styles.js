@@ -129,8 +129,11 @@ export const Grid = styled.div`
     grid-template-columns: ${props => gridColumns(props.theme.grid.columns.xl)};
   }
 
-  /* Last, so it also beats the gap of the media queries above. */
-  ${props => props.$rowGap && css`row-gap: ${props.$rowGap};`}
+  /* styled-components moves the media queries after this rule, so the
+     override needs the doubled class to beat their gap. */
+  ${props => props.$rowGap && css`
+    && { row-gap: ${props.$rowGap}; }
+  `}
 `;
 
 /**

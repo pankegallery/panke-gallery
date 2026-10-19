@@ -7,7 +7,7 @@ import { breakpointDisplay } from '../layout/Layout.styles';
 // every ancestor up to the page to keep `overflow: visible` (or `clip`):
 // `overflow: hidden` on any of them would switch `position: sticky` off.
 export const Bar = styled.nav`
-  margin-bottom: ${props => props.theme.spacing.imageGap};
+  margin-bottom: ${props => props.theme.spacing.chipGap};
   border-block: 1px solid ${props => props.theme.colors.theme.rule};
   background: ${props => props.theme.colors.theme.white};
 
@@ -24,7 +24,7 @@ export const Bar = styled.nav`
 // there is more, so the scrollbar is hidden.
 export const Chips = styled.ul`
   display: flex;
-  gap: ${props => props.theme.spacing.imageGap};
+  gap: ${props => props.theme.spacing.chipGap};
   overflow-x: auto;
   scrollbar-width: none;
   margin: 0;

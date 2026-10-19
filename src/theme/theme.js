@@ -101,13 +101,17 @@ export const theme = {
     // and teaser, plus a little more above the teaser.
     textGap: '4px',
     teaserGap: '6px',
-    // Under a Recent card image, and between the year chips.
-    imageGap: '8px',
+    // Between the year chips, and under the year index.
+    chipGap: '8px',
     // Between image and text where they don't sit on the page grid: archive
     // rows on phones and stacked features.
     splitGap: '12px',
-    // Between the two lines of Recent cards (added to `textGap`).
-    cardLineGap: '24px',
+    // Recent cards: image to date, and end of a card's text to the next
+    // line of cards. The text must sit visibly closer to its own image than
+    // to the cards below, or a line of text reads as the caption of the
+    // image under it. Both are the full distances (row gap included).
+    cardImageGap: '6px',
+    cardLineGap: '48px',
     // Archive year index: above and below the chips, inside a chip, and
     // around a year heading.
     yearIndexPadding: '10px',
