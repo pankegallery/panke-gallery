@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet';
 import get from 'lodash/get';
 import Moment from 'moment';
@@ -117,23 +117,6 @@ const IntroVisitSection = ({ visitHtml }) => (
  * @param {Object} props.data - Page query result.
  */
 const PankeIndex = ({ data }) => {
-  const START_DATE = "01/08/2024";
-  const END_DATE = "30/09/2024";
-
-  const [redirectActive, setRedirectActive] = useState(false);
-
-  useEffect(() => {
-    const currentDate = new Date();
-    const startDate = Moment(START_DATE, 'DD/MM/YYYY').toDate();
-    const endDate = Moment(END_DATE, 'DD/MM/YYYY').toDate();
-
-    console.log("dates", startDate, currentDate, endDate);
-    if (currentDate >= startDate && currentDate <= endDate) {
-
-      setRedirectActive(true);
-    }
-  }, []);
-
   const filterUpcomingEvents = (_ev) => {
     const currentDate = new Date();
     const eventStartDate = new Date(_ev.node.date);
@@ -151,7 +134,7 @@ const PankeIndex = ({ data }) => {
   const past = current.length === 0 && upcoming.length === 0 ? latestPast(data, exhibitions) : [];
 
   return (
-    <Layout redirectActive={redirectActive} wide>
+    <Layout wide>
       <Helmet
         title="Home"
         meta={[
@@ -179,15 +162,11 @@ const PankeIndex = ({ data }) => {
 
       {/* One section per block, so later ones (an ongoing residency, the
           livestream during events) slot in between without restructuring. */}
-      {!redirectActive && (
-        <>
-          <EventsSection events={upcomingEvents.map(({ node }) => node)} />
-          <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
-          <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
-          <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
-          <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
-        </>
-      )}
+      <EventsSection events={upcomingEvents.map(({ node }) => node)} />
+      <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
+      <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
+      <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
+      <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
     </Layout>
   );
 };
