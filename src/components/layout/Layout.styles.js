@@ -23,7 +23,7 @@ export const Container = styled.div`
     border-color: ${props => props.$themeColor ? props.theme.colors.panke[props.$themeColor] : props.theme.colors.panke.blue};
   }
 
-  button.tag-selected,
+  a.tag-selected,
   .carousel-indicators button.active {
     background: ${props => props.$themeColor ? props.theme.colors.panke[props.$themeColor] : props.theme.colors.panke.blue};
     color: ${props => props.theme.colors.theme.white} !important;
