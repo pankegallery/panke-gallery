@@ -11,23 +11,54 @@ export const theme = {
     },
     theme: {
       black: '#000',
+      // Borders, tags and icons only. At 2.85:1 on white it is too light
+      // for text, so text uses `date` or `quiet` below.
       grey: '#999',
       lightgrey: '#ccc',
-      white: '#fff'
+      white: '#fff',
+      // Dates and other secondary text (e.g. the artist line in the Recent
+      // grid). The lightest grey that still reaches 4.5:1 on white (WCAG AA).
+      date: '#767676',
+      // Teaser text: a darker, slightly cool grey that reads as body copy
+      // while staying quieter than the black titles.
+      quiet: '#5f5f66'
     }
   },
   breakpoints: {
     sm: '768px',
-    md: '1080px'
+    md: '1080px',
+    // Wide screens: features get larger titles and the wide container.
+    xl: '1440px'
   },
   fonts: {
-    main: "'Roboto', sans-serif"
+    main: "'Roboto', sans-serif",
+    // Artist lines in archive rows, Current, Upcoming and the exhibition page.
+    // Self-hosted via @fontsource/roboto-mono (see gatsby-browser.js).
+    mono: "'Roboto Mono', ui-monospace, Menlo, monospace"
   },
   fontSizes: {
+    // Legacy sizes. The em values are relative to the parent, so they
+    // compound when nested; keep them for existing styles only.
     base: '16px',
     small: '0.8em',
     medium: '0.9em',
-    large: '1.8em'
+    large: '1.8em',
+
+    // Refresh sizes (#65). Always px: they come 1:1 from the agreed design
+    // table and don't compound like em. (rem would add nothing, since the
+    // root size is fixed at `base` = 16px in GlobalStyles.)
+    date: '13px',          // Dates everywhere, Light 300
+    itemTitle: '15px',     // Titles in grids and archive rows, Medium 500
+    artist: '14px',        // Artist line in the Recent grid, Regular 400
+    artistMono: '13px',    // Artist line set in `fonts.mono`, Light 300
+    teaser: '14px',        // Teaser text, Light 300
+    // Feature titles (Medium 500). The `Wide` variants apply from
+    // `breakpoints.xl`; the exhibition page title stays 34px throughout.
+    currentTitle: '28px',
+    currentTitleWide: '32px',
+    upcomingTitle: '22px',
+    upcomingTitleWide: '26px',
+    pageTitle: '34px'
   },
   fontWeights: {
     light: 300,
@@ -44,7 +75,10 @@ export const theme = {
     headings: '1.3em'
   },
   container: {
-    maxWidth: '1080px'
+    // Default content width.
+    maxWidth: '1080px',
+    // Content width from `breakpoints.xl` up.
+    maxWidthWide: '1400px'
   }
 };
 
@@ -54,9 +88,14 @@ export const getPankeColor = (color) => theme.colors.panke[color] || theme.color
 // Helper function to get theme color by key
 export const getThemeColor = (color) => theme.colors.theme[color] || theme.colors.theme.black;
 
-// Media query helpers
+// Media query helpers.
+// Note the names are shifted against `breakpoints`: `media.sm` is everything
+// below `breakpoints.sm` (mobile), `media.md` starts at `breakpoints.sm`
+// (tablet) and `media.lg` at `breakpoints.md` (desktop). `media.xl` matches
+// `breakpoints.xl` directly.
 export const media = {
   sm: `@media (max-width: ${theme.breakpoints.sm})`,
   md: `@media (min-width: ${theme.breakpoints.sm})`,
-  lg: `@media (min-width: ${theme.breakpoints.md})`
+  lg: `@media (min-width: ${theme.breakpoints.md})`,
+  xl: `@media (min-width: ${theme.breakpoints.xl})`
 };
