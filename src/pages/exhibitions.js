@@ -18,14 +18,14 @@ const isCurrent = ({ startDate, endDate }) =>
 const isUpcoming = ({ startDate }) => day(startDate).isAfter(new Date(), 'day')
 const isPast = ({ endDate }) => day(endDate).isBefore(new Date(), 'day')
 
-// Recent is two lines of the page grid: 4 shows on phones, 6 from
-// `breakpoints.sm`, 8 from `breakpoints.xl`. All 8 are rendered and CSS hides
+// Recent shows 4 shows on phones (one full-width column), then two lines of
+// the page grid: 6 from `breakpoints.sm`, 8 from `breakpoints.xl`. All 8 are
+// rendered and CSS hides
 // the ones that don't fit, while the archive renders the same shows with the
 // opposite visibility. So each past show appears exactly once at every width,
 // and the server-rendered HTML already matches the screen (no width check in
 // JS, no layout jump on hydration).
-const RECENT_LINES = 2
-const recentCount = (key) => RECENT_LINES * theme.grid.columns[key]
+const RECENT_COUNT = { sm: 4, md: 6, xl: 8 }
 
 /**
  * Where the past show at `index` (newest first) is a Recent card:
@@ -33,9 +33,9 @@ const recentCount = (key) => RECENT_LINES * theme.grid.columns[key]
  * never. Below that breakpoint it is an archive row instead.
  */
 const recentFrom = (index) => {
-  if (index < recentCount('sm')) return 'always'
-  if (index < recentCount('md')) return 'md'
-  if (index < recentCount('xl')) return 'xl'
+  if (index < RECENT_COUNT.sm) return 'always'
+  if (index < RECENT_COUNT.md) return 'md'
+  if (index < RECENT_COUNT.xl) return 'xl'
   return null
 }
 
@@ -66,7 +66,7 @@ const PankeExhibitions = ({ data }) => {
   const upcoming = exhibitions.filter(isUpcoming).reverse()
   const past = exhibitions.filter(isPast)
 
-  const recent = past.slice(0, recentCount('xl'))
+  const recent = past.slice(0, RECENT_COUNT.xl)
 
   // Every past show that isn't always in Recent, hidden from where it is.
   const archiveEntries = past.flatMap((exhibition, index) => {

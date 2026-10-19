@@ -103,7 +103,7 @@ export const Col = styled.div`
 const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
 
 /**
- * The page column grid: `theme.grid.columns` columns per breakpoint (2 on
+ * The page column grid: `theme.grid.columns` columns per breakpoint (1 on
  * phones, 3 from `breakpoints.sm`, 4 from `breakpoints.xl`) with the theme
  * gap. On /exhibitions the features, the Recent cards and the archive rows
  * all sit on it, and ExhibitionItem lays its parts out on these columns

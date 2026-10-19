@@ -78,8 +78,10 @@ export const theme = {
   },
   // Columns of the page grid (`Grid` in Layout.styles.js), keyed like the
   // `media` helpers: phones, then from `breakpoints.sm` and `breakpoints.xl`.
+  // One column on phones, so Recent shows full-width images: between
+  // exhibitions it is the first thing on the page.
   grid: {
-    columns: { sm: 2, md: 3, xl: 4 }
+    columns: { sm: 1, md: 3, xl: 4 }
   },
   sizes: {
     // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.

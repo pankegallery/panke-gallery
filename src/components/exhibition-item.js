@@ -16,9 +16,13 @@ import {
   Teaser,
 } from './exhibition-item/ExhibitionItem.styles'
 
-// Variants whose images sit next to a linked title and whose dates switch to
-// short months on phones (see `LongDate` / `ShortDate`).
+// Variants whose image only repeats the linked title next to it, so it
+// gets `alt=""` and stays out of the tab order.
 const COMPACT_VARIANTS = ['card', 'row']
+// Variants whose dates switch to short months on phones (see `LongDate` /
+// `ShortDate`): archive rows, whose text column is narrow there. Recent
+// cards are full width on phones and keep the full month names.
+const SHORT_DATE_VARIANTS = ['row']
 
 // `sizes` for the image of each variant, from the grid columns its image
 // spans on phones, from `breakpoints.sm` and from `breakpoints.xl` (see the
@@ -33,10 +37,11 @@ const imageSizes = ([sm, md, xl]) => [
 ].join(', ')
 
 const IMAGE_SIZES = {
-  feature: imageSizes([2, 2, 3]),
-  'feature-small': imageSizes([2, 1, 2]),
+  feature: imageSizes([1, 2, 3]),
+  'feature-small': imageSizes([1, 1, 2]),
   card: imageSizes([1, 1, 1]),
-  row: imageSizes([1, 1, 1]),
+  // On phones the row has its own 2 : 3 split, so the image is 2/5 wide.
+  row: imageSizes([0.4, 1, 1]),
 }
 
 /** Returns `gatsbyImageData` with its `sizes` replaced on every source. */
@@ -83,8 +88,8 @@ const DateRange = ({ parts }) =>
  * Artist lines stop after two lines in every variant. Images are cropped to
  * the aspect ratio the page queries (16:10 on /exhibitions).
  *
- * `card` and `row` show abbreviated months on phones and use `alt=""`, since
- * their image only repeats the linked title. The feature variants describe
+ * `row` shows abbreviated months on phones. `card` and `row` use `alt=""`,
+ * since their image only repeats the linked title. The feature variants describe
  * the image with the Contentful asset description.
  *
  * @param {Object} props
@@ -121,6 +126,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
 
   const path = `/exhibition/${slug}`
   const isCompact = COMPACT_VARIANTS.includes(variant)
+  const hasShortDate = SHORT_DATE_VARIANTS.includes(variant)
   const artistHtml = subtitleShortDescription?.childMarkdownRemark?.html
   const teaser = variant !== 'card' && description?.childMarkdownRemark?.excerpt
   const meta = isCompact ? [] : [openingHours, vernissageInfos].filter(Boolean)
@@ -151,10 +157,10 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
       )}
 
       <ItemDate>
-        <LongDate $hasShort={isCompact}>
+        <LongDate $hasShort={hasShortDate}>
           <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc })} />
         </LongDate>
-        {isCompact && (
+        {hasShortDate && (
           <ShortDate>
             <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc, short: true })} />
           </ShortDate>
