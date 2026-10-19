@@ -8,6 +8,7 @@ import Layout from "../components/layout"
 import ExhibitionListItem from '../components/exhibition-list-item'
 import { Section, Headline } from '../components/content/Content.styles';
 
+
 class PankeExhibitions extends React.Component {
 
   filterCurrent = (_ex) => {
