@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { DASH, dateRangeParts } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { theme } from '../theme/theme'
 import {
   Item,
   ImageLink,
@@ -15,11 +16,38 @@ import {
   Teaser,
 } from './exhibition-item/ExhibitionItem.styles'
 
-export { ItemGrid } from './exhibition-item/ExhibitionItem.styles'
-
 // Variants whose images sit next to a linked title and whose dates switch to
 // short months on phones (see `LongDate` / `ShortDate`).
 const COMPACT_VARIANTS = ['card', 'row']
+
+// `sizes` for the image of each variant, from the grid columns its image
+// spans on phones, from `breakpoints.sm` and from `breakpoints.xl` (see the
+// styles). The query asks for 1050px images, whose default `sizes` would
+// make a phone load a 2100px file for a half-width thumbnail. These are
+// upper bounds (gaps and page padding left out), so images stay sharp.
+const { breakpoints, container, grid } = theme
+const imageSizes = ([sm, md, xl]) => [
+  `(min-width: ${breakpoints.xl}) calc(${container.maxWidthWide} * ${xl} / ${grid.columns.xl})`,
+  `(min-width: ${breakpoints.sm}) ${Math.ceil((100 * md) / grid.columns.md)}vw`,
+  `${Math.ceil((100 * sm) / grid.columns.sm)}vw`,
+].join(', ')
+
+const IMAGE_SIZES = {
+  feature: imageSizes([2, 2, 3]),
+  'feature-small': imageSizes([2, 1, 2]),
+  card: imageSizes([1, 1, 1]),
+  row: imageSizes([1, 1, 1]),
+}
+
+/** Returns `gatsbyImageData` with its `sizes` replaced on every source. */
+const withSizes = (image, sizes) => ({
+  ...image,
+  images: {
+    ...image.images,
+    fallback: image.images.fallback && { ...image.images.fallback, sizes },
+    sources: image.images.sources?.map((source) => ({ ...source, sizes })),
+  },
+})
 
 /** Renders the parts of a date range so it wraps only after the dash. */
 const DateRange = ({ parts }) =>
@@ -33,19 +61,24 @@ const DateRange = ({ parts }) =>
 /**
  * One exhibition in a list: the homepage, /exhibitions and its archive all
  * render shows through this component, so they share markup, date format and
- * alt text.
+ * alt text. Every variant must be a direct child of the page `Grid`
+ * (Layout.styles.js), whose columns it lays its image and text on.
  *
  * Variants:
  * - `feature`: the current show. Large image, feature-size title, mono artist
- *   line, date with opening hours and vernissage info, long teaser.
+ *   line, date with opening hours and vernissage info, long teaser. Spans the
+ *   grid; from `breakpoints.sm` the image takes 2 of 3 columns, from
+ *   `breakpoints.xl` 3 of 4, with the text beside it.
  * - `feature-small`: upcoming shows. Like `feature` with a smaller title and
- *   a shorter teaser.
- * - `card`: the Recent grid. Image, date, title and a grey two-line artist
- *   line. Cards must be direct children of a CSS grid such as `ItemGrid`,
- *   whose rows they share through `subgrid` (see the styles).
- * - `row`: archive rows. Image in one column; date (always with the year,
- *   since the year heading may have scrolled away), title, mono artist line,
- *   and a three-line teaser from `breakpoints.sm` up.
+ *   a shorter teaser; the image takes 1 of 3, then 2 of 4 columns.
+ * - `card`: the Recent grid. One column: image, date, title and a grey
+ *   two-line artist line. Cards share the grid rows through `subgrid` (see
+ *   the styles).
+ * - `row`: archive rows. Image in the first column, the text in the rest of
+ *   the row; from `breakpoints.xl` a row spans two columns, so two sit side
+ *   by side. Date (always with the year, since the year heading may have
+ *   scrolled away), title, mono artist line, and a three-line teaser from
+ *   `breakpoints.sm` up.
  *
  * `card` and `row` show abbreviated months on phones and use `alt=""`, since
  * their image only repeats the linked title. The feature variants describe
@@ -62,8 +95,14 @@ const DateRange = ({ parts }) =>
  * @param {'feature'|'feature-small'|'card'|'row'} props.variant
  * @param {number} [props.headingLevel=3] - Level of the title heading, to fit
  *   the page's outline.
+ * @param {'md'|'xl'} [props.hideBelow] - Hide the item below this `media`
+ *   breakpoint.
+ * @param {'md'|'xl'} [props.hideFrom] - Hide the item from this `media`
+ *   breakpoint up. Both are CSS, so the server-rendered page is already
+ *   right; /exhibitions uses them to show a show either as a Recent card or
+ *   as an archive row, depending on the width.
  */
-const ExhibitionItem = ({ exhibition, variant, headingLevel = 3 }) => {
+const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hideFrom }) => {
   const {
     slug,
     title,
@@ -84,7 +123,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3 }) => {
   const meta = isCompact ? [] : [openingHours, vernissageInfos].filter(Boolean)
 
   return (
-    <Item $variant={variant}>
+    <Item $variant={variant} $hideBelow={hideBelow} $hideFrom={hideFrom}>
       {/* In compact variants the title link is the one to announce and tab to;
           the image link is a mouse shortcut to the same page. */}
       <ImageLink
@@ -92,7 +131,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3 }) => {
         {...(isCompact && { tabIndex: -1, 'aria-hidden': true })}
       >
         <GatsbyImage
-          image={featuredImage.gatsbyImageData}
+          image={withSizes(featuredImage.gatsbyImageData, IMAGE_SIZES[variant])}
           alt={isCompact ? '' : featuredImage.description || title}
         />
       </ImageLink>

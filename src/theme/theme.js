@@ -58,12 +58,22 @@ export const theme = {
     currentTitleWide: '32px',
     upcomingTitle: '22px',
     upcomingTitleWide: '26px',
+    yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
     pageTitle: '34px'
   },
   fontWeights: {
     light: 300,
     normal: 400,
     medium: 500
+  },
+  // Columns of the page grid (`Grid` in Layout.styles.js), keyed like the
+  // `media` helpers: phones, then from `breakpoints.sm` and `breakpoints.xl`.
+  grid: {
+    columns: { sm: 2, md: 3, xl: 4 }
+  },
+  sizes: {
+    // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.
+    tapTarget: '44px'
   },
   spacing: {
     gap: '20px',
@@ -97,5 +107,10 @@ export const media = {
   sm: `@media (max-width: ${theme.breakpoints.sm})`,
   md: `@media (min-width: ${theme.breakpoints.sm})`,
   lg: `@media (min-width: ${theme.breakpoints.md})`,
-  xl: `@media (min-width: ${theme.breakpoints.xl})`
+  xl: `@media (min-width: ${theme.breakpoints.xl})`,
+  // Exact complements of `media.md` and `media.xl`, for hiding something
+  // until a breakpoint. (`media.sm` uses max-width and so also matches at
+  // exactly `breakpoints.sm`.)
+  belowMd: `@media (width < ${theme.breakpoints.sm})`,
+  belowXl: `@media (width < ${theme.breakpoints.xl})`
 };
