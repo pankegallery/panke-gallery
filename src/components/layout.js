@@ -20,11 +20,10 @@ import Navigation from "./navigation";
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children - The page content.
- * @param {boolean} [props.redirectActive] - Hides header, menu and footer.
  * @param {boolean} [props.wide] - Use `container.maxWidthWide` from
  *   `breakpoints.xl` up, for pages built on the 4-column grid.
  */
-const Layout = ({ children, redirectActive, wide }) => {
+const Layout = ({ children, wide }) => {
   const [offCanvas, setOffCanvas] = useState(false);
 
   const handleClick = () => {
@@ -94,28 +93,24 @@ const Layout = ({ children, redirectActive, wide }) => {
                 />
                 <meta name="theme-color" content="#ffffff" />
               </Helmet>
-              {!redirectActive && (
-                <OffCanvas className={offCanvasClass}>
-                  <ToggleMenuButton
-                    className="toggle-menu justify-right"
-                    onClick={handleClick}
-                  >
-                    <FontAwesomeIcon icon={faPlus} aria-label="Toggle menu" />
-                  </ToggleMenuButton>
-                  <Navigation />
-                </OffCanvas>
-              )}
+              <OffCanvas className={offCanvasClass}>
+                <ToggleMenuButton
+                  className="toggle-menu justify-right"
+                  onClick={handleClick}
+                >
+                  <FontAwesomeIcon icon={faPlus} aria-label="Toggle menu" />
+                </ToggleMenuButton>
+                <Navigation />
+              </OffCanvas>
               <Container className={offCanvas ? "menu-active" : ""} $themeColor={color} $wide={wide}>
-                {!redirectActive && <Header handleClick={handleClick} />}
+                <Header handleClick={handleClick} />
                 <Main>{children}</Main>
-                {!redirectActive && <Footer />}
+                <Footer />
               </Container>
-              {!redirectActive && (
-                <ColorSwap
-                  themeColor={color}
-                  changeThemeColor={changeThemeColor}
-                />
-              )}
+              <ColorSwap
+                themeColor={color}
+                changeThemeColor={changeThemeColor}
+              />
             </PageWrapper>
           </StyledThemeProvider>
         )}
