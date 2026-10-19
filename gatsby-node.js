@@ -230,11 +230,17 @@ exports.onCreatePage = ({ page, actions }) => {
     },
   })
 
-  createPage({
-    path: `/events/:series`,
-    matchPath: `/events/:series`,
-    component: path.resolve(`./src/pages/events.js`),
-  })
+  // /events/<series-slug>/ shows the events page filtered by that series.
+  // It's a client-only route: the page reads the slug from `params.series`.
+  // onCreatePage runs for every page, so only add the route once, alongside
+  // the /events/ page it belongs to.
+  if (page.path === '/events/') {
+    createPage({
+      path: '/events/:series',
+      matchPath: '/events/:series',
+      component: page.component,
+    })
+  }
 }
 
 exports.createSchemaCustomization = ({ actions }) => {
