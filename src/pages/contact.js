@@ -6,6 +6,7 @@ import { graphql } from 'gatsby'
 import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import ConsentEmbed from '../components/consent-embed'
+import NewsletterForm from '../components/newsletter-form'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { FurtherSection } from '../components/content/Content.styles';
 import { Col, Row } from '../components/layout/Layout.styles';
@@ -95,7 +96,10 @@ class PankeContact extends React.Component{
         
         {otherBlocks.map(({node}) => {
           return (
-              <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
+              <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent}>
+                {/* The block keeps its title and intro text in Contentful; the form is code (#58). */}
+                {node.slug === 'contact-newsletter' && <NewsletterForm />}
+              </ContentBlock>
           )
         })}
 
