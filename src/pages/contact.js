@@ -94,7 +94,7 @@ class PankeContact extends React.Component{
           return (
               <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent}>
                 {/* The block keeps its title and intro text in Contentful; the form is code (#58). */}
-                {node.slug === 'contact-newsletter' && <NewsletterForm />}
+                {node.slug === 'contact-04-newsletter' && <NewsletterForm />}
               </ContentBlock>
           )
         })}
@@ -116,7 +116,7 @@ class PankeContact extends React.Component{
                 <p>Robert Sakrowski</p>
 
                 <h3>Vereinsregisternummer</h3>
-                  <p>VR 30390 B</p>
+                  <p>VR 35779 B</p>
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
                 {definedBlocks.disclaimer.array.map(({ node }) => (
@@ -135,7 +135,7 @@ export default PankeContact;
 
 export const pageQuery = graphql`
   query PankeContactQuery {
-    allContentfulContentBlock (filter: {page: {eq: "Contact"}}, sort: { fields: [createdAt], order: ASC}){
+    allContentfulContentBlock (filter: {page: {eq: "Contact"}}, sort: { fields: [slug], order: ASC}){
       edges {
         node {
           id
