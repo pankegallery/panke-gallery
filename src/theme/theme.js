@@ -21,7 +21,9 @@ export const theme = {
       date: '#767676',
       // Teaser text: a darker, slightly cool grey that reads as body copy
       // while staying quieter than the black titles.
-      quiet: '#5f5f66'
+      quiet: '#5f5f66',
+      // Thin lines around the year index and the chip outlines (#67).
+      rule: '#d9d9de'
     }
   },
   breakpoints: {
@@ -52,13 +54,17 @@ export const theme = {
     artist: '14px',        // Artist line in the Recent grid, Regular 400
     artistMono: '13px',    // Artist line set in `fonts.mono`, Regular 400
     teaser: '14px',        // Teaser text, Light 300
-    // Feature titles (Medium 500). The `Wide` variants apply from
-    // `breakpoints.xl`; the exhibition page title stays 34px throughout.
+    // Feature titles (Medium 500). `Phone` applies below `breakpoints.sm`,
+    // the plain value from there and `Wide` from `breakpoints.xl`; the
+    // exhibition page title stays 34px throughout.
+    currentTitlePhone: '24px',
     currentTitle: '28px',
     currentTitleWide: '32px',
+    upcomingTitlePhone: '20px',
     upcomingTitle: '22px',
     upcomingTitleWide: '26px',
     yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
+    yearChip: '14px',      // Year chips in the archive index, Regular 400
     pageTitle: '34px'
   },
   letterSpacing: {
@@ -77,16 +83,45 @@ export const theme = {
   },
   sizes: {
     // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.
-    tapTarget: '44px'
+    tapTarget: '44px',
+    yearChipMinWidth: '60px',
+    // Teasers stop at a readable line length in wide text columns.
+    teaserMaxWidth: '60ch',
+    // Rounded ends for pill shapes such as the year chips.
+    pillRadius: '999px'
   },
   spacing: {
     gap: '20px',
+    // Gutter of the page `Grid` below `breakpoints.sm`.
+    gapPhone: '16px',
     inner: '20px 15px',
-    headerTop: '55px'
+    headerTop: '55px',
+
+    // Inside exhibition items (#67): between the date, title, artist line
+    // and teaser, plus a little more above the teaser.
+    textGap: '4px',
+    teaserGap: '6px',
+    // Under a Recent card image, and between the year chips.
+    imageGap: '8px',
+    // Between image and text where they don't sit on the page grid: archive
+    // rows on phones and stacked features.
+    splitGap: '12px',
+    // Between the two lines of Recent cards (added to `textGap`).
+    cardLineGap: '24px',
+    // Archive year index: above and below the chips, inside a chip, and
+    // around a year heading.
+    yearIndexPadding: '10px',
+    yearChipPadding: '14px',
+    yearHeadingTop: '28px',
+    yearHeadingBottom: '14px',
+    // Where a jump to a year stops from `breakpoints.sm`, below the sticky
+    // year index (chip, padding and lines, plus some air).
+    yearScrollMargin: '72px'
   },
   lineHeight: {
     base: '1.4em',
-    headings: '1.3em'
+    headings: '1.3em',
+    teaser: '1.5'
   },
   container: {
     // Default content width.

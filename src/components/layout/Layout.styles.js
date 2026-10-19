@@ -109,20 +109,28 @@ const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
  * all sit on it, and ExhibitionItem lays its parts out on these columns
  * through `subgrid`, so every image and text edge on the page lines up.
  * The tracks are `minmax(0, 1fr)` so long titles or nowrap dates can't widen
- * a column.
+ * a column. The gutter is `spacing.gapPhone` on phones, `spacing.gap` from
+ * `breakpoints.sm`.
+ *
+ * `$rowGap` replaces the row gap, e.g. for the Recent cards, whose four
+ * subgrid rows each are one line of text.
  */
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: ${props => gridColumns(props.theme.grid.columns.sm)};
-  gap: ${props => props.theme.spacing.gap};
+  gap: ${props => props.theme.spacing.gapPhone};
 
   ${media.md} {
     grid-template-columns: ${props => gridColumns(props.theme.grid.columns.md)};
+    gap: ${props => props.theme.spacing.gap};
   }
 
   ${media.xl} {
     grid-template-columns: ${props => gridColumns(props.theme.grid.columns.xl)};
   }
+
+  /* Last, so it also beats the gap of the media queries above. */
+  ${props => props.$rowGap && css`row-gap: ${props.$rowGap};`}
 `;
 
 /**

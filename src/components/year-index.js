@@ -7,8 +7,8 @@ import { Bar, Chips, ChipItem, Chip } from './year-index/YearIndex.styles'
  * Returns the id of the year section the reader is in: the last visible one
  * whose top has scrolled up to where a jump to it stops (its
  * `scroll-margin-top`, just below the sticky bar). At the very bottom of the
- * page it is the last section, which may be too short to get there.
- * `null` before the first section, and on the server, so the
+ * page it is the last section, which may be too short to get there. Above
+ * the archive it is the first visible year. `null` on the server, so the
  * server-rendered markup and the first client render agree.
  */
 const useActiveYear = (ids) => {
@@ -29,7 +29,7 @@ const useActiveYear = (ids) => {
       const atEnd =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1
 
-      let current = null
+      let current = sections.length > 0 ? sections[0].id : null
       sections.forEach((section) => {
         const stop = parseFloat(getComputedStyle(section).scrollMarginTop) || 0
         if (section.getBoundingClientRect().top <= stop + 1) current = section.id
@@ -60,8 +60,8 @@ const useActiveYear = (ids) => {
  * The year index of the exhibitions archive: a line of year chips between
  * two thin lines, each linking to the section whose id is the year. The
  * line scrolls sideways on phones and sticks to the top of the viewport
- * from `breakpoints.sm`, where the chip of the year in view gets the
- * accent border (the colour picked in the colour swap).
+ * from `breakpoints.sm`. The chip of the year in view gets a 2px border in
+ * the accent colour (the colour picked in the colour swap).
  *
  * @param {Object} props
  * @param {{year: number, hideFrom?: 'md'|'xl'}[]} props.years - The years

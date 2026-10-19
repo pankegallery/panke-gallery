@@ -119,7 +119,7 @@ const PankeExhibitions = ({ data }) => {
           <Headline>
             <h2>Recent</h2>
           </Headline>
-          <Grid>
+          <Grid $rowGap={theme.spacing.textGap}>
             {recent.map((exhibition, index) => {
               const from = recentFrom(index)
               return (
@@ -175,10 +175,15 @@ export const pageQuery = graphql`
         startDate
         endDate
         dateTbc
+        # Every image on the page is shown at 16:10, cropped around the
+        # centre by Contentful, as in the archive prototype.
         featuredImage {
           gatsbyImageData(
             layout: CONSTRAINED,
             width: 1050,
+            aspectRatio: 1.6,
+            resizingBehavior: FILL,
+            cropFocus: CENTER,
             placeholder: BLURRED
           )
           description

@@ -48,23 +48,22 @@ export const Headline = styled.div`
 `;
 
 // One year of the exhibitions archive; its id is the year, the target of
-// the year index. From `breakpoints.sm` the index sticks to the top (one
-// line of `sizes.tapTarget` chips), so a jump stops below it. Takes
-// `$hideFrom` / `$hideBelow` (see `breakpointDisplay`).
+// the year index. From `breakpoints.sm` the index sticks to the top, so a
+// jump stops below it. Takes `$hideFrom` / `$hideBelow` (see
+// `breakpointDisplay`).
 export const YearSection = styled.section`
-  margin-top: calc(${props => props.theme.spacing.gap} * 2);
-
   ${media.md} {
-    scroll-margin-top: calc(${props => props.theme.sizes.tapTarget} + ${props => props.theme.spacing.gap});
+    scroll-margin-top: ${props => props.theme.spacing.yearScrollMargin};
   }
 
   ${breakpointDisplay}
 `;
 
 export const YearHeading = styled.h3`
-  margin-bottom: ${props => props.theme.spacing.gap};
+  margin: ${props => props.theme.spacing.yearHeadingTop} 0 ${props => props.theme.spacing.yearHeadingBottom};
   font-size: ${props => props.theme.fontSizes.yearTitle};
   font-weight: ${props => props.theme.fontWeights.medium};
+  font-variant-numeric: tabular-nums;
 `;
 
 export const Article = styled.article`

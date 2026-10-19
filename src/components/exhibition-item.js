@@ -64,21 +64,24 @@ const DateRange = ({ parts }) =>
  * alt text. Every variant must be a direct child of the page `Grid`
  * (Layout.styles.js), whose columns it lays its image and text on.
  *
- * Variants:
- * - `feature`: the current show. Large image, feature-size title, mono artist
- *   line, date with opening hours and vernissage info, long teaser. Spans the
- *   grid; from `breakpoints.sm` the image takes 2 of 3 columns, from
- *   `breakpoints.xl` 3 of 4, with the text beside it.
+ * Variants (layout as in the archive prototype of #67):
+ * - `feature`: the current show. Large image; date with opening hours and
+ *   vernissage info, feature-size title, mono artist line, long teaser.
+ *   Stacked on phones; from `breakpoints.sm` the image takes 2 of 3 columns,
+ *   from `breakpoints.xl` 3 of 4, with the text beside it.
  * - `feature-small`: upcoming shows. Like `feature` with a smaller title and
  *   a shorter teaser; the image takes 1 of 3, then 2 of 4 columns.
  * - `card`: the Recent grid. One column: image, date, title and a grey
- *   two-line artist line. Cards share the grid rows through `subgrid` (see
- *   the styles).
- * - `row`: archive rows. Image in the first column, the text in the rest of
- *   the row; from `breakpoints.xl` a row spans two columns, so two sit side
- *   by side. Date (always with the year, since the year heading may have
- *   scrolled away), title, mono artist line, and a three-line teaser from
- *   `breakpoints.sm` up.
+ *   artist line. Cards share the grid rows through `subgrid` (see the
+ *   styles).
+ * - `row`: archive rows. Image and text side by side: 2 : 3 on phones, then
+ *   image 1 column and text 2; from `breakpoints.xl` a row spans two columns,
+ *   so two sit side by side. Date (always with the year, since the year
+ *   heading may have scrolled away), title, mono artist line, and a
+ *   three-line teaser from `breakpoints.sm` up.
+ *
+ * Artist lines stop after two lines in every variant. Images are cropped to
+ * the aspect ratio the page queries (16:10 on /exhibitions).
  *
  * `card` and `row` show abbreviated months on phones and use `alt=""`, since
  * their image only repeats the linked title. The feature variants describe
