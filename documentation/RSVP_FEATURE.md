@@ -50,8 +50,8 @@ The RSVP form will automatically appear on the event page if:
 
 ### For Administrators
 View and manage registrations in Baserow:
-1. Filter by `eventId` to see registrations for a specific event
-2. Use `eventTitle` for easy identification
+1. Filter by `Event ID` to see registrations for a specific event
+2. Use `Event Title` for easy identification
 3. Export data as CSV for email lists or analysis
 
 ## Features
