@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 import { breakpointDisplay } from '../layout/Layout.styles';
 
-// Lines a teaser or artist line shows before it is cut off with an ellipsis,
+// Lines a teaser or subtitle shows before it is cut off with an ellipsis,
 // per breakpoint (keys as in `media`), as in the archive prototype (#67).
 // The teaser comes as a long plain-text excerpt from GraphQL, so the visible
 // length is decided here rather than by truncating in JS.
@@ -11,7 +11,7 @@ const TEASER_LINES = {
   'feature-small': { sm: 3, md: 3, xl: 6 },
   row: { sm: 3, md: 3, xl: 3 },
 };
-const ARTIST_LINES = 2;
+const SUBTITLE_LINES = 2;
 
 const clamp = (lines) => css`
   display: -webkit-box;
@@ -58,14 +58,14 @@ const FEATURE_COLUMNS = {
   },
 };
 
-// The text of every variant reads date, title, artist line, teaser, one
+// The text of every variant reads date, title, subtitle, teaser, one
 // grid row each, `spacing.textGap` apart. The DOM order puts the title
-// first instead (image, title, artist line, date, teaser), so screen readers
+// first instead (image, title, subtitle, date, teaser), so screen readers
 // meet the heading first; the grid rows below put the date on top.
 const textRows = (first) => css`
   > ${ItemDate} { grid-row: ${first}; }
   > ${Title} { grid-row: ${first + 1}; }
-  > ${Artist} { grid-row: ${first + 2}; }
+  > ${Subline} { grid-row: ${first + 2}; }
   > ${Teaser} { grid-row: ${first + 3}; }
 `;
 
@@ -75,7 +75,7 @@ const textRows = (first) => css`
 // cards next to them.
 const variantLayout = ({ $variant, theme }) => {
   if ($variant === 'card') {
-    // Each card stacks its own text: the artist line follows its title
+    // Each card stacks its own text: the subtitle follows its title
     // directly. (Sharing rows with the neighbours through `subgrid` left a
     // gap under every one-line title next to a two-line one.) Images and
     // one-line dates still line up, since all images are 16:10. The text
@@ -162,7 +162,7 @@ const variantLayout = ({ $variant, theme }) => {
 export const Item = styled.article`
   /* Holds the title link's click area, which covers the whole item. */
   position: relative;
-  /* Artist lines may hold bare URLs, which can't wrap in a half-width
+  /* Subtitles may hold bare URLs, which can't wrap in a half-width
      column on phones and would widen the page. */
   overflow-wrap: anywhere;
 
@@ -212,21 +212,21 @@ export const Title = styled.h3`
   }
 `;
 
-// The artist line is the short subtitle from Contentful, rendered as HTML.
+// The subline is the subtitle from Contentful, rendered as HTML.
 // Two lines at most in every variant; long group-show lists end in "…".
-export const Artist = styled.div`
-  ${clamp(ARTIST_LINES)}
+export const Subline = styled.div`
+  ${clamp(SUBTITLE_LINES)}
 
   ${({ $variant, theme }) => $variant === 'card'
     ? css`
       font-family: ${theme.fonts.main};
-      font-size: ${theme.fontSizes.artist};
+      font-size: ${theme.fontSizes.subline};
       font-weight: ${theme.fontWeights.normal};
       color: ${theme.colors.theme.date};
     `
     : css`
       font-family: ${theme.fonts.mono};
-      font-size: ${theme.fontSizes.artistMono};
+      font-size: ${theme.fontSizes.sublineMono};
       font-weight: ${theme.fontWeights.normal};
       color: ${theme.colors.theme.black};
     `}
@@ -235,7 +235,7 @@ export const Artist = styled.div`
     margin: 0;
   }
 
-  /* Links in an artist line (e.g. an artist's website) stay clickable
+  /* Links in a subline (e.g. an artist's website) stay clickable
      above the title link's click area. */
   a {
     position: relative;
