@@ -176,8 +176,11 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Get current registration count for this event
-    const filterUrl = `${baserowUrl}/api/database/rows/table/${tableId}/?user_field_names=true&filter__field_eventId__equal=${eventId}`;
+    // Get current registration count for this event.
+    // With user_field_names the filter must name the real Baserow column ("Event ID").
+    // Baserow silently ignores a filter on an unknown field and counts the whole table,
+    // which made every event look full once all RSVPs together exceeded its capacity.
+    const filterUrl = `${baserowUrl}/api/database/rows/table/${tableId}/?user_field_names=true&filter__${encodeURIComponent('Event ID')}__equal=${encodeURIComponent(eventId)}`;
 
     const countResponse = await fetch(filterUrl, {
       method: 'GET',
