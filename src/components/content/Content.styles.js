@@ -1,12 +1,11 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
-import { breakpointDisplay, shortRule } from '../layout/Layout.styles';
+import { breakpointDisplay, shortRule, uppercase } from '../layout/Layout.styles';
 
 // Uppercase section labels such as "Upcoming events", "Current" or
 // "About the exhibition".
 const sectionLabel = ({ theme }) => css`
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  ${uppercase}
   font-size: ${theme.fontSizes.medium};
   font-weight: ${theme.fontWeights.light};
   margin-bottom: 1em;
@@ -109,8 +108,7 @@ export const Tag = styled.p`
   border-radius: 5px;
   background: transparent;
   color: ${props => props.theme.colors.theme.grey};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  ${uppercase}
   font-size: ${props => props.theme.fontSizes.medium};
   margin-top: 10px;
   margin-right: 10px;
@@ -142,8 +140,7 @@ export const Button = styled.button`
   text-align: center;
   color: ${props => props.theme.colors.theme.black};
   padding: 10px 20px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  ${uppercase}
   border: ${props => props.theme.colors.theme.black} 2px solid;
   border-radius: 5px;
   background: transparent;

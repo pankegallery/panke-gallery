@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { uppercase } from '../layout/Layout.styles';
 
 export const RsvpSection = styled.section`
   padding: 40px 0;
@@ -63,8 +64,7 @@ export const RsvpSubmitButton = styled.button`
   text-align: center;
   color: ${props => props.theme.colors.theme.black};
   padding: 10px 20px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  ${uppercase}
   border: ${props => props.theme.colors.theme.black} 2px solid;
   border-radius: 5px;
   background: transparent;

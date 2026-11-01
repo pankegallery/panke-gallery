@@ -77,7 +77,10 @@ export const theme = {
   },
   letterSpacing: {
     // Opens up the small light grey dates a little, so they read more easily.
-    date: '0.02em'
+    date: '0.02em',
+    // Every uppercase text, through the `uppercase` helper in
+    // Layout.styles.js: capitals read better with a little extra space (#89).
+    uppercase: '0.02em'
   },
   fontWeights: {
     light: 300,

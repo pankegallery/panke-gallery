@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
+import { uppercase } from '../layout/Layout.styles';
 
 export const NavWrapper = styled.div`
 display: block;
@@ -46,8 +47,7 @@ export const NavList = styled.ul`
     a {
       margin: 0;
       padding: 0 0 0 15px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      ${uppercase}
       font-size: ${props => props.theme.fontSizes.medium};
     }
 
@@ -93,8 +93,7 @@ export const OffCanvas = styled.div`
         display: block;
         padding: 1em 0;
         margin: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
+        ${uppercase}
         font-size: ${props => props.theme.fontSizes.medium};
         text-align: center;
       }

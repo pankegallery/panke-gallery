@@ -9,7 +9,7 @@ const buttonStyles = {
   textAlign: 'center',
   color: '#000',
   padding: '8px 12px',
-  letterSpacing: '0.1em',
+  letterSpacing: theme.letterSpacing.uppercase,
   textTransform: 'uppercase',
   border: '#000 2px solid',
   borderRadius: '5px',

@@ -170,6 +170,18 @@ export const shortRule = ({ theme }) => css`
   border-bottom: 1px solid;
 `;
 
+/**
+ * Style helper for uppercase text: sets the case and the letter-spacing
+ * together, so no uppercase text goes without the little extra space
+ * capitals need to read well (`letterSpacing.uppercase`, #89). Use
+ * `${uppercase}` wherever text is set in capitals. A wider spacing chosen
+ * as a style of its own (e.g. in the audio guide) is set separately.
+ */
+export const uppercase = ({ theme }) => css`
+  text-transform: uppercase;
+  letter-spacing: ${theme.letterSpacing.uppercase};
+`;
+
 // Utility classes
 export const TextRight = styled.span`
   text-align: right;
