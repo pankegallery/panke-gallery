@@ -24,4 +24,6 @@ On Info page, content block slugs are numbered (ordered by slug ASC)
 
 ## Contribution
 
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branch names, workflow and code conventions.
+
 Site was developed by [Larissa Wunderlich](http://www.larissawunderlich.de). Feel free to contact me if you want to learn more.

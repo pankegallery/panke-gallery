@@ -1,158 +1,71 @@
 import React from 'react';
 import Helmet from 'react-helmet'
-import get from 'lodash/get'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import EventListItem from '../components/event-list-item'
 import { Section, Headline } from '../components/content/Content.styles';
+import { useRouteParam } from '../utils/use-route-param';
 
+/**
+ * /events/ – upcoming and past events, optionally filtered by event series.
+ *
+ * The filter lives only in the URL: this page also answers to
+ * `/events/<series-slug>/` (`MATCH_PATHS` in gatsby-node.js) and reads the
+ * slug with `useRouteParam`, so the static HTML is the full list and the
+ * filter applies right after hydration. The series tags are links to those
+ * URLs, so a filter can be shared, bookmarked and undone with the back
+ * button, and the page keeps no filter state of its own that could disagree
+ * with the address bar.
+ */
+const PankeEvents = ({ data, params }) => {
+  const activeSeries = useRouteParam(params)
 
-class PankeEvents extends React.Component {
+  const passFilter = (ev) => !activeSeries || ev.eventSeries?.slug === activeSeries
 
-  state = {
-    isFilterOn: false,
-    filterby: ''
-  }
+  const renderEvents = (events) => events
+    .filter(({ node }) => passFilter(node))
+    .map(({ node }) => (
+      <EventListItem key={node.slug} event={node} activeSeries={activeSeries} />
+    ))
 
-  handleEventsClick = (tagSlug) => {
-    this.setState(state => ({
-      isFilterOn: !state.isFilterOn,
-      filterby: {tagSlug}
-    }));
-  }
+  const posts = data.allContentfulEvent.edges
+  const currentDate = new Date()
+  // The query sorts newest first; upcoming events read better soonest first.
+  const upcomingEvents = posts.filter(({ node }) => new Date(node.date) >= currentDate).reverse()
+  const pastEvents = posts.filter(({ node }) => new Date(node.date) < currentDate)
 
-  passFilter = (ev) => {
-    if (!this.state.isFilterOn) {
-      return true;
-    }
-
-    if (!ev.eventSeries){
-      return false;
-    }
-
-    return this.state.filterby.tagSlug === ev.eventSeries.slug
-  }
-
-  returnEventListItem = (ev) => {
-//    console.log('hä?')
-    return (
-      <EventListItem
-        key={ev.slug}
-        event={ev}
-        handleClick={this.handleEventsClick}
-        filterIsOn={this.state.isFilterOn}
+  return (
+    <Layout>
+      <Helmet
+        title="Events"
+        meta={[
+          {
+            name: 'description',
+            content: 'Upcoming and past events of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
+          }
+        ]}
       />
-    )
-  }
 
-  componentDidMount = () => {
-    this.props.series && this.setState({
-      isFilterOn: true,
-      filterby: {tagSlug: this.props.series}
-    })
-  }
-
-  render() {
-
-    // Get array of events
-    const posts = get(this, 'props.data.allContentfulEvent.edges')
-
-    // Log array of Events
-//    console.log("Posts:");
-//    console.log(posts);
-
-    // Filter array of events    
-    function filterUpcoming(_ev) {
-      var currentDate = new Date();
-      var eventDate = new Date(_ev.node.date);
-      return eventDate >= currentDate;
-    }
-    const upcomingEvents = posts.filter(filterUpcoming);
-    upcomingEvents.reverse();
-
-    function filterPast(_ev) {
-      var currentDate = new Date();
-      var eventDate = new Date(_ev.node.date);
-      return eventDate < currentDate;
-    }
-    const pastEvents = posts.filter(filterPast);
-
-    // Log array of upcoming events
-//    console.log("Upcoming events:");
-//    console.log(upcomingEvents);
-
-    // Log array of past events
-//    console.log("Past events:");
-//    console.log(pastEvents);
-
-    var upcoming;
-    if (upcomingEvents.length > 0){
-      upcoming = (
+      {upcomingEvents.length > 0 && (
         <Section className="upcoming">
-
           <Headline>
- <h2>Upcoming events</h2>
+            <h2>Upcoming events</h2>
           </Headline>
-
-          {upcomingEvents.map(({ node }) => {
-            if (this.passFilter(node)){
-              return this.returnEventListItem(node);
-            }
-            return null
-          })}
+          {renderEvents(upcomingEvents)}
         </Section>
-      );
-    }
+      )}
 
-    var past;
-    if (pastEvents.length > 0) {
-      past = (
+      {pastEvents.length > 0 && (
         <Section className="past">
           <Headline>
             <h2>Past events</h2>
           </Headline>
-
-
-
-          {pastEvents.map(({ node }) => {
-            if (this.passFilter(node)){
-              return this.returnEventListItem(node);
-            }
-            return null
-          })}
+          {renderEvents(pastEvents)}
         </Section>
-      );
-    }
-
-    //==========================================================================
-
-    //                                OUTPUT
-
-    //==========================================================================
-
-
-    return (
-      <Layout>
-        <Helmet
-          title="Events"
-          meta={[
-            {
-              name: 'description',
-              content: 'Upcoming and past events of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
-            }
-          ]}
-        />
-
-        {upcoming}
-
-        {past}
-
-      </Layout>
-
-
-    );
-  }
+      )}
+    </Layout>
+  );
 }
 
 export default PankeEvents;

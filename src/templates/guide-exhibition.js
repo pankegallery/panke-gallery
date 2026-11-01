@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
-import Moment from 'moment'
 
 import GuideLayout from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage } from '../utils/audioguide-language'
+import { formatDateRange } from '../utils/formatDateRange'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
@@ -47,12 +47,10 @@ const GuideExhibitionOverview = props => {
       ? 'panke.gallery'
       : exhibitionSlug
 
-  let dateDisplayed
-  if (exhibition) {
-    dateDisplayed = exhibition.dateTbc
-      ? 'Date to be confirmed'
-      : Moment(exhibition.startDate).format('DD/MM') + ' – ' + Moment(exhibition.endDate).format('DD/MM/YYYY')
-  }
+  // Short months keep the date on the one-line guide header.
+  const dateDisplayed = exhibition
+    ? formatDateRange(exhibition.startDate, exhibition.endDate, { short: true, tbc: exhibition.dateTbc })
+    : undefined
 
   return (
     <GuideLayout

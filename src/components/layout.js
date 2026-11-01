@@ -14,7 +14,16 @@ import { ToggleMenuButton } from "./header/Header.styles";
 import Header from "./header";
 import Navigation from "./navigation";
 
-const Layout = ({ children, redirectActive }) => {
+/**
+ * Page frame: theme providers, global styles, header, off-canvas menu and
+ * footer around the page content.
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - The page content.
+ * @param {boolean} [props.wide] - Use `container.maxWidthWide` from
+ *   `breakpoints.xl` up, for pages built on the 4-column grid.
+ */
+const Layout = ({ children, wide }) => {
   const [offCanvas, setOffCanvas] = useState(false);
 
   const handleClick = () => {
@@ -83,43 +92,25 @@ const Layout = ({ children, redirectActive }) => {
                   content="/favicons/browserconfig.xml"
                 />
                 <meta name="theme-color" content="#ffffff" />
-                {/* CDN Scripts for Slideshow, Icons */}
-                <script
-                  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                  type="text/javascript"
-                />
-                <script
-                  src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-                  type="text/javascript"
-                />
-                <link
-                  rel="stylesheet"
-                  href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-                  type="text/css"
-                />
               </Helmet>
-              {!redirectActive && (
-                <OffCanvas className={offCanvasClass}>
-                  <ToggleMenuButton
-                    className="toggle-menu justify-right"
-                    onClick={handleClick}
-                  >
-                    <FontAwesomeIcon icon={faPlus} aria-label="Toggle menu" />
-                  </ToggleMenuButton>
-                  <Navigation />
-                </OffCanvas>
-              )}
-              <Container className={offCanvas ? "menu-active" : ""} $themeColor={color}>
-                {!redirectActive && <Header handleClick={handleClick} />}
+              <OffCanvas className={offCanvasClass}>
+                <ToggleMenuButton
+                  className="toggle-menu justify-right"
+                  onClick={handleClick}
+                >
+                  <FontAwesomeIcon icon={faPlus} aria-label="Toggle menu" />
+                </ToggleMenuButton>
+                <Navigation />
+              </OffCanvas>
+              <Container className={offCanvas ? "menu-active" : ""} $themeColor={color} $wide={wide}>
+                <Header handleClick={handleClick} />
                 <Main>{children}</Main>
-                {!redirectActive && <Footer />}
+                <Footer />
               </Container>
-              {!redirectActive && (
-                <ColorSwap
-                  themeColor={color}
-                  changeThemeColor={changeThemeColor}
-                />
-              )}
+              <ColorSwap
+                themeColor={color}
+                changeThemeColor={changeThemeColor}
+              />
             </PageWrapper>
           </StyledThemeProvider>
         )}

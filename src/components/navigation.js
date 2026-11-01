@@ -6,7 +6,7 @@ const Navigation = () => (
   <NavWrapper>
     <NavMain id="nav-main">
       <NavList>
-        <li className="live"><Link to="/streaming">Live</Link></li>
+        {/* <li className="live"><Link to="/streaming">Live</Link></li> */}
         <li><Link to="/exhibitions">Exhibitions</Link></li>
         <li><Link to="/events">Events</Link></li>
         <li><Link to="/info">Info</Link></li>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Section, Headline } from './content/Content.styles';
-import { PrintStyles, PrintSection, QrGrid, QrCard } from './print-sheet/PrintSheet.styles';
+import { PrintStyles, PrintSection, QrGrid, QrCard, QrWrapper, QrNumberBadge } from './print-sheet/PrintSheet.styles';
 
 // sections: [{ key, title, overviewQrCodeSvg, stops }] — one section per
 // exhibition (plus the fallback bucket, if used). Each gets its own heading,
@@ -33,8 +33,10 @@ const PrintSheet = ({ pageTitle, sections }) => (
 
           {section.stops.map(({ node }) => (
             <QrCard key={node.referenceNumber}>
-              <div dangerouslySetInnerHTML={{ __html: node.qrCodeSvg }} />
-              <h3>{node.referenceNumber}</h3>
+              <QrWrapper>
+                <div dangerouslySetInnerHTML={{ __html: node.qrCodeSvg }} />
+                <QrNumberBadge>{node.referenceNumber}</QrNumberBadge>
+              </QrWrapper>
               <p>{node.artworkName}</p>
             </QrCard>
           ))}

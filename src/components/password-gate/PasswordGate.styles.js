@@ -27,7 +27,7 @@ export const Input = styled.input`
   text-align: center;
 
   &::placeholder {
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
   }
 `;
 
@@ -61,6 +61,6 @@ export const Submit = styled.button`
 `;
 
 export const ErrorNote = styled.p`
-  color: ${props => props.theme.colors.theme.grey};
+  color: ${props => props.theme.colors.theme.date};
   font-size: ${props => props.theme.fontSizes.small};
 `;

@@ -5,20 +5,21 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
-import ContentBlock from '../components/content-block'
+import ContentBlock, { ContentHtml } from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
-import { processExternalLinks } from '../utils/processExternalLinks'
-import { FurtherSection, HeadSection, Meta, InfoSection, Tag } from '../components/content/Content.styles'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
+import Tag from '../components/tag'
+import { FurtherSection, HeadSection, InfoSection } from '../components/content/Content.styles'
+import { ItemDate, Subline } from '../components/content/Item.styles'
 import { Col, Row } from '../components/layout/Layout.styles'
 
 class EventTemplate extends React.Component {
   render() {
 
     const event = get(this.props, 'data.contentfulEvent')
-    console.log(event);
     // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
@@ -42,17 +43,12 @@ class EventTemplate extends React.Component {
     }
 
     // ––– Event date and fee –––
-    var EventDateAndEntryFee;
-    if (event.entryfee){
-      EventDateAndEntryFee =(
-       <Meta><EventDate event={event} /> | {event.entryfee}</Meta>
-      );
-    }
-    else{
-      EventDateAndEntryFee =(
-        <Meta><EventDate event={event} /></Meta>
-      );
-    }
+    const EventDateAndEntryFee = (
+      <ItemDate>
+        <EventDate event={event} />
+        {event.entryfee && ` | ${event.entryfee}`}
+      </ItemDate>
+    );
 
 
     // ––– Further Content Blocks –––
@@ -69,27 +65,20 @@ class EventTemplate extends React.Component {
     }
 
     // ––– Event series and tags –––
-    var eventCategory;
-    if (event.eventSeries!=null){
-      eventCategory =(
-        <Tag className="eventSeries tag">
-          {event.eventSeries.name}
-        </Tag>
-      );
-    }
+    // The series links to its events on /events/, as on the homepage.
+    const series = event.eventSeries
+    const eventCategory = series && (
+      <Tag
+        tag={series}
+        type="eventSeries"
+        to={`/events/${series.slug}/`}
+        label={`Show only ${series.name} events`}
+      />
+    );
 
-    var eventTags;
-    if (event.tags!=null){
-      eventTags =(
-        event.tags.map(({slug, name}) => {
-          return (
-            <Tag className="tag">
-              {name}
-            </Tag>
-          )
-        })
-      );
-    }
+    const eventTags = event.tags && event.tags.map(({ slug, name }) => (
+      <Tag key={slug} tag={{ slug, name }} />
+    ));
 
     // ––– RSVP Form –––
     var RsvpSection;
@@ -148,18 +137,22 @@ class EventTemplate extends React.Component {
       <main>
         <Helmet title={`${event.title}`} />
         <HeadSection>
-
-              <h1>{event.title}</h1>
-              <div className="subtitle" dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(event.subtitleShortDescription.childMarkdownRemark.html)
-                }} />
+          {/* Title and date left, subline and tags right: 4/8 like the
+              "About the event" row below, 6/6 on larger screens (#70). */}
+          <Row>
+            <Col $md={6} $sm={4} $xs={12}>
+              <h1>{keepSeparatorsAttached(event.title)}</h1>
               {EventDateAndEntryFee}
+            </Col>
+            <Col $md={6} $sm={8} $xs={12}>
+              <Subline as={ContentHtml} $variant="page" html={event.subtitleShortDescription.childMarkdownRemark.html} />
               {eventCategory}{eventTags}
+            </Col>
+          </Row>
 
-              {/*  ---- FEATURED IMAGE ---- */}
+          {/*  ---- FEATURED IMAGE ---- */}
 
-              {ImageOrSlides}
-
+          {ImageOrSlides}
         </HeadSection>
 
         {/*  ---- ABOUT ---- */}
@@ -170,9 +163,7 @@ class EventTemplate extends React.Component {
               <h2>About the event</h2>
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
-              <div dangerouslySetInnerHTML={{
-                __html: processExternalLinks(event.description.childMarkdownRemark.html)
-              }} />
+              <ContentHtml html={event.description.childMarkdownRemark.html} />
             </Col>
           </Row>
          

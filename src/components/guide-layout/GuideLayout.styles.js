@@ -56,7 +56,7 @@ export const HeaderTitle = styled.div`
   }
 
   .date {
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
     margin-left: 0.6em;
   }
 `;

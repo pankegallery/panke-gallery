@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledFooter = styled.footer`
-  color: ${props => props.theme.colors.theme.grey};
-  font-size: 0.7em;
+  color: ${props => props.theme.colors.theme.date};
+  font-size: ${props => props.theme.fontSizes.small};
   padding: 100px 0 30px;
 
   .social {

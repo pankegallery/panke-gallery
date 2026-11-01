@@ -1,27 +1,22 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
+import { shortRule } from '../layout/Layout.styles';
 
 export const StyledHeader = styled.header`
-  padding: ${props => props.theme.spacing.gap} 0 0;
+  padding: ${props => props.theme.spacing.gutter} 0 0;
 
   ${media.md} {
     padding: ${props => props.theme.spacing.headerTop} 0  0;
   }
 
   &::after {
-    border-bottom: 1px solid;
-    clear: both;
-    content: "";
-    display: inline-block;
-    height: 32px;
-    margin-left: -20px;
-    width: 40px;
+    ${shortRule}
   }
 `;
 
 export const Logotype = styled.p`
   color: ${props => props.theme.colors.theme.black};
-  font-size: ${props => props.theme.fontSizes.large};
+  font-size: ${props => props.theme.fontSizes.logo};
   font-weight: ${props => props.theme.fontWeights.medium};
   letter-spacing: 0.08em;
   margin: 0;

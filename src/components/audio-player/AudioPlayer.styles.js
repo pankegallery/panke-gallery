@@ -49,7 +49,7 @@ export const NowPlaying = styled.div`
 
   p {
     font-size: ${props => props.theme.fontSizes.small};
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -94,7 +94,7 @@ export const PlayButton = styled.button`
 `;
 
 export const ErrorNote = styled.p`
-  color: ${props => props.theme.colors.theme.grey};
+  color: ${props => props.theme.colors.theme.date};
   font-size: ${props => props.theme.fontSizes.small};
 `;
 
@@ -183,7 +183,7 @@ export const OverlayCenter = styled.div`
   }
 
   .artist {
-    color: ${props => props.theme.colors.theme.grey};
+    color: ${props => props.theme.colors.theme.date};
   }
 `;
 
@@ -228,7 +228,7 @@ export const TimeRow = styled.div`
   justify-content: space-between;
   width: 100%;
   font-size: ${props => props.theme.fontSizes.small};
-  color: ${props => props.theme.colors.theme.grey};
+  color: ${props => props.theme.colors.theme.date};
 `;
 
 // Flows inside OverlayCenter (the single scrollable region) rather than

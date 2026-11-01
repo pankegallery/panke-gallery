@@ -36,6 +36,7 @@
         "npm:moment@^2.30.1",
         "npm:netlify-cli@^17.11.1",
         "npm:node-fetch@^2.7.0",
+        "npm:qrcode@^1.5.4",
         "npm:react-dom@^18.2.0",
         "npm:react-fontawesome@^1.7.1",
         "npm:react-helmet@^6.1.0",

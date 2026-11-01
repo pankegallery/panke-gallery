@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { uppercase } from '../layout/Layout.styles';
 
 export const RsvpSection = styled.section`
   padding: 40px 0;
@@ -11,7 +12,7 @@ export const RsvpSection = styled.section`
 export const RsvpFormContainer = styled.div`
   h3 {
     margin-bottom: 20px;
-    font-size: 1.2em;
+    font-size: ${props => props.theme.fontSizes.large};
   }
 `;
 
@@ -28,6 +29,9 @@ export const RsvpForm = styled.form`
     input[type="text"],
     input[type="email"],
     textarea {
+      /* Padding and border inside the 100%, or the field ends 26px past its
+         column and the page scrolls sideways on phones. */
+      box-sizing: border-box;
       width: 100%;
       padding: 10px 12px;
       border: 1px solid ${props => props.theme.colors.theme.black};
@@ -63,8 +67,7 @@ export const RsvpSubmitButton = styled.button`
   text-align: center;
   color: ${props => props.theme.colors.theme.black};
   padding: 10px 20px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  ${uppercase}
   border: ${props => props.theme.colors.theme.black} 2px solid;
   border-radius: 5px;
   background: transparent;

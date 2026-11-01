@@ -1,15 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
+import { Row, breakpointDisplay, shortRule, uppercase } from '../layout/Layout.styles';
+import { ItemDate } from './Item.styles';
+
+// Uppercase section labels such as "Upcoming events", "Current" or
+// "About the exhibition".
+const sectionLabel = ({ theme }) => css`
+  ${uppercase}
+  font-size: ${theme.fontSizes.medium};
+  font-weight: ${theme.fontWeights.light};
+  margin-bottom: 1em;
+`;
 
 export const NewsSection = styled.section`
   &::after {
-    border-bottom: 1px solid #333;
-    content: "";
-    width: 40px;
-    clear: both;
-    display: inline-block;
-    height: 32px;
-    margin-left: -20px;
+    ${shortRule}
   }
 `;
 
@@ -28,11 +33,7 @@ export const Headline = styled.div`
   }
 
   h1, h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   h1 {
@@ -44,6 +45,25 @@ export const Headline = styled.div`
     padding-top: 2em;
   }
   
+`;
+
+// One year of the exhibitions archive; its id is the year, the target of
+// the year index. From `breakpoints.sm` the index sticks to the top, so a
+// jump stops below it. Takes `$hideFrom` / `$hideBelow` (see
+// `breakpointDisplay`).
+export const YearSection = styled.section`
+  ${media.md} {
+    scroll-margin-top: ${props => props.theme.sizes.yearScrollMargin};
+  }
+
+  ${breakpointDisplay}
+`;
+
+export const YearHeading = styled.h3`
+  margin: ${props => props.theme.spacing.xl} 0 ${props => props.theme.spacing.sm};
+  font-size: ${props => props.theme.fontSizes.large};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  font-variant-numeric: tabular-nums;
 `;
 
 export const Article = styled.article`
@@ -58,14 +78,14 @@ export const Article = styled.article`
     margin: 1em 0 1em;
     
     small {
-      font-size: 1em; !important;
+      font-size: inherit;
       font-weight: ${props => props.theme.fontWeights.light};
       padding-left: 1em;
     }
   }
 
   p small {
-    font-size: 1em;
+    font-size: inherit;
     font-weight: ${props => props.theme.fontWeights.light};
     padding-left: 1em;
   }
@@ -75,8 +95,11 @@ export const NewsArticle = styled(Article)`
   margin: 0 0 30px;
 `;
 
+// Secondary lines in grey: dates, image captions, the artist of an audio
+// guide stop. Small, like the dates in the exhibition items.
 export const Meta = styled.p`
-  color: ${props => props.theme.colors.theme.grey};
+  font-size: ${props => props.theme.fontSizes.small};
+  color: ${props => props.theme.colors.theme.date};
 `;
 
 export const Tag = styled.p`
@@ -86,9 +109,8 @@ export const Tag = styled.p`
   border-radius: 5px;
   background: transparent;
   color: ${props => props.theme.colors.theme.grey};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: ${props => props.theme.fontSizes.medium};
+  ${uppercase}
+  font-size: ${props => props.theme.fontSizes.small};
   margin-top: 10px;
   margin-right: 10px;
 
@@ -119,8 +141,7 @@ export const Button = styled.button`
   text-align: center;
   color: ${props => props.theme.colors.theme.black};
   padding: 10px 20px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  ${uppercase}
   border: ${props => props.theme.colors.theme.black} 2px solid;
   border-radius: 5px;
   background: transparent;
@@ -138,28 +159,55 @@ export const Button = styled.button`
   }
 `;
 
+// Head of an exhibition or event page (#70): a `Row` with the title and
+// date in the left `Col`, and the subline and tags in the right one. From
+// `breakpoints.sm` it is the 4/8 split of the InfoSection rows below, so
+// the head lines up with "About the exhibition" and its text; from
+// `breakpoints.md` it opens to 6/6, which gives long titles and the mono
+// subline more room side by side. The image or slideshow follows the row
+// across the full width. On phones both columns stack.
 export const HeadSection = styled.div`
+  margin: 2em 0 0;
 
-margin: 2em 0 0;
-
-  h1 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+  > ${Row} {
+    /* Stacked on phones, the subline stays close to its title. */
+    row-gap: ${props => props.theme.spacing.xs};
+    margin-bottom: ${props => props.theme.spacing.lg};
   }
+
+  /* The page title, the same size as the current show on /exhibitions, so
+     it keeps its size from teaser to page; Medium like every title (#65).
+     No uppercase: exhibition titles keep the artists' own casing. Long
+     titles wrap within their column. */
+  h1 {
+    margin: 0;
+    font-size: ${props => props.theme.fontSizes.xlarge};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+
+  /* Subline, date and tags read as one block, spaced as in the exhibition
+     items. */
+  ${ItemDate} {
+    margin-top: ${props => props.theme.spacing.xxs};
+  }
+`;
+
+// Long words without spaces in Contentful text (URLs, wallet addresses
+// such as the one under "Support" on /info) wrap anywhere instead of
+// widening their column and the page on phones.
+const wrapLongWords = css`
+  overflow-wrap: anywhere;
 `;
 
 export const InfoSection = styled.div`
   margin: 3em 0 0;
+  line-height: ${props => props.theme.lineHeight.text};
+  ${wrapLongWords}
 
   h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   p {
@@ -173,17 +221,15 @@ export const InfoSection = styled.div`
 
 export const FurtherSection = styled.div`
   margin: 3em 0 0;
+  line-height: ${props => props.theme.lineHeight.text};
+  ${wrapLongWords}
 
   h2 {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    ${sectionLabel}
   }
 
   h4 {
-    font-size: 1em;
+    font-size: ${props => props.theme.fontSizes.base};
     font-weight: ${props => props.theme.fontWeights.medium};
     margin: 0 0 0.3em;
   }
@@ -208,10 +254,13 @@ export const ImageWrapperVertical = styled.div`
   vertical-align: middle;
 `;
 
+// Scales an embedded iframe to the column width at a fixed aspect ratio.
+// Defaults to 16:9 for video; pass `$ratio` (a CSS aspect-ratio value) for
+// other embeds such as the contact page map.
 export const ResponsiveVideo = styled.div`
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: ${props => props.$ratio || '16 / 9'};
 
   iframe {
     position: absolute;
@@ -219,5 +268,40 @@ export const ResponsiveVideo = styled.div`
     width: 100%;
     height: 100%;
     border: 0;
+  }
+`;
+// The homepage's last row (#69): the one-line intro in the first column of
+// the page `Grid` and the Visit block beside it, from the same column edge
+// as the exhibition text above. The short rule from the header marks the
+// row instead of a full-width line.
+export const IntroSection = styled.section`
+  &::before {
+    ${shortRule}
+    display: block;
+    margin-bottom: ${props => props.theme.spacing.lg};
+  }
+`;
+
+export const Intro = styled.p`
+  margin: 0;
+  font-size: ${props => props.theme.fontSizes.large};
+  font-weight: ${props => props.theme.fontWeights.light};
+  line-height: ${props => props.theme.lineHeight.text};
+  text-wrap: balance;
+
+  ${media.md} {
+    padding-right: ${props => props.theme.spacing.gutter};
+  }
+`;
+
+// Address and opening hours: the Contact page's "visitUs" block from
+// Contentful, so the hours are kept in one place. Its headings are section
+// labels here, as on the Contact page.
+export const Visit = styled.div`
+  ${media.md} { grid-column: 2 / -1; }
+  ${media.xl} { grid-column: 2 / span 2; }
+
+  h2 {
+    ${sectionLabel}
   }
 `;

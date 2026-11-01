@@ -10,6 +10,7 @@ import LanguagePicker from '../components/language-picker'
 import { HeadSection, Meta } from '../components/content/Content.styles'
 import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage, setStoredLanguage } from '../utils/audioguide-language'
+import { linkify } from '../utils/linkify'
 
 const Overview = styled.section`
   max-width: 640px;
@@ -120,7 +121,7 @@ const GuideStopTemplate = props => {
           <ArtworkImage src={activeRow.artworkImage} alt={activeRow.artworkName} />
         )}
 
-        <p style={{ whiteSpace: 'pre-wrap' }}>{activeRow.description}</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{linkify(activeRow.description)}</p>
       </Overview>
 
       <AudioPlayer

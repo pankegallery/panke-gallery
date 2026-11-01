@@ -8,35 +8,33 @@ import Layout from '../components/layout'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
-import Moment from 'moment'
+import { formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
-import { HeadSection, Meta, InfoSection, Button } from '../components/content/Content.styles'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
+import { HeadSection, InfoSection, Button } from '../components/content/Content.styles'
+import { ItemDate, Subline } from '../components/content/Item.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
-
+import Tag from '../components/tag'
 
 class ExhibitionTemplate extends React.Component {
   render() {
 
     const exhibition = get(this.props, 'data.contentfulExhibition')
-    console.log(exhibition);
 
     const audioguideStops = get(this.props, 'data.allAudioguideStop.edges', [])
     const hasAudioguide = audioguideStops.some(({ node }) => node.audioUrl)
 
-    const siteTitle = get(this.props, 'data.site.siteMetadata.title')
-    console.log(siteTitle);
-
     // ––– Slideshow or featured images –––
 
     var ImageOrSlides;
-    if (exhibition.exhibitionImpressionsSlideshow != null){
-      ImageOrSlides =(
+    if (exhibition.exhibitionImpressionsSlideshow != null) {
+      ImageOrSlides = (
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
       );
     }
-    else{
-      ImageOrSlides =(
-        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} aspectratio={16/9} />
+    else {
+      ImageOrSlides = (
+        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
       );
     }
 
@@ -44,8 +42,8 @@ class ExhibitionTemplate extends React.Component {
     // ––– Documentation –––
 
     var DocumentationImages;
-    if (exhibition.exhibitionDocumentationImagesBelow){
-      DocumentationImages =(
+    if (exhibition.exhibitionDocumentationImagesBelow) {
+      DocumentationImages = (
         <Documentation images={exhibition.exhibitionDocumentationImagesBelow} />
       );
     }
@@ -53,11 +51,11 @@ class ExhibitionTemplate extends React.Component {
     // ––– Further Content Blocks –––
 
     var FurtherContentBlocks
-    if (exhibition.furtherInformationBlocks){
-      FurtherContentBlocks =(
-        exhibition.furtherInformationBlocks.map(({id, title, childContentfulContentBlockBlockContentTextNode}) => {
+    if (exhibition.furtherInformationBlocks) {
+      FurtherContentBlocks = (
+        exhibition.furtherInformationBlocks.map(({ id, title, childContentfulContentBlockBlockContentTextNode }) => {
           return (
-              <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
+            <ContentBlock key={id} blockTitle={title} blockContent={childContentfulContentBlockBlockContentTextNode} />
           )
         })
       );
@@ -66,37 +64,24 @@ class ExhibitionTemplate extends React.Component {
     // ––– Exhibition tags –––
 
     var exhibitionTags;
-    if (exhibition.tags!=null){
-      exhibitionTags =(
-        exhibition.tags.map(({slug, name}) => {
-          return (
-            <p className="tag">
-              {name}
-            </p>
-          )
-        })
+    if (exhibition.tags != null) {
+      exhibitionTags = (
+        exhibition.tags.map(({ slug, name }) => (
+          <Tag key={slug} tag={{ slug, name }} />
+        ))
       );
     }
 
 
-        // --- Date or to be confirmed plus other meta--
+    // --- Date or to be confirmed plus other meta--
 
-    let dateDisplayed
+    let metaInfos = formatDateRange(exhibition.startDate, exhibition.endDate, { tbc: exhibition.dateTbc })
 
-    if (exhibition.dateTbc){
-      dateDisplayed = "Date to be confirmed"
-    }
-    else{
-      dateDisplayed = Moment(exhibition.startDate).format('DD MMMM') + '\u2009\u2013\u2009' + Moment(exhibition.endDate).format('DD MMMM YYYY')
-    }
-
-    let metaInfos = dateDisplayed
-
-    if (exhibition.vernissageInfos){
+    if (exhibition.openingHours) {
       metaInfos += ' | ' + exhibition.openingHours
     }
 
-    if (exhibition.vernissageInfos){
+    if (exhibition.vernissageInfos) {
       metaInfos += ' | ' + exhibition.vernissageInfos
     }
     //==========================================================================
@@ -107,69 +92,71 @@ class ExhibitionTemplate extends React.Component {
 
     return (
       <Layout>
-      <main>
-        <Helmet title={`${exhibition.title}`} />
-        <HeadSection>
+        <main>
+          <Helmet title={`${exhibition.title}`} />
+          <HeadSection>
+            {/* Title and date left, subline and tags right: 4/8 like the
+                "About the exhibition" row below, 6/6 on larger screens (#70). */}
+            <Row>
+              <Col $md={6} $sm={4} $xs={12}>
+                <h1>{keepSeparatorsAttached(exhibition.title)}</h1>
+                <ItemDate>{metaInfos}</ItemDate>
+              </Col>
+              <Col $md={6} $sm={8} $xs={12}>
+                <Subline $variant="page" dangerouslySetInnerHTML={{
+                  __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
+                }} />
+                {exhibitionTags}
+              </Col>
+            </Row>
 
-          <h1>{exhibition.title}</h1>
-          <div className="subtitle" dangerouslySetInnerHTML={{
-              __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
-            }} />
-          <Meta>
-           {metaInfos}
-          </Meta>
+            {/*  ---- SLIDESHOW ---- */}
 
-          {exhibitionTags}
+            {ImageOrSlides}
+          </HeadSection>
 
-          {/*  ---- SLIDESHOW ---- */}
+          {/*  ---- ABOUT ---- */}
 
-          {ImageOrSlides}
-
-
-        </HeadSection>
-
-        {/*  ---- ABOUT ---- */}
-
-        <InfoSection>
-          <Row>
-            <Col $md={4} $sm={4} $xs={12}>
-              <h2>About the exhibition</h2>
-            </Col>
-            <Col $md={8} $sm={8} $xs={12}>
-              <div dangerouslySetInnerHTML={{
-                __html: processExternalLinks(exhibition.description.childMarkdownRemark.html)
-              }} />
-            </Col>  
-          </Row>
-        </InfoSection>
-
-        {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
-
-        {FurtherContentBlocks}
-
-        {/*  ---- AUDIOGUIDE ---- */}
-
-        {hasAudioguide && (
           <InfoSection>
             <Row>
               <Col $md={4} $sm={4} $xs={12}>
-                <h2>Audio guide</h2>
+                <h2>About the exhibition</h2>
               </Col>
               <Col $md={8} $sm={8} $xs={12}>
-                <p>This exhibition has a free audio guide.</p>
-                <p style={{fontWeight: "normal"}}>Listen on your phone as you walk through, or scan the code at each artwork. <br />
-                We kindly ask you to bring your own headphones.</p>
-                <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{margin: "10px 0", display: "inline-block"}}>Open the audioguide</Button>
+                <div dangerouslySetInnerHTML={{
+                  __html: processExternalLinks(exhibition.description.childMarkdownRemark.html)
+                }} />
               </Col>
             </Row>
           </InfoSection>
-        )}
 
-        {/*  ---- DOCUMENTATION IMAGES ---- */}
+          {/*  ---- ADDITIONAL BLOCKS (each a section) ---- */}
 
-        {DocumentationImages}
+          {FurtherContentBlocks}
 
-      </main>
+          {/*  ---- AUDIOGUIDE ---- */}
+
+          {hasAudioguide && (
+            <InfoSection>
+              <Row>
+                <Col $md={4} $sm={4} $xs={12}>
+                  <h2>Audio guide</h2>
+                </Col>
+                <Col $md={8} $sm={8} $xs={12}>
+                  <p>This exhibition has a free audio guide.</p>
+                  <p style={{ fontWeight: "normal" }}>Listen on your phone as you walk through, or scan the code at each artwork. <br />
+                    We kindly ask you to bring your own headphones.</p>
+                  <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{ margin: "10px 0", display: "inline-block" }}>Open the audioguide</Button>
+                </Col>
+              </Row>
+            </InfoSection>
+          )}
+
+          {/*  ---- DOCUMENTATION IMAGES ---- */}
+
+          {DocumentationImages}
+
+        </main>
       </Layout>
     )
   }

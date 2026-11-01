@@ -9,6 +9,7 @@ import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { HeadSection, FurtherSection } from '../components/content/Content.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
 
@@ -88,7 +89,7 @@ class EditionTemplate extends React.Component {
           <Helmet title={`${edition.title}`} />
           <HeadSection>
 
-            <h1>{edition.title}</h1>
+            <h1>{keepSeparatorsAttached(edition.title)}</h1>
             <div className="subtitle" dangerouslySetInnerHTML={{
               __html: processExternalLinks(edition.subtitleShortDescription.childMarkdownRemark.html)
             }} />
