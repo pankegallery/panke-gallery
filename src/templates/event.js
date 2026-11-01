@@ -10,6 +10,7 @@ import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import Tag from '../components/tag'
 import { FurtherSection, HeadSection, InfoSection } from '../components/content/Content.styles'
 import { ItemDate, Subline } from '../components/content/Item.styles'
@@ -140,7 +141,7 @@ class EventTemplate extends React.Component {
               "About the event" row below, 6/6 on larger screens (#70). */}
           <Row>
             <Col $md={6} $sm={4} $xs={12}>
-              <h1>{event.title}</h1>
+              <h1>{keepSeparatorsAttached(event.title)}</h1>
               {EventDateAndEntryFee}
             </Col>
             <Col $md={6} $sm={8} $xs={12}>

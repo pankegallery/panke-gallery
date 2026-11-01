@@ -1,5 +1,6 @@
 import React from 'react'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { useLinkedEmails } from '../utils/email-address'
 import { Row, Col } from './layout/Layout.styles'
 import { FurtherSection } from './content/Content.styles'
@@ -42,7 +43,7 @@ const ContentBlock = ({ blockTitle, blockContent, children }) => (
   <FurtherSection className="further">
     <Row>
       <Col $md={4} $sm={4} $xs={12}>
-        <h2>{blockTitle}</h2>
+        <h2>{keepSeparatorsAttached(blockTitle)}</h2>
       </Col>
       <Col $md={8} $sm={8} $xs={12}>
         <ContentHtml html={blockContent?.childMarkdownRemark?.html} />

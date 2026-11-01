@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { DASH, dateRangeParts } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { theme } from '../theme/theme'
 import {
   Item,
@@ -156,7 +157,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
       </ItemImage>
 
       <Title as={`h${headingLevel}`} $variant={variant}>
-        <Link to={path}>{title}</Link>
+        <Link to={path}>{keepSeparatorsAttached(title)}</Link>
       </Title>
 
       {subtitleHtml && (

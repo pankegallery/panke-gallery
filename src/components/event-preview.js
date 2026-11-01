@@ -4,6 +4,7 @@ import Moment from 'moment'
 import Tag from './tag'
 import { DASH, formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { ItemDate, LongDate, ShortDate, Title } from './content/Item.styles'
 import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.styles'
 
@@ -40,7 +41,7 @@ const EventPreview = ({ event }) => {
   return (
     <EventRow>
       <Title>
-        <Link to={`/event/${event.slug}`}>{event.title}</Link>
+        <Link to={`/event/${event.slug}`}>{keepSeparatorsAttached(event.title)}</Link>
       </Title>
 
       {sublineHtml && (

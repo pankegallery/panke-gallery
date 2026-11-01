@@ -10,6 +10,7 @@ import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
 import EventListItem from '../components/event-list-item'
 import { processExternalLinks } from '../utils/processExternalLinks'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { InfoSection, FurtherSection, Meta } from '../components/content/Content.styles';
 import { Row, Col } from '../components/layout/Layout.styles';
 
@@ -65,7 +66,7 @@ class PankeRosa extends React.Component {
                     <GatsbyImage alt="FeaturedImage" image={node.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
                   </Link>
                   <h3 className="mt-3">
-                    <Link to={`/event/${node.slug}`}>{node.title}</Link>
+                    <Link to={`/event/${node.slug}`}>{keepSeparatorsAttached(node.title)}</Link>
                   </h3>
                   <div dangerouslySetInnerHTML={{
                     __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
@@ -95,7 +96,7 @@ class PankeRosa extends React.Component {
               {pastEvents.map(({ node }) => (
                 <>
                   <h3>
-                    <Link to={`/event/${node.slug}`}>{node.title}</Link>
+                    <Link to={`/event/${node.slug}`}>{keepSeparatorsAttached(node.title)}</Link>
                   </h3>
                   <div dangerouslySetInnerHTML={{
                     __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
@@ -144,7 +145,7 @@ class PankeRosa extends React.Component {
           <InfoSection>
             <Row>
               <Col $md={4} $sm={4} $xs={12}>
-                <h2>{infoBlock.title}</h2>
+                <h2>{keepSeparatorsAttached(infoBlock.title)}</h2>
               </Col>
               <Col $md={8} $sm={8} $xs={12}>
                 {<div dangerouslySetInnerHTML={{

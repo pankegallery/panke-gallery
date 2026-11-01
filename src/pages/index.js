@@ -9,6 +9,7 @@ import ExhibitionItem from '../components/exhibition-item';
 import EventPreview from '../components/event-preview';
 import { ContentHtml } from '../components/content-block';
 import { processExternalLinks } from '../utils/processExternalLinks';
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached';
 import { isCurrent, isUpcoming, isPast } from '../utils/exhibition-archive.mjs';
 import { Row, Col, Grid } from '../components/layout/Layout.styles';
 import {
@@ -150,7 +151,7 @@ const PankeIndex = ({ data }) => {
           {newsItems.map(({ node }) => (
             <NewsArticle key={node.id}>
               <Headline>
-                <h2>{node.title}</h2>
+                <h2>{keepSeparatorsAttached(node.title)}</h2>
               </Headline>
               <Row>
                 <Col $md={12} $sm={12} $xs={12} dangerouslySetInnerHTML={{ __html: processExternalLinks(node.blockContent.childMarkdownRemark.html) }} />
