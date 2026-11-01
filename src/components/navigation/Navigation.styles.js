@@ -61,9 +61,9 @@ export const OffCanvas = styled.div`
   background: ${props => props.theme.colors.theme.white} none repeat scroll 0 0;
   box-shadow: 0 0 10px ${props => props.theme.colors.theme.lightgrey} inset;
   height: 100%;
-  padding: ${props => props.theme.spacing.gap} ${props => props.theme.spacing.gap};
+  padding: ${props => props.theme.spacing.gutter};
   position: fixed;
-  right: calc(-100% - 2 * ${props => props.theme.spacing.gap});
+  right: calc(-100% - 2 * ${props => props.theme.spacing.gutter});
   top: 0;
   width: 100%;
   transition: right 0.25s ease;

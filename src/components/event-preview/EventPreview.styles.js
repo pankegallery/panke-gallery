@@ -34,7 +34,7 @@ export const EventRow = styled.article`
   position: relative;
   grid-column: 1 / -1;
   display: grid;
-  row-gap: ${props => props.theme.spacing.textGap};
+  row-gap: ${props => props.theme.spacing.xxs};
   align-content: start;
   overflow-wrap: anywhere;
 

@@ -109,45 +109,27 @@ export const theme = {
     exhibitionImageRatio: '16 / 10',
     // The short rule under the logo, which also marks the intro/Visit row on
     // the homepage instead of a full-width line (#69).
-    shortRule: '40px'
-  },
-  spacing: {
-    gap: '20px',
-    // Gutter of the page `Grid` below `breakpoints.sm`.
-    gapPhone: '16px',
-    inner: '20px 15px',
-    headerTop: '55px',
-
-    // Inside exhibition items (#67): between the date, title, subtitle
-    // and teaser, plus a little more above the teaser.
-    textGap: '4px',
-    teaserGap: '6px',
-    // Between the year chips, and under the year index.
-    chipGap: '8px',
-    // Between image and text where they don't sit on the page grid: archive
-    // rows on phones and stacked features.
-    splitGap: '12px',
-    // Recent cards: image to date, and end of a card's text to the next
-    // line of cards. The text must sit visibly closer to its own image than
-    // to the cards below, or a line of text reads as the caption of the
-    // image under it. `cardLineGap` is the Recent grid's row gap.
-    cardImageGap: '6px',
-    cardLineGap: '48px',
-    // Archive year index: above and below the chips, inside a chip, and
-    // around a year heading.
-    yearIndexPadding: '10px',
-    yearChipPadding: '14px',
-    yearHeadingTop: '28px',
-    yearHeadingBottom: '14px',
+    shortRule: '40px',
     // Where a jump to a year stops from `breakpoints.sm`, below the sticky
     // year index (chip, padding and lines, plus some air).
-    yearScrollMargin: '72px',
-    // Short rule (`shortRule` in Layout.styles.js): the space above its
-    // line, how far it sticks out left of the text edge, and the space
-    // between it and the content it introduces.
-    shortRuleSpace: '32px',
-    shortRuleOutdent: '20px',
-    shortRuleGap: '24px'
+    yearScrollMargin: '72px'
+  },
+  // Spacing scale (#89): every gap, padding and margin takes a step from
+  // here, on a 4px grid, instead of a value of its own.
+  spacing: {
+    xxs: '4px',    // Between the lines of an item: date, title, subline, teaser
+    xs: '8px',     // Image to text in Recent cards; between and around year chips
+    sm: '12px',    // Image to text side by side; inside a year chip; under a year heading
+    md: '16px',    // Page gutter on phones
+    lg: '24px',    // Between the short rule and the content it introduces
+    xl: '32px',    // Above the short rule; above a year heading
+    xxl: '48px',   // Between the lines of Recent cards, so text stays with its own image
+    // Two layout values outside the scale, part of the site's look since
+    // the start: the page gutter from `breakpoints.sm` (also how far the
+    // short rule sticks out left of the text) and the space above the
+    // header from `breakpoints.sm`.
+    gutter: '20px',
+    headerTop: '55px'
   },
   // One line height per kind of text, matching the type scale: `base` for
   // small and medium (set on every element in GlobalStyles), `text` for

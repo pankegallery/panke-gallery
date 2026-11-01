@@ -52,14 +52,14 @@ export const Headline = styled.div`
 // `breakpointDisplay`).
 export const YearSection = styled.section`
   ${media.md} {
-    scroll-margin-top: ${props => props.theme.spacing.yearScrollMargin};
+    scroll-margin-top: ${props => props.theme.sizes.yearScrollMargin};
   }
 
   ${breakpointDisplay}
 `;
 
 export const YearHeading = styled.h3`
-  margin: ${props => props.theme.spacing.yearHeadingTop} 0 ${props => props.theme.spacing.yearHeadingBottom};
+  margin: ${props => props.theme.spacing.xl} 0 ${props => props.theme.spacing.sm};
   font-size: ${props => props.theme.fontSizes.large};
   font-weight: ${props => props.theme.fontWeights.medium};
   font-variant-numeric: tabular-nums;
@@ -247,7 +247,7 @@ export const IntroSection = styled.section`
   &::before {
     ${shortRule}
     display: block;
-    margin-bottom: ${props => props.theme.spacing.shortRuleGap};
+    margin-bottom: ${props => props.theme.spacing.lg};
   }
 `;
 
@@ -259,7 +259,7 @@ export const Intro = styled.p`
   text-wrap: balance;
 
   ${media.md} {
-    padding-right: ${props => props.theme.spacing.gap};
+    padding-right: ${props => props.theme.spacing.gutter};
   }
 `;
 

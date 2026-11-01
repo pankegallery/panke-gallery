@@ -43,15 +43,10 @@ export const Main = styled.main`
   /* Main content styles */
 `;
 
-// export const Inner = styled.div`
-//   padding: ${props => props.theme.spacing.inner};
-// `;
-
 export const Row = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: ${props => props.theme.spacing.gap};
-
+  gap: ${props => props.theme.spacing.gutter};
 `;
 
 export const Col = styled.div`
@@ -109,7 +104,7 @@ const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
  * all sit on it, and ExhibitionItem lays its parts out on these columns
  * through `subgrid`, so every image and text edge on the page lines up.
  * The tracks are `minmax(0, 1fr)` so long titles or nowrap dates can't widen
- * a column. The gutter is `spacing.gapPhone` on phones, `spacing.gap` from
+ * a column. The gutter is `spacing.md` on phones, `spacing.gutter` from
  * `breakpoints.sm`.
  *
  * `$rowGap` replaces the row gap, e.g. the wider gap between the lines of
@@ -118,11 +113,11 @@ const gridColumns = (count) => `repeat(${count}, minmax(0, 1fr))`;
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: ${props => gridColumns(props.theme.grid.columns.sm)};
-  gap: ${props => props.theme.spacing.gapPhone};
+  gap: ${props => props.theme.spacing.md};
 
   ${media.md} {
     grid-template-columns: ${props => gridColumns(props.theme.grid.columns.md)};
-    gap: ${props => props.theme.spacing.gap};
+    gap: ${props => props.theme.spacing.gutter};
   }
 
   ${media.xl} {
@@ -155,7 +150,7 @@ export const breakpointDisplay = ({ $hideBelow, $hideFrom }) => css`
 
 /**
  * Style helper for the short rule under the logo: a 40px line that sticks
- * out to the left of the text edge, `spacing.shortRuleSpace` below what is
+ * out to the left of the text edge, `spacing.xl` below what is
  * above it. Put it on a pseudo-element (`&::after { ${shortRule} }`). The
  * header, the news on the homepage and the homepage's intro/Visit row use it
  * in place of full-width lines (#69). The line takes the text colour.
@@ -165,8 +160,8 @@ export const shortRule = ({ theme }) => css`
   display: inline-block;
   clear: both;
   width: ${theme.sizes.shortRule};
-  height: ${theme.spacing.shortRuleSpace};
-  margin-left: -${theme.spacing.shortRuleOutdent};
+  height: ${theme.spacing.xl};
+  margin-left: -${theme.spacing.gutter};
   border-bottom: 1px solid;
 `;
 

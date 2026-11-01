@@ -32,7 +32,7 @@ const FEATURE_COLUMNS = {
 };
 
 // The text of every variant reads date, title, subtitle, teaser, one
-// grid row each, `spacing.textGap` apart. The DOM order puts the title
+// grid row each, `spacing.xxs` apart. The DOM order puts the title
 // first instead (image, title, subtitle, date, teaser), so screen readers
 // meet the heading first; the grid rows below put the date on top.
 const textRows = (first) => css`
@@ -52,17 +52,18 @@ const variantLayout = ({ $variant, theme }) => {
     // directly. (Sharing rows with the neighbours through `subgrid` left a
     // gap under every one-line title next to a two-line one.) Images and
     // one-line dates still line up, since all images are 16:10. The text
-    // sits close to its own image (`cardImageGap`), and the Recent grid's
-    // row gap (`cardLineGap`) keeps it far from the next line of cards, so
+    // sits close to its own image (`spacing.xs`), and the Recent grid's
+    // row gap (`spacing.xxl`) keeps it far from the next line of cards, so
     // it can't be read as belonging to the image below.
     return css`
       display: grid;
-      row-gap: ${theme.spacing.textGap};
+      row-gap: ${theme.spacing.xxs};
       align-content: start;
 
       > ${ItemImage} {
         grid-row: 1;
-        margin-bottom: calc(${theme.spacing.cardImageGap} - ${theme.spacing.textGap});
+        /* Together with the row gap: xs between image and date. */
+        margin-bottom: calc(${theme.spacing.xs} - ${theme.spacing.xxs});
       }
       ${textRows(2)}
     `;
@@ -80,8 +81,8 @@ const variantLayout = ({ $variant, theme }) => {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
       grid-template-rows: auto auto auto auto 1fr;
-      column-gap: ${theme.spacing.splitGap};
-      row-gap: ${theme.spacing.textGap};
+      column-gap: ${theme.spacing.sm};
+      row-gap: ${theme.spacing.xxs};
       align-items: start;
 
       ${media.md} {
@@ -106,14 +107,14 @@ const variantLayout = ({ $variant, theme }) => {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: subgrid;
-    row-gap: ${theme.spacing.textGap};
+    row-gap: ${theme.spacing.xxs};
     align-items: start;
 
     > * { grid-column: 1 / -1; }
     > ${ItemImage} {
       grid-row: 1;
-      /* Together with the row gap: splitGap between image and date. */
-      margin-bottom: calc(${theme.spacing.splitGap} - ${theme.spacing.textGap});
+      /* Together with the row gap: sm between image and date. */
+      margin-bottom: calc(${theme.spacing.sm} - ${theme.spacing.xxs});
     }
     ${textRows(2)}
 
@@ -155,7 +156,9 @@ export const ImagePending = styled.div`
 `;
 
 export const Teaser = styled.p`
-  margin: ${props => props.theme.spacing.teaserGap} 0 0;
+  /* Together with the row gap: xs above the teaser, a little more than
+     between the other lines. */
+  margin: ${props => props.theme.spacing.xxs} 0 0;
   max-width: ${props => props.theme.sizes.teaserMaxWidth};
   font-size: ${props => props.theme.fontSizes.medium};
   font-weight: ${props => props.theme.fontWeights.light};
