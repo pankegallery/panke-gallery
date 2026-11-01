@@ -85,9 +85,12 @@ class PankeContact extends React.Component{
           )
         })}
 
+        {/* Imprint and disclaimer open to 6/6 from `breakpoints.md`, like the
+            head of a detail page (#70), so the long association name fits
+            on one line where the screen allows. */}
         <FurtherSection id="imprint">
           <Row>
-            <Col $md={4} $sm={4} $xs={12}>
+            <Col $md={6} $sm={4} $xs={12}>
               {/* The imprint is the "contact-imprint" block in Contentful,
                   edited there like the other contact texts (#61). The [at]
                   address in it becomes a link in the browser (#62). */}
@@ -98,7 +101,7 @@ class PankeContact extends React.Component{
                 </React.Fragment>
               ))}
             </Col>
-            <Col $md={8} $sm={8} $xs={12}>
+            <Col $md={6} $sm={8} $xs={12}>
                 {definedBlocks.disclaimer.array.map(({ node }) => (
                   <ContentHtml key={node.slug} html={node.blockContent?.childMarkdownRemark?.html} />
                 ))}
