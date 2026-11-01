@@ -21,7 +21,7 @@ const eventTime = ({ date, endTime, openEnd }) => {
  * stacks, with abbreviated months.
  *
  * Shares its type with the exhibition items: the date token, the 15px
- * title, and a Roboto subline like the artist line of the Recent grid.
+ * title, and a Roboto subline like the one in the Recent grid.
  * The whole row links to the event through its title link (see `Title` in
  * ExhibitionItem.styles.js); the series tag stays a link of its own, to the
  * series on /events/.

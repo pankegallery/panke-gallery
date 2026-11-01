@@ -16,7 +16,7 @@ export const theme = {
       grey: '#999',
       lightgrey: '#ccc',
       white: '#fff',
-      // Dates and other secondary text (e.g. the artist line in the Recent
+      // Dates and other secondary text (e.g. the subtitle in the Recent
       // grid). The lightest grey that still reaches 4.5:1 on white (WCAG AA).
       date: '#767676',
       // Teaser text: a darker, slightly cool grey that reads as body copy
@@ -37,7 +37,7 @@ export const theme = {
   },
   fonts: {
     main: "'Roboto', sans-serif",
-    // Artist lines in archive rows, Current, Upcoming and the exhibition page.
+    // Sublines in archive rows, Current, Upcoming and the exhibition page.
     // Self-hosted via @fontsource/roboto-mono (see gatsby-browser.js).
     mono: "'Roboto Mono', ui-monospace, Menlo, monospace"
   },
@@ -54,8 +54,8 @@ export const theme = {
     // root size is fixed at `base` = 16px in GlobalStyles.)
     date: '13px',          // Dates everywhere, Light 300
     itemTitle: '15px',     // Titles in grids and archive rows, Medium 500
-    artist: '14px',        // Artist line in the Recent grid, Regular 400
-    artistMono: '13px',    // Artist line set in `fonts.mono`, Regular 400
+    subline: '14px',       // Subline in the Recent grid, Regular 400
+    sublineMono: '13px',   // Subline set in `fonts.mono`, Regular 400
     teaser: '14px',        // Teaser text, Light 300
     // Feature titles (Medium 500). `Phone` applies below `breakpoints.sm`,
     // the plain value from there and `Wide` from `breakpoints.xl`; the
@@ -114,7 +114,7 @@ export const theme = {
     inner: '20px 15px',
     headerTop: '55px',
 
-    // Inside exhibition items (#67): between the date, title, artist line
+    // Inside exhibition items (#67): between the date, title, subtitle
     // and teaser, plus a little more above the teaser.
     textGap: '4px',
     teaserGap: '6px',

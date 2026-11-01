@@ -9,7 +9,7 @@ import {
   ItemImage,
   ImagePending,
   Title,
-  Artist,
+  Subline,
   ItemDate,
   NoWrap,
   LongDate,
@@ -72,21 +72,21 @@ const DateRange = ({ parts }) =>
  *
  * Variants (layout as in the archive prototype of #67):
  * - `feature`: the current show. Large image; date with opening hours and
- *   vernissage info, feature-size title, mono artist line, long teaser.
+ *   vernissage info, feature-size title, mono subtitle, long teaser.
  *   Stacked on phones; from `breakpoints.sm` the image takes 2 of 3 columns,
  *   from `breakpoints.xl` 3 of 4, with the text beside it.
  * - `feature-small`: upcoming shows. Like `feature` with a smaller title and
  *   a shorter teaser; the image takes 1 of 3, then 2 of 4 columns.
  * - `card`: the Recent grid. One column: image, date, title and a grey
- *   artist line, which follows its own title directly.
+ *   subtitle, which follows its own title directly.
  * - `row`: archive rows. Image and text side by side: 2 : 3 on phones, then
  *   image 1 column and text 2; from `breakpoints.xl` a row spans two columns,
  *   so two sit side by side. Date (always with the year, since the year
- *   heading may have scrolled away), title, mono artist line, and a
+ *   heading may have scrolled away), title, mono subtitle, and a
  *   three-line teaser from `breakpoints.sm` up.
  *
  * The whole item links to the exhibition page through its title link, and
- * hovering it colours the title (see `Title` in the styles). Artist lines
+ * hovering it colours the title (see `Title` in the styles). Subtitle
  * stop after two lines in every variant. Images are cropped to
  * the aspect ratio the page queries (16:10 on /exhibitions).
  *
@@ -104,7 +104,7 @@ const DateRange = ({ parts }) =>
  *   `title`, `startDate`, `endDate`, `dateTbc`,
  *   `featuredImage { gatsbyImageData description }` (may be missing while a
  *   row's image loads),
- *   `subtitleShortDescription.childMarkdownRemark.html` (the artist line) and,
+ *   `subtitleShortDescription.childMarkdownRemark.html` (the subtitle) and,
  *   for a teaser, `description.childMarkdownRemark.excerpt(pruneLength: 1200)`.
  *   The feature variants also show `openingHours` and `vernissageInfos` when
  *   they are queried and set.
@@ -135,7 +135,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
   const path = `/exhibition/${slug}`
   const isCompact = COMPACT_VARIANTS.includes(variant)
   const hasShortDate = SHORT_DATE_VARIANTS.includes(variant)
-  const artistHtml = subtitleShortDescription?.childMarkdownRemark?.html
+  const subtitleHtml = subtitleShortDescription?.childMarkdownRemark?.html
   const teaser = variant !== 'card' && description?.childMarkdownRemark?.excerpt
   const meta = isCompact ? [] : [openingHours, vernissageInfos].filter(Boolean)
 
@@ -157,10 +157,10 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
         <Link to={path}>{title}</Link>
       </Title>
 
-      {artistHtml && (
-        <Artist
+      {subtitleHtml && (
+        <Subline
           $variant={variant}
-          dangerouslySetInnerHTML={{ __html: processExternalLinks(artistHtml) }}
+          dangerouslySetInnerHTML={{ __html: processExternalLinks(subtitleHtml) }}
         />
       )}
 

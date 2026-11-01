@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
-import { Artist, ItemDate, Title } from '../exhibition-item/ExhibitionItem.styles';
+import { ItemDate, Subline as ItemSubline, Title } from '../exhibition-item/ExhibitionItem.styles';
 
 // Lines of the event subline before it is cut off. Event sublines are
-// short descriptions, so they get one line more than an artist line.
+// short descriptions, so they get one line more than an exhibition subline.
 const SUBLINE_LINES = 3;
 
-// The subline in Roboto, as in the Recent grid: mono is kept for artist
-// lines next to exhibition teasers.
-export const Subline = styled(Artist)`
+// The subline in Roboto, as in the Recent grid: mono is kept for sublines
+// next to exhibition teasers.
+export const Subline = styled(ItemSubline)`
   -webkit-line-clamp: ${SUBLINE_LINES};
   line-clamp: ${SUBLINE_LINES};
 `;
