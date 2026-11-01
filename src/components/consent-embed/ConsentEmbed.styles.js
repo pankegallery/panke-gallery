@@ -10,7 +10,7 @@ export const Placeholder = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.8em;
-  padding: ${props => props.theme.spacing.inner};
+  padding: ${props => props.theme.spacing.gutter} ${props => props.theme.spacing.md};
   text-align: center;
   background-color: ${props => props.theme.colors.theme.lightgrey};
 

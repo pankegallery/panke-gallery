@@ -4,7 +4,7 @@ import Moment from 'moment'
 import Tag from './tag'
 import { DASH, formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
-import { ItemDate, LongDate, ShortDate, Title } from './exhibition-item/ExhibitionItem.styles'
+import { ItemDate, LongDate, ShortDate, Title } from './content/Item.styles'
 import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.styles'
 
 /** "19:00–21:00", or "19:00 – open end". */
@@ -20,10 +20,11 @@ const eventTime = ({ date, endTime, openEnd }) => {
  * first column, then title, subline and series tag (#69). On phones the row
  * stacks, with abbreviated months.
  *
- * Shares its type with the exhibition items: the date token, the 15px
- * title, and a Roboto subline like the one in the Recent grid.
+ * Shares its date, title and subline with the exhibition items
+ * (content/Item.styles.js); `$variant="event"` gives the title the base
+ * size and the subline grey Roboto, as in the Recent grid.
  * The whole row links to the event through its title link (see `Title` in
- * ExhibitionItem.styles.js); the series tag stays a link of its own, to the
+ * content/Item.styles.js); the series tag stays a link of its own, to the
  * series on /events/.
  *
  * @param {object} props
@@ -44,7 +45,7 @@ const EventPreview = ({ event }) => {
 
       {sublineHtml && (
         <Subline
-          $variant="card"
+          $variant="event"
           dangerouslySetInnerHTML={{ __html: processExternalLinks(sublineHtml) }}
         />
       )}

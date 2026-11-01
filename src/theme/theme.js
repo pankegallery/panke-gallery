@@ -41,42 +41,46 @@ export const theme = {
     // Self-hosted via @fontsource/roboto-mono (see gatsby-browser.js).
     mono: "'Roboto Mono', ui-monospace, Menlo, monospace"
   },
+  // Type scale (#65): five sizes for the whole site, set per screen size.
+  // Keys of each step as in `media`: `sm` phones, `md` from
+  // `breakpoints.sm`, `xl` from `breakpoints.xl`. GlobalStyles turns them
+  // into CSS custom properties, so components use `fontSizes` below and
+  // never need a media query of their own for type.
+  // - small: dates, mono sublines, meta lines, footer, captions
+  // - medium: everything in grids and rows (titles, sublines, teasers) and
+  //   the interface (navigation, section labels, tags, chips, buttons)
+  // - base: running text only (descriptions, Info, Contact). Never in a
+  //   grid, where it would break the layout; never below 16px, or iOS
+  //   zooms into form fields.
+  // - large: upcoming titles, year headings, the homepage intro
+  // - xlarge: the current exhibition and the title of a detail page
+  // Hierarchy inside an item comes from weight and colour, not more sizes.
+  typeScale: {
+    small: { sm: '13px', md: '13px', xl: '13px' },
+    medium: { sm: '14px', md: '15px', xl: '15px' },
+    base: { sm: '16px', md: '16px', xl: '16px' },
+    large: { sm: '20px', md: '22px', xl: '24px' },
+    xlarge: { sm: '24px', md: '28px', xl: '32px' }
+  },
+  // Use these in styles: each one follows its `typeScale` step through the
+  // breakpoints. Always px underneath, so nested sizes don't compound like
+  // the old em values did.
   fontSizes: {
-    // Legacy sizes. The em values are relative to the parent, so they
-    // compound when nested; keep them for existing styles only.
-    base: '16px',
-    small: '0.8em',
-    medium: '0.9em',
-    large: '1.8em',
-
-    // Refresh sizes (#65). Always px: they come 1:1 from the agreed design
-    // table and don't compound like em. (rem would add nothing, since the
-    // root size is fixed at `base` = 16px in GlobalStyles.)
-    date: '13px',          // Dates everywhere, Light 300
-    itemTitle: '15px',     // Titles in grids and archive rows, Medium 500
-    subline: '14px',       // Subline in the Recent grid, Regular 400
-    sublineMono: '13px',   // Subline set in `fonts.mono`, Regular 400
-    teaser: '14px',        // Teaser text, Light 300
-    // Feature titles (Medium 500). `Phone` applies below `breakpoints.sm`,
-    // the plain value from there and `Wide` from `breakpoints.xl`; the
-    // exhibition page title stays 34px throughout.
-    currentTitlePhone: '24px',
-    currentTitle: '28px',
-    currentTitleWide: '32px',
-    upcomingTitlePhone: '20px',
-    upcomingTitle: '22px',
-    upcomingTitleWide: '26px',
-    yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
-    yearChip: '14px',      // Year chips in the archive index, Regular 400
-    // The one-line intro on the homepage, Light 300: `Phone` below
-    // `breakpoints.sm`, the plain value from there (#69).
-    introPhone: '17px',
-    intro: '19px',
-    pageTitle: '34px'
+    small: 'var(--fs-small)',
+    medium: 'var(--fs-medium)',
+    base: 'var(--fs-base)',
+    large: 'var(--fs-large)',
+    xlarge: 'var(--fs-xlarge)',
+    // The logotype is part of the corporate identity, so it stays outside
+    // the scale and the same on every screen.
+    logo: '28.8px'
   },
   letterSpacing: {
     // Opens up the small light grey dates a little, so they read more easily.
-    date: '0.02em'
+    date: '0.02em',
+    // Every uppercase text, through the `uppercase` helper in
+    // Layout.styles.js: capitals read better with a little extra space (#89).
+    uppercase: '0.02em'
   },
   fontWeights: {
     light: 300,
@@ -105,51 +109,35 @@ export const theme = {
     exhibitionImageRatio: '16 / 10',
     // The short rule under the logo, which also marks the intro/Visit row on
     // the homepage instead of a full-width line (#69).
-    shortRule: '40px'
-  },
-  spacing: {
-    gap: '20px',
-    // Gutter of the page `Grid` below `breakpoints.sm`.
-    gapPhone: '16px',
-    inner: '20px 15px',
-    headerTop: '55px',
-
-    // Inside exhibition items (#67): between the date, title, subtitle
-    // and teaser, plus a little more above the teaser.
-    textGap: '4px',
-    teaserGap: '6px',
-    // Between the year chips, and under the year index.
-    chipGap: '8px',
-    // Between image and text where they don't sit on the page grid: archive
-    // rows on phones and stacked features.
-    splitGap: '12px',
-    // Recent cards: image to date, and end of a card's text to the next
-    // line of cards. The text must sit visibly closer to its own image than
-    // to the cards below, or a line of text reads as the caption of the
-    // image under it. `cardLineGap` is the Recent grid's row gap.
-    cardImageGap: '6px',
-    cardLineGap: '48px',
-    // Archive year index: above and below the chips, inside a chip, and
-    // around a year heading.
-    yearIndexPadding: '10px',
-    yearChipPadding: '14px',
-    yearHeadingTop: '28px',
-    yearHeadingBottom: '14px',
+    shortRule: '40px',
     // Where a jump to a year stops from `breakpoints.sm`, below the sticky
     // year index (chip, padding and lines, plus some air).
-    yearScrollMargin: '72px',
-    // Short rule (`shortRule` in Layout.styles.js): the space above its
-    // line, how far it sticks out left of the text edge, and the space
-    // between it and the content it introduces.
-    shortRuleSpace: '32px',
-    shortRuleOutdent: '20px',
-    shortRuleGap: '24px'
+    yearScrollMargin: '72px'
   },
+  // Spacing scale (#89): every gap, padding and margin takes a step from
+  // here, on a 4px grid, instead of a value of its own.
+  spacing: {
+    xxs: '4px',    // Between the lines of an item: date, title, subline, teaser
+    xs: '8px',     // Image to text in Recent cards; between and around year chips
+    sm: '12px',    // Image to text side by side; inside a year chip; under a year heading
+    md: '16px',    // Page gutter on phones
+    lg: '24px',    // Between the short rule and the content it introduces
+    xl: '32px',    // Above the short rule; above a year heading
+    xxl: '48px',   // Between the lines of Recent cards, so text stays with its own image
+    // Two layout values outside the scale, part of the site's look since
+    // the start: the page gutter from `breakpoints.sm` (also how far the
+    // short rule sticks out left of the text) and the space above the
+    // header from `breakpoints.sm`.
+    gutter: '20px',
+    headerTop: '55px'
+  },
+  // One line height per kind of text, matching the type scale: `base` for
+  // small and medium (set on every element in GlobalStyles), `text` for
+  // running text and teasers, `headings` for large and xlarge.
   lineHeight: {
     base: '1.4em',
-    headings: '1.3em',
-    teaser: '1.5',
-    intro: '1.45'
+    text: '1.5',
+    headings: '1.25'
   },
   container: {
     // Default content width.

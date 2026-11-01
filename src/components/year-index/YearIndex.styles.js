@@ -8,7 +8,7 @@ import { breakpointDisplay } from '../layout/Layout.styles';
 // every ancestor up to the page to keep `overflow: visible` (or `clip`):
 // `overflow: hidden` on any of them would switch `position: sticky` off.
 export const Bar = styled.nav`
-  margin-bottom: ${props => props.theme.spacing.chipGap};
+  margin-bottom: ${props => props.theme.spacing.xs};
   border-block: 1px solid ${props => props.theme.colors.theme.rule};
   background: ${props => props.theme.colors.theme.white};
 
@@ -25,11 +25,11 @@ export const Bar = styled.nav`
 // there is more, so the scrollbar is hidden.
 export const Chips = styled.ul`
   display: flex;
-  gap: ${props => props.theme.spacing.chipGap};
+  gap: ${props => props.theme.spacing.xs};
   overflow-x: auto;
   scrollbar-width: none;
   margin: 0;
-  padding: ${props => props.theme.spacing.yearIndexPadding} 0;
+  padding: ${props => props.theme.spacing.xs} 0;
   list-style: none;
 `;
 
@@ -47,10 +47,10 @@ export const Chip = styled(Link)`
   box-sizing: border-box;
   min-width: ${props => props.theme.sizes.yearChipMinWidth};
   min-height: ${props => props.theme.sizes.tapTarget};
-  padding: 0 ${props => props.theme.spacing.yearChipPadding};
+  padding: 0 ${props => props.theme.spacing.sm};
   border: 1px solid ${props => props.theme.colors.theme.rule};
   border-radius: ${props => props.theme.sizes.pillRadius};
-  font-size: ${props => props.theme.fontSizes.yearChip};
+  font-size: ${props => props.theme.fontSizes.medium};
   font-weight: ${props => props.theme.fontWeights.normal};
   font-variant-numeric: tabular-nums;
   color: ${props => props.theme.colors.theme.black};

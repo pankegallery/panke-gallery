@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
-import { ItemDate, Subline as ItemSubline, Title } from '../exhibition-item/ExhibitionItem.styles';
+import { ItemDate, Subline as ItemSubline, Title } from '../content/Item.styles';
 
 // Lines of the event subline before it is cut off. Event sublines are
-// short descriptions, so they get one line more than an exhibition subline.
+// short descriptions, so they get one line more than the shared `Subline`.
 const SUBLINE_LINES = 3;
 
 // The subline in Roboto, as in the Recent grid: mono is kept for sublines
@@ -34,7 +34,7 @@ export const EventRow = styled.article`
   position: relative;
   grid-column: 1 / -1;
   display: grid;
-  row-gap: ${props => props.theme.spacing.textGap};
+  row-gap: ${props => props.theme.spacing.xxs};
   align-content: start;
   overflow-wrap: anywhere;
 
