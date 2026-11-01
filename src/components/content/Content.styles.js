@@ -194,9 +194,17 @@ export const HeadSection = styled.div`
   }
 `;
 
+// Long words without spaces in Contentful text (URLs, wallet addresses
+// such as the one under "Support" on /info) wrap anywhere instead of
+// widening their column and the page on phones.
+const wrapLongWords = css`
+  overflow-wrap: anywhere;
+`;
+
 export const InfoSection = styled.div`
   margin: 3em 0 0;
   line-height: ${props => props.theme.lineHeight.text};
+  ${wrapLongWords}
 
   h2 {
     ${sectionLabel}
@@ -214,6 +222,7 @@ export const InfoSection = styled.div`
 export const FurtherSection = styled.div`
   margin: 3em 0 0;
   line-height: ${props => props.theme.lineHeight.text};
+  ${wrapLongWords}
 
   h2 {
     ${sectionLabel}

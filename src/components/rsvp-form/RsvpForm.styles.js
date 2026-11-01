@@ -29,6 +29,9 @@ export const RsvpForm = styled.form`
     input[type="text"],
     input[type="email"],
     textarea {
+      /* Padding and border inside the 100%, or the field ends 26px past its
+         column and the page scrolls sideways on phones. */
+      box-sizing: border-box;
       width: 100%;
       padding: 10px 12px;
       border: 1px solid ${props => props.theme.colors.theme.black};
