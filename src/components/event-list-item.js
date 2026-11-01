@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import EventDate from '../components/event-date-time'
 import Tag from '../components/tag'
 import { ContentHtml } from './content-block'
+import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { Col, Row } from './layout/Layout.styles'
 import { NewsArticle } from './content/Content.styles'
 
@@ -37,7 +38,7 @@ const EventListItem = ({ event, activeSeries }) => {
         </Col>
         <Col $md={8} $sm={8} $xs={12}>
           <h3>
-            <Link to={`/event/${event.slug}`}>{event.title}</Link>
+            <Link to={`/event/${event.slug}`}>{keepSeparatorsAttached(event.title)}</Link>
           </h3>
           <ContentHtml html={event.subtitleShortDescription.childMarkdownRemark.html} />
           <p className="meta"><EventDate event={event} /></p>

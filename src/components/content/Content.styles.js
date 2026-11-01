@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
-import { breakpointDisplay, shortRule, uppercase } from '../layout/Layout.styles';
+import { Row, breakpointDisplay, shortRule, uppercase } from '../layout/Layout.styles';
+import { ItemDate } from './Item.styles';
 
 // Uppercase section labels such as "Upcoming events", "Current" or
 // "About the exhibition".
@@ -109,7 +110,7 @@ export const Tag = styled.p`
   background: transparent;
   color: ${props => props.theme.colors.theme.grey};
   ${uppercase}
-  font-size: ${props => props.theme.fontSizes.medium};
+  font-size: ${props => props.theme.fontSizes.small};
   margin-top: 10px;
   margin-right: 10px;
 
@@ -158,17 +159,38 @@ export const Button = styled.button`
   }
 `;
 
+// Head of an exhibition or event page (#70): a `Row` with the title and
+// date in the left `Col`, and the subline and tags in the right one. From
+// `breakpoints.sm` it is the 4/8 split of the InfoSection rows below, so
+// the head lines up with "About the exhibition" and its text; from
+// `breakpoints.md` it opens to 6/6, which gives long titles and the mono
+// subline more room side by side. The image or slideshow follows the row
+// across the full width. On phones both columns stack.
 export const HeadSection = styled.div`
+  margin: 2em 0 0;
 
-margin: 2em 0 0;
+  > ${Row} {
+    /* Stacked on phones, the subline stays close to its title. */
+    row-gap: ${props => props.theme.spacing.xs};
+    margin-bottom: ${props => props.theme.spacing.lg};
+  }
 
   /* The page title, the same size as the current show on /exhibitions, so
      it keeps its size from teaser to page; Medium like every title (#65).
-     No uppercase: exhibition titles keep the artists' own casing. */
+     No uppercase: exhibition titles keep the artists' own casing. Long
+     titles wrap within their column. */
   h1 {
+    margin: 0;
     font-size: ${props => props.theme.fontSizes.xlarge};
     font-weight: ${props => props.theme.fontWeights.medium};
-    margin-bottom: 0.5em;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+
+  /* Subline, date and tags read as one block, spaced as in the exhibition
+     items. */
+  ${ItemDate} {
+    margin-top: ${props => props.theme.spacing.xxs};
   }
 `;
 
