@@ -10,7 +10,8 @@ import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import { formatDateRange } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
-import { HeadSection, Meta, InfoSection, Button } from '../components/content/Content.styles'
+import { HeadSection, InfoSection, Button } from '../components/content/Content.styles'
+import { ItemDate, Subline } from '../components/content/Item.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
 import Tag from '../components/tag'
 
@@ -18,13 +19,9 @@ class ExhibitionTemplate extends React.Component {
   render() {
 
     const exhibition = get(this.props, 'data.contentfulExhibition')
-    console.log(exhibition);
 
     const audioguideStops = get(this.props, 'data.allAudioguideStop.edges', [])
     const hasAudioguide = audioguideStops.some(({ node }) => node.audioUrl)
-
-    const siteTitle = get(this.props, 'data.site.siteMetadata.title')
-    console.log(siteTitle);
 
     // ––– Slideshow or featured images –––
 
@@ -97,22 +94,24 @@ class ExhibitionTemplate extends React.Component {
         <main>
           <Helmet title={`${exhibition.title}`} />
           <HeadSection>
-
-            <h1>{exhibition.title}</h1>
-            <div className="subtitle" dangerouslySetInnerHTML={{
-              __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
-            }} />
-            <Meta>
-              {metaInfos}
-            </Meta>
-
-            {exhibitionTags}
+            {/* Title and date left, subline and tags right: 4/8 like the
+                "About the exhibition" row below, 6/6 on larger screens (#70). */}
+            <Row>
+              <Col $md={6} $sm={4} $xs={12}>
+                <h1>{exhibition.title}</h1>
+                <ItemDate>{metaInfos}</ItemDate>
+              </Col>
+              <Col $md={6} $sm={8} $xs={12}>
+                <Subline $variant="page" dangerouslySetInnerHTML={{
+                  __html: processExternalLinks(exhibition.subtitleShortDescription.childMarkdownRemark.html)
+                }} />
+                {exhibitionTags}
+              </Col>
+            </Row>
 
             {/*  ---- SLIDESHOW ---- */}
 
             {ImageOrSlides}
-
-
           </HeadSection>
 
           {/*  ---- ABOUT ---- */}

@@ -15,7 +15,7 @@ class EventDateComp extends React.Component {
     }
     return(
       <span>
-        {eventDate} from {eventTime} &thinsp;&ndash;&thinsp;{eventEnd}
+        {eventDate} from {eventTime}&thinsp;&ndash;&thinsp;{eventEnd}
       </span>
     );
   }

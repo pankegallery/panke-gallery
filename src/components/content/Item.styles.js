@@ -8,7 +8,8 @@ import { media } from '../../theme/theme';
 // so an exhibition and an event read the same.
 //
 // `$variant` on `Title` and `Subline` is the exhibition item variant
-// (`feature`, `feature-small`, `card`, `row`), or `event` for an event row.
+// (`feature`, `feature-small`, `card`, `row`), `event` for an event row,
+// or `page` for the head of a detail page (Subline only).
 
 const SUBLINE_LINES = 2;
 
@@ -74,10 +75,12 @@ export const Title = styled.h3`
 `;
 
 // The subline is the subtitle from Contentful, rendered as HTML.
-// Two lines at most; long group-show lists end in "…". Recent cards and
-// events set it in grey Roboto; next to a teaser it is mono in black.
+// In lists two lines at most; long group-show lists end in "…". On a
+// detail page (`$variant="page"`, the head in HeadSection) it shows in
+// full. Recent cards and events set it in grey Roboto; next to a teaser
+// and on a detail page it is mono in black.
 export const Subline = styled.div`
-  ${clamp(SUBLINE_LINES)}
+  ${({ $variant }) => $variant !== 'page' && clamp(SUBLINE_LINES)}
 
   ${({ $variant, theme }) => ['card', 'event'].includes($variant)
     ? css`
