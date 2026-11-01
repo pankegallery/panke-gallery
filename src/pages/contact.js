@@ -5,7 +5,6 @@ import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
 import ContentBlock, { ContentHtml } from '../components/content-block'
-import EmailLink from '../components/email-link'
 import ConsentEmbed from '../components/consent-embed'
 import NewsletterForm from '../components/newsletter-form'
 import { FurtherSection } from '../components/content/Content.styles';
@@ -15,11 +14,7 @@ class PankeContact extends React.Component{
   render() {
     // Get array of content blocks
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
-    
-    // Log array of Blocks
-    console.log('Blocks:');
-    console.log(blocks);
-    
+
     // Define decidated content blocks: definedBlocks
     var definedBlocks = {
       'visitUs'     : { slug:'contact-visit-us'   },
@@ -39,18 +34,9 @@ class PankeContact extends React.Component{
       slugs.push(definedBlocks[key].slug);
     } 
   
-    console.log('definedBlocks:');
-    console.log(definedBlocks);
-    
-    console.log('slugs:');
-    console.log(slugs);
-
     var otherBlocks = blocks.filter(function (_blocks) {
       return !(slugs.includes(_blocks.node.slug));
     });
-    
-    console.log('otherBlocks:');
-    console.log(otherBlocks);
     
     return(
       <Layout>
@@ -102,21 +88,15 @@ class PankeContact extends React.Component{
         <FurtherSection id="imprint">
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
-              <h2>Imprint<br /></h2>
-
-                <h3>panke.gallery – Verein für künstlerisch-kulturelle Bildung e.V.</h3>
-                <p>Gerichtstr. 23 · Hof V<br />
-                  13347 Berlin</p>
-
-                <h3>Email</h3>
-                <p><EmailLink user="info" domain="panke.gallery" /></p>
-
-                <h3>Liability of information according to § 5 TMG
-                </h3>
-                <p>Robert Sakrowski</p>
-
-                <h3>Vereinsregisternummer</h3>
-                  <p>VR 35779 B</p>
+              {/* The imprint is the "contact-imprint" block in Contentful,
+                  edited there like the other contact texts (#61). The [at]
+                  address in it becomes a link in the browser (#62). */}
+              {definedBlocks.imprint.array.map(({ node }) => (
+                <React.Fragment key={node.slug}>
+                  <h2>{node.title}</h2>
+                  <ContentHtml html={node.blockContent?.childMarkdownRemark?.html} />
+                </React.Fragment>
+              ))}
             </Col>
             <Col $md={8} $sm={8} $xs={12}>
                 {definedBlocks.disclaimer.array.map(({ node }) => (
