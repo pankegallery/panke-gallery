@@ -79,6 +79,16 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: ${props => props.theme.fontWeights.medium};
   }
 
+  /* Every GatsbyImage on the site is CONSTRAINED. The tint behind it gives
+     images with transparency (e.g. "Network Portraits") a visible box in
+     the image's shape, so they line up with the images next to them. It is
+     the colour image boxes show while they load (#68). */
+  .gatsby-image-wrapper-constrained {
+    display: inline-block;
+    vertical-align: top;
+    background: ${props => props.theme.colors.theme.tint};
+  }
+
   img:hover {
     -webkit-filter: none;
     filter: none;
