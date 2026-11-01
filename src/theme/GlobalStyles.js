@@ -1,6 +1,26 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
+import { media } from './theme';
+
+// The type scale as CSS custom properties (`--fs-small` … `--fs-xlarge`),
+// one set per breakpoint. `theme.fontSizes` points at them, so a size in a
+// component follows the screen without a media query of its own.
+const typeScaleProperties = (scale, breakpoint) =>
+  Object.entries(scale)
+    .map(([step, sizes]) => `--fs-${step}: ${sizes[breakpoint]};`)
+    .join('\n');
+
+const typeScale = ({ theme }) => css`
+  :root {
+    ${typeScaleProperties(theme.typeScale, 'sm')}
+
+    ${media.md} { ${typeScaleProperties(theme.typeScale, 'md')} }
+    ${media.xl} { ${typeScaleProperties(theme.typeScale, 'xl')} }
+  }
+`;
 
 export const GlobalStyles = createGlobalStyle`
+  ${typeScale}
+
   * {
     line-height: ${props => props.theme.lineHeight.base};
   }
@@ -43,7 +63,7 @@ export const GlobalStyles = createGlobalStyle`
 
   h3 {
     font-weight: ${props => props.theme.fontWeights.medium};
-    font-size: 1rem;
+    font-size: ${props => props.theme.fontSizes.base};
   }
 
   p{

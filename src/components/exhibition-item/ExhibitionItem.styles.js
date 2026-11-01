@@ -1,8 +1,13 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 import { breakpointDisplay } from '../layout/Layout.styles';
+import { ItemDate, Subline, Title, clamp, clampLines } from '../content/Item.styles';
 
-// Lines a teaser or subtitle shows before it is cut off with an ellipsis,
+// Layout of an exhibition item per variant, plus its image and teaser. The
+// title, subline and date are shared with the event rows on the homepage
+// and live in content/Item.styles.js.
+
+// Lines a teaser shows before it is cut off with an ellipsis,
 // per breakpoint (keys as in `media`), as in the archive prototype (#67).
 // The teaser comes as a long plain-text excerpt from GraphQL, so the visible
 // length is decided here rather than by truncating in JS.
@@ -10,38 +15,6 @@ const TEASER_LINES = {
   feature: { sm: 6, md: 11, xl: 14 },
   'feature-small': { sm: 3, md: 3, xl: 6 },
   row: { sm: 3, md: 3, xl: 3 },
-};
-const SUBTITLE_LINES = 2;
-
-const clamp = (lines) => css`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: ${lines};
-  line-clamp: ${lines};
-  overflow: hidden;
-`;
-
-const clampLines = (lines) => css`
-  -webkit-line-clamp: ${lines};
-  line-clamp: ${lines};
-`;
-
-const titleSize = ({ $variant, theme }) => {
-  if ($variant === 'feature') {
-    return css`
-      font-size: ${theme.fontSizes.currentTitlePhone};
-      ${media.md} { font-size: ${theme.fontSizes.currentTitle}; }
-      ${media.xl} { font-size: ${theme.fontSizes.currentTitleWide}; }
-    `;
-  }
-  if ($variant === 'feature-small') {
-    return css`
-      font-size: ${theme.fontSizes.upcomingTitlePhone};
-      ${media.md} { font-size: ${theme.fontSizes.upcomingTitle}; }
-      ${media.xl} { font-size: ${theme.fontSizes.upcomingTitleWide}; }
-    `;
-  }
-  return css`font-size: ${theme.fontSizes.itemTitle};`;
 };
 
 // Columns of the page `Grid` (3 from `breakpoints.sm`, 4 from `xl`) that
@@ -181,105 +154,12 @@ export const ImagePending = styled.div`
   background: ${props => props.theme.colors.theme.tint};
 `;
 
-export const Title = styled.h3`
-  /* The global reset covers h1–h3 only; archive rows use h4. */
-  margin: 0;
-  color: ${props => props.theme.colors.theme.black};
-  font-weight: ${props => props.theme.fontWeights.medium};
-  line-height: ${props => props.theme.lineHeight.headings};
-  text-wrap: balance;
-  ${titleSize}
-
-  /* The whole item is clickable, as in the archive prototype, through the
-     title link: its ::after covers the item. The link text stays just the
-     title for screen readers, and there is one tab stop per show. Hovering
-     anywhere on the item hovers the link, so the title takes the accent
-     colour (the a:hover rule in Layout.styles.js), and the focus ring
-     goes around the whole item. */
-  a::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-
-  a:focus-visible {
-    outline: none;
-  }
-
-  a:focus-visible::after {
-    outline: ${props => props.theme.sizes.focusRing} solid ${props => props.theme.colors.theme.black};
-    outline-offset: ${props => props.theme.sizes.focusRing};
-  }
-`;
-
-// The subline is the subtitle from Contentful, rendered as HTML.
-// Two lines at most in every variant; long group-show lists end in "…".
-export const Subline = styled.div`
-  ${clamp(SUBTITLE_LINES)}
-
-  ${({ $variant, theme }) => $variant === 'card'
-    ? css`
-      font-family: ${theme.fonts.main};
-      font-size: ${theme.fontSizes.subline};
-      font-weight: ${theme.fontWeights.normal};
-      color: ${theme.colors.theme.date};
-    `
-    : css`
-      font-family: ${theme.fonts.mono};
-      font-size: ${theme.fontSizes.sublineMono};
-      font-weight: ${theme.fontWeights.normal};
-      color: ${theme.colors.theme.black};
-    `}
-
-  p {
-    margin: 0;
-  }
-
-  /* Links in a subline (e.g. an artist's website) stay clickable
-     above the title link's click area. */
-  a {
-    position: relative;
-    z-index: 1;
-  }
-`;
-
-export const ItemDate = styled.p`
-  margin: 0;
-  font-size: ${props => props.theme.fontSizes.date};
-  font-weight: ${props => props.theme.fontWeights.light};
-  color: ${props => props.theme.colors.theme.date};
-  letter-spacing: ${props => props.theme.letterSpacing.date};
-  /* Equal-width digits, so dates line up from row to row. */
-  font-variant-numeric: tabular-nums;
-`;
-
-// Each half of a range is one unbreakable piece, so a long range such as
-// "10 September 2022 – 21 January 2023" wraps only after the dash.
-export const NoWrap = styled.span`
-  white-space: nowrap;
-`;
-
-// `card` and `row` render the range twice and let CSS pick one, so the
-// server-rendered HTML matches the browser and no width check runs in JS:
-// full month names from `breakpoints.sm` up, abbreviated ones below.
-export const LongDate = styled.span`
-  ${props => props.$hasShort && css`
-    ${media.belowMd} { display: none; }
-  `}
-`;
-
-export const ShortDate = styled.span`
-  display: none;
-
-  ${media.belowMd} { display: inline; }
-`;
-
 export const Teaser = styled.p`
   margin: ${props => props.theme.spacing.teaserGap} 0 0;
   max-width: ${props => props.theme.sizes.teaserMaxWidth};
-  font-size: ${props => props.theme.fontSizes.teaser};
+  font-size: ${props => props.theme.fontSizes.medium};
   font-weight: ${props => props.theme.fontWeights.light};
-  line-height: ${props => props.theme.lineHeight.teaser};
+  line-height: ${props => props.theme.lineHeight.text};
   color: ${props => props.theme.colors.theme.quiet};
   ${props => clamp(TEASER_LINES[props.$variant].sm)}
   ${media.md} { ${props => clampLines(TEASER_LINES[props.$variant].md)} }

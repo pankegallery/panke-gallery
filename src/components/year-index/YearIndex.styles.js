@@ -50,7 +50,7 @@ export const Chip = styled(Link)`
   padding: 0 ${props => props.theme.spacing.yearChipPadding};
   border: 1px solid ${props => props.theme.colors.theme.rule};
   border-radius: ${props => props.theme.sizes.pillRadius};
-  font-size: ${props => props.theme.fontSizes.yearChip};
+  font-size: ${props => props.theme.fontSizes.medium};
   font-weight: ${props => props.theme.fontWeights.normal};
   font-variant-numeric: tabular-nums;
   color: ${props => props.theme.colors.theme.black};

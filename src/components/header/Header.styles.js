@@ -16,7 +16,7 @@ export const StyledHeader = styled.header`
 
 export const Logotype = styled.p`
   color: ${props => props.theme.colors.theme.black};
-  font-size: ${props => props.theme.fontSizes.large};
+  font-size: ${props => props.theme.fontSizes.logo};
   font-weight: ${props => props.theme.fontWeights.medium};
   letter-spacing: 0.08em;
   margin: 0;

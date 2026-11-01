@@ -11,7 +11,7 @@ export const RsvpSection = styled.section`
 export const RsvpFormContainer = styled.div`
   h3 {
     margin-bottom: 20px;
-    font-size: 1.2em;
+    font-size: ${props => props.theme.fontSizes.large};
   }
 `;
 

@@ -61,7 +61,7 @@ export const YearSection = styled.section`
 
 export const YearHeading = styled.h3`
   margin: ${props => props.theme.spacing.yearHeadingTop} 0 ${props => props.theme.spacing.yearHeadingBottom};
-  font-size: ${props => props.theme.fontSizes.yearTitle};
+  font-size: ${props => props.theme.fontSizes.large};
   font-weight: ${props => props.theme.fontWeights.medium};
   font-variant-numeric: tabular-nums;
 `;
@@ -78,14 +78,14 @@ export const Article = styled.article`
     margin: 1em 0 1em;
     
     small {
-      font-size: 1em; !important;
+      font-size: inherit;
       font-weight: ${props => props.theme.fontWeights.light};
       padding-left: 1em;
     }
   }
 
   p small {
-    font-size: 1em;
+    font-size: inherit;
     font-weight: ${props => props.theme.fontWeights.light};
     padding-left: 1em;
   }
@@ -95,7 +95,10 @@ export const NewsArticle = styled(Article)`
   margin: 0 0 30px;
 `;
 
+// Secondary lines in grey: dates, image captions, the artist of an audio
+// guide stop. Small, like the dates in the exhibition items.
 export const Meta = styled.p`
+  font-size: ${props => props.theme.fontSizes.small};
   color: ${props => props.theme.colors.theme.date};
 `;
 
@@ -162,18 +165,19 @@ export const HeadSection = styled.div`
 
 margin: 2em 0 0;
 
-  /* No uppercase: exhibition titles keep the artists' own casing (#65).
-     Section labels such as "About the exhibition" stay uppercase. */
+  /* The page title, the same size as the current show on /exhibitions, so
+     it keeps its size from teaser to page; Medium like every title (#65).
+     No uppercase: exhibition titles keep the artists' own casing. */
   h1 {
-    letter-spacing: 0.1em;
-    font-size: ${props => props.theme.fontSizes.medium};
-    font-weight: ${props => props.theme.fontWeights.light};
-    margin-bottom: 1em;
+    font-size: ${props => props.theme.fontSizes.xlarge};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    margin-bottom: 0.5em;
   }
 `;
 
 export const InfoSection = styled.div`
   margin: 3em 0 0;
+  line-height: ${props => props.theme.lineHeight.text};
 
   h2 {
     ${sectionLabel}
@@ -190,13 +194,14 @@ export const InfoSection = styled.div`
 
 export const FurtherSection = styled.div`
   margin: 3em 0 0;
+  line-height: ${props => props.theme.lineHeight.text};
 
   h2 {
     ${sectionLabel}
   }
 
   h4 {
-    font-size: 1em;
+    font-size: ${props => props.theme.fontSizes.base};
     font-weight: ${props => props.theme.fontWeights.medium};
     margin: 0 0 0.3em;
   }
@@ -251,13 +256,12 @@ export const IntroSection = styled.section`
 
 export const Intro = styled.p`
   margin: 0;
-  font-size: ${props => props.theme.fontSizes.introPhone};
+  font-size: ${props => props.theme.fontSizes.large};
   font-weight: ${props => props.theme.fontWeights.light};
-  line-height: ${props => props.theme.lineHeight.intro};
+  line-height: ${props => props.theme.lineHeight.text};
   text-wrap: balance;
 
-  ${media.md} { 
-    font-size: ${props => props.theme.fontSizes.intro};
+  ${media.md} {
     padding-right: ${props => props.theme.spacing.gap};
   }
 `;

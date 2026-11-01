@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
+import { theme } from '../theme/theme'
 
 const STRIPE_PUBLISHABLE_KEY = process.env.GATSBY_STRIPE_PUBLISHABLE_LIVE_KEY;
 
 const buttonStyles = {
-  fontSize: '.9em',
+  fontSize: theme.fontSizes.medium,
   textAlign: 'center',
   color: '#000',
   padding: '8px 12px',

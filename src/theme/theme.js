@@ -41,38 +41,39 @@ export const theme = {
     // Self-hosted via @fontsource/roboto-mono (see gatsby-browser.js).
     mono: "'Roboto Mono', ui-monospace, Menlo, monospace"
   },
+  // Type scale (#65): five sizes for the whole site, set per screen size.
+  // Keys of each step as in `media`: `sm` phones, `md` from
+  // `breakpoints.sm`, `xl` from `breakpoints.xl`. GlobalStyles turns them
+  // into CSS custom properties, so components use `fontSizes` below and
+  // never need a media query of their own for type.
+  // - small: dates, mono sublines, meta lines, footer, captions
+  // - medium: everything in grids and rows (titles, sublines, teasers) and
+  //   the interface (navigation, section labels, tags, chips, buttons)
+  // - base: running text only (descriptions, Info, Contact). Never in a
+  //   grid, where it would break the layout; never below 16px, or iOS
+  //   zooms into form fields.
+  // - large: upcoming titles, year headings, the homepage intro
+  // - xlarge: the current exhibition and the title of a detail page
+  // Hierarchy inside an item comes from weight and colour, not more sizes.
+  typeScale: {
+    small: { sm: '13px', md: '13px', xl: '13px' },
+    medium: { sm: '14px', md: '15px', xl: '15px' },
+    base: { sm: '16px', md: '16px', xl: '16px' },
+    large: { sm: '20px', md: '22px', xl: '24px' },
+    xlarge: { sm: '24px', md: '28px', xl: '32px' }
+  },
+  // Use these in styles: each one follows its `typeScale` step through the
+  // breakpoints. Always px underneath, so nested sizes don't compound like
+  // the old em values did.
   fontSizes: {
-    // Legacy sizes. The em values are relative to the parent, so they
-    // compound when nested; keep them for existing styles only.
-    base: '16px',
-    small: '0.8em',
-    medium: '0.9em',
-    large: '1.8em',
-
-    // Refresh sizes (#65). Always px: they come 1:1 from the agreed design
-    // table and don't compound like em. (rem would add nothing, since the
-    // root size is fixed at `base` = 16px in GlobalStyles.)
-    date: '13px',          // Dates everywhere, Light 300
-    itemTitle: '15px',     // Titles in grids and archive rows, Medium 500
-    subline: '14px',       // Subline in the Recent grid, Regular 400
-    sublineMono: '13px',   // Subline set in `fonts.mono`, Regular 400
-    teaser: '14px',        // Teaser text, Light 300
-    // Feature titles (Medium 500). `Phone` applies below `breakpoints.sm`,
-    // the plain value from there and `Wide` from `breakpoints.xl`; the
-    // exhibition page title stays 34px throughout.
-    currentTitlePhone: '24px',
-    currentTitle: '28px',
-    currentTitleWide: '32px',
-    upcomingTitlePhone: '20px',
-    upcomingTitle: '22px',
-    upcomingTitleWide: '26px',
-    yearTitle: '22px',     // Year headings in the exhibitions archive, Medium 500
-    yearChip: '14px',      // Year chips in the archive index, Regular 400
-    // The one-line intro on the homepage, Light 300: `Phone` below
-    // `breakpoints.sm`, the plain value from there (#69).
-    introPhone: '17px',
-    intro: '19px',
-    pageTitle: '34px'
+    small: 'var(--fs-small)',
+    medium: 'var(--fs-medium)',
+    base: 'var(--fs-base)',
+    large: 'var(--fs-large)',
+    xlarge: 'var(--fs-xlarge)',
+    // The logotype is part of the corporate identity, so it stays outside
+    // the scale and the same on every screen.
+    logo: '28.8px'
   },
   letterSpacing: {
     // Opens up the small light grey dates a little, so they read more easily.
@@ -145,11 +146,13 @@ export const theme = {
     shortRuleOutdent: '20px',
     shortRuleGap: '24px'
   },
+  // One line height per kind of text, matching the type scale: `base` for
+  // small and medium (set on every element in GlobalStyles), `text` for
+  // running text and teasers, `headings` for large and xlarge.
   lineHeight: {
     base: '1.4em',
-    headings: '1.3em',
-    teaser: '1.5',
-    intro: '1.45'
+    text: '1.5',
+    headings: '1.25'
   },
   container: {
     // Default content width.
