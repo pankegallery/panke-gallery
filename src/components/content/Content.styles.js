@@ -22,6 +22,16 @@ export const Section = styled.section`
   margin: ${props => props.$margin || '0'};
 `;
 
+// Puts more space between the labelled sections inside it, on top of the
+// space above each section label, so one block (event rows, a feature, the
+// Recent grid) doesn't run into the next. Used on the homepage, /exhibitions
+// and /events, so all three share the same rhythm.
+export const SectionStack = styled.div`
+  > ${Section} + ${Section} {
+    margin-top: ${props => props.theme.spacing.xxl};
+  }
+`;
+
 export const Headline = styled.div`
 
   display: block;
@@ -124,6 +134,13 @@ export const Tag = styled.p`
       margin-right: 1em;
     }
   }
+`;
+
+// The number of events after a series name in the series overview on
+// /events, e.g. "SOUND NIGHT 17".
+export const TagCount = styled.span`
+  margin-left: 0.4em;
+  font-variant-numeric: tabular-nums;
 `;
 
 export const EventSeries = styled(Tag)`

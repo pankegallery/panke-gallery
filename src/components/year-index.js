@@ -57,11 +57,11 @@ const useActiveYear = (ids) => {
 }
 
 /**
- * The year index of the exhibitions archive: a line of year chips between
- * two thin lines. Each chip links to `/exhibitions/<year>/`, which the page
- * answers by scrolling to the section whose id is the year and loading its
- * images (#68), so a year can be shared and the back button returns to the
- * year before. The line scrolls sideways on phones and sticks to the top of
+ * The year index of an archive (/exhibitions, /events): a line of year chips
+ * between two thin lines. Each chip links to `<basePath><year>/`, which the
+ * page answers by scrolling to the section whose id is the year
+ * (`useOpenYear`; on /exhibitions it also loads the year's images, #68), so
+ * a year can be shared and the back button returns to the year before. The line scrolls sideways on phones and sticks to the top of
  * the viewport from `breakpoints.sm`. The chip of the year in view gets a
  * 2px border in the accent colour (the colour picked in the colour swap).
  *
@@ -69,8 +69,10 @@ const useActiveYear = (ids) => {
  * @param {{year: number, hideFrom?: 'md'|'xl'}[]} props.years - The years
  *   to list, newest first. `hideFrom` hides a chip from that `media`
  *   breakpoint up, for a year whose shows are all in Recent there.
+ * @param {string} [props.basePath] - The page the years belong to, with a
+ *   trailing slash. Defaults to `/exhibitions/`.
  */
-const YearIndex = ({ years }) => {
+const YearIndex = ({ years, basePath = '/exhibitions/' }) => {
   const { color } = useContext(ThemeContext)
   const activeId = useActiveYear(years.map(({ year }) => String(year)))
 
@@ -82,7 +84,7 @@ const YearIndex = ({ years }) => {
           return (
             <ChipItem key={year} $hideFrom={hideFrom}>
               <Chip
-                to={`/exhibitions/${year}/`}
+                to={`${basePath}${year}/`}
                 // Tells the page the reader picked this year, so it moves
                 // the keyboard focus there too (not on a URL opened directly).
                 state={{ fromYearIndex: true }}

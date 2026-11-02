@@ -31,11 +31,12 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 
 config.autoAddCss = false;
 
-// /exhibitions/<year>/ scrolls to its year itself, also on back and forward
-// (src/pages/exhibitions.js), so Gatsby mustn't scroll to the top or to a
-// saved position there. Everywhere else Gatsby keeps its own behaviour:
-// `undefined` leaves the decision to it.
-const EXHIBITIONS_YEAR = /^\/exhibitions\/[^/]+\/?$/;
+// /exhibitions/<year>/ and /events/<year>/ scroll to their year themselves,
+// also on back and forward (`useOpenYear`), so Gatsby mustn't scroll to the
+// top or to a saved position there. /events/<series>/ is a filter and keeps
+// Gatsby's behaviour, as does everything else: `undefined` leaves the
+// decision to it.
+const ARCHIVE_YEAR = /^\/(exhibitions\/[^/]+|events\/\d{4})\/?$/;
 
 export const shouldUpdateScroll = ({ routerProps: { location } }) =>
-  EXHIBITIONS_YEAR.test(location.pathname) ? false : undefined;
+  ARCHIVE_YEAR.test(location.pathname) ? false : undefined;

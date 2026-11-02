@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { Tag as StyledTag } from './content/Content.styles'
+import { Tag as StyledTag, TagCount } from './content/Content.styles'
 
 /**
  * A rounded, outlined label for a tag or an event series.
@@ -15,11 +15,13 @@ import { Tag as StyledTag } from './content/Content.styles'
  * - `selected` – renders the filled `tag-selected` state with a "×", used on
  *   /events/ for the series that is currently filtered by.
  * - `label` – optional accessible name, e.g. to say what clicking the link does.
+ * - `count` – optional number shown after the name, e.g. the events of a
+ *   series in the overview on /events/.
  *
  * The selected state comes only from props: the caller derives it from the
  * URL, so the tag never holds a copy of it that could get out of sync.
  */
-const Tag = ({ tag, type, to, selected = false, label }) => {
+const Tag = ({ tag, type, to, selected = false, label, count }) => {
   const className = [
     'tag',
     type === 'eventSeries' && 'eventSeries',
@@ -37,6 +39,7 @@ const Tag = ({ tag, type, to, selected = false, label }) => {
       aria-label={label}
     >
       {tag.name}
+      {count != null && <TagCount>{count}</TagCount>}
     </StyledTag>
   )
 }

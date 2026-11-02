@@ -1,19 +1,11 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import Moment from 'moment'
 import Tag from './tag'
-import { DASH, formatDateRange } from '../utils/formatDateRange'
+import { formatDateRange, formatEventTime } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { ItemDate, LongDate, ShortDate, Title } from './content/Item.styles'
 import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.styles'
-
-/** "19:00–21:00", or "19:00 – open end". */
-const eventTime = ({ date, endTime, openEnd }) => {
-  const start = Moment(date).format('HH:mm')
-  if (openEnd) return `${start}${DASH}open end`
-  return endTime ? `${start}–${Moment(endTime).format('HH:mm')}` : start
-}
 
 /**
  * One upcoming event on the homepage, as a row of the page `Grid`
@@ -28,19 +20,28 @@ const eventTime = ({ date, endTime, openEnd }) => {
  * content/Item.styles.js); the series tag stays a link of its own, to the
  * series on /events/.
  *
+ * Used on the homepage and on /events/, which can be filtered by series.
+ * In a list filtered by the event's own series the tag is left out: the
+ * series overview and the list heading already name it.
+ *
  * @param {object} props
  * @param {object} props.event - A Contentful event node with `slug`, `title`,
  *   `date`, `endTime`, `openEnd`, `eventSeries { name slug }` and
  *   `subtitleShortDescription.childMarkdownRemark.html`.
+ * @param {string} [props.activeSeries] - Slug of the series /events/ is
+ *   filtered by, or empty.
+ * @param {number} [props.headingLevel] - Level of the title heading: 3, or
+ *   4 under a year heading in the archive on /events/.
  */
-const EventPreview = ({ event }) => {
-  const time = eventTime(event)
+const EventPreview = ({ event, activeSeries = '', headingLevel = 3 }) => {
+  const time = formatEventTime(event)
   const sublineHtml = event.subtitleShortDescription?.childMarkdownRemark?.html
   const series = event.eventSeries
+  const showSeries = Boolean(series) && series.slug !== activeSeries
 
   return (
     <EventRow>
-      <Title>
+      <Title as={`h${headingLevel}`}>
         <Link to={`/event/${event.slug}`}>{keepSeparatorsAttached(event.title)}</Link>
       </Title>
 
@@ -51,7 +52,7 @@ const EventPreview = ({ event }) => {
         />
       )}
 
-      {series && (
+      {showSeries && (
         <SeriesTag>
           <Tag
             tag={series}

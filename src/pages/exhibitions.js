@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
@@ -6,12 +6,13 @@ import Layout from '../components/layout'
 import ExhibitionItem from '../components/exhibition-item'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
-import { Section, Headline, YearSection, YearHeading } from '../components/content/Content.styles'
+import { Section, SectionStack, Headline, YearSection, YearHeading } from '../components/content/Content.styles'
 import { theme } from '../theme/theme'
 import { RECENT_COUNT, isCurrent, isUpcoming, isPast } from '../utils/exhibition-archive.mjs'
 import { groupByOpeningYear } from '../utils/group-by-opening-year.mjs'
 import { useRouteParam } from '../utils/use-route-param'
 import { useYearImages } from '../utils/use-year-images'
+import { useOpenYear } from '../utils/use-open-year'
 
 /**
  * Where the past show at `index` (newest first) is a Recent card:
@@ -39,38 +40,6 @@ const recentFrom = (index) => {
 const yearHideFrom = (entries) => {
   if (entries.some(({ hideFrom }) => !hideFrom)) return undefined
   return entries.some(({ hideFrom }) => hideFrom === 'xl') ? 'xl' : 'md'
-}
-
-/**
- * Moves to the archive year in the URL (/exhibitions/<year>/) and loads its
- * images: when the page is opened at that URL, when a chip in the year index
- * is picked, and on back and forward (gatsby-browser.js leaves the scrolling
- * of these URLs to this hook). A year hidden at this width has all its shows
- * in Recent, so the page moves there instead. After a pick in the year index
- * the keyboard focus moves to the year heading too, as it would with an
- * in-page link.
- *
- * @param {string} year - The year in the URL, or `''`.
- * @param {Object} location - The page's `location` prop.
- * @param {(year: string) => void} loadYear
- */
-const useOpenYear = (year, location, loadYear) => {
-  const fromYearIndex = Boolean(location.state?.fromYearIndex)
-
-  useEffect(() => {
-    const section = year && document.getElementById(year)
-    if (!section) return
-    loadYear(year)
-
-    if (section.offsetParent === null) {
-      document.getElementById('recent')?.scrollIntoView()
-      return
-    }
-    section.scrollIntoView()
-    if (fromYearIndex) section.querySelector('h3')?.focus({ preventScroll: true })
-    // `location.key` changes on every navigation, so picking the year that
-    // is already in the URL scrolls back to it.
-  }, [year, location.key, fromYearIndex, loadYear])
 }
 
 /**
@@ -124,7 +93,7 @@ const PankeExhibitions = ({ data, params, location }) => {
     return image ? { ...exhibition, featuredImage: { gatsbyImageData: image } } : exhibition
   }
 
-  useOpenYear(useRouteParam(params), location, loadYear)
+  useOpenYear(useRouteParam(params), location, loadYear, 'recent')
 
   return (
     <Layout wide>
@@ -138,79 +107,81 @@ const PankeExhibitions = ({ data, params, location }) => {
         ]}
       />
 
-      {current.length > 0 && (
-        <Section>
-          <Headline>
-            <h2>Current</h2>
-          </Headline>
-          <Grid>
-            {current.map((exhibition) => (
-              <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature" />
-            ))}
-          </Grid>
-        </Section>
-      )}
+      <SectionStack>
+        {current.length > 0 && (
+          <Section>
+            <Headline>
+              <h2>Current</h2>
+            </Headline>
+            <Grid>
+              {current.map((exhibition) => (
+                <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature" />
+              ))}
+            </Grid>
+          </Section>
+        )}
 
-      {upcoming.length > 0 && (
-        <Section>
-          <Headline>
-            <h2>Upcoming</h2>
-          </Headline>
-          <Grid>
-            {upcoming.map((exhibition) => (
-              <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature-small" />
-            ))}
-          </Grid>
-        </Section>
-      )}
+        {upcoming.length > 0 && (
+          <Section>
+            <Headline>
+              <h2>Upcoming</h2>
+            </Headline>
+            <Grid>
+              {upcoming.map((exhibition) => (
+                <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant="feature-small" />
+              ))}
+            </Grid>
+          </Section>
+        )}
 
-      {recent.length > 0 && (
-        <Section id="recent">
-          <Headline>
-            <h2>Recent</h2>
-          </Headline>
-          <Grid $rowGap={theme.spacing.xxl}>
-            {recent.map((exhibition, index) => {
-              const from = recentFrom(index)
-              return (
-                <ExhibitionItem
-                  key={exhibition.slug}
-                  exhibition={exhibition}
-                  variant="card"
-                  hideBelow={from === 'always' ? undefined : from}
-                />
-              )
-            })}
-          </Grid>
-        </Section>
-      )}
-
-      {archive.length > 0 && (
-        <Section>
-          <Headline>
-            <h2>Archive</h2>
-          </Headline>
-          <YearIndex years={archive.map(({ year, hideFrom }) => ({ year, hideFrom }))} />
-
-          {archive.map(({ year, entries, hideFrom }) => (
-            <YearSection key={year} id={String(year)} $hideFrom={hideFrom} aria-labelledby={`year-${year}`}>
-              {/* Focusable by script only, for useOpenYear. */}
-              <YearHeading id={`year-${year}`} tabIndex={-1}>{year}</YearHeading>
-              <Grid>
-                {entries.map(({ exhibition, hideFrom }) => (
+        {recent.length > 0 && (
+          <Section id="recent">
+            <Headline>
+              <h2>Recent</h2>
+            </Headline>
+            <Grid $rowGap={theme.spacing.xxl}>
+              {recent.map((exhibition, index) => {
+                const from = recentFrom(index)
+                return (
                   <ExhibitionItem
                     key={exhibition.slug}
-                    exhibition={withYearImage(exhibition, year)}
-                    variant="row"
-                    headingLevel={4}
-                    hideFrom={hideFrom}
+                    exhibition={exhibition}
+                    variant="card"
+                    hideBelow={from === 'always' ? undefined : from}
                   />
-                ))}
-              </Grid>
-            </YearSection>
-          ))}
-        </Section>
-      )}
+                )
+              })}
+            </Grid>
+          </Section>
+        )}
+
+        {archive.length > 0 && (
+          <Section>
+            <Headline>
+              <h2>Archive</h2>
+            </Headline>
+            <YearIndex years={archive.map(({ year, hideFrom }) => ({ year, hideFrom }))} />
+
+            {archive.map(({ year, entries, hideFrom }) => (
+              <YearSection key={year} id={String(year)} $hideFrom={hideFrom} aria-labelledby={`year-${year}`}>
+                {/* Focusable by script only, for useOpenYear. */}
+                <YearHeading id={`year-${year}`} tabIndex={-1}>{year}</YearHeading>
+                <Grid>
+                  {entries.map(({ exhibition, hideFrom }) => (
+                    <ExhibitionItem
+                      key={exhibition.slug}
+                      exhibition={withYearImage(exhibition, year)}
+                      variant="row"
+                      headingLevel={4}
+                      hideFrom={hideFrom}
+                    />
+                  ))}
+                </Grid>
+              </YearSection>
+            ))}
+          </Section>
+        )}
+      </SectionStack>
     </Layout>
   )
 }
