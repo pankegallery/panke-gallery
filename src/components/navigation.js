@@ -9,15 +9,16 @@ const Navigation = () => (
         {/* <li className="live"><Link to="/streaming">Live</Link></li> */}
         <li><Link to="/exhibitions">Exhibitions</Link></li>
         <li><Link to="/events">Events</Link></li>
+        <li><Link to="/studio">Studio</Link></li>
         <li><Link to="/info">Info</Link></li>
         <li><Link to="/contact">Contact</Link></li>
       </NavList>
     </NavMain>
 
+    {/* Side projects of the gallery, apart from its own programme. */}
     <NavSatellite id="nav-satellite">
       <NavList>
         <li><Link to="/rosa">/rosa</Link></li>
-        <li><Link to="/studio">Studio</Link></li>
         <li><a href="http://router.gallery" target="_blank" rel="noopener noreferrer">Router</a></li>
       </NavList>
     </NavSatellite>
