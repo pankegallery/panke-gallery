@@ -93,7 +93,11 @@ module.exports = {
       options: {
         siteId: '2',
         matomoUrl: 'https://matomo.crosssenses.de',
-        siteUrl: 'https://www.panke.gallery'
+        siteUrl: 'https://www.panke.gallery',
+        // No cookies, so Matomo needs no consent banner (§ 25 TDDDG, #60).
+        // Visits are still counted, only returning visitors aren't
+        // recognised across days.
+        disableCookies: true
       }
     },
     'gatsby-plugin-netlify'
