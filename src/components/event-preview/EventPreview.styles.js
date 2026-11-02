@@ -19,6 +19,8 @@ export const SeriesTag = styled.div`
   position: relative;
   z-index: 1;
   justify-self: start;
+  /* A long series name ends in "…" (see Tag) instead of widening the row. */
+  max-width: 100%;
 
   > * { margin-top: 0; }
 `;
@@ -34,6 +36,9 @@ export const EventRow = styled.article`
   position: relative;
   grid-column: 1 / -1;
   display: grid;
+  /* One column on phones that may shrink below its content, so a long
+     series tag can't widen the page. */
+  grid-template-columns: minmax(0, 1fr);
   row-gap: ${props => props.theme.spacing.xxs};
   align-content: start;
   overflow-wrap: anywhere;

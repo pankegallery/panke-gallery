@@ -91,7 +91,7 @@ export const Subline = styled.div`
     `
     : css`
       font-family: ${theme.fonts.mono};
-      font-size: ${theme.fontSizes.small};
+      font-size: calc(${theme.fontSizes.small} + 1px);
       font-weight: ${theme.fontWeights.normal};
       color: ${theme.colors.theme.black};
     `}

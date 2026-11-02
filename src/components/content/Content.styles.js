@@ -22,6 +22,16 @@ export const Section = styled.section`
   margin: ${props => props.$margin || '0'};
 `;
 
+// Puts more space between the labelled sections inside it, on top of the
+// space above each section label, so one block (event rows, a feature, the
+// Recent grid) doesn't run into the next. Used on the homepage, /exhibitions
+// and /events, so all three share the same rhythm.
+export const SectionStack = styled.div`
+  > ${Section} + ${Section} {
+    margin-top: ${props => props.theme.spacing.xxl};
+  }
+`;
+
 export const Headline = styled.div`
 
   display: block;
@@ -102,8 +112,15 @@ export const Meta = styled.p`
   color: ${props => props.theme.colors.theme.date};
 `;
 
+// A tag stays on one line: a name too long for its column ends in "…"
+// (TagName), and the box keeps the width of its text instead of wrapping
+// into a box as wide as the column.
 export const Tag = styled.p`
-  display: inline-block;
+  display: inline-flex;
+  align-items: baseline;
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
   padding: 4px 8px;
   border: ${props => props.theme.colors.theme.grey} 2px solid;
   border-radius: 5px;
@@ -123,6 +140,59 @@ export const Tag = styled.p`
       display: inline-block;
       margin-right: 1em;
     }
+  }
+`;
+
+// The name in a Tag, cut off with "…" when the tag reaches the width of
+// its column. `min-width: 0` lets it shrink inside the flex box.
+export const TagName = styled.span`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+// The number of events after a series name in the series overview on
+// /events, e.g. "SOUND NIGHT 17". It never shrinks, so it stays visible
+// when the name is cut off.
+export const TagCount = styled.span`
+  flex: none;
+  margin-left: 0.4em;
+  font-variant-numeric: tabular-nums;
+`;
+
+// A line-wrapping list of tags, e.g. the series overview on /events. Its
+// items can be hidden with the `hidden` attribute: Tag sets its own
+// `display`, which would otherwise win over the browser's `[hidden]` rule.
+export const TagList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    display: inline-block;
+    /* So a long tag ends in "…" at the column edge instead of widening it. */
+    max-width: 100%;
+  }
+
+  > li[hidden] {
+    display: none;
+  }
+`;
+
+// A button in the shape of a tag, e.g. "+ 10 more" at the end of a TagList.
+// In the accent colour like the tags around it, but dimmed and with a
+// dotted border, so it reads as a control rather than another series.
+// `$accent` is the colour picked in the colour swap (getPankeColor).
+export const TagButton = styled(Tag).attrs({ as: 'button', type: 'button' })`
+  font-family: inherit;
+  cursor: pointer;
+  color: color-mix(in srgb, ${props => props.$accent} 70%, ${props => props.theme.colors.theme.white});
+  border-style: dotted;
+  border-color: color-mix(in srgb, ${props => props.$accent} 60%, ${props => props.theme.colors.theme.white});
+
+  &:hover {
+    color: ${props => props.$accent};
+    border-color: ${props => props.$accent};
   }
 `;
 
