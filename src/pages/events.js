@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Helmet from 'react-helmet'
 import { graphql, Link } from 'gatsby'
 
@@ -7,10 +7,11 @@ import EventPreview from '../components/event-preview'
 import Tag from '../components/tag'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
-import { Section, SectionStack, Headline, YearSection, YearHeading } from '../components/content/Content.styles';
+import { Section, SectionStack, Headline, TagList, TagButton, YearSection, YearHeading } from '../components/content/Content.styles';
 import { groupByOpeningYear } from '../utils/group-by-opening-year.mjs'
 import { useRouteParam } from '../utils/use-route-param';
 import { useOpenYear } from '../utils/use-open-year'
+import { theme } from '../theme/theme'
 
 // Past events shown under "Recent events" before the archive (#48).
 const RECENT_COUNT = 3
@@ -36,17 +37,101 @@ const countSeries = (events) => {
   return [...bySlug.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
 }
 
+// Lines of tags the series overview shows before "+ N more": more on
+// phones, where only one or two series fit on a line.
+const SERIES_LINES = { phone: 4, wide: 2 }
+
+/**
+ * How many items of a TagList fit on `lines` lines, with the list's last
+ * item (the "+ N more" button) still at the end of the last line. The
+ * number depends on the screen width, so it is measured in the browser,
+ * again on every resize. `null` while not measured (the server-rendered
+ * HTML, which lists every tag) and when everything fits.
+ *
+ * It measures by showing every item, then hiding items from the end until
+ * the button moves up onto the last line; React then renders the same
+ * `hidden` state from the returned number.
+ *
+ * @param {React.RefObject<HTMLElement>} listRef - The TagList.
+ * @param {{phone: number, wide: number}} lines - Lines to show below and
+ *   from `breakpoints.sm`.
+ * @param {boolean} enabled - Off while the list is expanded.
+ * @returns {number|null}
+ */
+const useVisibleTags = (listRef, lines, enabled) => {
+  const [visible, setVisible] = useState(null)
+
+  useEffect(() => {
+    const list = listRef.current
+    if (!list || !enabled) return undefined
+
+    const phone = window.matchMedia(`(width < ${theme.breakpoints.sm})`)
+
+    const measure = () => {
+      const maxLines = phone.matches ? lines.phone : lines.wide
+      const items = [...list.children]
+      const more = items.pop()
+      items.forEach((item) => { item.hidden = false })
+      more.hidden = false
+
+      const lineTops = [...new Set(items.map((item) => item.offsetTop))]
+      if (lineTops.length <= maxLines) {
+        more.hidden = true
+        setVisible(null)
+        return
+      }
+
+      const lastTop = lineTops[maxLines - 1]
+      let fit = items.filter((item) => item.offsetTop <= lastTop).length
+      items.forEach((item, index) => { item.hidden = index >= fit })
+      while (fit > 0 && more.offsetTop > lastTop) {
+        fit -= 1
+        items[fit].hidden = true
+      }
+      setVisible(fit)
+    }
+
+    measure()
+    const observer = new ResizeObserver(() => requestAnimationFrame(measure))
+    observer.observe(list)
+    return () => observer.disconnect()
+  }, [listRef, lines, enabled])
+
+  return visible
+}
+
 /**
  * The series overview: one tag per series, with its number of events. A
  * tag filters the page by its series (/events/<slug>/); the active one is
  * filled and leads back to all events.
+ *
+ * It shows SERIES_LINES lines of tags (4 on phones, 2 from
+ * `breakpoints.sm`) and a "+ N more" tag that opens the
+ * rest (and then turns into "Show fewer"). An active series beyond the cut
+ * opens the list the same way, so its tag is visible and an open list
+ * always ends in "Show fewer". The open state stays when a tag is picked:
+ * the page answers to /events/<slug>/ itself and isn't remounted.
  *
  * @param {Object} props
  * @param {{slug: string, name: string, count: number}[]} props.series
  * @param {string} [props.activeSeries] - Slug of the active series, or empty.
  */
 const SeriesOverview = ({ series, activeSeries = '' }) => {
+  const listRef = useRef(null)
+  const [expanded, setExpanded] = useState(false)
+  const visible = useVisibleTags(listRef, SERIES_LINES, !expanded)
+  const activeIndex = series.findIndex(({ slug }) => slug === activeSeries)
+
+  useEffect(() => {
+    if (visible !== null && activeIndex >= visible) setExpanded(true)
+  }, [activeIndex, visible])
+
   if (series.length === 0) return null
+
+  const isHidden = (index) => !expanded && visible !== null && index >= visible
+  // Before the first measurement the button is in the list only to be
+  // measured; it is hidden until then, and when everything fits.
+  const hasMore = expanded || visible !== null
 
   return (
     <Section>
@@ -54,22 +139,35 @@ const SeriesOverview = ({ series, activeSeries = '' }) => {
         <h2>Event series at panke.gallery</h2>
       </Headline>
       <nav aria-label="Event series">
-        {series.map(({ slug, name, count }) => {
-          const isSelected = slug === activeSeries
-          return (
-            <Tag
-              key={slug}
-              tag={{ slug, name }}
-              type="eventSeries"
-              count={count}
-              selected={isSelected}
-              to={isSelected ? '/events/' : `/events/${slug}/`}
-              label={isSelected
-                ? `Show all events, not only ${name}`
-                : `Show only ${name} events (${count})`}
-            />
-          )
-        })}
+        <TagList id="event-series" ref={listRef}>
+          {series.map(({ slug, name, count }, index) => {
+            const isSelected = slug === activeSeries
+            return (
+              <li key={slug} hidden={isHidden(index)}>
+                <Tag
+                  tag={{ slug, name }}
+                  type="eventSeries"
+                  count={count}
+                  selected={isSelected}
+                  to={isSelected ? '/events/' : `/events/${slug}/`}
+                  label={isSelected
+                    ? `Show all events, not only ${name}`
+                    : `Show only ${name} events (${count})`}
+                />
+              </li>
+            )
+          })}
+          <li hidden={!hasMore}>
+            <TagButton
+              className="eventSeries"
+              aria-expanded={expanded}
+              aria-controls="event-series"
+              onClick={() => setExpanded(!expanded)}
+            >
+              {expanded ? 'Show fewer' : `+ ${series.length - (visible ?? 0)} more`}
+            </TagButton>
+          </li>
+        </TagList>
       </nav>
     </Section>
   )
