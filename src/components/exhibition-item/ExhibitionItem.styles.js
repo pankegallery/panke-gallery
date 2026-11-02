@@ -155,6 +155,13 @@ export const ImagePending = styled.div`
   background: ${props => props.theme.colors.theme.tint};
 `;
 
+// The ↗ after the title of an item that links to another site. Kept apart
+// from the last word, but never wrapped onto a line of its own.
+export const ExternalMark = styled.span`
+  margin-left: 0.3em;
+  white-space: nowrap;
+`;
+
 export const Teaser = styled.p`
   /* Together with the row gap: xs above the teaser, a little more than
      between the other lines. */

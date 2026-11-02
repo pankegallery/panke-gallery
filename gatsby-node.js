@@ -79,6 +79,12 @@ const writeExhibitionYearImages = async (graphql) => {
 }
 
 exports.createPages = async ({ graphql, actions }) => {
+  // "Edition" became "Studio" (#85); old links and bookmarks keep working.
+  // Edition detail pages stay at /edition/<slug>.
+  for (const fromPath of ['/editions', '/editions/']) {
+    actions.createRedirect({ fromPath, toPath: '/studio/', isPermanent: true })
+  }
+
   await writeExhibitionYearImages(graphql)
   return createContentPages({ graphql, actions })
 }
@@ -90,6 +96,7 @@ const createContentPages = ({ graphql, actions }) => {
     const exhibition = path.resolve('./src/templates/exhibition.js');
     const event = path.resolve('./src/templates/event.js');
     const edition = path.resolve('./src/templates/edition.js');
+    const residency = path.resolve('./src/templates/residency.js');
     const guideStop = path.resolve('./src/templates/guide-stop.js');
     const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
     const codesExhibition = path.resolve('./src/templates/codes-exhibition.js');
@@ -119,6 +126,11 @@ const createContentPages = ({ graphql, actions }) => {
                 }
               }
             }
+            allContentfulResidency {
+              nodes {
+                slug
+              }
+            }
             allAudioguideStop {
               edges {
                 node {
@@ -138,6 +150,7 @@ const createContentPages = ({ graphql, actions }) => {
         const exhibitions = result.data.allContentfulExhibition.edges;
         const events = result.data.allContentfulEvent.edges;
         const editions = result.data.allContentfulEdition.edges;
+        const residencies = result.data.allContentfulResidency.nodes;
         const guideStops = result.data.allAudioguideStop.edges;
 
         exhibitions.forEach((entry, index) => {
@@ -167,6 +180,14 @@ const createContentPages = ({ graphql, actions }) => {
             context: {
               slug: entry.node.slug
             },
+          })
+        })
+
+        residencies.forEach(({ slug }) => {
+          createPage({
+            path: `/residency/${slug}/`,
+            component: residency,
+            context: { slug },
           })
         })
 

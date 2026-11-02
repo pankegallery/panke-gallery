@@ -17,7 +17,7 @@ const Navigation = () => (
     <NavSatellite id="nav-satellite">
       <NavList>
         <li><Link to="/rosa">/rosa</Link></li>
-        <li><Link to="/editions" rel="noopener noreferrer">Edition</Link></li>
+        <li><Link to="/studio">Studio</Link></li>
         <li><a href="http://router.gallery" target="_blank" rel="noopener noreferrer">Router</a></li>
       </NavList>
     </NavSatellite>

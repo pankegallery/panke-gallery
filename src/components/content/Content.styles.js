@@ -309,6 +309,21 @@ export const FurtherSection = styled.div`
   }
 `;
 
+// Cards in the text column of a labelled section, as on /studio (#85): two
+// side by side from `breakpoints.sm`, full width on phones like the Recent
+// grid. The wide row gap keeps each card's text with its own image.
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: ${props => props.theme.spacing.xxl} ${props => props.theme.spacing.md};
+  margin-top: ${props => props.theme.spacing.lg};
+
+  ${media.md} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: ${props => props.theme.spacing.gutter};
+  }
+`;
+
 export const ImageWrapper = styled.div`
   margin-bottom: 30px;
   
