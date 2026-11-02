@@ -15,6 +15,7 @@ import { Row, Col, Grid } from '../components/layout/Layout.styles';
 import {
   NewsSection,
   Section,
+  SectionStack,
   Headline,
   NewsArticle,
   EventSeries,
@@ -163,10 +164,12 @@ const PankeIndex = ({ data }) => {
 
       {/* One section per block, so later ones (an ongoing residency, the
           livestream during events) slot in between without restructuring. */}
-      <EventsSection events={upcomingEvents.map(({ node }) => node)} />
-      <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
-      <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
-      <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
+      <SectionStack>
+        <EventsSection events={upcomingEvents.map(({ node }) => node)} />
+        <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
+        <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
+        <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
+      </SectionStack>
       <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
     </Layout>
   );

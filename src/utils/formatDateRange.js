@@ -2,9 +2,12 @@ import Moment from 'moment'
 
 export const DATE_TBC = 'Date to be confirmed'
 
-// En dash between thin spaces (U+2009), as the site has always used.
+// En dash between hair spaces (U+200A), the narrowest space: narrower than
+// the thin spaces the site used before, so ranges such as "19:00 – 21:00"
+// read as one unit. Used for every date and time range on the site. The space
+// after the dash is a breaking one, so long date ranges wrap after it.
 // Exported for components that render the parts of `dateRangeParts` themselves.
-export const DASH = ' – '
+export const DASH = ' – '
 
 /**
  * Splits an exhibition's date range into the text before and after the dash.
@@ -58,3 +61,25 @@ export const dateRangeParts = (start, end, { short = false, tbc = false } = {}) 
  */
 export const formatDateRange = (start, end, options) =>
   dateRangeParts(start, end, options).join(DASH)
+
+/**
+ * The time of an event, with the same dash as date ranges (`DASH`):
+ *
+ *   with end time → '19:00 – 21:00'
+ *   open end      → '19:00 – open end'
+ *   start only    → '19:00'
+ *
+ * Used for the event rows (event-preview.js) and the event date line
+ * (event-date-time.js), so both read the same.
+ *
+ * @param {Object} event - A Contentful event node.
+ * @param {string} event.date - Start date and time.
+ * @param {string} [event.endTime] - End date and time.
+ * @param {boolean} [event.openEnd] - The event has no fixed end.
+ * @returns {string}
+ */
+export const formatEventTime = ({ date, endTime, openEnd }) => {
+  const start = Moment(date).format('HH:mm')
+  if (openEnd) return `${start}${DASH}open end`
+  return endTime ? `${start}${DASH}${Moment(endTime).format('HH:mm')}` : start
+}
