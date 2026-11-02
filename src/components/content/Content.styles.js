@@ -74,6 +74,14 @@ export const YearHeading = styled.h3`
   font-size: ${props => props.theme.fontSizes.large};
   font-weight: ${props => props.theme.fontWeights.medium};
   font-variant-numeric: tabular-nums;
+
+  /* useOpenYear moves the focus here after a jump to the year, so screen
+     readers continue at the heading. It is focusable by script only
+     (tabIndex -1), never a Tab stop, so it needs no focus ring; without
+     this, the browser draws one, e.g. after reloading a year URL. */
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const Article = styled.article`
