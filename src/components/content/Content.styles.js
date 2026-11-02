@@ -360,6 +360,10 @@ export const ResponsiveVideo = styled.div`
 // as the exhibition text above. The short rule from the header marks the
 // row instead of a full-width line.
 export const IntroSection = styled.section`
+  /* The same gap as between the labelled sections above (SectionStack),
+     so the last block (e.g. the residency) doesn't crowd the short rule. */
+  margin-top: ${props => props.theme.spacing.xxl};
+
   &::before {
     ${shortRule}
     display: block;
