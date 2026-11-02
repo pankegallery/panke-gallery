@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Helmet from 'react-helmet'
 import { graphql, Link } from 'gatsby'
 
@@ -11,7 +11,8 @@ import { Section, SectionStack, Headline, TagList, TagButton, YearSection, YearH
 import { groupByOpeningYear } from '../utils/group-by-opening-year.mjs'
 import { useRouteParam } from '../utils/use-route-param';
 import { useOpenYear } from '../utils/use-open-year'
-import { theme } from '../theme/theme'
+import { theme, getPankeColor } from '../theme/theme'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 // Past events shown under "Recent events" before the archive (#48).
 const RECENT_COUNT = 3
@@ -118,6 +119,7 @@ const useVisibleTags = (listRef, lines, enabled) => {
  */
 const SeriesOverview = ({ series, activeSeries = '' }) => {
   const listRef = useRef(null)
+  const { color } = useContext(ThemeContext)
   const [expanded, setExpanded] = useState(false)
   const visible = useVisibleTags(listRef, SERIES_LINES, !expanded)
   const activeIndex = series.findIndex(({ slug }) => slug === activeSeries)
@@ -159,7 +161,7 @@ const SeriesOverview = ({ series, activeSeries = '' }) => {
           })}
           <li hidden={!hasMore}>
             <TagButton
-              className="eventSeries"
+              $accent={getPankeColor(color)}
               aria-expanded={expanded}
               aria-controls="event-series"
               onClick={() => setExpanded(!expanded)}

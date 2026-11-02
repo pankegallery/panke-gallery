@@ -179,10 +179,21 @@ export const TagList = styled.ul`
   }
 `;
 
-// A button in the look of a tag, e.g. "+ 10 more" at the end of a TagList.
+// A button in the shape of a tag, e.g. "+ 10 more" at the end of a TagList.
+// In the accent colour like the tags around it, but dimmed and with a
+// dotted border, so it reads as a control rather than another series.
+// `$accent` is the colour picked in the colour swap (getPankeColor).
 export const TagButton = styled(Tag).attrs({ as: 'button', type: 'button' })`
   font-family: inherit;
   cursor: pointer;
+  color: color-mix(in srgb, ${props => props.$accent} 70%, ${props => props.theme.colors.theme.white});
+  border-style: dotted;
+  border-color: color-mix(in srgb, ${props => props.$accent} 60%, ${props => props.theme.colors.theme.white});
+
+  &:hover {
+    color: ${props => props.$accent};
+    border-color: ${props => props.$accent};
+  }
 `;
 
 export const EventSeries = styled(Tag)`
