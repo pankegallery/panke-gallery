@@ -38,5 +38,14 @@
 #   also set this for the "Local development" context (or a local .env file)
 #   if testing /codes via `netlify dev` — see AUDIOGUIDE_TASKS.md §3.4.
 
+# The Live page (/streaming) is gone (#60, #74): it loaded YouTube without
+# consent and built the YouTube API key into the public JavaScript. Old
+# links go to /events/, where recordings will be featured (#75). The
+# legacy page is kept on the `streaming-page` branch.
+[[redirects]]
+  from = "/streaming"
+  to = "/events/"
+  status = 301
+
 [[plugins]]
   package = "@netlify/plugin-gatsby"
