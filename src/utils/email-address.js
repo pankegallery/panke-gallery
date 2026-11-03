@@ -12,15 +12,6 @@ import { useEffect, useRef } from 'react'
 const OBFUSCATED_EMAIL = /([\w.+-]+)\s*\[at\]\s*([\w-]+(?:\.[\w-]+)+)/g
 
 /**
- * The text shown before hydration and without JavaScript.
- *
- * @param {string} user - Part before the @, e.g. `info`.
- * @param {string} domain - Part after the @, e.g. `panke.gallery`.
- * @returns {string} e.g. `info [at] panke.gallery`
- */
-export const obfuscateEmail = (user, domain) => `${user} [at] ${domain}`
-
-/**
  * The real address, assembled at runtime so it is never in the static HTML.
  *
  * @param {string} user - Part before the @.
@@ -45,7 +36,7 @@ const revealEmails = (text) =>
  *
  * For HTML from Contentful, which React renders with dangerouslySetInnerHTML
  * and never diffs inside, so changing those nodes after hydration is safe.
- * Do not run it on markup React renders itself; use EmailLink there.
+ * Do not run it on markup React renders itself.
  * Running it twice is harmless: linked text and repaired links no longer
  * contain `[at]`.
  *

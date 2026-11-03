@@ -297,6 +297,46 @@ export const InfoSection = styled.div`
   }
 `;
 
+// Wrapper of Contentful markdown HTML (ContentHtml in content-block.js).
+// Subheadings in longer texts (### in markdown, e.g. the privacy policy)
+// start a new part, so they get more space above than a paragraph break;
+// the global reset sets their margins to 0.
+// `$accent` is the colour picked in the colour swap (getPankeColor).
+export const Markdown = styled.div`
+  /* The text starts level with the label next to it, also when it opens
+     with a list, which has a top margin by default. */
+  > :first-child {
+    margin-top: 0;
+  }
+
+  /* Bullet lists use a long dash in the accent colour instead of a dot.
+     The dash starts at the text edge, the item text is indented after it.
+     A pseudo-element rather than ::marker, whose content Safari ignores. */
+  ul {
+    list-style: none;
+    padding-left: 2em;
+  }
+
+  ul > li {
+    position: relative;
+  }
+
+  ul > li::before {
+    content: "—";
+    position: absolute;
+    left: -2em;
+    color: ${props => props.$accent};
+  }
+
+  h3:not(:first-child) {
+    margin-top: ${props => props.theme.spacing.lg};
+  }
+
+  h3 {
+    margin-bottom: ${props => props.theme.spacing.xxs};
+  }
+`;
+
 export const FurtherSection = styled.div`
   margin: 3em 0 0;
   line-height: ${props => props.theme.lineHeight.text};
