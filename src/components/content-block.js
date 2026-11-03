@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { useLinkedEmails } from '../utils/email-address'
 import { Row, Col } from './layout/Layout.styles'
-import { FurtherSection } from './content/Content.styles'
+import { FurtherSection, Markdown } from './content/Content.styles'
+import { ThemeContext } from '../contexts/ThemeContext'
+import { getPankeColor } from '../theme/theme'
 
 // A <script> pasted into Contentful would run on a direct page load (it is
 // part of the server-rendered HTML) but not after client-side navigation,
@@ -22,10 +24,11 @@ const stripScripts = (html) => html && html.replace(/<script[\s\S]*?<\/script>/g
  */
 export const ContentHtml = ({ html, className }) => {
   const ref = useLinkedEmails(html)
+  const { color } = useContext(ThemeContext)
 
   if (!html) return null
 
-  return <div ref={ref} className={className} dangerouslySetInnerHTML={{
+  return <Markdown ref={ref} className={className} $accent={getPankeColor(color)} dangerouslySetInnerHTML={{
     __html: processExternalLinks(stripScripts(html))
   }} />
 }
@@ -37,16 +40,18 @@ export const ContentHtml = ({ html, className }) => {
  * @param {object} props
  * @param {string} props.blockTitle - Section title.
  * @param {object} [props.blockContent] - Contentful long text with `childMarkdownRemark.html`.
+ * @param {string} [props.html] - Markdown HTML to use instead of
+ *   `blockContent`, e.g. one part of a block that a page splits into rows.
  * @param {React.ReactNode} [props.children] - Extra content below the text, e.g. a form.
  */
-const ContentBlock = ({ blockTitle, blockContent, children }) => (
+const ContentBlock = ({ blockTitle, blockContent, html, children }) => (
   <FurtherSection className="further">
     <Row>
       <Col $md={4} $sm={4} $xs={12}>
         <h2>{keepSeparatorsAttached(blockTitle)}</h2>
       </Col>
       <Col $md={8} $sm={8} $xs={12}>
-        <ContentHtml html={blockContent?.childMarkdownRemark?.html} />
+        <ContentHtml html={html ?? blockContent?.childMarkdownRemark?.html} />
         {children}
       </Col>
     </Row>
