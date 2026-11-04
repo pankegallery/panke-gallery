@@ -11,10 +11,6 @@ class PankeInfo extends React.Component{
 
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
-
-    console.log('Blocks:');
-    console.log(blocks);
-
     return(
       <Layout>
       <main>
