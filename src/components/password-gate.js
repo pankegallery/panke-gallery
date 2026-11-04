@@ -64,6 +64,9 @@ const PasswordGate = ({ children }) => {
               setError(false)
             }}
             placeholder="Password"
+            // The gate replaces the whole page (no header or nav), so this field is the
+            // only thing to interact with and focusing it skips nothing.
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />
           <Submit type="submit" disabled={checking}>
