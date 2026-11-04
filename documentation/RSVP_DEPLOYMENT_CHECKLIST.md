@@ -26,7 +26,7 @@ Use this checklist to verify the RSVP feature is working correctly after deploym
 ### 3. Netlify Environment Variables
 - [ ] Set `BASEROW_TOKEN` in Netlify dashboard
 - [ ] Set `BASEROW_URL` in Netlify dashboard (e.g., https://api.baserow.io)
-- [ ] Set `BASEROW_TABLE_ID` in Netlify dashboard
+- [ ] Set `BASEROW_RSVP_TABLE_ID` in Netlify dashboard
 - [ ] Verify existing Contentful variables are still set
 
 ## Post-Deployment Verification
