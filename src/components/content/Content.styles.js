@@ -26,7 +26,17 @@ export const Section = styled.section`
 // space above each section label, so one block (event rows, a feature, the
 // Recent grid) doesn't run into the next. Used on the homepage, /exhibitions
 // and /events, so all three share the same rhythm.
+// `$rule` puts the short rule above the stack, where the page changes from
+// text to a list, e.g. from the info on /rosa to its events. The section
+// label's own space above keeps it clear of the rule.
 export const SectionStack = styled.div`
+  ${props => props.$rule && css`
+    &::before {
+      ${shortRule}
+      display: block;
+    }
+  `}
+
   > ${Section} + ${Section} {
     margin-top: ${props => props.theme.spacing.xxl};
   }

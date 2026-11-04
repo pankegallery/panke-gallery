@@ -2,14 +2,15 @@ import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 
 // Text styles shared by everything listed as an item with a whole-item
-// link: exhibition items (exhibition-item.js) and the event rows on the
-// homepage (event-preview.js). Each component keeps its own layout in its
+// link: exhibition items (exhibition-item.js) and the event rows
+// (event-item.js). Each component keeps its own layout in its
 // own styles file and places these pieces in it; they set only the type,
 // so an exhibition and an event read the same.
 //
 // `$variant` on `Title` and `Subline` is the exhibition item variant
 // (`feature`, `feature-small`, `card`, `row`), `event` for an event row,
-// or `page` for the head of a detail page (Subline only).
+// `event-teaser` for an event row with a thumbnail and teaser (Subline
+// only), or `page` for the head of a detail page (Subline only).
 
 const SUBLINE_LINES = 2;
 
@@ -77,8 +78,9 @@ export const Title = styled.h3`
 // The subline is the subtitle from Contentful, rendered as HTML.
 // In lists two lines at most; long group-show lists end in "…". On a
 // detail page (`$variant="page"`, the head in HeadSection) it shows in
-// full. Recent cards and events set it in grey Roboto; next to a teaser
-// and on a detail page it is mono in black.
+// full. Recent cards and plain event rows set it in grey Roboto; next to a
+// teaser (also in an event row, `event-teaser`) and on a detail page it is
+// mono in black.
 export const Subline = styled.div`
   ${({ $variant }) => $variant !== 'page' && clamp(SUBLINE_LINES)}
 
@@ -106,6 +108,40 @@ export const Subline = styled.div`
     position: relative;
     z-index: 1;
   }
+`;
+
+// Lines a teaser shows before it is cut off with an ellipsis,
+// per breakpoint (keys as in `media`), as in the archive prototype (#67).
+// The teaser comes as a long plain-text excerpt from GraphQL, so the visible
+// length is decided here rather than by truncating in JS. `event` is an
+// event row with a thumbnail (EventItem `withImage`), sized like an archive
+// row, whose image it sits next to.
+const TEASER_LINES = {
+  feature: { sm: 6, md: 11, xl: 14 },
+  'feature-small': { sm: 3, md: 3, xl: 6 },
+  row: { sm: 3, md: 3, xl: 3 },
+  event: { sm: 3, md: 3, xl: 3 },
+};
+
+// A few lines from the item's long description, in a quieter grey than the
+// subline, for the items with an image. `$variant` is a key of TEASER_LINES.
+export const Teaser = styled.p`
+  /* Together with the row gap: xs above the teaser, a little more than
+     between the other lines. */
+  margin: ${props => props.theme.spacing.xxs} 0 0;
+  max-width: ${props => props.theme.sizes.teaserMaxWidth};
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.light};
+  line-height: ${props => props.theme.lineHeight.text};
+  color: ${props => props.theme.colors.theme.quiet};
+  ${props => clamp(TEASER_LINES[props.$variant].sm)}
+  ${media.md} { ${props => clampLines(TEASER_LINES[props.$variant].md)} }
+  ${media.xl} { ${props => clampLines(TEASER_LINES[props.$variant].xl)} }
+
+  /* Archive rows are too narrow on phones for a teaser. */
+  ${props => props.$variant === 'row' && css`
+    ${media.belowMd} { display: none; }
+  `}
 `;
 
 export const ItemDate = styled.p`
