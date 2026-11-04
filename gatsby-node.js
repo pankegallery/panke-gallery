@@ -358,6 +358,47 @@ exports.createSchemaCustomization = ({ actions }) => {
       audioguideOverviewQrCodeSvg: String
     }
 
+    # Residencies (#85, model in #86). Gatsby infers Contentful types from
+    # published entries, so without these the queries in studio.js,
+    # residency.js and index.js fail once no residency or work is published,
+    # or an optional field is empty in every entry. Names and links match
+    # what Gatsby infers from the content as it is.
+    type ContentfulResidency implements Node {
+      title: String
+      slug: String
+      startDate: Date @dateformat
+      endDate: Date @dateformat
+      dateTbc: Boolean
+      subtitleShortDescription: contentfulResidencySubtitleShortDescriptionTextNode @link(from: "subtitleShortDescription___NODE")
+      featuredImage: ContentfulAsset @link(from: "featuredImage___NODE")
+      description: contentfulResidencyDescriptionTextNode @link(from: "description___NODE")
+      furtherInformationBlocks: [ContentfulContentBlock] @link(from: "furtherInformationBlocks___NODE")
+      works: [ContentfulResidencyWork] @link(from: "works___NODE")
+    }
+
+    type ContentfulResidencyWork implements Node {
+      title: String
+      year: Int
+      type: String
+      url: String
+      image: ContentfulAsset @link(from: "image___NODE")
+      shortDescription: contentfulResidencyWorkShortDescriptionTextNode @link(from: "shortDescription___NODE")
+    }
+
+    # The Markdown fields. @mimeTypes lets gatsby-transformer-remark add
+    # childMarkdownRemark even when no node of the type exists yet.
+    type contentfulResidencySubtitleShortDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      subtitleShortDescription: String
+    }
+
+    type contentfulResidencyDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      description: String
+    }
+
+    type contentfulResidencyWorkShortDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      shortDescription: String
+    }
+
     type Query {
       audioguideUnassignedOverviewUrl: String
       audioguideUnassignedOverviewQrCodeSvg: String
