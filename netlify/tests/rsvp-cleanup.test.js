@@ -143,12 +143,12 @@ function standardRegistrations() {
 
 // ---------------------------------------------------------------------------
 
-test('groupByEvent groups rows, flags kept events and sets aside rows without an Event ID', () => {
+test('groupByEvent groups rows and sets aside rows without an Event ID', () => {
   const { groups, withoutEventId } = groupByEvent([
-    reg(1, 'a'), reg(2, 'a', { 'Keep for funder': true }), reg(3, 'b'), reg(4, ''), { id: 5 }
+    reg(1, 'a'), reg(2, 'a'), reg(3, 'b'), reg(4, ''), { id: 5 }
   ]);
-  assert.deepEqual(groups.get('a'), { rowIds: [1, 2], keepForFunder: true });
-  assert.deepEqual(groups.get('b'), { rowIds: [3], keepForFunder: false });
+  assert.deepEqual(groups.get('a'), [1, 2]);
+  assert.deepEqual(groups.get('b'), [3]);
   assert.deepEqual(withoutEventId, [4, 5]);
 });
 
@@ -158,10 +158,10 @@ test('retentionCutoff is 3 calendar months before now', () => {
 
 test('planCleanup uses the end time and the 3-month cutoff', () => {
   const groups = new Map([
-    ['endedBefore', { rowIds: [1], keepForFunder: false }],
-    ['endsAfter', { rowIds: [2], keepForFunder: false }],
-    ['missing', { rowIds: [3], keepForFunder: false }],
-    ['noDate', { rowIds: [4], keepForFunder: false }]
+    ['endedBefore', [1]],
+    ['endsAfter', [2]],
+    ['missing', [3]],
+    ['noDate', [4]]
   ]);
   const events = new Map([
     // Starts before the cutoff (2026-08-04T10:00Z) …
@@ -205,34 +205,6 @@ test('never asks Baserow for names or emails', async () => {
     assert.equal(row.Email, undefined);
   });
   assert.equal(rows.length, 6, 'all pages are read');
-});
-
-test('leaves an event alone if any of its registrations is ticked "Keep for funder"', async () => {
-  const registrations = standardRegistrations();
-  registrations[1]['Keep for funder'] = true; // one of the three oldEvent rows
-  const backend = createFakeBackend({ registrations, events: EVENTS });
-  const summary = await runCleanup({ ...clients(backend.fetch), now: NOW, log: silentLog });
-
-  assert.deepEqual(backend.state.counts, []);
-  assert.equal(backend.state.registrations.length, 6);
-  assert.deepEqual(backend.state.batchDeleteCalls, []);
-  assert.ok(summary.skipped.some(s => s.eventId === 'oldEvent' && s.reason === 'keep-for-funder'));
-  // Kept events need no Contentful lookup.
-  assert.ok(backend.state.requests.filter(r => r.url.includes('contentful')).every(r => !r.url.includes('oldEvent')));
-});
-
-test('counts and deletes a kept event once the box is unticked', async () => {
-  const registrations = standardRegistrations();
-  registrations[0]['Keep for funder'] = true;
-  const backend = createFakeBackend({ registrations, events: EVENTS });
-  await runCleanup({ ...clients(backend.fetch), now: NOW, log: silentLog });
-  assert.equal(backend.state.counts.length, 0);
-
-  backend.state.registrations.find(r => r.id === 1)['Keep for funder'] = false;
-  await runCleanup({ ...clients(backend.fetch), now: NOW, log: silentLog });
-  assert.equal(backend.state.counts.length, 1);
-  assert.equal(backend.state.counts[0].Registrations, 3);
-  assert.deepEqual(backend.state.registrations.map(r => r.id), [4, 5, 6]);
 });
 
 test('running twice changes nothing the second time', async () => {

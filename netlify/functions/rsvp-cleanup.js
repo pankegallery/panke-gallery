@@ -3,9 +3,9 @@
  * event, and keep one count row per event (#107).
  *
  * The privacy policy promises that registrations are deleted 3 months after
- * the event, unless a funder needs the attendance list. The number of
- * registrations per event is still useful for funding reports, so it is kept
- * in a separate Baserow table ("RSVP counts") without any personal data.
+ * the event. Funders only need the number of registrations per event, so
+ * that is kept in a separate Baserow table ("RSVP counts") without any
+ * personal data.
  *
  * Once a week (schedule in netlify.toml) it:
  * 1. Reads all registrations from Baserow and groups them by "Event ID", the
@@ -16,8 +16,6 @@
  * 4. Deletes that event's registrations with Baserow's batch delete.
  *
  * Rules:
- * - If any registration of an event has "Keep for funder" ticked, the whole
- *   event is left alone (not counted, not deleted) until the box is unticked.
  * - Events that are already in "RSVP counts" are only deleted, never counted
  *   again. That covers a run where the count was written but the delete
  *   failed.
@@ -58,8 +56,7 @@ const CONTENTFUL_IDS_PER_REQUEST = 100;
 // the tables exactly: Baserow silently ignores unknown field names in
 // filters (see rsvp-submit.js).
 const REGISTRATION_FIELDS = {
-  eventId: 'Event ID',
-  keepForFunder: 'Keep for funder'
+  eventId: 'Event ID'
 };
 
 const COUNT_FIELDS = {
@@ -76,10 +73,9 @@ const COUNT_FIELDS = {
 /**
  * Groups registration rows by their "Event ID".
  *
- * @param {Object[]} rows - Baserow rows with `id`, "Event ID" and
- *   "Keep for funder".
- * @returns {{ groups: Map<string, { rowIds: number[], keepForFunder: boolean }>,
- *   withoutEventId: number[] }} Rows without an Event ID can't be matched to
+ * @param {Object[]} rows - Baserow rows with `id` and "Event ID".
+ * @returns {{ groups: Map<string, number[]>, withoutEventId: number[] }}
+ *   Row IDs by Event ID. Rows without an Event ID can't be matched to
  *   an event, so they are returned separately and left alone.
  */
 function groupByEvent(rows) {
@@ -93,14 +89,9 @@ function groupByEvent(rows) {
       return;
     }
 
-    const group = groups.get(eventId) || { rowIds: [], keepForFunder: false };
-    group.rowIds.push(row.id);
-    // One ticked row is enough to keep the whole event: the funder needs the
-    // complete attendance list, and a partial count would be misleading.
-    if (row[REGISTRATION_FIELDS.keepForFunder] === true) {
-      group.keepForFunder = true;
-    }
-    groups.set(eventId, group);
+    const rowIds = groups.get(eventId) || [];
+    rowIds.push(row.id);
+    groups.set(eventId, rowIds);
   });
 
   return { groups, withoutEventId };
@@ -149,12 +140,7 @@ function planCleanup({ groups, events, countedEventIds, now }) {
   const due = [];
   const skipped = [];
 
-  groups.forEach((group, eventId) => {
-    if (group.keepForFunder) {
-      skipped.push({ eventId, reason: 'keep-for-funder' });
-      return;
-    }
-
+  groups.forEach((rowIds, eventId) => {
     const event = events.get(eventId);
     if (!event) {
       skipped.push({ eventId, reason: 'not-in-contentful' });
@@ -176,7 +162,7 @@ function planCleanup({ groups, events, countedEventIds, now }) {
       eventId,
       title: event.title || '',
       date: event.date,
-      rowIds: group.rowIds,
+      rowIds,
       alreadyCounted: countedEventIds.has(eventId)
     });
   });
@@ -201,9 +187,7 @@ async function runCleanup({ baserow, contentful, now = new Date(), dryRun = fals
   const rows = await baserow.listRegistrations();
   const { groups, withoutEventId } = groupByEvent(rows);
 
-  // Kept events are skipped anyway, so they don't need a Contentful lookup.
-  const idsToLookUp = [...groups].filter(([, g]) => !g.keepForFunder).map(([id]) => id);
-  const events = await contentful.getEvents(idsToLookUp);
+  const events = await contentful.getEvents([...groups.keys()]);
   const countedEventIds = await baserow.listCountedEventIds();
 
   const { due, skipped } = planCleanup({ groups, events, countedEventIds, now });
@@ -300,7 +284,7 @@ function createBaserowClient({ url, token, registrationsTableId, countsTableId, 
 
   return {
     listRegistrations() {
-      return listAllRows(registrationsTableId, [REGISTRATION_FIELDS.eventId, REGISTRATION_FIELDS.keepForFunder]);
+      return listAllRows(registrationsTableId, [REGISTRATION_FIELDS.eventId]);
     },
 
     async listCountedEventIds() {
