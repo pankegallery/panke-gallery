@@ -3,8 +3,9 @@
   publish = "public"
   functions = "netlify/functions"
 
+# No NODE_VERSION here: Netlify reads the Node version from .nvmrc, so it is
+# set in one place for local and Netlify builds (#93).
 [build.environment]
-  NODE_VERSION = "18"
   NPM_FLAGS = "--legacy-peer-deps"
   # Gatsby 5.12+ tries to auto-install its own native Netlify "adapter" on
   # every Netlify build, on top of the @netlify/plugin-gatsby build plugin

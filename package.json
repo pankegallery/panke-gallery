@@ -7,6 +7,9 @@
   "bugs": {
     "url": "https://github.com/crosssenses/panke-gallery/issues"
   },
+  "engines": {
+    "node": "^24"
+  },
   "dependencies": {
     "@fontsource/roboto": "^5.3.0",
     "@fontsource/roboto-mono": "^5.3.0",
