@@ -1,6 +1,6 @@
 // Netlify serverless function for RSVP submission
 // This function handles event registration with Baserow backend
-// Environment variables needed: BASEROW_TOKEN, BASEROW_URL, BASEROW_TABLE_ID
+// Environment variables needed: BASEROW_TOKEN, BASEROW_URL, BASEROW_RSVP_TABLE_ID
 
 const fetch = require('node-fetch');
 
@@ -165,7 +165,7 @@ exports.handler = async (event, context) => {
     // Check environment variables
     const baserowToken = process.env.BASEROW_TOKEN;
     const baserowUrl = process.env.BASEROW_URL;
-    const tableId = process.env.BASEROW_TABLE_ID;
+    const tableId = process.env.BASEROW_RSVP_TABLE_ID;
 
     if (!baserowToken || !baserowUrl || !tableId) {
       console.error('Missing Baserow configuration');

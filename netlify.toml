@@ -25,8 +25,8 @@
 # Environment variables that need to be set in Netlify UI:
 # - BASEROW_TOKEN: Your Baserow API token
 # - BASEROW_URL: Base URL for Baserow API (e.g., https://api.baserow.io)
-# - BASEROW_TABLE_ID: The ID of the Baserow table for RSVP registrations
-# - BASEROW_COUNTS_TABLE_ID: The ID of the Baserow "RSVP counts" table, written
+# - BASEROW_RSVP_TABLE_ID: The ID of the Baserow table for RSVP registrations
+# - BASEROW_RSVP_COUNTS_TABLE_ID: The ID of the Baserow "RSVP counts" table, written
 #   by netlify/functions/rsvp-cleanup.js (#107)
 # - BASEROW_AUDIOGUIDE_TABLE_ID: The ID of the Baserow "Audioguide" table (shares BASEROW_TOKEN/BASEROW_URL above)
 # - SITE_URL: Production origin encoded into audioguide QR codes, e.g. https://www.panke.gallery

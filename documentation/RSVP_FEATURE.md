@@ -30,13 +30,13 @@ Set the following environment variables in your Netlify dashboard:
 ```
 BASEROW_TOKEN=your_baserow_api_token
 BASEROW_URL=https://api.baserow.io
-BASEROW_TABLE_ID=your_table_id
+BASEROW_RSVP_TABLE_ID=your_table_id
 ```
 
 To get these values:
 1. **BASEROW_TOKEN**: Generate in Baserow Settings > API Tokens
 2. **BASEROW_URL**: Use `https://api.baserow.io` for Baserow cloud, or your self-hosted URL
-3. **BASEROW_TABLE_ID**: Found in the URL when viewing your table (e.g., `https://api.baserow.io/database/123/table/456` - use `456`)
+3. **BASEROW_RSVP_TABLE_ID**: Found in the URL when viewing your table (e.g., `https://api.baserow.io/database/123/table/456` - use `456`)
 
 ## Usage
 
@@ -89,7 +89,7 @@ The privacy policy promises that registrations are deleted 3 months after the ev
 - It only runs on the published production deploy. Its log (Netlify → Logs → Functions → rsvp-cleanup) lists what was counted, deleted, skipped and failed, by event ID.
 - Set `RSVP_CLEANUP_DRY_RUN=true` in Netlify to only log what it would do.
 
-It needs `BASEROW_COUNTS_TABLE_ID`, and `CONTENTFUL_SPACE_ID` and `CONTENTFUL_DELIVERY_TOKEN` scoped to Functions. The Baserow token needs **read** and **delete** on the registrations table, and **read** and **create** on RSVP counts.
+It needs `BASEROW_RSVP_COUNTS_TABLE_ID`, and `CONTENTFUL_SPACE_ID` and `CONTENTFUL_DELIVERY_TOKEN` scoped to Functions. The Baserow token needs **read** and **delete** on the registrations table, and **read** and **create** on RSVP counts.
 
 Tests with mocked Baserow and Contentful responses: `npm run test:functions`.
 

@@ -31,8 +31,8 @@
  * against a copy of the tables, never the real registrations.
  *
  * Environment variables:
- * - BASEROW_TOKEN, BASEROW_URL, BASEROW_TABLE_ID (shared with rsvp-submit.js)
- * - BASEROW_COUNTS_TABLE_ID: the "RSVP counts" table
+ * - BASEROW_TOKEN, BASEROW_URL, BASEROW_RSVP_TABLE_ID (shared with rsvp-submit.js)
+ * - BASEROW_RSVP_COUNTS_TABLE_ID: the "RSVP counts" table
  * - CONTENTFUL_SPACE_ID, CONTENTFUL_DELIVERY_TOKEN (must be available to
  *   functions, not only to builds)
  * - RSVP_CLEANUP_DRY_RUN=true (optional): log what would be counted and
@@ -265,8 +265,8 @@ async function runCleanup({ baserow, contentful, now = new Date(), dryRun = fals
  * @param {Object} config
  * @param {string} config.url - BASEROW_URL
  * @param {string} config.token - BASEROW_TOKEN
- * @param {string} config.registrationsTableId - BASEROW_TABLE_ID
- * @param {string} config.countsTableId - BASEROW_COUNTS_TABLE_ID
+ * @param {string} config.registrationsTableId - BASEROW_RSVP_TABLE_ID
+ * @param {string} config.countsTableId - BASEROW_RSVP_COUNTS_TABLE_ID
  * @param {Function} [config.fetchImpl] - Injected in tests.
  */
 function createBaserowClient({ url, token, registrationsTableId, countsTableId, fetchImpl = fetch }) {
@@ -391,11 +391,11 @@ function createContentfulClient({ spaceId, token, fetchImpl = fetch }) {
 
 exports.handler = async () => {
   const {
-    BASEROW_TOKEN, BASEROW_URL, BASEROW_TABLE_ID, BASEROW_COUNTS_TABLE_ID,
+    BASEROW_TOKEN, BASEROW_URL, BASEROW_RSVP_TABLE_ID, BASEROW_RSVP_COUNTS_TABLE_ID,
     CONTENTFUL_SPACE_ID, CONTENTFUL_DELIVERY_TOKEN, RSVP_CLEANUP_DRY_RUN
   } = process.env;
 
-  if (!BASEROW_TOKEN || !BASEROW_URL || !BASEROW_TABLE_ID || !BASEROW_COUNTS_TABLE_ID
+  if (!BASEROW_TOKEN || !BASEROW_URL || !BASEROW_RSVP_TABLE_ID || !BASEROW_RSVP_COUNTS_TABLE_ID
     || !CONTENTFUL_SPACE_ID || !CONTENTFUL_DELIVERY_TOKEN) {
     console.error('rsvp-cleanup: missing Baserow or Contentful configuration, nothing done');
     return { statusCode: 500, body: JSON.stringify({ error: 'Server configuration error' }) };
@@ -406,8 +406,8 @@ exports.handler = async () => {
       baserow: createBaserowClient({
         url: BASEROW_URL,
         token: BASEROW_TOKEN,
-        registrationsTableId: BASEROW_TABLE_ID,
-        countsTableId: BASEROW_COUNTS_TABLE_ID
+        registrationsTableId: BASEROW_RSVP_TABLE_ID,
+        countsTableId: BASEROW_RSVP_COUNTS_TABLE_ID
       }),
       contentful: createContentfulClient({
         spaceId: CONTENTFUL_SPACE_ID,

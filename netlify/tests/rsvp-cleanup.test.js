@@ -337,7 +337,7 @@ test('a dry run writes and deletes nothing', async () => {
 
 test('the handler does nothing without its configuration', async () => {
   const saved = { ...process.env };
-  ['BASEROW_TOKEN', 'BASEROW_URL', 'BASEROW_TABLE_ID', 'BASEROW_COUNTS_TABLE_ID',
+  ['BASEROW_TOKEN', 'BASEROW_URL', 'BASEROW_RSVP_TABLE_ID', 'BASEROW_RSVP_COUNTS_TABLE_ID',
     'CONTENTFUL_SPACE_ID', 'CONTENTFUL_DELIVERY_TOKEN'].forEach(name => { delete process.env[name]; });
   const originalError = console.error;
   console.error = () => {};
