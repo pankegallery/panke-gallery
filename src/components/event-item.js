@@ -16,7 +16,8 @@ import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem
  *
  * Shares its date, title and subline with the exhibition items
  * (content/Item.styles.js); `$variant="event"` gives the title the base
- * size and the subline grey Roboto, as in the Recent grid.
+ * size and the subline grey Roboto, as in the Recent grid; with a teaser the
+ * subline is mono in black, as in the exhibition items.
  * The whole row links to the event through its title link (see `Title` in
  * content/Item.styles.js); the series tag stays a link of its own, to the
  * series on /events/.
@@ -65,7 +66,8 @@ const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = fal
 
       {sublineHtml && (
         <Subline
-          $variant="event"
+          // Mono in black next to a teaser, as in the exhibition items.
+          $variant={teaser ? 'event-teaser' : 'event'}
           dangerouslySetInnerHTML={{ __html: processExternalLinks(sublineHtml) }}
         />
       )}
