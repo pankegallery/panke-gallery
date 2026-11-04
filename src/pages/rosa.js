@@ -136,12 +136,13 @@ export const pageQuery = graphql`
             html
           }
         }
-        # A thumbnail in the first column (about a third of the page), cropped
-        # like the exhibition images.
+        # The thumbnail of the upcoming event: full width on phones, the first
+        # column from breakpoints.sm. Sized and cropped like the exhibition
+        # images.
         featuredImage {
           gatsbyImageData(
             layout: CONSTRAINED,
-            width: 800,
+            width: 1050,
             aspectRatio: 1.6,
             placeholder: BLURRED
           )

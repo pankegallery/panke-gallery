@@ -40,39 +40,40 @@ export const EventImage = styled.div`
 // A row with a thumbnail (`$withImage`, the upcoming event on /rosa) is laid
 // out like an archive row on /exhibitions: the image takes the first column,
 // where the date sits otherwise, and date, title, subline and tag follow
-// next to it, date on top as in the exhibition items. On phones image and
-// text sit side by side, 2 : 3. The last grid row (`1fr`) takes up the rest
-// of the image height.
+// next to it, date on top as in the exhibition items. On phones the image
+// spans the full width, with the text below it, as the features on the
+// homepage. Next to the image the last grid row (`1fr`) takes up the rest
+// of its height.
 // Each part gets its column and row again in every media query, by its own
 // selector: the plain row's rules above use `*` and `:not()`, which would
 // otherwise win or lose depending on the order the media queries end up in.
-const textColumns = (columns) => css`
-  > ${ItemDate} { grid-column: ${columns}; grid-row: 1; }
-  > ${Title} { grid-column: ${columns}; grid-row: 2; }
-  > ${Subline} { grid-column: ${columns}; grid-row: 3; }
-  > ${SeriesTag} { grid-column: ${columns}; grid-row: 4; }
+const textColumns = (columns, firstRow) => css`
+  > ${ItemDate} { grid-column: ${columns}; grid-row: ${firstRow}; }
+  > ${Title} { grid-column: ${columns}; grid-row: ${firstRow + 1}; }
+  > ${Subline} { grid-column: ${columns}; grid-row: ${firstRow + 2}; }
+  > ${SeriesTag} { grid-column: ${columns}; grid-row: ${firstRow + 3}; }
 `;
 
 const withImage = ({ theme }) => css`
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  grid-template-rows: auto auto auto auto 1fr;
-  column-gap: ${theme.spacing.sm};
-
-  > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
-  ${textColumns('2')}
+  > ${EventImage} {
+    grid-column: 1;
+    grid-row: 1;
+    /* Together with the row gap: sm between image and date. */
+    margin-bottom: calc(${theme.spacing.sm} - ${theme.spacing.xxs});
+  }
+  ${textColumns('1', 2)}
 
   ${media.md} {
     grid-template-columns: subgrid;
-    /* "normal" on a subgrid uses the page grid's gap. */
-    column-gap: normal;
+    grid-template-rows: auto auto auto auto 1fr;
 
-    > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
-    ${textColumns('2 / -1')}
+    > ${EventImage} { grid-column: 1; grid-row: 1 / -1; margin-bottom: 0; }
+    ${textColumns('2 / -1', 1)}
   }
 
   ${media.xl} {
     > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
-    ${textColumns('2 / span 2')}
+    ${textColumns('2 / span 2', 1)}
   }
 `;
 
