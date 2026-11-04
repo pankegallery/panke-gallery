@@ -11,10 +11,6 @@ class PankeInfo extends React.Component{
 
     const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
 
-
-    console.log('Blocks:');
-    console.log(blocks);
-
     return(
       <Layout>
       <main>
@@ -45,7 +41,7 @@ export default PankeInfo;
 
 export const pageQuery = graphql`
   query PankeInfoQuery {
-    allContentfulContentBlock (filter: {page: {eq: "Info"}}, sort: { fields: [slug], order: ASC}){
+    allContentfulContentBlock (filter: {page: {eq: "Info"}}, sort: { slug: ASC }){
       edges {
         node {
           id

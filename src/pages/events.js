@@ -298,7 +298,7 @@ export default PankeEvents;
 export const pageQuery = graphql`
   query PankeEventsQuery {
     allContentfulEvent(
-      sort: { fields: [date], order: DESC }
+      sort: { date: DESC }
     ) {
       nodes {
         title

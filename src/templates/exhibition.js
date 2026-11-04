@@ -32,9 +32,11 @@ class ExhibitionTemplate extends React.Component {
         <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
       );
     }
-    else {
+    else if (exhibition.featuredImage?.gatsbyImageData) {
+      // Without image data (e.g. a broken upload) GatsbyImage would warn on
+      // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
+        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} />
       );
     }
 
