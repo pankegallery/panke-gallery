@@ -86,3 +86,6 @@ netlify/functions/gatsby
 temp/*
 temp
 public.zip
+
+# Written by `netlify dev` for edge functions; this site has none.
+deno.lock
