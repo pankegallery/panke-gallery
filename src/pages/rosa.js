@@ -95,7 +95,8 @@ const PankeRosa = ({ data }) => {
           <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
         ))}
 
-        <SectionStack>
+        {/* The short rule marks where the info ends and the events start. */}
+        <SectionStack $rule>
           <EventSection label="Upcoming at /rosa" events={upcoming} withImage />
           <EventSection label="Past events at /rosa" events={past} />
         </SectionStack>
