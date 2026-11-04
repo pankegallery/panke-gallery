@@ -5,7 +5,7 @@ import Tag from './tag'
 import { formatDateRange, formatEventTime } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
-import { ItemDate, LongDate, ShortDate, Title } from './content/Item.styles'
+import { ItemDate, LongDate, ShortDate, Teaser, Title } from './content/Item.styles'
 import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem.styles'
 
 /**
@@ -26,7 +26,8 @@ import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem
  * overview and the list heading already name it.
  *
  * With `withImage` the row shows the event's featured image as a thumbnail
- * in the first column and the date above the title (the upcoming event on
+ * in the first column, the date above the title and a teaser from the long
+ * description, as the exhibition items with an image (the upcoming event on
  * /rosa). The image only repeats the title next to it, so it gets `alt=""`.
  *
  * @param {object} props
@@ -38,7 +39,9 @@ import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem
  * @param {number} [props.headingLevel] - Level of the title heading: 3, or
  *   4 under a year heading in the archive on /events/.
  * @param {boolean} [props.withImage] - Show `event.featuredImage` as a
- *   thumbnail; the query must ask for `featuredImage { gatsbyImageData }`.
+ *   thumbnail and a teaser; the query must ask for
+ *   `featuredImage { gatsbyImageData }` and
+ *   `description { childMarkdownRemark { excerpt(pruneLength: 300) } }`.
  */
 const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = false }) => {
   const time = formatEventTime(event)
@@ -46,6 +49,7 @@ const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = fal
   const series = event.eventSeries
   const showSeries = Boolean(series) && series.slug !== activeSeries
   const image = withImage && event.featuredImage?.gatsbyImageData
+  const teaser = image && event.description?.childMarkdownRemark?.excerpt
 
   return (
     <EventRow $withImage={Boolean(image)}>
@@ -65,6 +69,8 @@ const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = fal
           dangerouslySetInnerHTML={{ __html: processExternalLinks(sublineHtml) }}
         />
       )}
+
+      {teaser && <Teaser $variant="event">{teaser}</Teaser>}
 
       {showSeries && (
         <SeriesTag>

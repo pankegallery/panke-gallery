@@ -137,6 +137,12 @@ export const pageQuery = graphql`
             html
           }
         }
+        # The teaser next to the thumbnail shows three lines at most.
+        description {
+          childMarkdownRemark {
+            excerpt(pruneLength: 300)
+          }
+        }
         # The thumbnail of the upcoming event: full width on phones, the first
         # column from breakpoints.sm. Sized and cropped like the exhibition
         # images.

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
-import { ItemDate, Subline as ItemSubline, Title } from '../content/Item.styles';
+import { ItemDate, Subline as ItemSubline, Teaser, Title } from '../content/Item.styles';
 
 // Lines of the event subline before it is cut off. Event sublines are
 // short descriptions, so they get one line more than the shared `Subline`.
@@ -39,8 +39,8 @@ export const EventImage = styled.div`
 
 // A row with a thumbnail (`$withImage`, the upcoming event on /rosa) is laid
 // out like an archive row on /exhibitions: the image takes the first column,
-// where the date sits otherwise, and date, title, subline and tag follow
-// next to it, date on top as in the exhibition items. On phones the image
+// where the date sits otherwise, and date, title, subline, teaser and tag
+// follow next to it, date on top as in the exhibition items. On phones the image
 // spans the full width, with the text below it, as the features on the
 // homepage. Next to the image the last grid row (`1fr`) takes up the rest
 // of its height.
@@ -51,7 +51,8 @@ const textColumns = (columns, firstRow) => css`
   > ${ItemDate} { grid-column: ${columns}; grid-row: ${firstRow}; }
   > ${Title} { grid-column: ${columns}; grid-row: ${firstRow + 1}; }
   > ${Subline} { grid-column: ${columns}; grid-row: ${firstRow + 2}; }
-  > ${SeriesTag} { grid-column: ${columns}; grid-row: ${firstRow + 3}; }
+  > ${Teaser} { grid-column: ${columns}; grid-row: ${firstRow + 3}; }
+  > ${SeriesTag} { grid-column: ${columns}; grid-row: ${firstRow + 4}; }
 `;
 
 const withImage = ({ theme }) => css`
@@ -65,7 +66,7 @@ const withImage = ({ theme }) => css`
 
   ${media.md} {
     grid-template-columns: subgrid;
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: repeat(5, auto) 1fr;
 
     > ${EventImage} { grid-column: 1; grid-row: 1 / -1; margin-bottom: 0; }
     ${textColumns('2 / -1', 1)}
