@@ -41,8 +41,6 @@
  * mocked responses (netlify/tests/rsvp-cleanup.test.js).
  */
 
-const fetch = require('node-fetch');
-
 const RETENTION_MONTHS = 3;
 
 // Baserow accepts at most 200 rows per batch request and 200 rows per page.
