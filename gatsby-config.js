@@ -39,23 +39,12 @@ if (!spaceId || !accessToken) {
 }
 
 module.exports = {
-  // Gatsby's own Netlify adapter writes the redirects and caching headers for
-  // the deploy. Don't add @netlify/plugin-gatsby or gatsby-plugin-netlify next
-  // to it: they do the same job, and Gatsby stops the build on the mismatch.
+  // Gatsby's own Netlify adapter writes the redirects and headers for the
+  // deploy, including the security headers gatsby-plugin-netlify used to add
+  // (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, X-XSS-Protection).
+  // Don't add @netlify/plugin-gatsby or gatsby-plugin-netlify next to it: they
+  // do the same job, and Gatsby stops the build on the mismatch.
   adapter: adapter(),
-  // Security headers for every page (gatsby-plugin-netlify's defaults, which
-  // the adapter doesn't add on its own).
-  headers: [
-    {
-      source: '/*',
-      headers: [
-        { key: 'X-Frame-Options', value: 'DENY' },
-        { key: 'X-XSS-Protection', value: '1; mode=block' },
-        { key: 'X-Content-Type-Options', value: 'nosniff' },
-        { key: 'Referrer-Policy', value: 'same-origin' }
-      ]
-    }
-  ],
   siteMetadata: {
     title: 'panke.gallery'
   },
