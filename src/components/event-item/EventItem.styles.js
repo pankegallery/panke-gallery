@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 import { ItemDate, Subline as ItemSubline, Title } from '../content/Item.styles';
 
@@ -31,6 +31,51 @@ export const SeriesTag = styled.div`
 // and series tag in the next two, the same edges as the exhibition text and
 // the intro/Visit row. From `breakpoints.xl` the text stays two columns wide.
 // The DOM puts the title first, so screen readers meet the heading first.
+// The thumbnail of a row with `$withImage`. Not a link of its own: the
+// title link covers the whole row.
+export const EventImage = styled.div`
+  display: block;
+`;
+
+// A row with a thumbnail (`$withImage`, the upcoming event on /rosa) is laid
+// out like an archive row on /exhibitions: the image takes the first column,
+// where the date sits otherwise, and date, title, subline and tag follow
+// next to it, date on top as in the exhibition items. On phones image and
+// text sit side by side, 2 : 3. The last grid row (`1fr`) takes up the rest
+// of the image height.
+// Each part gets its column and row again in every media query, by its own
+// selector: the plain row's rules above use `*` and `:not()`, which would
+// otherwise win or lose depending on the order the media queries end up in.
+const textColumns = (columns) => css`
+  > ${ItemDate} { grid-column: ${columns}; grid-row: 1; }
+  > ${Title} { grid-column: ${columns}; grid-row: 2; }
+  > ${Subline} { grid-column: ${columns}; grid-row: 3; }
+  > ${SeriesTag} { grid-column: ${columns}; grid-row: 4; }
+`;
+
+const withImage = ({ theme }) => css`
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  grid-template-rows: auto auto auto auto 1fr;
+  column-gap: ${theme.spacing.sm};
+
+  > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
+  ${textColumns('2')}
+
+  ${media.md} {
+    grid-template-columns: subgrid;
+    /* "normal" on a subgrid uses the page grid's gap. */
+    column-gap: normal;
+
+    > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
+    ${textColumns('2 / -1')}
+  }
+
+  ${media.xl} {
+    > ${EventImage} { grid-column: 1; grid-row: 1 / -1; }
+    ${textColumns('2 / span 2')}
+  }
+`;
+
 export const EventRow = styled.article`
   /* Holds the title link's click area, which covers the whole row. */
   position: relative;
@@ -61,4 +106,6 @@ export const EventRow = styled.article`
   ${media.xl} {
     > :not(${ItemDate}) { grid-column: 2 / span 2; }
   }
+
+  ${props => props.$withImage && withImage}
 `;

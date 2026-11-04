@@ -3,7 +3,7 @@ import { media } from '../../theme/theme';
 
 // Text styles shared by everything listed as an item with a whole-item
 // link: exhibition items (exhibition-item.js) and the event rows on the
-// homepage (event-preview.js). Each component keeps its own layout in its
+// homepage (event-item.js). Each component keeps its own layout in its
 // own styles file and places these pieces in it; they set only the type,
 // so an exhibition and an event read the same.
 //

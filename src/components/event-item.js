@@ -1,14 +1,15 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import Tag from './tag'
 import { formatDateRange, formatEventTime } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { ItemDate, LongDate, ShortDate, Title } from './content/Item.styles'
-import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.styles'
+import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem.styles'
 
 /**
- * One upcoming event on the homepage, as a row of the page `Grid`
+ * One event as a row of the page `Grid`
  * (Layout.styles.js), which must be its parent: the date and time in the
  * first column, then title, subline and series tag (#69). On phones the row
  * stacks, with abbreviated months.
@@ -20,9 +21,13 @@ import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.style
  * content/Item.styles.js); the series tag stays a link of its own, to the
  * series on /events/.
  *
- * Used on the homepage and on /events/, which can be filtered by series.
- * In a list filtered by the event's own series the tag is left out: the
- * series overview and the list heading already name it.
+ * Used on the homepage, /events/ and /rosa, through EventSection. In a list
+ * filtered by the event's own series the tag is left out: the series
+ * overview and the list heading already name it.
+ *
+ * With `withImage` the row shows the event's featured image as a thumbnail
+ * in the first column and the date above the title (the upcoming event on
+ * /rosa). The image only repeats the title next to it, so it gets `alt=""`.
  *
  * @param {object} props
  * @param {object} props.event - A Contentful event node with `slug`, `title`,
@@ -32,15 +37,24 @@ import { EventRow, Subline, SeriesTag } from './event-preview/EventPreview.style
  *   filtered by, or empty.
  * @param {number} [props.headingLevel] - Level of the title heading: 3, or
  *   4 under a year heading in the archive on /events/.
+ * @param {boolean} [props.withImage] - Show `event.featuredImage` as a
+ *   thumbnail; the query must ask for `featuredImage { gatsbyImageData }`.
  */
-const EventPreview = ({ event, activeSeries = '', headingLevel = 3 }) => {
+const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = false }) => {
   const time = formatEventTime(event)
   const sublineHtml = event.subtitleShortDescription?.childMarkdownRemark?.html
   const series = event.eventSeries
   const showSeries = Boolean(series) && series.slug !== activeSeries
+  const image = withImage && event.featuredImage?.gatsbyImageData
 
   return (
-    <EventRow>
+    <EventRow $withImage={Boolean(image)}>
+      {image && (
+        <EventImage>
+          <GatsbyImage image={image} alt="" />
+        </EventImage>
+      )}
+
       <Title as={`h${headingLevel}`}>
         <Link to={`/event/${event.slug}`}>{keepSeparatorsAttached(event.title)}</Link>
       </Title>
@@ -72,4 +86,4 @@ const EventPreview = ({ event, activeSeries = '', headingLevel = 3 }) => {
   )
 }
 
-export default EventPreview
+export default EventItem

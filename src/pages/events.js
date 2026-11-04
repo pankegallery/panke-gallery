@@ -3,7 +3,8 @@ import Helmet from 'react-helmet'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
-import EventPreview from '../components/event-preview'
+import EventItem from '../components/event-item'
+import EventSection from '../components/event-section'
 import Tag from '../components/tag'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
@@ -176,32 +177,6 @@ const SeriesOverview = ({ series, activeSeries = '' }) => {
 }
 
 /**
- * A labelled block of event rows on the page `Grid`. Renders nothing
- * without events.
- *
- * @param {Object} props
- * @param {string} props.label - Section label, e.g. "Recent events".
- * @param {Object[]} props.events - Event nodes.
- * @param {string} [props.activeSeries] - Slug of the active series, or empty.
- */
-const EventSection = ({ label, events, activeSeries = '' }) => {
-  if (events.length === 0) return null
-
-  return (
-    <Section>
-      <Headline>
-        <h2>{label}</h2>
-      </Headline>
-      <Grid>
-        {events.map((event) => (
-          <EventPreview key={event.slug} event={event} activeSeries={activeSeries} />
-        ))}
-      </Grid>
-    </Section>
-  )
-}
-
-/**
  * /events/ (#48): upcoming events, the three most recent past events, the
  * event series, and the archive of all older events by year. Text rows only,
  * the same as on the homepage, so the page stays light and the exhibitions
@@ -299,7 +274,7 @@ const PankeEvents = ({ data, params, location }) => {
                 <YearHeading id={`year-${year}`} tabIndex={-1}>{year}</YearHeading>
                 <Grid>
                   {items.map((event) => (
-                    <EventPreview key={event.slug} event={event} headingLevel={4} />
+                    <EventItem key={event.slug} event={event} headingLevel={4} />
                   ))}
                 </Grid>
               </YearSection>
