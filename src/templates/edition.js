@@ -34,9 +34,11 @@ class EditionTemplate extends React.Component {
         <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
       );
     }
-    else {
+    else if (edition.featuredImage?.gatsbyImageData) {
+      // Without image data (e.g. a broken upload) GatsbyImage would warn on
+      // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
+        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} />
       );
     }
 

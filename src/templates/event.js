@@ -28,9 +28,11 @@ class EventTemplate extends React.Component {
         <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
       );
     }
-    else{
-      ImageOrSlides =(
-        <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} aspectratio={16/9}  />
+    else if (event.featuredImage?.gatsbyImageData) {
+      // Without image data (e.g. a broken upload) GatsbyImage would warn on
+      // every build, so the image is left out instead.
+      ImageOrSlides = (
+        <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
       );
     }
 
