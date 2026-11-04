@@ -26,10 +26,14 @@
 # - BASEROW_TOKEN: Your Baserow API token
 # - BASEROW_URL: Base URL for Baserow API (e.g., https://api.baserow.io)
 # - BASEROW_TABLE_ID: The ID of the Baserow table for RSVP registrations
+# - BASEROW_COUNTS_TABLE_ID: The ID of the Baserow "RSVP counts" table, written
+#   by netlify/functions/rsvp-cleanup.js (#107)
 # - BASEROW_AUDIOGUIDE_TABLE_ID: The ID of the Baserow "Audioguide" table (shares BASEROW_TOKEN/BASEROW_URL above)
 # - SITE_URL: Production origin encoded into audioguide QR codes, e.g. https://www.panke.gallery
 # - CONTENTFUL_SPACE_ID: Your Contentful space ID
 # - CONTENTFUL_DELIVERY_TOKEN: Your Contentful delivery token
+#   (CONTENTFUL_SPACE_ID and CONTENTFUL_DELIVERY_TOKEN must be scoped to
+#   Functions as well as Builds, because rsvp-cleanup.js reads event dates)
 # - RESEND_API_KEY: Resend API key for confirmation emails
 # - RSVP_FROM_EMAIL: Verified sender, e.g. "panke.gallery <rsvp@panke.gallery>"
 # - CODES_PASSWORD: Password for the /codes print sheets (checked server-side
@@ -37,6 +41,13 @@
 #   prefixed, so it never gets inlined into the client bundle. Remember to
 #   also set this for the "Local development" context (or a local .env file)
 #   if testing /codes via `netlify dev` — see AUDIOGUIDE_TASKS.md §3.4.
+
+# Deletes RSVP registrations 3 months after their event and keeps a count per
+# event (#107). Weekly is often enough for a 3-month deadline. Scheduled
+# functions only run on the published production deploy. With the env var
+# RSVP_CLEANUP_DRY_RUN=true it only logs what it would count and delete.
+[functions."rsvp-cleanup"]
+  schedule = "@weekly"
 
 # The Live page (/streaming) is gone (#60, #74): it loaded YouTube without
 # consent and built the YouTube API key into the public JavaScript. Old

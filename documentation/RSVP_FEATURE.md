@@ -19,6 +19,10 @@ Create a table in Baserow with the following fields:
 - `Event ID` (Text): Contentful event ID
 - `Event Title` (Text): Event title for human readability
 - `Registered at` (Date): Registration timestamp
+- `Keep for funder` (Boolean): Tick to keep an event's registrations past the 3-month deletion, e.g. for a funder's attendance list (see "Deletion after 3 months")
+
+And a second table, **RSVP counts**, for the numbers that stay after the registrations are deleted:
+- `Event ID` (Text), `Event title` (Text), `Event date` (Date), `Registrations` (Number)
 
 ### 3. Environment Variables
 Set the following environment variables in your Netlify dashboard:
@@ -73,6 +77,21 @@ View and manage registrations in Baserow:
 - Real-time capacity checking before submission
 - Automatic timestamp on registration
 - Returns 409 status when capacity reached
+
+## Deletion after 3 months
+
+The privacy policy promises that registrations are deleted 3 months after the event. The scheduled function `netlify/functions/rsvp-cleanup.js` does that once a week (#107):
+
+- It looks up each event's date in Contentful. For every event that ended more than 3 months ago, it writes one row into **RSVP counts** and then deletes the event's registrations.
+- If any registration of an event has **Keep for funder** ticked, the whole event is left alone until the box is unticked. Untick it once the funder report is done, or the data is kept indefinitely.
+- An event already in **RSVP counts** is never counted twice: if a delete failed, the next run only deletes.
+- Registrations of events that are no longer published in Contentful are left alone and listed as `not-in-contentful` in the function log. Delete those by hand.
+- It only runs on the published production deploy. Its log (Netlify → Logs → Functions → rsvp-cleanup) lists what was counted, deleted, skipped and failed, by event ID.
+- Set `RSVP_CLEANUP_DRY_RUN=true` in Netlify to only log what it would do.
+
+It needs `BASEROW_COUNTS_TABLE_ID`, and `CONTENTFUL_SPACE_ID` and `CONTENTFUL_DELIVERY_TOKEN` scoped to Functions. The Baserow token needs **read** and **delete** on the registrations table, and **read** and **create** on RSVP counts.
+
+Tests with mocked Baserow and Contentful responses: `npm run test:functions`.
 
 ## Troubleshooting
 
