@@ -2,8 +2,6 @@
 // This function handles event registration with Baserow backend
 // Environment variables needed: BASEROW_TOKEN, BASEROW_URL, BASEROW_RSVP_TABLE_ID
 
-const fetch = require('node-fetch');
-
 // Rate limiting: simple in-memory store (resets on cold start)
 const submissions = new Map();
 const RATE_LIMIT_WINDOW = 60000; // 1 minute

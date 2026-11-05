@@ -3,24 +3,8 @@
   publish = "public"
   functions = "netlify/functions"
 
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps"
-  # Gatsby 5.12+ tries to auto-install its own native Netlify "adapter" on
-  # every Netlify build, on top of the @netlify/plugin-gatsby build plugin
-  # already configured below. It can't safely reconcile the two (especially
-  # with a custom function already in netlify/functions/) and aborts the
-  # build defensively rather than risk a broken deploy. This keeps the
-  # existing, working build-plugin setup and skips that auto-adapter attempt.
-  #
-  # NOTE: Gatsby's own panic message here is wrong — it tells you to set
-  # GATSBY_CONTINUE_BUILD_ON_MISSING_ADAPTER, but as of gatsby@5.15.0 the
-  # actual check in node_modules/gatsby/dist/utils/adapter/init.js only reads
-  # GATSBY_CONTINUE_BUILD_ON_ADAPTER_MISMATCH — the name in the message is
-  # never read anywhere. Kept both set in case a future Gatsby release
-  # reverts to the name it currently tells you to use.
-  GATSBY_CONTINUE_BUILD_ON_MISSING_ADAPTER = "true"
-  GATSBY_CONTINUE_BUILD_ON_ADAPTER_MISMATCH = "true"
+# No [build.environment] NODE_VERSION: Netlify reads the Node version from
+# .nvmrc, so it is set in one place for local and Netlify builds (#93).
 
 # Environment variables that need to be set in Netlify UI:
 # - BASEROW_TOKEN: Your Baserow API token
@@ -57,6 +41,3 @@
   from = "/streaming"
   to = "/events/"
   status = 301
-
-[[plugins]]
-  package = "@netlify/plugin-gatsby"

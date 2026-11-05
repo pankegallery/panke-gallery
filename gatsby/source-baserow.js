@@ -10,8 +10,6 @@
 // Reference Number, Artwork Name, Artist, Description, Audio URL,
 // Exhibition Slug, Transcript, Artwork Image, Language (optional).
 
-const fetch = require('node-fetch')
-
 // A Nextcloud public share link (what "Copy link" gives editors, e.g.
 // https://host/s/<token>) serves an HTML preview page, not the audio file —
 // only appending /download returns the actual bytes with the right
