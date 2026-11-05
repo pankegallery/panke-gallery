@@ -58,6 +58,13 @@ export const Pill = styled.div`
     }
   `}
 
+  /* The card of the two steps: room for the notice, but not across a
+     whole wide image. */
+  ${props => props.$card && css`
+    gap: ${props.theme.spacing.xs};
+    width: ${props.theme.sizes.consentCard};
+  `}
+
   /* White ground, so the date grey keeps its 4.5:1 contrast here. */
   ${Notice} {
     margin: 0;
@@ -91,5 +98,43 @@ export const PillButton = styled.button`
      the pill stays small on the image. */
   @media (pointer: coarse) {
     min-height: ${props => props.theme.sizes.tapTarget};
+  }
+`;
+
+// Icon, heading and close button of the card in the two steps.
+export const CardHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xs};
+  width: 100%;
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  ${uppercase}
+`;
+
+export const CloseButton = styled.button`
+  margin-left: auto;
+  padding: ${props => props.theme.spacing.xxs};
+  border: 0;
+  background: transparent;
+  color: ${props => props.theme.colors.theme.black};
+  cursor: pointer;
+
+  @media (pointer: coarse) {
+    min-width: ${props => props.theme.sizes.tapTarget};
+    min-height: ${props => props.theme.sizes.tapTarget};
+  }
+`;
+
+// The consent button and the link to open the content elsewhere.
+export const CardActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  font-size: ${props => props.theme.fontSizes.small};
+
+  a {
+    color: ${props => props.theme.colors.theme.date};
   }
 `;

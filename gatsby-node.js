@@ -313,9 +313,15 @@ exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
 
   createTypes(`
+    # Gatsby only infers a Contentful field once an entry has a value for
+    # it, so fields that can be empty on every event are declared here, or
+    # the page queries fail. liveOnTwitch (#74) is only ticked around a
+    # stream; recordingUrl (#75) is declared for the same reason.
     type ContentfulEvent implements Node {
       rsvpCapacity: Int
       rsvpDeadline: Date @dateformat
+      liveOnTwitch: Boolean
+      recordingUrl: String
     }
 
     type AudioguideStop implements Node {

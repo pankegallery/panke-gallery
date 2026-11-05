@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
@@ -11,63 +11,93 @@ import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
 import ConsentEmbed from '../components/consent-embed'
+import TwitchEmbed from '../components/twitch-embed'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { getYouTubeEmbedUrl, getYouTubeId } from '../utils/youtube'
+import { isLiveNow } from '../utils/live-stream'
+import { useNow } from '../utils/use-now'
 import Tag from '../components/tag'
 import { FurtherSection, HeadSection, InfoSection } from '../components/content/Content.styles'
 import { ItemDate, Subline } from '../components/content/Item.styles'
 import { Col, Row } from '../components/layout/Layout.styles'
 
+/**
+ * Props for the recording of an event (#75): a YouTube link in Contentful,
+ * played through youtube-nocookie.com after a click (#60).
+ *
+ * @param {object} event - The Contentful event.
+ * @returns {object|null} ConsentEmbed props, or null without a usable link
+ *   (links of another form, a playlist say, give no ID and are left out).
+ */
+const getRecording = (event) => {
+  const id = getYouTubeId(event.recordingUrl)
+  if (!id) return null
+  return {
+    src: getYouTubeEmbedUrl(id),
+    title: `Recording: ${event.title}`,
+    provider: 'YouTube (Google)',
+    buttonLabel: 'Watch recording',
+    allow: 'autoplay; encrypted-media; fullscreen; picture-in-picture',
+    // YouTube's player needs to know which site embeds it, but the origin
+    // is enough: it doesn't need the path of the event page.
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    children: (
+      <a href={`https://www.youtube.com/watch?v=${id}`} target="_blank" rel="noopener noreferrer">
+        Open on YouTube
+      </a>
+    ),
+  }
+}
+
+/**
+ * The slideshow or featured image at the top of an event page, with what
+ * can be watched: while a stream marked "Live on Twitch" runs, the live
+ * player (#74); otherwise the recording, if there is one (#75). Both load
+ * only after a click, in place of the image or slideshow.
+ *
+ * Whether the stream runs is worked out in the browser (useNow), so the
+ * built page shows the recording or the bare image, and the live pill
+ * appears once the page runs during the event.
+ *
+ * @param {object} props
+ * @param {object} props.event - The Contentful event.
+ */
+const EventMedia = ({ event }) => {
+  const now = useNow()
+  const slides = event.eventImpressionsSlideshow
+
+  let cover = null
+  if (slides != null) {
+    cover = <Slideshow slides={slides} length={slides.length} />
+  } else if (event.featuredImage?.gatsbyImageData) {
+    // Without image data (e.g. a broken upload) GatsbyImage would warn on
+    // every build, so the image is left out instead.
+    cover = <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
+  }
+  // The pill goes below a slideshow rather than on it, clear of its arrows.
+  const pillBelow = slides != null
+
+  // Once live, the player stays for this page view, so a stream that runs
+  // past its end time isn't cut off while someone watches.
+  const wasLive = useRef(false)
+  if (isLiveNow(event, now)) wasLive.current = true
+  if (wasLive.current) {
+    return <TwitchEmbed title={event.title} cover={cover} pillBelow={pillBelow} />
+  }
+
+  const recording = getRecording(event)
+  if (!recording) return cover
+  // With a cover, the player takes its place after the click, always 16:9
+  // whatever the image's shape; without, a grey 16:9 placeholder.
+  return cover
+    ? <ConsentEmbed variant="pill" cover={cover} pillBelow={pillBelow} {...recording} />
+    : <ConsentEmbed {...recording} />
+}
+
 class EventTemplate extends React.Component {
   render() {
 
     const event = get(this.props, 'data.contentfulEvent')
-
-    // ––– Recording (#75) –––
-    // A YouTube link in Contentful. It plays here only after a click, through
-    // youtube-nocookie.com (#60). Links of another form (a playlist, say)
-    // give no ID and are left out.
-    const recordingId = getYouTubeId(event.recordingUrl)
-    const recording = recordingId && {
-      src: getYouTubeEmbedUrl(recordingId),
-      title: `Recording: ${event.title}`,
-      provider: 'YouTube (Google)',
-      buttonLabel: 'Watch recording',
-      allow: 'autoplay; encrypted-media; fullscreen; picture-in-picture',
-      // YouTube's player needs to know which site embeds it, but the origin
-      // is enough: it doesn't need the path of the event page.
-      referrerPolicy: 'strict-origin-when-cross-origin',
-      children: (
-        <a href={`https://www.youtube.com/watch?v=${recordingId}`} target="_blank" rel="noopener noreferrer">
-          Open on YouTube
-        </a>
-      ),
-    }
-
-    // ––– Slideshow or featured image, with the recording –––
-
-    var ImageOrSlides;
-    if (event.eventImpressionsSlideshow != null){
-      const slideshow = <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
-      // The pill goes below the slideshow rather than on it, clear of its
-      // arrows; the player still takes the slideshow's place.
-      ImageOrSlides = recording
-        ? <ConsentEmbed variant="pill" cover={slideshow} pillBelow {...recording} />
-        : slideshow;
-    }
-    else if (event.featuredImage?.gatsbyImageData) {
-      // Without image data (e.g. a broken upload) GatsbyImage would warn on
-      // every build, so the image is left out instead.
-      const image = <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
-      // The image stays visible until the click; the player then takes its
-      // place, always 16:9 whatever the image's shape.
-      ImageOrSlides = recording
-        ? <ConsentEmbed variant="pill" cover={image} {...recording} />
-        : image;
-    }
-    else if (recording) {
-      ImageOrSlides = <ConsentEmbed {...recording} />;
-    }
 
     // ––– Documentation –––
     var DocumentationImages;
@@ -187,7 +217,7 @@ class EventTemplate extends React.Component {
 
           {/*  ---- FEATURED IMAGE ---- */}
 
-          {ImageOrSlides}
+          <EventMedia event={event} />
         </HeadSection>
 
         {/*  ---- ABOUT ---- */}
@@ -249,6 +279,7 @@ export const pageQuery = graphql`
       rsvpCapacity
       rsvpDeadline
       recordingUrl
+      liveOnTwitch
       eventSeries {
         slug
         name
