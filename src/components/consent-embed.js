@@ -18,10 +18,12 @@ import { Cover, Placeholder, Notice, Pill, PillButton } from './consent-embed/Co
  * - `box` (default): a grey placeholder in the frame's shape, with a button
  *   and the notice, e.g. the map on /contact/.
  * - `pill`: a small box with a play button and the notice. With `cover` it
- *   sits on top of that content (an event's featured image); without, it
- *   stands on its own (below a slideshow). Used for recordings (#75).
+ *   sits on top of that content (an event's featured image), or below it
+ *   with `pillBelow` (a slideshow, whose arrows it would cover). Used for
+ *   recordings (#75).
  *
- * After the click, either variant becomes the iframe in a frame of `ratio`.
+ * After the click, either variant becomes the iframe in a frame of `ratio`,
+ * in place of the cover.
  *
  * @param {object} props
  * @param {string} props.src - URL of the iframe to load after the click.
@@ -30,7 +32,8 @@ import { Cover, Placeholder, Notice, Pill, PillButton } from './consent-embed/Co
  * @param {string} props.buttonLabel - Text of the load button (e.g. "Show map").
  * @param {string} [props.ratio] - CSS aspect ratio of the frame. Defaults to 16 / 9.
  * @param {'box'|'pill'} [props.variant] - Look of the placeholder. Defaults to `box`.
- * @param {React.ReactNode} [props.cover] - `pill` only: content the pill sits on, replaced by the iframe after the click.
+ * @param {React.ReactNode} [props.cover] - `pill` only: content the pill belongs to, replaced by the iframe after the click.
+ * @param {boolean} [props.pillBelow] - `pill` only: put the pill below the cover instead of on it.
  * @param {string} [props.allow] - The iframe's permissions policy, e.g. "autoplay; fullscreen".
  * @param {string} [props.referrerPolicy] - The iframe's referrer policy. Defaults to `no-referrer-when-downgrade`, which Google Maps needs.
  * @param {React.ReactNode} [props.children] - Extra placeholder content, e.g. a link to open the content elsewhere. In the `pill` variant it follows the notice inline.
@@ -43,6 +46,7 @@ const ConsentEmbed = ({
   ratio,
   variant = 'box',
   cover,
+  pillBelow = false,
   allow,
   referrerPolicy = 'no-referrer-when-downgrade',
   children,
@@ -74,7 +78,7 @@ const ConsentEmbed = ({
 
   if (variant === 'pill') {
     const pill = (
-      <Pill $overlay={Boolean(cover)}>
+      <Pill $overlay={Boolean(cover) && !pillBelow}>
         <PillButton type="button" onClick={() => setLoaded(true)}>
           <FontAwesomeIcon icon={faPlay} aria-hidden="true" />
           {buttonLabel}

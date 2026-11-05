@@ -48,13 +48,12 @@ class EventTemplate extends React.Component {
 
     var ImageOrSlides;
     if (event.eventImpressionsSlideshow != null){
-      ImageOrSlides = (
-        <>
-          <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
-          {/* Below the slideshow rather than on it, clear of its arrows. */}
-          {recording && <ConsentEmbed variant="pill" {...recording} />}
-        </>
-      );
+      const slideshow = <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
+      // The pill goes below the slideshow rather than on it, clear of its
+      // arrows; the player still takes the slideshow's place.
+      ImageOrSlides = recording
+        ? <ConsentEmbed variant="pill" cover={slideshow} pillBelow {...recording} />
+        : slideshow;
     }
     else if (event.featuredImage?.gatsbyImageData) {
       // Without image data (e.g. a broken upload) GatsbyImage would warn on
