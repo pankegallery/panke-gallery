@@ -14,10 +14,12 @@ import { Section, Headline } from './content/Content.styles'
  * @param {string} [props.activeSeries] - Slug of a series the list is
  *   filtered by; its tag is left out of the rows (see EventItem).
  * @param {boolean} [props.withImage] - Rows with a thumbnail (see EventItem).
+ * @param {string} [props.liveSlug] - Slug of the event whose stream is
+ *   running; its row gets the "Live now" label (#74).
  * @param {React.ReactNode} [props.children] - Shown next to the label, e.g.
  *   the "See all events" link on the homepage.
  */
-const EventSection = ({ label, events, activeSeries = '', withImage = false, children }) => {
+const EventSection = ({ label, events, activeSeries = '', withImage = false, liveSlug = '', children }) => {
   if (events.length === 0) return null
 
   return (
@@ -28,7 +30,13 @@ const EventSection = ({ label, events, activeSeries = '', withImage = false, chi
       </Headline>
       <Grid>
         {events.map((event) => (
-          <EventItem key={event.slug} event={event} activeSeries={activeSeries} withImage={withImage} />
+          <EventItem
+            key={event.slug}
+            event={event}
+            activeSeries={activeSeries}
+            withImage={withImage}
+            live={Boolean(liveSlug) && event.slug === liveSlug}
+          />
         ))}
       </Grid>
     </Section>

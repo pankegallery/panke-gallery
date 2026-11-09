@@ -6,7 +6,8 @@ import { formatDateRange, formatEventTime } from '../utils/formatDateRange'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import { ItemDate, LongDate, ShortDate, Teaser, Title } from './content/Item.styles'
-import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem.styles'
+import { LiveDot } from './content/Content.styles'
+import { EventRow, EventImage, LiveLabel, Subline, SeriesTag } from './event-item/EventItem.styles'
 
 /**
  * One event as a row of the page `Grid`
@@ -43,8 +44,10 @@ import { EventRow, EventImage, Subline, SeriesTag } from './event-item/EventItem
  *   thumbnail and a teaser; the query must ask for
  *   `featuredImage { gatsbyImageData }` and
  *   `description { childMarkdownRemark { excerpt(pruneLength: 300) } }`.
+ * @param {boolean} [props.live] - The event's Twitch stream is running:
+ *   adds a "Live now" label to the date line (#74).
  */
-const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = false }) => {
+const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = false, live = false }) => {
   const time = formatEventTime(event)
   const sublineHtml = event.subtitleShortDescription?.childMarkdownRemark?.html
   const series = event.eventSeries
@@ -89,6 +92,7 @@ const EventItem = ({ event, activeSeries = '', headingLevel = 3, withImage = fal
       <ItemDate>
         <LongDate $hasShort>{formatDateRange(event.date)} · {time}</LongDate>
         <ShortDate>{formatDateRange(event.date, undefined, { short: true })} · {time}</ShortDate>
+        {live && <LiveLabel><LiveDot aria-hidden="true" />Live now</LiveLabel>}
       </ItemDate>
     </EventRow>
   )
