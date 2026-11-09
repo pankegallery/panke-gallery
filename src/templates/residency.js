@@ -65,11 +65,11 @@ const WorksSection = ({ works }) => {
 const LandingPageButton = ({ url }) =>
   url.startsWith('/') ? (
     <Button as={Link} to={url}>
-      Visit the residency
+      Visit live studio
     </Button>
   ) : (
     <Button as="a" href={url} target="_blank" rel="noopener noreferrer">
-      Visit the residency
+      Visit live studio
       {/* The arrow alone says nothing to a screen reader. */}
       <ExternalMark aria-label="opens external site" role="img">↗</ExternalMark>
     </Button>
