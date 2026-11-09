@@ -6,7 +6,7 @@ import { Link, graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import ExhibitionItem from '../components/exhibition-item';
-import EventPreview from '../components/event-preview';
+import EventSection from '../components/event-section';
 import { ContentHtml } from '../components/content-block';
 import { processExternalLinks } from '../utils/processExternalLinks';
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached';
@@ -36,31 +36,6 @@ const latestPast = (data, exhibitions) => {
   if (!latest) return [];
   const { openingHours, vernissageInfos, ...show } = latest;
   return [show];
-};
-
-/**
- * Up to three upcoming events, one per row of the page `Grid`, with a link
- * to all events.
- *
- * @param {Object} props
- * @param {Object[]} props.events - Event nodes, soonest first.
- */
-const EventsSection = ({ events }) => {
-  if (events.length === 0) return null;
-
-  return (
-    <Section>
-      <Headline>
-        <h2>Upcoming events</h2>
-        <Link to="/events/"><EventSeries className="eventSeries">See all events</EventSeries></Link>
-      </Headline>
-      <Grid>
-        {events.map((event) => (
-          <EventPreview key={event.slug} event={event} />
-        ))}
-      </Grid>
-    </Section>
-  );
 };
 
 /**
@@ -173,7 +148,9 @@ const PankeIndex = ({ data }) => {
       {/* One section per block, so later ones (an ongoing residency, the
           livestream during events) slot in between without restructuring. */}
       <SectionStack>
-        <EventsSection events={upcomingEvents.map(({ node }) => node)} />
+        <EventSection label="Upcoming events" events={upcomingEvents.map(({ node }) => node)}>
+          <Link to="/events/"><EventSeries className="eventSeries">See all events</EventSeries></Link>
+        </EventSection>
         <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
         <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
         <ExhibitionSection label="Past" exhibitions={past} variant="feature" />

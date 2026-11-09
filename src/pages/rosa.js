@@ -1,238 +1,158 @@
 import React from 'react';
-import get from 'lodash/get'
 import Helmet from 'react-helmet'
-import { graphql, Link } from 'gatsby'
-import { GatsbyImage } from 'gatsby-plugin-image'
+import { graphql } from 'gatsby'
 
-
-import EventDate from '../components/event-date-time'
 import Layout from "../components/layout"
 import ContentBlock from '../components/content-block'
-import EventListItem from '../components/event-list-item'
+import EventSection from '../components/event-section'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
-import { InfoSection, FurtherSection, Meta } from '../components/content/Content.styles';
+import { InfoSection, FurtherSection, SectionStack } from '../components/content/Content.styles';
 import { Row, Col } from '../components/layout/Layout.styles';
 
-class PankeRosa extends React.Component {
+const infoBlock = {
+  title: 'About',
+  content: '<strong>/rosa is a project space in Berlin. It is jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery and focuses on researching and exhibiting net art and net culture.</strong>'
+}
 
-  returnEventListItem = (ev) => {
-    console.log('hä?')
-    return (
-      <EventListItem
-        key={ev.slug}
-        event={ev}
-      />
-    )
-  }
+const moreBlock = {
+  title: 'More',
+  content: `/rosa offers a site for local and international dialogues between researchers, students, net art enthusiasts, and established and emerging artists. In addition to showing artworks, /rosa proposes experimental formats of art mediation, with public lectures and a workspace, as well as a growing research library for self-study. It also  functions as a venue for community events such as reading groups and workshops.`
+}
 
-  render() {
+const address = `
+  <strong>/rosa</strong><br>
+  Heidelberger Str. 28<br>
+  12059 Berlin
+`
 
-    const blocks = get(this, 'props.data.allContentfulContentBlock.edges');
+/**
+ * /rosa, the project space run with Zentrum für Netzkunst: about, address,
+ * the /rosa content blocks from Contentful, then the events of the "rosa"
+ * series in the same rows as on the homepage and /events. The upcoming
+ * event gets a thumbnail; there is rarely more than one at a time, so its
+ * row spans the page.
+ *
+ * @param {Object} props
+ * @param {Object} props.data - Page query result: the /rosa content blocks
+ *   and the rosa events, newest first.
+ */
+const PankeRosa = ({ data }) => {
+  const blocks = data.allContentfulContentBlock.nodes
+  const events = data.allContentfulEvent.nodes
 
-    const events = get(this, 'props.data.allContentfulEvent.edges');
-    console.log('Events from query', events)
+  const now = new Date()
+  // The query sorts newest first; upcoming events read better soonest first.
+  const upcoming = events.filter(({ date }) => new Date(date) >= now).reverse()
+  const past = events.filter(({ date }) => new Date(date) < now)
 
-    // Filter array of events    
-    function filterUpcoming(_ev) {
-      var currentDate = new Date();
-      var eventDate = new Date(_ev.node.date);
-      return eventDate >= currentDate;
-    }
-    const upcomingEvents = events.filter(filterUpcoming);
-    upcomingEvents.reverse();
+  return (
+    <Layout>
+      <main>
+        <Helmet
+          title="/rosa"
+          meta={[
+            {
+              name: 'description',
+              content: '/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin.'
+            }
+          ]}
+        />
 
-    function filterPast(_ev) {
-      var currentDate = new Date();
-      var eventDate = new Date(_ev.node.date);
-      return eventDate < currentDate;
-    }
-    const pastEvents = events.filter(filterPast);
-
-    var upcoming;
-    if (upcomingEvents.length > 0) {
-      upcoming = (
-
-        <FurtherSection className="upcoming">
+        <InfoSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
-              <h2>Upcoming at /rosa</h2>
+              <h2>{keepSeparatorsAttached(infoBlock.title)}</h2>
             </Col>
-
             <Col $md={8} $sm={8} $xs={12}>
-              {upcomingEvents.map(({ node }) => (
-                <>
-                  <Link to={`/event/${node.slug}`}>
-                    <GatsbyImage alt="FeaturedImage" image={node.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
-                  </Link>
-                  <h3 className="mt-3">
-                    <Link to={`/event/${node.slug}`}>{keepSeparatorsAttached(node.title)}</Link>
-                  </h3>
-                  <div dangerouslySetInnerHTML={{
-                    __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
-                  }} />
-                  <Meta style={{
-                    marginBottom: '3em'
-                  }}><EventDate event={node} /></Meta>                </>
-              ))}
+              <div dangerouslySetInnerHTML={{
+                __html: processExternalLinks(infoBlock.content)
+              }} />
+            </Col>
+          </Row>
+        </InfoSection>
+
+        <FurtherSection>
+          <Row>
+            <Col $md={4} $sm={4} $xs={12}>
+              <div dangerouslySetInnerHTML={{
+                __html: processExternalLinks(address)
+              }}
+                style={{
+                  background: '#00ef00',
+                  display: 'inline'
+                }} />
+            </Col>
+            <Col $md={8} $sm={8} $xs={12}>
+              <div dangerouslySetInnerHTML={{
+                __html: processExternalLinks(moreBlock.content)
+              }} />
             </Col>
           </Row>
         </FurtherSection>
-      );
-    }
 
-    var past;
-    if (pastEvents.length > 0) {
-      console.log('past', pastEvents)
-      past = (
-        <FurtherSection className="past">
-          <Row>
-            <Col $md={4} $sm={4} $xs={12}>
-              <h2>Past events at rosa</h2>
+        {blocks.map((node) => (
+          <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
+        ))}
 
-            </Col>
-
-            <Col $md={8} $sm={8} $xs={12}>
-              {pastEvents.map(({ node }) => (
-                <>
-                  <h3>
-                    <Link to={`/event/${node.slug}`}>{keepSeparatorsAttached(node.title)}</Link>
-                  </h3>
-                  <div dangerouslySetInnerHTML={{
-                    __html: processExternalLinks(node.subtitleShortDescription.childMarkdownRemark.html)
-                  }} />
-                  <Meta style={{
-                    marginBottom: '3em'
-                  }}><EventDate event={node} /></Meta>
-                </>
-              ))}
-            </Col>
-          </Row>
-        </FurtherSection>
-      );
-    }
-
-    let infoBlock = {
-      title: 'About',
-      content: '<strong>/rosa is a project space in Berlin. It is jointly run by <a href="https://netzkunst.berlin">Zentrum für Netzkunst (ZfN)</a> and panke.gallery and focuses on researching and exhibiting net art and net culture.</strong>'
-    }
-
-    let moreBlock = {
-      title: 'More',
-      content: `/rosa offers a site for local and international dialogues between researchers, students, net art enthusiasts, and established and emerging artists. In addition to showing artworks, /rosa proposes experimental formats of art mediation, with public lectures and a workspace, as well as a growing research library for self-study. It also  functions as a venue for community events such as reading groups and workshops.`
-    }
-
-    let address = `
-      <strong>/rosa</strong><br>
-      Heidelberger Str. 28<br>
-      12059 Berlin
-    `
-
-
-    return (
-      <Layout>
-        <main>
-          <Helmet
-            title="/rosa"
-            meta={[
-              {
-                name: 'description',
-                content: '/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin.'
-              }
-            ]}
-          />
-
-          <InfoSection>
-            <Row>
-              <Col $md={4} $sm={4} $xs={12}>
-                <h2>{keepSeparatorsAttached(infoBlock.title)}</h2>
-              </Col>
-              <Col $md={8} $sm={8} $xs={12}>
-                {<div dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(infoBlock.content)
-                }} />}
-              </Col>
-            </Row>
-          </InfoSection>
-
-          <FurtherSection>
-            <Row>
-              <Col $md={4} $sm={4} $xs={12}>
-                {<div dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(address)
-                }}
-                  style={{
-                    background: '#00ef00',
-                    display: 'inline'
-                  }} />}
-              </Col>
-              <Col $md={8} $sm={8} $xs={12}>
-                {<div dangerouslySetInnerHTML={{
-                  __html: processExternalLinks(moreBlock.content)
-                }} />}
-              </Col>
-            </Row>
-          </FurtherSection>
-
-
-          {blocks.map(({ node }) => {
-            return (
-              <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
-            )
-          })}
-
-          {upcoming}
-
-          {past}
-
-        </main>
-      </Layout>
-    );
-  }
+        {/* The short rule marks where the info ends and the events start. */}
+        <SectionStack $rule>
+          <EventSection label="Upcoming at /rosa" events={upcoming} withImage />
+          <EventSection label="Past events at /rosa" events={past} />
+        </SectionStack>
+      </main>
+    </Layout>
+  );
 }
 
 export default PankeRosa;
 
 export const pageQuery = graphql`
   query PankeRosaQuery {
-    allContentfulContentBlock (filter: {page: {eq: "/rosa"}}, sort: { fields: [slug], order: ASC}){
-      edges {
-        node {
-          id
-          title
-          page
-          slug
-          blockContent {
-            childMarkdownRemark {
-              html
-            }
+    allContentfulContentBlock(filter: { page: { eq: "/rosa" } }, sort: { slug: ASC }) {
+      nodes {
+        id
+        title
+        page
+        slug
+        blockContent {
+          childMarkdownRemark {
+            html
           }
         }
       }
     }
     allContentfulEvent(
-      sort: { fields: [date], order: DESC }
-			filter: {eventSeries: {slug: {eq: "rosa"}}}
+      sort: { date: DESC }
+      filter: {eventSeries: {slug: {eq: "rosa"}}}
     ) {
-      edges {
-        node {
-          title
-          slug
-          date
-          endTime
-          openEnd
-          subtitleShortDescription {
-            childMarkdownRemark {
-              html
-            }
+      nodes {
+        title
+        slug
+        date
+        endTime
+        openEnd
+        subtitleShortDescription {
+          childMarkdownRemark {
+            html
           }
-          featuredImage {
-            gatsbyImageData(
-              layout: CONSTRAINED,
-              width: 1050,
-              placeholder: BLURRED
-            )
+        }
+        # The teaser next to the thumbnail shows three lines at most.
+        description {
+          childMarkdownRemark {
+            excerpt(pruneLength: 300)
           }
+        }
+        # The thumbnail of the upcoming event: full width on phones, the first
+        # column from breakpoints.sm. Sized and cropped like the exhibition
+        # images.
+        featuredImage {
+          gatsbyImageData(
+            layout: CONSTRAINED,
+            width: 1050,
+            aspectRatio: 1.6,
+            placeholder: BLURRED
+          )
         }
       }
     }

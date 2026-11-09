@@ -9,9 +9,9 @@ import { groupByOpeningYear } from './group-by-opening-year.mjs'
  * (`imagesSince`) and to write the images of every year to
  * `yearImagesPath(year)`.
  *
- * An `.mjs` file, like `group-by-opening-year.mjs`, so gatsby-node.js can
- * `import()` it: Netlify builds on Node 18, which can't `require()` an ES
- * module, and only treats a file as one by its extension.
+ * An `.mjs` file, like `group-by-opening-year.mjs`, so the CommonJS
+ * gatsby-node.js can `import()` it: Node only treats a file as an ES module
+ * by its extension, since package.json has no `"type": "module"`.
  */
 
 // Compare whole days in Berlin summer time, as the page always has.

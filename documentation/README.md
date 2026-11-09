@@ -48,7 +48,7 @@ This directory contains complete documentation for the RSVP (event registration)
    ```
    BASEROW_TOKEN=your_token_here
    BASEROW_URL=https://api.baserow.io
-   BASEROW_TABLE_ID=your_table_id
+   BASEROW_RSVP_TABLE_ID=your_table_id
    ```
 2. Deploy site
 

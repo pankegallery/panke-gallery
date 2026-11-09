@@ -69,7 +69,7 @@ export const formatDateRange = (start, end, options) =>
  *   open end      → '19:00 – open end'
  *   start only    → '19:00'
  *
- * Used for the event rows (event-preview.js) and the event date line
+ * Used for the event rows (event-item.js) and the event date line
  * (event-date-time.js), so both read the same.
  *
  * @param {Object} event - A Contentful event node.

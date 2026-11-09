@@ -34,7 +34,7 @@ let exhibitionImagesSince = null
  * and `gatsby develop` serves `public/` as well.
  */
 const writeExhibitionYearImages = async (graphql) => {
-  // .mjs, imported: Node 18 (Netlify) can't require() an ES module.
+  // ES modules shared with the page code, so this CommonJS file import()s them.
   const { groupByOpeningYear } = await import('./src/utils/group-by-opening-year.mjs')
   const { imagesSince, yearImagesPath } = await import('./src/utils/exhibition-archive.mjs')
 

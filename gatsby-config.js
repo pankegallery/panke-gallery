@@ -12,6 +12,7 @@ let contentfulConfig;
 // the override manually via dotenv.parse() + Object.assign instead.
 const fs = require('fs')
 const path = require('path')
+const adapter = require('gatsby-adapter-netlify').default
 const envPath = path.resolve(__dirname, `.env.${process.env.NODE_ENV}`)
 if (fs.existsSync(envPath)) {
   Object.assign(process.env, require('dotenv').parse(fs.readFileSync(envPath)))
@@ -38,6 +39,12 @@ if (!spaceId || !accessToken) {
 }
 
 module.exports = {
+  // Gatsby's own Netlify adapter writes the redirects and headers for the
+  // deploy, including the security headers gatsby-plugin-netlify used to add
+  // (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, X-XSS-Protection).
+  // Don't add @netlify/plugin-gatsby or gatsby-plugin-netlify next to it: they
+  // do the same job, and Gatsby stops the build on the mismatch.
+  adapter: adapter(),
   siteMetadata: {
     title: 'panke.gallery'
   },
@@ -99,7 +106,6 @@ module.exports = {
         // recognised across days.
         disableCookies: true
       }
-    },
-    'gatsby-plugin-netlify'
+    }
   ]
 }

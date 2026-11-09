@@ -9,7 +9,6 @@ import {
   Item,
   ItemImage,
   ImagePending,
-  Teaser,
   ExternalMark,
 } from './exhibition-item/ExhibitionItem.styles'
 import {
@@ -19,6 +18,7 @@ import {
   NoWrap,
   LongDate,
   ShortDate,
+  Teaser,
 } from './content/Item.styles'
 
 // Variants whose image only repeats the title next to it, so it gets

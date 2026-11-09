@@ -78,11 +78,11 @@ src/styles/*.map
 
 # Local Netlify folder
 .netlify
-# @netlify/plugin-gatsby ignores start
-netlify/functions/gatsby
-# @netlify/plugin-gatsby ignores end
 
 # Temporary files
 temp/*
 temp
 public.zip
+
+# Written by `netlify dev` for edge functions; this site has none.
+deno.lock

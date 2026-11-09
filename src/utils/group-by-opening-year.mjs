@@ -1,8 +1,8 @@
 /**
  * Groups exhibitions by the year they opened, for the archive on
  * /exhibitions and the per-year image files gatsby-node.js writes for it
- * (#68). /events groups its archive the same way, by each event's `date`. An `.mjs` file without dependencies, so gatsby-node.js can
- * `import()` it on Node 18.
+ * (#68). /events groups its archive the same way, by each event's `date`. An `.mjs` file without dependencies, so the CommonJS
+ * gatsby-node.js can `import()` it.
  *
  * A show belongs to the year of its `startDate` only, so one that runs
  * across New Year appears once, under its opening year. The year is read

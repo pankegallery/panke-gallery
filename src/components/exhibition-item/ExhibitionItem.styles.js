@@ -1,21 +1,11 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
 import { breakpointDisplay } from '../layout/Layout.styles';
-import { ItemDate, Subline, Title, clamp, clampLines } from '../content/Item.styles';
+import { ItemDate, Subline, Teaser, Title } from '../content/Item.styles';
 
-// Layout of an exhibition item per variant, plus its image and teaser. The
-// title, subline and date are shared with the event rows on the homepage
-// and live in content/Item.styles.js.
-
-// Lines a teaser shows before it is cut off with an ellipsis,
-// per breakpoint (keys as in `media`), as in the archive prototype (#67).
-// The teaser comes as a long plain-text excerpt from GraphQL, so the visible
-// length is decided here rather than by truncating in JS.
-const TEASER_LINES = {
-  feature: { sm: 6, md: 11, xl: 14 },
-  'feature-small': { sm: 3, md: 3, xl: 6 },
-  row: { sm: 3, md: 3, xl: 3 },
-};
+// Layout of an exhibition item per variant, plus its image. The title,
+// subline, date and teaser are shared with the event rows and live in
+// content/Item.styles.js.
 
 // Columns of the page `Grid` (3 from `breakpoints.sm`, 4 from `xl`) that
 // image and text of a feature take. Current gets the larger image: 2 of 3,
@@ -160,23 +150,4 @@ export const ImagePending = styled.div`
 export const ExternalMark = styled.span`
   margin-left: 0.3em;
   white-space: nowrap;
-`;
-
-export const Teaser = styled.p`
-  /* Together with the row gap: xs above the teaser, a little more than
-     between the other lines. */
-  margin: ${props => props.theme.spacing.xxs} 0 0;
-  max-width: ${props => props.theme.sizes.teaserMaxWidth};
-  font-size: ${props => props.theme.fontSizes.medium};
-  font-weight: ${props => props.theme.fontWeights.light};
-  line-height: ${props => props.theme.lineHeight.text};
-  color: ${props => props.theme.colors.theme.quiet};
-  ${props => clamp(TEASER_LINES[props.$variant].sm)}
-  ${media.md} { ${props => clampLines(TEASER_LINES[props.$variant].md)} }
-  ${media.xl} { ${props => clampLines(TEASER_LINES[props.$variant].xl)} }
-
-  /* Archive rows are too narrow on phones for a teaser. */
-  ${props => props.$variant === 'row' && css`
-    ${media.belowMd} { display: none; }
-  `}
 `;

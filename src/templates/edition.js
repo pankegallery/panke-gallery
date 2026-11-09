@@ -16,7 +16,6 @@ import { Row, Col } from '../components/layout/Layout.styles'
 class EditionTemplate extends React.Component {
 
   getChechoutStatus = () => {
-    //    console.log('location:', window.location)
     let url = typeof window !== 'undefined' ? window.location.href : '';
     return (url.indexOf('checkout') > 0) ?
       url.substr(url.indexOf('=') + 1) : 'initial'
@@ -25,11 +24,7 @@ class EditionTemplate extends React.Component {
 
   render() {
 
-    //    console.log('props:', window.location)
-
-
     const edition = get(this.props, 'data.contentfulEdition')
-    //    console.log(edition);
 
     // ––– Slideshow or featured images –––
 
@@ -39,9 +34,11 @@ class EditionTemplate extends React.Component {
         <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
       );
     }
-    else {
+    else if (edition.featuredImage?.gatsbyImageData) {
+      // Without image data (e.g. a broken upload) GatsbyImage would warn on
+      // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} aspectratio={16 / 9} />
+        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} />
       );
     }
 

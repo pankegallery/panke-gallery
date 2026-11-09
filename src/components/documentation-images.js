@@ -8,7 +8,7 @@ const DocumentationImages = ({images }) => (
     {images.map(({gatsbyImageData, description}) => {
         return (
           <div className="image-wrapper 3col">
-            <GatsbyImage alt={description} image={gatsbyImageData} aspectratio={16/9}  />
+            <GatsbyImage alt={description} image={gatsbyImageData} />
             <Meta style={{ marginTop: '0.5em'}}>{description}</Meta>
           </div>
         )

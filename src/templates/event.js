@@ -10,7 +10,9 @@ import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
 import RsvpForm from '../components/rsvp-form'
+import ConsentEmbed from '../components/consent-embed'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
+import { getYouTubeEmbedUrl, getYouTubeId } from '../utils/youtube'
 import Tag from '../components/tag'
 import { FurtherSection, HeadSection, InfoSection } from '../components/content/Content.styles'
 import { ItemDate, Subline } from '../components/content/Item.styles'
@@ -20,18 +22,51 @@ class EventTemplate extends React.Component {
   render() {
 
     const event = get(this.props, 'data.contentfulEvent')
-    // ––– Slideshow or featured images –––
+
+    // ––– Recording (#75) –––
+    // A YouTube link in Contentful. It plays here only after a click, through
+    // youtube-nocookie.com (#60). Links of another form (a playlist, say)
+    // give no ID and are left out.
+    const recordingId = getYouTubeId(event.recordingUrl)
+    const recording = recordingId && {
+      src: getYouTubeEmbedUrl(recordingId),
+      title: `Recording: ${event.title}`,
+      provider: 'YouTube (Google)',
+      buttonLabel: 'Watch recording',
+      allow: 'autoplay; encrypted-media; fullscreen; picture-in-picture',
+      // YouTube's player needs to know which site embeds it, but the origin
+      // is enough: it doesn't need the path of the event page.
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      children: (
+        <a href={`https://www.youtube.com/watch?v=${recordingId}`} target="_blank" rel="noopener noreferrer">
+          Open on YouTube
+        </a>
+      ),
+    }
+
+    // ––– Slideshow or featured image, with the recording –––
 
     var ImageOrSlides;
     if (event.eventImpressionsSlideshow != null){
-      ImageOrSlides =(
-        <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
-      );
+      const slideshow = <Slideshow slides={event.eventImpressionsSlideshow} length={event.eventImpressionsSlideshow.length} />
+      // The pill goes below the slideshow rather than on it, clear of its
+      // arrows; the player still takes the slideshow's place.
+      ImageOrSlides = recording
+        ? <ConsentEmbed variant="pill" cover={slideshow} pillBelow {...recording} />
+        : slideshow;
     }
-    else{
-      ImageOrSlides =(
-        <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} aspectratio={16/9}  />
-      );
+    else if (event.featuredImage?.gatsbyImageData) {
+      // Without image data (e.g. a broken upload) GatsbyImage would warn on
+      // every build, so the image is left out instead.
+      const image = <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
+      // The image stays visible until the click; the player then takes its
+      // place, always 16:9 whatever the image's shape.
+      ImageOrSlides = recording
+        ? <ConsentEmbed variant="pill" cover={image} {...recording} />
+        : image;
+    }
+    else if (recording) {
+      ImageOrSlides = <ConsentEmbed {...recording} />;
     }
 
     // ––– Documentation –––
@@ -213,6 +248,7 @@ export const pageQuery = graphql`
       rsvpEnabled
       rsvpCapacity
       rsvpDeadline
+      recordingUrl
       eventSeries {
         slug
         name
