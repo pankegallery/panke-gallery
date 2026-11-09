@@ -180,10 +180,12 @@ export const pageQuery = graphql`
           html
         }
       }
+      # As wide as the content column, theme.container.maxWidth (1080px):
+      # CONSTRAINED never shows an image wider than this width.
       featuredImage {
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050,
+          width: 1080,
           aspectRatio: 1.7778,
           placeholder: BLURRED,
           quality: 100

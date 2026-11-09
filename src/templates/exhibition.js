@@ -209,10 +209,13 @@ export const pageQuery = graphql`
         }
 
       }
+      # The images span the content column, so they are as wide as
+      # theme.container.maxWidth (1080px). CONSTRAINED never shows an
+      # image wider than this width.
       featuredImage{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050,
+          width: 1080,
           placeholder: BLURRED,
           quality: 100
         )
@@ -220,7 +223,7 @@ export const pageQuery = graphql`
       exhibitionImpressionsSlideshow{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050,
+          width: 1080,
           placeholder: BLURRED,
           quality: 100
         )
@@ -229,7 +232,7 @@ export const pageQuery = graphql`
       exhibitionDocumentationImagesBelow{
         gatsbyImageData(
           layout: CONSTRAINED,
-          width: 1050,
+          width: 1080,
           placeholder: BLURRED,
           quality: 100
         )
