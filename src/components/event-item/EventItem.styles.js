@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { media } from '../../theme/theme';
+import { uppercase } from '../layout/Layout.styles';
 import { ItemDate, Subline as ItemSubline, Teaser, Title } from '../content/Item.styles';
 
 // Lines of the event subline before it is cut off. Event sublines are
@@ -110,4 +111,16 @@ export const EventRow = styled.article`
   }
 
   ${props => props.$withImage && withImage}
+`;
+
+// "Live now" under the date and time while the event's stream runs (#74):
+// black, unlike the grey date, so it stands out in the list.
+export const LiveLabel = styled.span`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xxs};
+  margin-top: ${props => props.theme.spacing.xxs};
+  color: ${props => props.theme.colors.theme.black};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  ${uppercase}
 `;

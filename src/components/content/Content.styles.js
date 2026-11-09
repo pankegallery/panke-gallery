@@ -482,3 +482,15 @@ export const Visit = styled.div`
     ${sectionLabel}
   }
 `;
+
+// Red dot that marks a live stream (#74): in the event list, on the event
+// page and in the homepage dock. A graphic, not text, so the brand red's
+// 4:1 contrast on white is enough (WCAG asks 3:1 for graphics).
+export const LiveDot = styled.span`
+  display: inline-block;
+  flex: none;
+  width: ${props => props.theme.spacing.xs};
+  height: ${props => props.theme.spacing.xs};
+  border-radius: 50%;
+  background: ${props => props.theme.colors.panke.red};
+`;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Helmet from 'react-helmet';
 import get from 'lodash/get';
 import Moment from 'moment';
@@ -7,9 +7,12 @@ import { Link, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import ExhibitionItem from '../components/exhibition-item';
 import EventSection from '../components/event-section';
+import LiveDock from '../components/live-dock';
 import { ContentHtml } from '../components/content-block';
 import { processExternalLinks } from '../utils/processExternalLinks';
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached';
+import { isLiveNow } from '../utils/live-stream';
+import { useNow } from '../utils/use-now';
 import { isCurrent, isUpcoming, isPast } from '../utils/exhibition-archive.mjs';
 import { Row, Col, Grid } from '../components/layout/Layout.styles';
 import {
@@ -115,6 +118,15 @@ const PankeIndex = ({ data }) => {
   const current = exhibitions.filter(isCurrent);
   const upcoming = exhibitions.filter(isUpcoming);
   const upcomingEvents = events.filter(filterUpcomingEvents).slice(0, 3);
+  // The event whose Twitch stream runs right now, if any (#74). Worked out
+  // in the browser and refreshed every minute; the built page has none.
+  // Once found it stays for this page view, so a stream that runs past its
+  // end time isn't cut off in the dock while someone watches.
+  const now = useNow();
+  const lastLive = useRef(null);
+  const liveNow = events.map(({ node }) => node).find((event) => isLiveNow(event, now));
+  if (liveNow) lastLive.current = liveNow;
+  const liveEvent = lastLive.current;
   // Only between shows, so the page never looks empty.
   const past = current.length === 0 && upcoming.length === 0 ? latestPast(data, exhibitions) : [];
 
@@ -148,7 +160,7 @@ const PankeIndex = ({ data }) => {
       {/* One section per block, so later ones (an ongoing residency, the
           livestream during events) slot in between without restructuring. */}
       <SectionStack>
-        <EventSection label="Upcoming events" events={upcomingEvents.map(({ node }) => node)}>
+        <EventSection label="Upcoming events" events={upcomingEvents.map(({ node }) => node)} liveSlug={liveEvent?.slug}>
           <Link to="/events/"><EventSeries className="eventSeries">See all events</EventSeries></Link>
         </EventSection>
         <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
@@ -162,6 +174,7 @@ const PankeIndex = ({ data }) => {
         />
       </SectionStack>
       <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
+      {liveEvent && <LiveDock event={liveEvent} />}
     </Layout>
   );
 };
@@ -206,6 +219,7 @@ export const pageQuery = graphql`
           date
           endTime
           openEnd
+          liveOnTwitch
           eventSeries {
             name
             slug
