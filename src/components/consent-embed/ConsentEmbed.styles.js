@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { media } from '../../theme/theme';
+import { uppercase } from '../layout/Layout.styles';
 
 // Fills the ResponsiveVideo frame, so the page layout doesn't jump when the
 // iframe replaces the placeholder.
@@ -21,4 +23,118 @@ export const Placeholder = styled.div`
 
 export const Notice = styled.p`
   font-size: ${props => props.theme.fontSizes.small};
+`;
+
+// What the pill sits on, e.g. an event's featured image.
+export const Cover = styled.div`
+  position: relative;
+`;
+
+// The `pill` variant: on its cover in the bottom-left corner, or on its own
+// below a slideshow. A white box with a black outline like `Button`, so it
+// reads on light and dark images alike. On phones it always sits below:
+// there a wide image is often not much taller than the pill and would
+// disappear behind it.
+export const Pill = styled.div`
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${props => props.theme.spacing.xxs};
+  max-width: 100%;
+  margin-top: ${props => props.theme.spacing.sm};
+  padding: ${props => props.theme.spacing.xs} ${props => props.theme.spacing.sm};
+  background: ${props => props.theme.colors.theme.white};
+  border: 2px solid ${props => props.theme.colors.theme.black};
+  border-radius: 5px;
+
+  ${props => props.$overlay && css`
+    ${media.md} {
+      position: absolute;
+      left: ${props.theme.spacing.sm};
+      bottom: ${props.theme.spacing.sm};
+      max-width: calc(100% - 2 * ${props.theme.spacing.sm});
+      margin-top: 0;
+    }
+  `}
+
+  /* The card of the two steps: room for the notice, but not across a
+     whole wide image. */
+  ${props => props.$card && css`
+    gap: ${props.theme.spacing.xs};
+    width: ${props.theme.sizes.consentCard};
+  `}
+
+  /* White ground, so the date grey keeps its 4.5:1 contrast here. */
+  ${Notice} {
+    margin: 0;
+    color: ${props => props.theme.colors.theme.date};
+
+    a {
+      color: inherit;
+    }
+  }
+`;
+
+export const PillButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xs};
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: ${props => props.theme.colors.theme.black};
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  text-align: left;
+  ${uppercase}
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  /* Touch screens get the full tap target (CONTRIBUTING.md); with a mouse
+     the pill stays small on the image. */
+  @media (pointer: coarse) {
+    min-height: ${props => props.theme.sizes.tapTarget};
+  }
+`;
+
+// Icon, heading and close button of the card in the two steps.
+export const CardHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.xs};
+  width: 100%;
+  font-size: ${props => props.theme.fontSizes.medium};
+  font-weight: ${props => props.theme.fontWeights.medium};
+  ${uppercase}
+`;
+
+export const CloseButton = styled.button`
+  margin-left: auto;
+  padding: ${props => props.theme.spacing.xxs};
+  border: 0;
+  background: transparent;
+  color: ${props => props.theme.colors.theme.black};
+  cursor: pointer;
+
+  @media (pointer: coarse) {
+    min-width: ${props => props.theme.sizes.tapTarget};
+    min-height: ${props => props.theme.sizes.tapTarget};
+  }
+`;
+
+// The consent button and the link to open the content elsewhere.
+export const CardActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  font-size: ${props => props.theme.fontSizes.small};
+
+  a {
+    color: ${props => props.theme.colors.theme.date};
+  }
 `;

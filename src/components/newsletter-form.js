@@ -1,97 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'gatsby';
 
 import { Button } from './content/Content.styles';
 import { Notice } from './consent-embed/ConsentEmbed.styles';
-import {
-  RsvpForm as Form,
-  RsvpError,
-  RsvpSuccess
-} from './rsvp-form/RsvpForm.styles';
+import { RsvpForm as Form } from './rsvp-form/RsvpForm.styles';
+import { Fields } from './newsletter-form/NewsletterForm.styles';
 
-// The MailerLite form "hOMCKV" (account 805672). This is the action of its
-// HTML-only embed code; the form has double opt-in switched on in MailerLite.
-const SUBSCRIBE_URL = 'https://assets.mailerlite.com/jsonp/805672/forms/111883649410926357/subscribe';
+// Our own listmonk installation (#122): its public subscription form and the
+// "panke.gallery Newsletter" list. The list is double opt-in.
+const SUBSCRIBE_URL = 'https://list-panke.bitnik.org/subscription/form';
+const LIST_ID = '12fdef4e-2990-49a3-bf94-470f7d3bbb74';
 
 /**
- * Newsletter signup that posts straight to MailerLite's form endpoint (#58).
+ * Newsletter signup that posts straight to our listmonk server (#122).
  *
- * MailerLite's own embed needs their JavaScript, which loads on every page
- * view, sets cookies and pulls in their fonts, so visitors' IPs reach
- * MailerLite before anyone has decided to subscribe (#60). This form loads
- * nothing from MailerLite: the email address is only sent when the visitor
- * submits. The endpoint allows cross-origin requests and answers with JSON,
- * so the result is shown in place. Without JavaScript the form still works
- * as a plain POST that opens MailerLite's response in a new tab.
+ * A plain HTML form: it loads nothing from the newsletter server until the
+ * visitor submits (#60). listmonk doesn't let other sites read its answers,
+ * so the result can't be shown in place; submitting opens listmonk's own
+ * result page in a new tab and leaves this page open.
  *
  * Has no props; the section title and intro text come from the Contentful
  * block it is rendered in.
  */
-const NewsletterForm = () => {
-  const [email, setEmail] = useState('');
-  const [honeypot, setHoneypot] = useState('');
-  const [status, setStatus] = useState('idle');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Bots fill every field. Pretend it worked, so they don't retry.
-    if (honeypot) {
-      setStatus('success');
-      return;
-    }
-
-    setStatus('submitting');
-    setErrorMessage('');
-
-    // Form-encoded, so the browser sends it as a simple request without a
-    // CORS preflight. The hidden fields mirror MailerLite's own embed code.
-    const body = new URLSearchParams({
-      'fields[email]': email,
-      'ml-submit': '1',
-      anticsrf: 'true',
-      ajax: '1'
-    });
-
-    try {
-      const response = await fetch(SUBSCRIBE_URL, { method: 'POST', body });
-      const data = await response.json();
-
-      if (data.success) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-        setErrorMessage(
-          data.errors?.fields?.email?.[0] ||
-          'The signup didn’t work. Please check your email address and try again.'
-        );
-      }
-    } catch (error) {
-      setStatus('error');
-      setErrorMessage('Network error. Please try again.');
-      console.error('Newsletter signup error:', error);
-    }
-  };
-
-  if (status === 'success') {
-    return (
-      <RsvpSuccess role="status">
-        <h3>Almost done</h3>
-        <p>We’ve sent you an email. Please click the link in it to confirm your subscription.</p>
-      </RsvpSuccess>
-    );
-  }
-
-  const submitting = status === 'submitting';
-
-  return (
-    <Form
-      action={SUBSCRIBE_URL}
-      method="post"
-      target="_blank"
-      onSubmit={handleSubmit}
-    >
+const NewsletterForm = () => (
+  <Form action={SUBSCRIBE_URL} method="post" target="_blank" rel="noopener">
+    <Fields>
       <div className="form-group">
         <label htmlFor="newsletter-email">
           Email <span className="required">*</span>
@@ -99,50 +32,52 @@ const NewsletterForm = () => {
         <input
           type="email"
           id="newsletter-email"
-          name="fields[email]"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
           required
-          disabled={submitting}
           autoComplete="email"
           placeholder="your.email@example.com"
         />
       </div>
 
-      <div className="honeypot-field" aria-hidden="true">
-        <label htmlFor="newsletter-website">Leave this field empty</label>
+      <div className="form-group">
+        <label htmlFor="newsletter-name">Name (optional)</label>
         <input
           type="text"
-          id="newsletter-website"
-          name="website"
-          value={honeypot}
-          onChange={(e) => setHoneypot(e.target.value)}
-          tabIndex="-1"
-          autoComplete="off"
+          id="newsletter-name"
+          name="name"
+          autoComplete="name"
         />
       </div>
+    </Fields>
 
-      {/* Only used by the no-JavaScript fallback; fetch builds its own body. */}
-      <input type="hidden" name="ml-submit" value="1" />
-      <input type="hidden" name="anticsrf" value="true" />
+    {/* listmonk's spam trap: it rejects a sign-up when "nonce" is filled,
+        which bots do and people can't, as the field is off-screen. */}
+    <div className="honeypot-field" aria-hidden="true">
+      <label htmlFor="newsletter-nonce">Leave this field empty</label>
+      <input
+        type="text"
+        id="newsletter-nonce"
+        name="nonce"
+        tabIndex="-1"
+        autoComplete="off"
+      />
+    </div>
 
-      {status === 'error' && <RsvpError role="alert">{errorMessage}</RsvpError>}
+    <input type="hidden" name="l" value={LIST_ID} />
 
-      <div className="form-group">
-        <Button type="submit" disabled={submitting}>
-          {submitting ? 'Subscribing…' : 'Subscribe'}
-        </Button>
-      </div>
+    <div className="form-group">
+      <Button type="submit">Subscribe</Button>
+    </div>
 
-      {/* No consent checkbox: the form does nothing but subscribe, and the
-          double opt-in mail is the proof of consent. This note covers what
-          visitors need to know before submitting. */}
-      <Notice>
-        You can unsubscribe at any time. Your email address is sent to our newsletter
-        service MailerLite only when you subscribe. See our <Link to="/privacy/">privacy policy</Link>.
-      </Notice>
-    </Form>
-  );
-};
+    {/* No consent checkbox: the form does nothing but subscribe, and the
+        double opt-in mail is the proof of consent. This note covers what
+        visitors need to know before submitting. */}
+    <Notice>
+      We’ll email you a link to confirm your subscription. You can unsubscribe
+      at any time. Your name and email address go to our own newsletter server
+      only when you subscribe. See our <Link to="/privacy/">privacy policy</Link>.
+    </Notice>
+  </Form>
+);
 
 export default NewsletterForm;

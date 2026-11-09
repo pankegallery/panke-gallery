@@ -118,7 +118,7 @@ export default PankeContact;
 
 export const pageQuery = graphql`
   query PankeContactQuery {
-    allContentfulContentBlock (filter: {page: {eq: "Contact"}}, sort: { fields: [slug], order: ASC}){
+    allContentfulContentBlock (filter: {page: {eq: "Contact"}}, sort: { slug: ASC }){
       edges {
         node {
           id

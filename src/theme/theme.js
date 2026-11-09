@@ -110,6 +110,9 @@ export const theme = {
     // The short rule under the logo, which also marks the intro/Visit row on
     // the homepage instead of a full-width line (#69).
     shortRule: '40px',
+    // Width of the consent card of a live stream and of the live dock on the
+    // homepage (#74): room for the notice in a few lines.
+    consentCard: '360px',
     // Where a jump to a year stops from `breakpoints.sm`, below the sticky
     // year index (chip, padding and lines, plus some air).
     yearScrollMargin: '72px'

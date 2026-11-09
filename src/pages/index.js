@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Helmet from 'react-helmet';
 import get from 'lodash/get';
 import Moment from 'moment';
@@ -7,9 +7,12 @@ import { Link, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import ExhibitionItem from '../components/exhibition-item';
 import EventSection from '../components/event-section';
+import LiveDock from '../components/live-dock';
 import { ContentHtml } from '../components/content-block';
 import { processExternalLinks } from '../utils/processExternalLinks';
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached';
+import { isLiveNow } from '../utils/live-stream';
+import { useNow } from '../utils/use-now';
 import { isCurrent, isUpcoming, isPast } from '../utils/exhibition-archive.mjs';
 import { Row, Col, Grid } from '../components/layout/Layout.styles';
 import {
@@ -44,10 +47,13 @@ const latestPast = (data, exhibitions) => {
  *
  * @param {Object} props
  * @param {string} props.label - Section label, e.g. "Current".
- * @param {Object[]} props.exhibitions - Exhibition nodes.
+ * @param {Object[]} props.exhibitions - Exhibition nodes, or residency
+ *   nodes, which have the same fields.
  * @param {'feature'|'feature-small'} props.variant
+ * @param {string} [props.basePath='/exhibition'] - Path the items' slugs
+ *   go under, e.g. `/residency`.
  */
-const ExhibitionSection = ({ label, exhibitions, variant }) => {
+const ExhibitionSection = ({ label, exhibitions, variant, basePath = '/exhibition' }) => {
   if (exhibitions.length === 0) return null;
 
   return (
@@ -57,7 +63,12 @@ const ExhibitionSection = ({ label, exhibitions, variant }) => {
       </Headline>
       <Grid>
         {exhibitions.map((exhibition) => (
-          <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant={variant} />
+          <ExhibitionItem
+            key={exhibition.slug}
+            exhibition={exhibition}
+            variant={variant}
+            to={`${basePath}/${exhibition.slug}`}
+          />
         ))}
       </Grid>
     </Section>
@@ -87,7 +98,7 @@ const IntroVisitSection = ({ visitHtml }) => (
 /**
  * The homepage (#69): news, if any, then up to three upcoming events, the
  * current and the upcoming shows, or the most recent past show when there is
- * neither, and the intro with the Visit block. Everything sits on the page
+ * neither, the ongoing residency (#85), and the intro with the Visit block. Everything sits on the page
  * `Grid` in the wide container, as on /exhibitions.
  *
  * @param {Object} props
@@ -107,6 +118,15 @@ const PankeIndex = ({ data }) => {
   const current = exhibitions.filter(isCurrent);
   const upcoming = exhibitions.filter(isUpcoming);
   const upcomingEvents = events.filter(filterUpcomingEvents).slice(0, 3);
+  // The event whose Twitch stream runs right now, if any (#74). Worked out
+  // in the browser and refreshed every minute; the built page has none.
+  // Once found it stays for this page view, so a stream that runs past its
+  // end time isn't cut off in the dock while someone watches.
+  const now = useNow();
+  const lastLive = useRef(null);
+  const liveNow = events.map(({ node }) => node).find((event) => isLiveNow(event, now));
+  if (liveNow) lastLive.current = liveNow;
+  const liveEvent = lastLive.current;
   // Only between shows, so the page never looks empty.
   const past = current.length === 0 && upcoming.length === 0 ? latestPast(data, exhibitions) : [];
 
@@ -140,14 +160,21 @@ const PankeIndex = ({ data }) => {
       {/* One section per block, so later ones (an ongoing residency, the
           livestream during events) slot in between without restructuring. */}
       <SectionStack>
-        <EventSection label="Upcoming events" events={upcomingEvents.map(({ node }) => node)}>
+        <EventSection label="Upcoming events" events={upcomingEvents.map(({ node }) => node)} liveSlug={liveEvent?.slug}>
           <Link to="/events/"><EventSeries className="eventSeries">See all events</EventSeries></Link>
         </EventSection>
         <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
         <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
         <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
+        <ExhibitionSection
+          label="Artist in residence"
+          exhibitions={data.ongoingResidencies.nodes}
+          variant="feature-small"
+          basePath="/residency"
+        />
       </SectionStack>
       <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
+      {liveEvent && <LiveDock event={liveEvent} />}
     </Layout>
   );
 };
@@ -192,6 +219,7 @@ export const pageQuery = graphql`
           date
           endTime
           openEnd
+          liveOnTwitch
           eventSeries {
             name
             slug
@@ -202,6 +230,14 @@ export const pageQuery = graphql`
             }
           }
         }
+      }
+    }
+    ongoingResidencies: allContentfulResidency(
+      sort: { startDate: ASC },
+      filter: { startDate: { lte: $today }, endDate: { gte: $today } }
+    ) {
+      nodes {
+        ...HomeResidency
       }
     }
     visitUs: contentfulContentBlock(slug: { eq: "contact-visit-us" }) {
@@ -227,6 +263,32 @@ export const pageQuery = graphql`
             }
           }
         }
+      }
+    }
+  }
+
+  fragment HomeResidency on ContentfulResidency {
+    title
+    slug
+    startDate
+    endDate
+    dateTbc
+    featuredImage {
+      gatsbyImageData(
+        layout: CONSTRAINED,
+        width: 1050,
+        aspectRatio: 1.6
+      )
+      description
+    }
+    subtitleShortDescription {
+      childMarkdownRemark {
+        html
+      }
+    }
+    description {
+      childMarkdownRemark {
+        excerpt(pruneLength: 1200)
       }
     }
   }

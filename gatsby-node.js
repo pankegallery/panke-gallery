@@ -34,7 +34,7 @@ let exhibitionImagesSince = null
  * and `gatsby develop` serves `public/` as well.
  */
 const writeExhibitionYearImages = async (graphql) => {
-  // .mjs, imported: Node 18 (Netlify) can't require() an ES module.
+  // ES modules shared with the page code, so this CommonJS file import()s them.
   const { groupByOpeningYear } = await import('./src/utils/group-by-opening-year.mjs')
   const { imagesSince, yearImagesPath } = await import('./src/utils/exhibition-archive.mjs')
 
@@ -79,6 +79,12 @@ const writeExhibitionYearImages = async (graphql) => {
 }
 
 exports.createPages = async ({ graphql, actions }) => {
+  // "Edition" became "Studio" (#85); old links and bookmarks keep working.
+  // Edition detail pages stay at /edition/<slug>.
+  for (const fromPath of ['/editions', '/editions/']) {
+    actions.createRedirect({ fromPath, toPath: '/studio/', isPermanent: true })
+  }
+
   await writeExhibitionYearImages(graphql)
   return createContentPages({ graphql, actions })
 }
@@ -90,6 +96,7 @@ const createContentPages = ({ graphql, actions }) => {
     const exhibition = path.resolve('./src/templates/exhibition.js');
     const event = path.resolve('./src/templates/event.js');
     const edition = path.resolve('./src/templates/edition.js');
+    const residency = path.resolve('./src/templates/residency.js');
     const guideStop = path.resolve('./src/templates/guide-stop.js');
     const guideExhibition = path.resolve('./src/templates/guide-exhibition.js');
     const codesExhibition = path.resolve('./src/templates/codes-exhibition.js');
@@ -119,6 +126,11 @@ const createContentPages = ({ graphql, actions }) => {
                 }
               }
             }
+            allContentfulResidency {
+              nodes {
+                slug
+              }
+            }
             allAudioguideStop {
               edges {
                 node {
@@ -138,6 +150,7 @@ const createContentPages = ({ graphql, actions }) => {
         const exhibitions = result.data.allContentfulExhibition.edges;
         const events = result.data.allContentfulEvent.edges;
         const editions = result.data.allContentfulEdition.edges;
+        const residencies = result.data.allContentfulResidency.nodes;
         const guideStops = result.data.allAudioguideStop.edges;
 
         exhibitions.forEach((entry, index) => {
@@ -167,6 +180,14 @@ const createContentPages = ({ graphql, actions }) => {
             context: {
               slug: entry.node.slug
             },
+          })
+        })
+
+        residencies.forEach(({ slug }) => {
+          createPage({
+            path: `/residency/${slug}/`,
+            component: residency,
+            context: { slug },
           })
         })
 
@@ -313,9 +334,15 @@ exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
 
   createTypes(`
+    # Gatsby only infers a Contentful field once an entry has a value for
+    # it, so fields that can be empty on every event are declared here, or
+    # the page queries fail. liveOnTwitch (#74) is only ticked around a
+    # stream; recordingUrl (#75) is declared for the same reason.
     type ContentfulEvent implements Node {
       rsvpCapacity: Int
       rsvpDeadline: Date @dateformat
+      liveOnTwitch: Boolean
+      recordingUrl: String
     }
 
     type AudioguideStop implements Node {
@@ -335,6 +362,54 @@ exports.createSchemaCustomization = ({ actions }) => {
     type ContentfulExhibition implements Node {
       audioguideOverviewUrl: String
       audioguideOverviewQrCodeSvg: String
+    }
+
+    # Residencies (#85, model in #86). Gatsby infers Contentful types from
+    # published entries, so without these the queries in studio.js,
+    # residency.js and index.js fail once no residency or work is published,
+    # or an optional field is empty in every entry. Names and links match
+    # what Gatsby infers from the content as it is.
+    #
+    # @dontInfer: gatsby-source-contentful's incremental sync can leave a
+    # link to an entry that was just unpublished (e.g. a work still listed in
+    # \`works\`), and inferring that raw \`___NODE\` key fails the build. With
+    # only the declared fields, @link drops the missing entry instead. A field
+    # added in Contentful needs to be added here before a query can use it.
+    type ContentfulResidency implements Node @dontInfer {
+      title: String
+      slug: String
+      startDate: Date @dateformat
+      endDate: Date @dateformat
+      dateTbc: Boolean
+      subtitleShortDescription: contentfulResidencySubtitleShortDescriptionTextNode @link(from: "subtitleShortDescription___NODE")
+      featuredImage: ContentfulAsset @link(from: "featuredImage___NODE")
+      description: contentfulResidencyDescriptionTextNode @link(from: "description___NODE")
+      residencyLandingPage: String
+      furtherInformationBlocks: [ContentfulContentBlock] @link(from: "furtherInformationBlocks___NODE")
+      works: [ContentfulResidencyWork] @link(from: "works___NODE")
+    }
+
+    type ContentfulResidencyWork implements Node @dontInfer {
+      title: String
+      year: Int
+      type: String
+      url: String
+      image: ContentfulAsset @link(from: "image___NODE")
+      shortDescription: contentfulResidencyWorkShortDescriptionTextNode @link(from: "shortDescription___NODE")
+    }
+
+    # The Markdown fields. @mimeTypes lets gatsby-transformer-remark add
+    # childMarkdownRemark even when no node of the type exists yet.
+    type contentfulResidencySubtitleShortDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      subtitleShortDescription: String
+    }
+
+    type contentfulResidencyDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      description: String
+    }
+
+    type contentfulResidencyWorkShortDescriptionTextNode implements Node @mimeTypes(types: ["text/markdown"]) {
+      shortDescription: String
     }
 
     type Query {

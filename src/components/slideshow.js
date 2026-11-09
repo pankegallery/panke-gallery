@@ -41,7 +41,7 @@ const Slideshow = ({ slides, interval = 5000 }) => {
           <CarouselItem key={index} $active={index === active} aria-hidden={index !== active}>
             <div>
               <div className="image-wrapper 3-col">
-                <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} aspectratio={16 / 9} />
+                <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} />
               </div>
               <Meta style={{ textAlign: 'center', padding: '10px 0' }}>{description}</Meta>
             </div>
