@@ -247,6 +247,36 @@ export const Button = styled.button`
   }
 `;
 
+// An image with a `Button` centred on top of it, e.g. the link to a
+// residency's landing page (#85). The button gets a white ground, so it
+// reads on light and dark images alike, like the recordings pill
+// (ConsentEmbed.styles.js). It stays centred on phones too: a single
+// button fits even on a short 16:9 image.
+export const ImageWithButton = styled.div`
+  position: relative;
+
+  > ${Button} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: ${props => props.theme.sizes.tapTarget};
+    /* Sized by its label: placed at left: 50%, it would otherwise only get
+       half the image's width and wrap early. Wraps only when the label is
+       wider than the image. */
+    width: max-content;
+    max-width: calc(100% - 2 * ${props => props.theme.spacing.md});
+    padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.xl};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    text-decoration: none;
+    background: ${props => props.theme.colors.theme.white};
+  }
+`;
+
 // Head of an exhibition or event page (#70): a `Row` with the title and
 // date in the left `Col`, and the subline and tags in the right one. From
 // `breakpoints.sm` it is the 4/8 split of the InfoSection rows below, so

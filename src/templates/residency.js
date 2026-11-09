@@ -1,14 +1,22 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import { GatsbyImage } from 'gatsby-plugin-image'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import ExhibitionItem from '../components/exhibition-item'
+import { ExternalMark } from '../components/exhibition-item/ExhibitionItem.styles'
 import { formatDateRange } from '../utils/formatDateRange'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
-import { HeadSection, InfoSection, Section, Headline } from '../components/content/Content.styles'
+import {
+  Button,
+  HeadSection,
+  ImageWithButton,
+  InfoSection,
+  Section,
+  Headline,
+} from '../components/content/Content.styles'
 import { ItemDate, Subline } from '../components/content/Item.styles'
 import { Row, Col, Grid } from '../components/layout/Layout.styles'
 
@@ -46,11 +54,34 @@ const WorksSection = ({ works }) => {
 }
 
 /**
+ * The button to a residency's landing page, centred on its featured image.
+ * The Contentful field is plain text, so it takes both: a path on this site
+ * ("/…") opens like any internal link, a full URL opens in a new tab with
+ * an ↗, like the works.
+ *
+ * @param {Object} props
+ * @param {string} props.url - `residencyLandingPage` from Contentful.
+ */
+const LandingPageButton = ({ url }) =>
+  url.startsWith('/') ? (
+    <Button as={Link} to={url}>
+      Visit the residency
+    </Button>
+  ) : (
+    <Button as="a" href={url} target="_blank" rel="noopener noreferrer">
+      Visit the residency
+      {/* The arrow alone says nothing to a screen reader. */}
+      <ExternalMark aria-label="opens external site" role="img">↗</ExternalMark>
+    </Button>
+  )
+
+/**
  * A residency page (#85), built like the exhibition page: the head with the
  * title on the left and the artist line and dates on the right, aligned with
  * the 4/8 columns of the sections below; the featured image at 16:9; "About
  * the residency" in Medium; further blocks such as "About the artist" in
- * Light; then the works.
+ * Light; then the works. With a `residencyLandingPage`, a button to it sits
+ * on the image.
  *
  * @param {Object} props
  * @param {Object} props.data - Page query result.
@@ -58,6 +89,7 @@ const WorksSection = ({ works }) => {
 const ResidencyTemplate = ({ data }) => {
   const residency = data.contentfulResidency
   const { title, featuredImage } = residency
+  const landingPage = residency.residencyLandingPage?.trim()
 
   return (
     <Layout>
@@ -78,8 +110,14 @@ const ResidencyTemplate = ({ data }) => {
             </Col>
           </Row>
 
-          {featuredImage?.gatsbyImageData && (
-            <GatsbyImage image={featuredImage.gatsbyImageData} alt={featuredImage.description || title} />
+          {featuredImage?.gatsbyImageData ? (
+            <ImageWithButton>
+              <GatsbyImage image={featuredImage.gatsbyImageData} alt={featuredImage.description || title} />
+              {landingPage && <LandingPageButton url={landingPage} />}
+            </ImageWithButton>
+          ) : (
+            // Without an image the link still shows, on its own.
+            landingPage && <LandingPageButton url={landingPage} />
           )}
         </HeadSection>
 
@@ -135,6 +173,7 @@ export const pageQuery = graphql`
         )
         description
       }
+      residencyLandingPage
       furtherInformationBlocks {
         id
         title

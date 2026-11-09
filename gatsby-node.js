@@ -372,6 +372,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       subtitleShortDescription: contentfulResidencySubtitleShortDescriptionTextNode @link(from: "subtitleShortDescription___NODE")
       featuredImage: ContentfulAsset @link(from: "featuredImage___NODE")
       description: contentfulResidencyDescriptionTextNode @link(from: "description___NODE")
+      residencyLandingPage: String
       furtherInformationBlocks: [ContentfulContentBlock] @link(from: "furtherInformationBlocks___NODE")
       works: [ContentfulResidencyWork] @link(from: "works___NODE")
     }
