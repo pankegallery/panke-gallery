@@ -144,3 +144,10 @@ export const ImagePending = styled.div`
   aspect-ratio: ${props => props.theme.sizes.exhibitionImageRatio};
   background: ${props => props.theme.colors.theme.tint};
 `;
+
+// The ↗ after the title of an item that links to another site. Kept apart
+// from the last word, but never wrapped onto a line of its own.
+export const ExternalMark = styled.span`
+  margin-left: 0.3em;
+  white-space: nowrap;
+`;

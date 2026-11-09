@@ -9,6 +9,7 @@ import {
   Item,
   ItemImage,
   ImagePending,
+  ExternalMark,
 } from './exhibition-item/ExhibitionItem.styles'
 import {
   Title,
@@ -102,6 +103,11 @@ const DateRange = ({ parts }) =>
  * since their image only repeats the linked title. The feature variants describe
  * the image with the Contentful asset description.
  *
+ * Residencies, their works and editions use it too (#85). Their Contentful
+ * fields mirror Exhibition, so only the link and the info line differ: `to`
+ * links elsewhere on the site, `href` to another site (a work), and
+ * `dateLine` replaces the date range ("2027 · online work", "Edition").
+ *
  * @param {Object} props
  * @param {Object} props.exhibition - A `ContentfulExhibition` node with `slug`,
  *   `title`, `startDate`, `endDate`, `dateTbc`,
@@ -120,8 +126,23 @@ const DateRange = ({ parts }) =>
  *   breakpoint up. Both are CSS, so the server-rendered page is already
  *   right; /exhibitions uses them to show a show either as a Recent card or
  *   as an archive row, depending on the width.
+ * @param {string} [props.to] - Path of the page the item links to; defaults
+ *   to the exhibition page.
+ * @param {string} [props.href] - External URL instead of `to`. Opens in a
+ *   new tab, and the title gets an ↗.
+ * @param {string} [props.dateLine] - Info line shown instead of the date
+ *   range.
  */
-const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hideFrom }) => {
+const ExhibitionItem = ({
+  exhibition,
+  variant,
+  headingLevel = 3,
+  hideBelow,
+  hideFrom,
+  to,
+  href,
+  dateLine,
+}) => {
   const {
     slug,
     title,
@@ -135,7 +156,7 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
     vernissageInfos,
   } = exhibition
 
-  const path = `/exhibition/${slug}`
+  const path = to || `/exhibition/${slug}`
   const isCompact = COMPACT_VARIANTS.includes(variant)
   const hasShortDate = SHORT_DATE_VARIANTS.includes(variant)
   const subtitleHtml = subtitleShortDescription?.childMarkdownRemark?.html
@@ -157,7 +178,15 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
       </ItemImage>
 
       <Title as={`h${headingLevel}`} $variant={variant}>
-        <Link to={path}>{keepSeparatorsAttached(title)}</Link>
+        {href ? (
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            {keepSeparatorsAttached(title)}
+            {/* The arrow alone says nothing to a screen reader. */}
+            <ExternalMark aria-label="opens external site" role="img">↗</ExternalMark>
+          </a>
+        ) : (
+          <Link to={path}>{keepSeparatorsAttached(title)}</Link>
+        )}
       </Title>
 
       {subtitleHtml && (
@@ -168,13 +197,17 @@ const ExhibitionItem = ({ exhibition, variant, headingLevel = 3, hideBelow, hide
       )}
 
       <ItemDate>
-        <LongDate $hasShort={hasShortDate}>
-          <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc })} />
-        </LongDate>
-        {hasShortDate && (
-          <ShortDate>
-            <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc, short: true })} />
-          </ShortDate>
+        {dateLine || (
+          <>
+            <LongDate $hasShort={hasShortDate}>
+              <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc })} />
+            </LongDate>
+            {hasShortDate && (
+              <ShortDate>
+                <DateRange parts={dateRangeParts(startDate, endDate, { tbc: dateTbc, short: true })} />
+              </ShortDate>
+            )}
+          </>
         )}
         {meta.map((info) => ` | ${info}`)}
       </ItemDate>

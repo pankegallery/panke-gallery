@@ -235,6 +235,10 @@ export const Button = styled.button`
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
+  /* The same when rendered as a link (as="a" or as={Link}); a <button>
+     is inline-block already. */
+  display: inline-block;
+  text-decoration: none;
 
   &:hover:not(:disabled) {
     background: ${props => props.theme.colors.theme.black};
@@ -244,6 +248,42 @@ export const Button = styled.button`
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+`;
+
+// An image that links somewhere as a whole, with a `Button` centred on top
+// as its label, e.g. a residency's landing page (#85). Render it with
+// as="a" or as={Link}, and the button as a span inside. The button gets a
+// white ground, so it reads on light and dark images alike, like the
+// recordings pill (ConsentEmbed.styles.js), and fills black while the
+// pointer is anywhere on the image. It stays centred on phones too: a
+// single button fits even on a short 16:9 image.
+export const ImageLink = styled.div`
+  position: relative;
+  display: block;
+  text-decoration: none;
+
+  &:hover > ${Button},
+  &:focus-visible > ${Button} {
+    background: ${props => props.theme.colors.theme.black};
+    color: ${props => props.theme.colors.theme.white};
+  }
+
+  > ${Button} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    min-height: ${props => props.theme.sizes.tapTarget};
+    /* Sized by its label: placed at left: 50%, it would otherwise only get
+       half the image's width and wrap early. Wraps only when the label is
+       wider than the image. */
+    width: max-content;
+    max-width: calc(100% - 2 * ${props => props.theme.spacing.md});
+    padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.xl};
+    font-weight: ${props => props.theme.fontWeights.medium};
+    background: ${props => props.theme.colors.theme.white};
   }
 `;
 
@@ -367,6 +407,21 @@ export const FurtherSection = styled.div`
   }
 `;
 
+// Cards in the text column of a labelled section, as on /studio (#85): two
+// side by side from `breakpoints.sm`, full width on phones like the Recent
+// grid. The wide row gap keeps each card's text with its own image.
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: ${props => props.theme.spacing.xxl} ${props => props.theme.spacing.md};
+  margin-top: ${props => props.theme.spacing.lg};
+
+  ${media.md} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: ${props => props.theme.spacing.gutter};
+  }
+`;
+
 export const ImageWrapper = styled.div`
   margin-bottom: 30px;
   
@@ -403,6 +458,10 @@ export const ResponsiveVideo = styled.div`
 // as the exhibition text above. The short rule from the header marks the
 // row instead of a full-width line.
 export const IntroSection = styled.section`
+  /* The same gap as between the labelled sections above (SectionStack),
+     so the last block (e.g. the residency) doesn't crowd the short rule. */
+  margin-top: ${props => props.theme.spacing.xxl};
+
   &::before {
     ${shortRule}
     display: block;

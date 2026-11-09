@@ -47,10 +47,13 @@ const latestPast = (data, exhibitions) => {
  *
  * @param {Object} props
  * @param {string} props.label - Section label, e.g. "Current".
- * @param {Object[]} props.exhibitions - Exhibition nodes.
+ * @param {Object[]} props.exhibitions - Exhibition nodes, or residency
+ *   nodes, which have the same fields.
  * @param {'feature'|'feature-small'} props.variant
+ * @param {string} [props.basePath='/exhibition'] - Path the items' slugs
+ *   go under, e.g. `/residency`.
  */
-const ExhibitionSection = ({ label, exhibitions, variant }) => {
+const ExhibitionSection = ({ label, exhibitions, variant, basePath = '/exhibition' }) => {
   if (exhibitions.length === 0) return null;
 
   return (
@@ -60,7 +63,12 @@ const ExhibitionSection = ({ label, exhibitions, variant }) => {
       </Headline>
       <Grid>
         {exhibitions.map((exhibition) => (
-          <ExhibitionItem key={exhibition.slug} exhibition={exhibition} variant={variant} />
+          <ExhibitionItem
+            key={exhibition.slug}
+            exhibition={exhibition}
+            variant={variant}
+            to={`${basePath}/${exhibition.slug}`}
+          />
         ))}
       </Grid>
     </Section>
@@ -90,7 +98,7 @@ const IntroVisitSection = ({ visitHtml }) => (
 /**
  * The homepage (#69): news, if any, then up to three upcoming events, the
  * current and the upcoming shows, or the most recent past show when there is
- * neither, and the intro with the Visit block. Everything sits on the page
+ * neither, the ongoing residency (#85), and the intro with the Visit block. Everything sits on the page
  * `Grid` in the wide container, as on /exhibitions.
  *
  * @param {Object} props
@@ -158,6 +166,12 @@ const PankeIndex = ({ data }) => {
         <ExhibitionSection label="Current" exhibitions={current} variant="feature" />
         <ExhibitionSection label="Upcoming" exhibitions={upcoming} variant="feature-small" />
         <ExhibitionSection label="Past" exhibitions={past} variant="feature" />
+        <ExhibitionSection
+          label="Artist in residence"
+          exhibitions={data.ongoingResidencies.nodes}
+          variant="feature-small"
+          basePath="/residency"
+        />
       </SectionStack>
       <IntroVisitSection visitHtml={data.visitUs?.blockContent?.childMarkdownRemark?.html} />
       {liveEvent && <LiveDock event={liveEvent} />}
@@ -218,6 +232,14 @@ export const pageQuery = graphql`
         }
       }
     }
+    ongoingResidencies: allContentfulResidency(
+      sort: { startDate: ASC },
+      filter: { startDate: { lte: $today }, endDate: { gte: $today } }
+    ) {
+      nodes {
+        ...HomeResidency
+      }
+    }
     visitUs: contentfulContentBlock(slug: { eq: "contact-visit-us" }) {
       blockContent {
         childMarkdownRemark {
@@ -241,6 +263,32 @@ export const pageQuery = graphql`
             }
           }
         }
+      }
+    }
+  }
+
+  fragment HomeResidency on ContentfulResidency {
+    title
+    slug
+    startDate
+    endDate
+    dateTbc
+    featuredImage {
+      gatsbyImageData(
+        layout: CONSTRAINED,
+        width: 1050,
+        aspectRatio: 1.6
+      )
+      description
+    }
+    subtitleShortDescription {
+      childMarkdownRemark {
+        html
+      }
+    }
+    description {
+      childMarkdownRemark {
+        excerpt(pruneLength: 1200)
       }
     }
   }
