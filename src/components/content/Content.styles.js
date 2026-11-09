@@ -235,6 +235,10 @@ export const Button = styled.button`
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
+  /* The same when rendered as a link (as="a" or as={Link}); a <button>
+     is inline-block already. */
+  display: inline-block;
+  text-decoration: none;
 
   &:hover:not(:disabled) {
     background: ${props => props.theme.colors.theme.black};
@@ -247,13 +251,23 @@ export const Button = styled.button`
   }
 `;
 
-// An image with a `Button` centred on top of it, e.g. the link to a
-// residency's landing page (#85). The button gets a white ground, so it
-// reads on light and dark images alike, like the recordings pill
-// (ConsentEmbed.styles.js). It stays centred on phones too: a single
-// button fits even on a short 16:9 image.
-export const ImageWithButton = styled.div`
+// An image that links somewhere as a whole, with a `Button` centred on top
+// as its label, e.g. a residency's landing page (#85). Render it with
+// as="a" or as={Link}, and the button as a span inside. The button gets a
+// white ground, so it reads on light and dark images alike, like the
+// recordings pill (ConsentEmbed.styles.js), and fills black while the
+// pointer is anywhere on the image. It stays centred on phones too: a
+// single button fits even on a short 16:9 image.
+export const ImageLink = styled.div`
   position: relative;
+  display: block;
+  text-decoration: none;
+
+  &:hover > ${Button},
+  &:focus-visible > ${Button} {
+    background: ${props => props.theme.colors.theme.black};
+    color: ${props => props.theme.colors.theme.white};
+  }
 
   > ${Button} {
     position: absolute;
@@ -261,9 +275,6 @@ export const ImageWithButton = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
-    /* Inline text rather than flex, so a wrapped label keeps the ↗ next to
-       its last word. Padding and border already make the tap target. */
-    display: inline-block;
     min-height: ${props => props.theme.sizes.tapTarget};
     /* Sized by its label: placed at left: 50%, it would otherwise only get
        half the image's width and wrap early. Wraps only when the label is
@@ -272,7 +283,6 @@ export const ImageWithButton = styled.div`
     max-width: calc(100% - 2 * ${props => props.theme.spacing.md});
     padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.xl};
     font-weight: ${props => props.theme.fontWeights.medium};
-    text-decoration: none;
     background: ${props => props.theme.colors.theme.white};
   }
 `;

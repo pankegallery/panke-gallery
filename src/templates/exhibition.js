@@ -148,7 +148,7 @@ class ExhibitionTemplate extends React.Component {
                   <p>This exhibition has a free audio guide.</p>
                   <p style={{ fontWeight: "normal" }}>Listen on your phone as you walk through, or scan the code at each artwork. <br />
                     We kindly ask you to bring your own headphones.</p>
-                  <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{ margin: "10px 0", display: "inline-block" }}>Open the audioguide</Button>
+                  <Button as={Link} to={`/guide/${exhibition.slug}/`} style={{ margin: "10px 0" }}>Open the audioguide</Button>
                 </Col>
               </Row>
             </InfoSection>

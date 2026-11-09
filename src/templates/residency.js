@@ -12,7 +12,7 @@ import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
 import {
   Button,
   HeadSection,
-  ImageWithButton,
+  ImageLink,
   InfoSection,
   Section,
   Headline,
@@ -54,34 +54,41 @@ const WorksSection = ({ works }) => {
 }
 
 /**
- * The button to a residency's landing page, centred on its featured image.
- * The Contentful field is plain text, so it takes both: a path on this site
- * ("/…") opens like any internal link, a full URL opens in a new tab with
- * an ↗, like the works.
+ * Link props for a residency's landing page. The Contentful field is plain
+ * text, so it takes both: a path on this site ("/…") opens like any internal
+ * link, a full URL opens in a new tab, like the works.
+ *
+ * @param {string} url - `residencyLandingPage` from Contentful.
+ * @returns {Object} Props for a styled component, including `as`.
+ */
+const landingPageLinkProps = (url) =>
+  url.startsWith('/')
+    ? { as: Link, to: url }
+    : { as: 'a', href: url, target: '_blank', rel: 'noopener noreferrer' }
+
+/**
+ * Text of the landing page button, with an ↗ for another site.
  *
  * @param {Object} props
  * @param {string} props.url - `residencyLandingPage` from Contentful.
  */
-const LandingPageButton = ({ url }) =>
-  url.startsWith('/') ? (
-    <Button as={Link} to={url}>
-      Visit live studio
-    </Button>
-  ) : (
-    <Button as="a" href={url} target="_blank" rel="noopener noreferrer">
-      Visit live studio
-      {/* The arrow alone says nothing to a screen reader. */}
+const LandingPageLabel = ({ url }) => (
+  <>
+    Visit live studio
+    {/* The arrow alone says nothing to a screen reader. */}
+    {!url.startsWith('/') && (
       <ExternalMark aria-label="opens external site" role="img">↗</ExternalMark>
-    </Button>
-  )
+    )}
+  </>
+)
 
 /**
  * A residency page (#85), built like the exhibition page: the head with the
  * title on the left and the artist line and dates on the right, aligned with
  * the 4/8 columns of the sections below; the featured image at 16:9; "About
  * the residency" in Medium; further blocks such as "About the artist" in
- * Light; then the works. With a `residencyLandingPage`, a button to it sits
- * on the image.
+ * Light; then the works. With a `residencyLandingPage`, the whole image links
+ * to it, with a button centred on top.
  *
  * @param {Object} props
  * @param {Object} props.data - Page query result.
@@ -110,14 +117,24 @@ const ResidencyTemplate = ({ data }) => {
             </Col>
           </Row>
 
-          {featuredImage?.gatsbyImageData ? (
-            <ImageWithButton>
+          {featuredImage?.gatsbyImageData && landingPage && (
+            // One link for image and button: the button is only its label
+            // (a span), as a link can't contain another one.
+            <ImageLink {...landingPageLinkProps(landingPage)}>
               <GatsbyImage image={featuredImage.gatsbyImageData} alt={featuredImage.description || title} />
-              {landingPage && <LandingPageButton url={landingPage} />}
-            </ImageWithButton>
-          ) : (
-            // Without an image the link still shows, on its own.
-            landingPage && <LandingPageButton url={landingPage} />
+              <Button as="span">
+                <LandingPageLabel url={landingPage} />
+              </Button>
+            </ImageLink>
+          )}
+          {featuredImage?.gatsbyImageData && !landingPage && (
+            <GatsbyImage image={featuredImage.gatsbyImageData} alt={featuredImage.description || title} />
+          )}
+          {!featuredImage?.gatsbyImageData && landingPage && (
+            // Without an image the button still shows, on its own.
+            <Button {...landingPageLinkProps(landingPage)}>
+              <LandingPageLabel url={landingPage} />
+            </Button>
           )}
         </HeadSection>
 
