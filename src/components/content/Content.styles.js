@@ -261,9 +261,9 @@ export const ImageWithButton = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    /* Inline text rather than flex, so a wrapped label keeps the ↗ next to
+       its last word. Padding and border already make the tap target. */
+    display: inline-block;
     min-height: ${props => props.theme.sizes.tapTarget};
     /* Sized by its label: placed at left: 50%, it would otherwise only get
        half the image's width and wrap early. Wraps only when the label is
