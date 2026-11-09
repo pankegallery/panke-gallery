@@ -369,7 +369,13 @@ exports.createSchemaCustomization = ({ actions }) => {
     # residency.js and index.js fail once no residency or work is published,
     # or an optional field is empty in every entry. Names and links match
     # what Gatsby infers from the content as it is.
-    type ContentfulResidency implements Node {
+    #
+    # @dontInfer: gatsby-source-contentful's incremental sync can leave a
+    # link to an entry that was just unpublished (e.g. a work still listed in
+    # \`works\`), and inferring that raw \`___NODE\` key fails the build. With
+    # only the declared fields, @link drops the missing entry instead. A field
+    # added in Contentful needs to be added here before a query can use it.
+    type ContentfulResidency implements Node @dontInfer {
       title: String
       slug: String
       startDate: Date @dateformat
@@ -383,7 +389,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       works: [ContentfulResidencyWork] @link(from: "works___NODE")
     }
 
-    type ContentfulResidencyWork implements Node {
+    type ContentfulResidencyWork implements Node @dontInfer {
       title: String
       year: Int
       type: String
