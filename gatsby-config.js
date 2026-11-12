@@ -51,7 +51,6 @@ module.exports = {
   pathPrefix: '/panke-gallery',
   plugins: [
     'gatsby-transformer-remark',
-    'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-plugin-sharp`,
       options: {

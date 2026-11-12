@@ -1,8 +1,8 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ExhibitionItem from '../components/exhibition-item'
 import { ContentHtml } from '../components/content-block'
 import { FurtherSection, CardGrid } from '../components/content/Content.styles'
@@ -42,16 +42,6 @@ const StudioSection = ({ label, intro, children }) => (
  */
 const Studio = ({ data }) => (
   <Layout>
-    <Helmet
-      title="Studio"
-      meta={[
-        {
-          name: 'description',
-          content: 'Residencies and editions of panke.gallery: a remote residency for net art, and a series of limited artist’s editions.'
-        }
-      ]}
-    />
-
     <StudioSection label="Residency" intro={data.residencyIntro}>
       {data.allContentfulResidency.nodes.map((residency) => (
         <ExhibitionItem
@@ -75,6 +65,13 @@ const Studio = ({ data }) => (
       ))}
     </StudioSection>
   </Layout>
+)
+
+export const Head = () => (
+  <Seo
+    title="Studio"
+    description="Residencies and editions of panke.gallery: a remote residency for net art, and a series of limited artist’s editions."
+  />
 )
 
 export default Studio

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
 
-import GuideLayout from '../components/guide-layout'
+import GuideLayout, { GuideHead } from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
 import { getStoredLanguage } from '../utils/audioguide-language'
@@ -12,6 +11,14 @@ import { formatDateRange } from '../utils/formatDateRange'
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
 const UNASSIGNED_EXHIBITION_SLUG = 'stop'
+
+// The exhibition's title, or a stand-in for stops without a (known) exhibition.
+const exhibitionHeading = (exhibition, exhibitionSlug) =>
+  exhibition
+    ? exhibition.title
+    : exhibitionSlug === UNASSIGNED_EXHIBITION_SLUG
+      ? 'panke.gallery'
+      : exhibitionSlug
 
 const GuideExhibitionOverview = props => {
   const exhibition = get(props, 'data.contentfulExhibition')
@@ -41,11 +48,7 @@ const GuideExhibitionOverview = props => {
       : group.find(edge => edge.node.language === preferredLanguage) || group[0]
   )
 
-  const heading = exhibition
-    ? exhibition.title
-    : exhibitionSlug === UNASSIGNED_EXHIBITION_SLUG
-      ? 'panke.gallery'
-      : exhibitionSlug
+  const heading = exhibitionHeading(exhibition, exhibitionSlug)
 
   // Short months keep the date on the one-line guide header.
   const dateDisplayed = exhibition
@@ -62,14 +65,14 @@ const GuideExhibitionOverview = props => {
         </HeaderTitle>
       }
     >
-      <Helmet title={`${heading} — Audioguide`} />
-       
-
-
       <GuideStopList stops={stops} />
     </GuideLayout>
   )
 }
+
+export const Head = ({ data, pageContext }) => (
+  <GuideHead title={`${exhibitionHeading(data.contentfulExhibition, pageContext.exhibitionSlug)} — Audioguide`} />
+)
 
 export default GuideExhibitionOverview;
 

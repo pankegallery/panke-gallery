@@ -1,8 +1,8 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ExhibitionItem from '../components/exhibition-item'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
@@ -97,16 +97,6 @@ const PankeExhibitions = ({ data, params, location }) => {
 
   return (
     <Layout wide>
-      <Helmet
-        title="Exhibitions"
-        meta={[
-          {
-            name: 'description',
-            content: 'Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
-          }
-        ]}
-      />
-
       <SectionStack>
         {current.length > 0 && (
           <Section>
@@ -185,6 +175,13 @@ const PankeExhibitions = ({ data, params, location }) => {
     </Layout>
   )
 }
+
+export const Head = () => (
+  <Seo
+    title="Exhibitions"
+    description="Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
+  />
+)
 
 export default PankeExhibitions
 

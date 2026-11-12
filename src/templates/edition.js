@@ -1,10 +1,10 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
@@ -83,7 +83,6 @@ class EditionTemplate extends React.Component {
     return (
       <Layout>
         <main>
-          <Helmet title={`${edition.title}`} />
           <HeadSection>
 
             <h1>{keepSeparatorsAttached(edition.title)}</h1>
@@ -122,6 +121,8 @@ class EditionTemplate extends React.Component {
     )
   }
 }
+
+export const Head = ({ data }) => <Seo title={data.contentfulEdition.title} />
 
 export default EditionTemplate;
 

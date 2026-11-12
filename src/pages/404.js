@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 import { Row, Col } from '../components/layout/Layout.styles'
 import { FurtherSection, Headline } from '../components/content/Content.styles';  
 
@@ -29,5 +30,7 @@ class Panke404 extends React.Component{
     );
   }
 }
+
+export const Head = () => <Seo title="Page not found" />
 
 export default Panke404;

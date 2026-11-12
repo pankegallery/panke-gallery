@@ -1,8 +1,8 @@
 import React from 'react';
-import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 import ContentBlock from '../components/content-block'
 import EventSection from '../components/event-section'
 import { processExternalLinks } from '../utils/processExternalLinks'
@@ -49,16 +49,6 @@ const PankeRosa = ({ data }) => {
   return (
     <Layout>
       <main>
-        <Helmet
-          title="/rosa"
-          meta={[
-            {
-              name: 'description',
-              content: '/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin.'
-            }
-          ]}
-        />
-
         <InfoSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
@@ -104,6 +94,13 @@ const PankeRosa = ({ data }) => {
     </Layout>
   );
 }
+
+export const Head = () => (
+  <Seo
+    title="/rosa"
+    description="/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin."
+  />
+)
 
 export default PankeRosa;
 
