@@ -23,7 +23,6 @@
     "gatsby-adapter-netlify": "^1.4.0",
     "gatsby-cli": "^5.16.0",
     "gatsby-plugin-image": "^3.16.0",
-    "gatsby-plugin-matomo": "^0.17.0",
     "gatsby-plugin-offline": "^6.16.0",
     "gatsby-plugin-sharp": "^5.16.0",
     "gatsby-plugin-styled-components": "^6.16.0",

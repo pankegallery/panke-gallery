@@ -14,9 +14,51 @@ const favicons = [
   <meta key="theme-color" name="theme-color" content="#ffffff" />,
 ]
 
-export const onRenderBody = ({ setHtmlAttributes, setHeadComponents }) => {
+// Matomo, set up as gatsby-plugin-matomo did it: our own instance, no
+// cookies, and nothing tracked when the browser sends Do Not Track.
+// No cookies means Matomo needs no consent banner (§ 25 TDDDG, #60). Visits
+// are still counted, only returning visitors aren't recognised across days.
+// The page views are sent from `onRouteUpdate` in gatsby-browser.js, for the
+// first page as for every in-site navigation.
+const MATOMO_URL = 'https://matomo.crosssenses.de'
+const MATOMO_SITE_ID = '2'
+const SITE_URL = 'https://www.panke.gallery'
+
+const matomoTracker = `
+if (!(navigator.doNotTrack === '1' || window.doNotTrack === '1')) {
+  window._paq = window._paq || [];
+  window._paq.push(['disableCookies']);
+  window._paq.push(['setTrackerUrl', '${MATOMO_URL}/matomo.php']);
+  window._paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+  window._paq.push(['enableHeartBeatTimer']);
+  window.matomoLoadStart = Date.now();
+  (function() {
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = '${MATOMO_URL}/matomo.js'; s.parentNode.insertBefore(g, s);
+  })();
+}
+`
+
+// Counts visits without JavaScript, which the tracker above can't see.
+const matomoPixel = pathname =>
+  `<img src="${MATOMO_URL}/matomo.php?idsite=${MATOMO_SITE_ID}&amp;rec=1&amp;url=${encodeURIComponent(SITE_URL + pathname)}" style="border:0" alt="" />`
+
+// gatsby-plugin-offline renders an empty app shell for offline use. Nobody
+// visits it as a page, so it gets no tracker.
+const OFFLINE_APP_SHELL = '/offline-plugin-app-shell-fallback/'
+
+export const onRenderBody = ({ pathname, setHtmlAttributes, setHeadComponents, setPostBodyComponents }) => {
   // The site is English only (#63). German text, should it come back, gets
   // its own `lang="de"`.
   setHtmlAttributes({ lang: 'en' })
   setHeadComponents(favicons)
+
+  // Only the production build tracks, so `npm run dev` sends nothing.
+  if (process.env.NODE_ENV !== 'production' || pathname === OFFLINE_APP_SHELL) return
+
+  setHeadComponents([<link key="matomo-preconnect" rel="preconnect" href={MATOMO_URL} />])
+  setPostBodyComponents([
+    <script key="matomo-tracker" dangerouslySetInnerHTML={{ __html: matomoTracker }} />,
+    <noscript key="matomo-pixel" dangerouslySetInnerHTML={{ __html: matomoPixel(pathname) }} />,
+  ])
 }
