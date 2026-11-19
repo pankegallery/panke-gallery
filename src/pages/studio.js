@@ -70,6 +70,7 @@ const Studio = ({ data }) => (
 export const Head = () => (
   <Seo
     title="Studio"
+    path="/studio/"
     description="Residencies and editions of panke.gallery: a remote residency for net art, and a series of limited artist’s editions."
   />
 )

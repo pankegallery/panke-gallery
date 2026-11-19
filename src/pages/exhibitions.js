@@ -179,6 +179,7 @@ const PankeExhibitions = ({ data, params, location }) => {
 export const Head = () => (
   <Seo
     title="Exhibitions"
+    path="/exhibitions/"
     description="Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
   />
 )

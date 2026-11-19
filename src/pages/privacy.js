@@ -61,6 +61,7 @@ const PankePrivacy = ({ data }) => {
 export const Head = () => (
   <Seo
     title="Privacy Policy"
+    path="/privacy/"
     description="How panke.gallery handles personal data: hosting, images, cookie-free visitor statistics, newsletter, event RSVPs and your rights under the GDPR."
   />
 )
