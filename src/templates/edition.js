@@ -31,14 +31,14 @@ class EditionTemplate extends React.Component {
     var ImageOrSlides;
     if (edition.editionImpressionsSlideshow != null) {
       ImageOrSlides = (
-        <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
+        <Slideshow slides={edition.editionImpressionsSlideshow} alt={edition.title} />
       );
     }
     else if (edition.featuredImage?.gatsbyImageData) {
       // Without image data (e.g. a broken upload) GatsbyImage would warn on
       // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} />
+        <GatsbyImage alt={edition.featuredImage.description || edition.title} image={edition.featuredImage.gatsbyImageData} />
       );
     }
 
@@ -82,7 +82,7 @@ class EditionTemplate extends React.Component {
 
     return (
       <Layout>
-        <main>
+        <div>
           <HeadSection>
 
             <h1>{keepSeparatorsAttached(edition.title)}</h1>
@@ -116,7 +116,7 @@ class EditionTemplate extends React.Component {
 
           {FurtherContentBlocks}
 
-        </main>
+        </div>
       </Layout>
     )
   }

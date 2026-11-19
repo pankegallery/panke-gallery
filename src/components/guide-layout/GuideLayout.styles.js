@@ -40,8 +40,13 @@ export const GuideHeader = styled.header`
 // flex: 1 1 auto so it fills the space and truncates rather than pushing the
 // overview icon off the right edge or wrapping onto a second line, which
 // would change the header's height depending on content.
+// The overview pages render it as their <h1> (`as="h1"`), so it resets the
+// heading's own margin, weight and line height.
 export const HeaderTitle = styled.div`
   flex: 1 1 auto;
+  margin: 0;
+  font-weight: inherit;
+  line-height: inherit;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;

@@ -3,6 +3,20 @@ import { media } from '../../theme/theme';
 import { Row, breakpointDisplay, shortRule, uppercase } from '../layout/Layout.styles';
 import { ItemDate } from './Item.styles';
 
+// Read by screen readers but not shown, e.g. a page's <h1> where the design
+// has no visible page title: `<VisuallyHidden as="h1">Events</VisuallyHidden>`.
+export const VisuallyHidden = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+`;
+
 // Uppercase section labels such as "Upcoming events", "Current" or
 // "About the exhibition".
 const sectionLabel = ({ theme }) => css`

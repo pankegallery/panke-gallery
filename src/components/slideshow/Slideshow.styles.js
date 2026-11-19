@@ -73,7 +73,7 @@ export const CarouselIndicators = styled.div`
     text-indent: -999px;
     overflow: hidden;
     border: 0;
-    background-color: ${({ theme, $active }) =>
-      $active ? theme.colors.theme.black : theme.colors.theme.lightgrey};
+    /* The active one is in the accent colour (Layout.styles.js). */
+    background-color: ${({ theme }) => theme.colors.theme.lightgrey};
   }
 `

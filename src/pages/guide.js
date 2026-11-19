@@ -90,7 +90,7 @@ const GuideOverview = props => {
     <GuideLayout 
       showOverviewLink={false}
       headerAction={
-        <HeaderTitle>
+        <HeaderTitle as="h1">
           <strong>Overview of audio guide stops</strong>
         </HeaderTitle>
       }
