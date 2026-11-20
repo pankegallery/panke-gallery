@@ -52,9 +52,10 @@ module.exports = {
     // Share previews need absolute URLs.
     siteUrl: 'https://www.panke.gallery',
     description: 'panke.gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture, especially in the recent history of Berlin. Its program of exhibitions and events takes place in a gallery space within the premises of panke.club.',
-    // The share image of pages without an image of their own, 1200×630 px.
-    image: '/share-image.png',
-    imageAlt: 'panke.gallery',
+    // The share image of pages without an image of their own, 1200×630 px:
+    // the empty gallery with the logotype on its back wall.
+    image: '/share-image.jpg',
+    imageAlt: 'The empty panke.gallery: white walls, a concrete floor and fluorescent lights, with "panke.gallery" on the back wall',
     fediverseCreator: '@pankegallery@tldr.nettime.org'
   },
   pathPrefix: '/panke-gallery',
