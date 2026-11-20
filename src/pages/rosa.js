@@ -98,6 +98,7 @@ const PankeRosa = ({ data }) => {
 export const Head = () => (
   <Seo
     title="/rosa"
+    path="/rosa/"
     description="/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin."
   />
 )

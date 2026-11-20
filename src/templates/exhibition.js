@@ -4,7 +4,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
-import Seo from '../components/seo'
+import Seo, { excerptOf, shareImageOf, eventDataOfExhibition } from '../components/seo'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
@@ -163,7 +163,22 @@ class ExhibitionTemplate extends React.Component {
   }
 }
 
-export const Head = ({ data }) => <Seo title={data.contentfulExhibition.title} />
+// The share preview: the entry's subtitle, or else the start of its text, and
+// its featured image, or else the first slide.
+// The dates and place go into event data for search engines.
+export const Head = ({ data, location }) => {
+  const entry = data.contentfulExhibition
+  return (
+    <Seo
+      title={entry.title}
+      description={excerptOf(entry.subtitleShortDescription, entry.description)}
+      path={location.pathname}
+      image={shareImageOf(entry.featuredImage || entry.exhibitionImpressionsSlideshow?.[0])}
+      type="article"
+      event={eventDataOfExhibition(entry)}
+    />
+  )
+}
 
 export default ExhibitionTemplate;
 
@@ -190,11 +205,13 @@ export const pageQuery = graphql`
       subtitleShortDescription {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       description {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       openingHours
@@ -220,6 +237,9 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
+        description
       }
       exhibitionImpressionsSlideshow{
         gatsbyImageData(
@@ -228,6 +248,8 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
         description
       }
       exhibitionDocumentationImagesBelow{

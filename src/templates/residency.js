@@ -3,7 +3,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
-import Seo from '../components/seo'
+import Seo, { excerptOf, shareImageOf } from '../components/seo'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import ExhibitionItem from '../components/exhibition-item'
 import { ExternalMark } from '../components/exhibition-item/ExhibitionItem.styles'
@@ -158,7 +158,20 @@ const ResidencyTemplate = ({ data }) => {
   )
 }
 
-export const Head = ({ data }) => <Seo title={data.contentfulResidency.title} />
+// The share preview: the entry's subtitle, or else the start of its text, and
+// its featured image.
+export const Head = ({ data, location }) => {
+  const entry = data.contentfulResidency
+  return (
+    <Seo
+      title={entry.title}
+      description={excerptOf(entry.subtitleShortDescription, entry.description)}
+      path={location.pathname}
+      image={shareImageOf(entry.featuredImage)}
+      type="article"
+    />
+  )
+}
 
 export default ResidencyTemplate
 
@@ -174,11 +187,13 @@ export const pageQuery = graphql`
       subtitleShortDescription {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       description {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       # As wide as the content column, theme.container.maxWidth (1080px):
@@ -191,6 +206,8 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
         description
       }
       residencyLandingPage
