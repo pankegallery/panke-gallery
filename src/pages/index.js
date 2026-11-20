@@ -25,6 +25,7 @@ import {
   IntroSection,
   Intro,
   Visit,
+  VisuallyHidden,
 } from '../components/content/Content.styles';
 
 /**
@@ -132,6 +133,7 @@ const PankeIndex = ({ data }) => {
 
   return (
     <Layout wide>
+      <VisuallyHidden as="h1">panke.gallery</VisuallyHidden>
       {newsItems.length > 0 && (
         <NewsSection>
           {newsItems.map(({ node }) => (
@@ -172,6 +174,8 @@ const PankeIndex = ({ data }) => {
 export const Head = () => (
   <Seo
     title="Home"
+    shareTitle="panke.gallery"
+    path="/"
     description="News and upcoming exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
   />
 )

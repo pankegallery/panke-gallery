@@ -4,6 +4,7 @@ import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
 import ContentBlock from '../components/content-block'
+import { VisuallyHidden } from '../components/content/Content.styles'
 
 // The first sections of the text ("Who is responsible", "In short") stand
 // in rows of their own, labelled with their heading; the rest of the
@@ -50,6 +51,7 @@ const PankePrivacy = ({ data }) => {
 
   return (
     <Layout>
+      <VisuallyHidden as="h1">Privacy Policy</VisuallyHidden>
       {lead.map(({ title, html: sectionHtml }) => (
         <ContentBlock key={title} blockTitle={title} html={sectionHtml} />
       ))}
@@ -61,6 +63,7 @@ const PankePrivacy = ({ data }) => {
 export const Head = () => (
   <Seo
     title="Privacy Policy"
+    path="/privacy/"
     description="How panke.gallery handles personal data: hosting, images, cookie-free visitor statistics, newsletter, event RSVPs and your rights under the GDPR."
   />
 )

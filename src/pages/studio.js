@@ -5,7 +5,7 @@ import Layout from '../components/layout'
 import Seo from '../components/seo'
 import ExhibitionItem from '../components/exhibition-item'
 import { ContentHtml } from '../components/content-block'
-import { FurtherSection, CardGrid } from '../components/content/Content.styles'
+import { FurtherSection, CardGrid, VisuallyHidden } from '../components/content/Content.styles'
 import { Row, Col } from '../components/layout/Layout.styles'
 
 /**
@@ -42,6 +42,7 @@ const StudioSection = ({ label, intro, children }) => (
  */
 const Studio = ({ data }) => (
   <Layout>
+    <VisuallyHidden as="h1">Studio</VisuallyHidden>
     <StudioSection label="Residency" intro={data.residencyIntro}>
       {data.allContentfulResidency.nodes.map((residency) => (
         <ExhibitionItem
@@ -70,6 +71,7 @@ const Studio = ({ data }) => (
 export const Head = () => (
   <Seo
     title="Studio"
+    path="/studio/"
     description="Residencies and editions of panke.gallery: a remote residency for net art, and a series of limited artist’s editions."
   />
 )

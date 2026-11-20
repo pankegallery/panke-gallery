@@ -6,7 +6,7 @@ import Seo from '../components/seo'
 import ExhibitionItem from '../components/exhibition-item'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
-import { Section, SectionStack, Headline, YearSection, YearHeading } from '../components/content/Content.styles'
+import { Section, SectionStack, Headline, YearSection, YearHeading, VisuallyHidden } from '../components/content/Content.styles'
 import { theme } from '../theme/theme'
 import { RECENT_COUNT, isCurrent, isUpcoming, isPast } from '../utils/exhibition-archive.mjs'
 import { groupByOpeningYear } from '../utils/group-by-opening-year.mjs'
@@ -97,6 +97,7 @@ const PankeExhibitions = ({ data, params, location }) => {
 
   return (
     <Layout wide>
+      <VisuallyHidden as="h1">Exhibitions</VisuallyHidden>
       <SectionStack>
         {current.length > 0 && (
           <Section>
@@ -179,6 +180,7 @@ const PankeExhibitions = ({ data, params, location }) => {
 export const Head = () => (
   <Seo
     title="Exhibitions"
+    path="/exhibitions/"
     description="Upcoming and past exhibitions of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
   />
 )

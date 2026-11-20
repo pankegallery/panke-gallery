@@ -4,7 +4,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
-import Seo from '../components/seo'
+import Seo, { excerptOf, shareImageOf } from '../components/seo'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Checkout from '../components/checkout'
@@ -31,14 +31,14 @@ class EditionTemplate extends React.Component {
     var ImageOrSlides;
     if (edition.editionImpressionsSlideshow != null) {
       ImageOrSlides = (
-        <Slideshow slides={edition.editionImpressionsSlideshow} length={edition.editionImpressionsSlideshow.length} />
+        <Slideshow slides={edition.editionImpressionsSlideshow} alt={edition.title} />
       );
     }
     else if (edition.featuredImage?.gatsbyImageData) {
       // Without image data (e.g. a broken upload) GatsbyImage would warn on
       // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={edition.featuredImage.gatsbyImageData} />
+        <GatsbyImage alt={edition.featuredImage.description || edition.title} image={edition.featuredImage.gatsbyImageData} />
       );
     }
 
@@ -82,7 +82,7 @@ class EditionTemplate extends React.Component {
 
     return (
       <Layout>
-        <main>
+        <div>
           <HeadSection>
 
             <h1>{keepSeparatorsAttached(edition.title)}</h1>
@@ -116,13 +116,26 @@ class EditionTemplate extends React.Component {
 
           {FurtherContentBlocks}
 
-        </main>
+        </div>
       </Layout>
     )
   }
 }
 
-export const Head = ({ data }) => <Seo title={data.contentfulEdition.title} />
+// The share preview: the entry's subtitle, or else the start of its text, and
+// its featured image, or else the first slide.
+export const Head = ({ data, location }) => {
+  const entry = data.contentfulEdition
+  return (
+    <Seo
+      title={entry.title}
+      description={excerptOf(entry.subtitleShortDescription, entry.description)}
+      path={location.pathname}
+      image={shareImageOf(entry.featuredImage || entry.editionImpressionsSlideshow?.[0])}
+      type="article"
+    />
+  )
+}
 
 export default EditionTemplate;
 
@@ -143,11 +156,13 @@ export const pageQuery = graphql`
       subtitleShortDescription {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       description {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       stripePriceId
@@ -168,6 +183,9 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
+        description
       }
       editionImpressionsSlideshow{
         gatsbyImageData(
@@ -176,6 +194,8 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
         description
       }
     }

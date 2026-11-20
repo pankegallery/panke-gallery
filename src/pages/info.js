@@ -5,6 +5,7 @@ import { graphql } from 'gatsby'
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import ContentBlock from '../components/content-block'
+import { VisuallyHidden } from '../components/content/Content.styles'
 
 class PankeInfo extends React.Component{
   render() {
@@ -13,14 +14,15 @@ class PankeInfo extends React.Component{
 
     return(
       <Layout>
-      <main>
+      <VisuallyHidden as="h1">About</VisuallyHidden>
+      <div>
         {blocks.map(({node}) => {
           return (
               <ContentBlock key={node.id} blockTitle={node.title} blockContent={node.blockContent} />
           )
         })}
 
-      </main>
+      </div>
       </Layout>
     );
   }
@@ -29,6 +31,7 @@ class PankeInfo extends React.Component{
 export const Head = () => (
   <Seo
     title="About"
+    path="/info/"
     description="panke.gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture, especially in the recent history of Berlin. Its program of exhibitions and events takes place in a gallery space within the premises of panke.club."
   />
 )

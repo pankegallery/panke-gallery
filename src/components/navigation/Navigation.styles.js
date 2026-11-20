@@ -66,11 +66,17 @@ export const OffCanvas = styled.div`
   right: calc(-100% - 2 * ${props => props.theme.spacing.gutter});
   top: 0;
   width: 100%;
-  transition: right 0.25s ease;
   z-index: 100;
+  /* Closed, the menu is hidden as well as moved out of view, so its links
+     aren't reached with Tab or read out next to the header's navigation.
+     It hides only once it has slid out. */
+  visibility: hidden;
+  transition: right 0.25s ease, visibility 0s linear 0.25s;
 
   &.active {
     right: 0;
+    visibility: visible;
+    transition: right 0.25s ease;
   }
 
   ${NavMain}, ${NavSatellite} {

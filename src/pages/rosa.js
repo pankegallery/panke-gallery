@@ -7,7 +7,7 @@ import ContentBlock from '../components/content-block'
 import EventSection from '../components/event-section'
 import { processExternalLinks } from '../utils/processExternalLinks'
 import { keepSeparatorsAttached } from '../utils/keepSeparatorsAttached'
-import { InfoSection, FurtherSection, SectionStack } from '../components/content/Content.styles';
+import { InfoSection, FurtherSection, SectionStack, VisuallyHidden } from '../components/content/Content.styles';
 import { Row, Col } from '../components/layout/Layout.styles';
 
 const infoBlock = {
@@ -48,7 +48,8 @@ const PankeRosa = ({ data }) => {
 
   return (
     <Layout>
-      <main>
+      <VisuallyHidden as="h1">/rosa</VisuallyHidden>
+      <div>
         <InfoSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
@@ -90,7 +91,7 @@ const PankeRosa = ({ data }) => {
           <EventSection label="Upcoming at /rosa" events={upcoming} withImage />
           <EventSection label="Past events at /rosa" events={past} />
         </SectionStack>
-      </main>
+      </div>
     </Layout>
   );
 }
@@ -98,6 +99,7 @@ const PankeRosa = ({ data }) => {
 export const Head = () => (
   <Seo
     title="/rosa"
+    path="/rosa/"
     description="/rosa is a project space jointly run by Zentrum für Netzkunst (ZfN) and panke.gallery focused on representing net art and net culture in Berlin."
   />
 )

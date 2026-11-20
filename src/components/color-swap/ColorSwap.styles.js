@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { media } from '../../theme/theme';
 
-export const ColorSwapContainer = styled.div`
-  left: 20px;
+// An <aside>, so it is a landmark of its own next to the page. The column of
+// 24px buttons is centred where the old, denser column was.
+export const ColorSwapContainer = styled.aside`
+  left: 15px;
   position: fixed;
-  top: 80%;
+  top: calc(80% - 24px);
 
   ${media.sm} {
     left: 4%;
@@ -14,19 +16,27 @@ export const ColorSwapContainer = styled.div`
   }
 `;
 
-export const ColorBox = styled.div`
-  background: ${props => props.$color || props.theme.colors.theme.lightgrey};
-  border: 2px solid ${props => props.theme.colors.theme.white};
-  height: 10px;
-  margin: 0 0 2px;
-  width: 10px;
+// A transparent 24px button (WCAG 2.5.8) with the colour as a small box in
+// its middle, so the boxes keep their size but sit further apart.
+export const ColorBox = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${props => props.theme.sizes.pointerTarget};
+  height: ${props => props.theme.sizes.pointerTarget};
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  appearance: none;
   cursor: pointer;
 
-  ${media.sm} {
-    display: inline-block;
-    margin: 0 0px 0 0;
-    border: 1px solid ${props => props.theme.colors.theme.white};
-    height: 8px;
-    width: 8px;
+  &::before {
+    content: '';
+    box-sizing: content-box;
+    width: 10px;
+    height: 10px;
+    border: 2px solid ${props => props.theme.colors.theme.white};
+    background: ${props => props.$color || props.theme.colors.theme.lightgrey};
   }
 `;
