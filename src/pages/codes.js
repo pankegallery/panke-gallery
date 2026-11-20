@@ -1,15 +1,16 @@
 import React from 'react';
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
 
-import PrintLayout from '../components/print-layout'
+import PrintLayout, { PrintHead } from '../components/print-layout'
 import PrintSheet from '../components/print-sheet'
 import { dedupeStopsByPosition } from '../utils/dedupe-stops-by-position'
 
 // Kept in sync with the same reserved bucket in gatsby-node.js — stops with
 // no exhibitionSlug in Baserow get filed here instead of being dropped.
 const UNASSIGNED_EXHIBITION_SLUG = 'stop'
+
+const TITLE = 'Audioguide — Print Sheet — All'
 
 class PrintSheetPage extends React.Component {
   render() {
@@ -46,17 +47,15 @@ class PrintSheetPage extends React.Component {
       })
     }
 
-    const title = 'Audioguide — Print Sheet — All'
-
     return (
       <PrintLayout>
-        <Helmet title={title} />
-
-        <PrintSheet pageTitle={title} sections={sections} />
+        <PrintSheet pageTitle={TITLE} sections={sections} />
       </PrintLayout>
     );
   }
 }
+
+export const Head = () => <PrintHead title={TITLE} />
 
 export default PrintSheetPage;
 

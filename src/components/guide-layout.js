@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import Helmet from 'react-helmet';
 import { Link } from 'gatsby';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import { theme } from '../theme/theme';
 import { GlobalStyles } from '../theme/GlobalStyles';
+import Seo from './seo';
 import {
   GuideShell,
   GuideHeader,
@@ -12,6 +12,20 @@ import {
   OverviewLink,
   DashboardIcon,
 } from './guide-layout/GuideLayout.styles';
+
+/**
+ * Head for the audioguide pages, to export as `Head` from them: the title as
+ * given, and a viewport that reaches under the notch and home indicator
+ * (`viewport-fit=cover`), since the guide is used fullscreen on a phone.
+ *
+ * @param {Object} props
+ * @param {string} props.title
+ */
+export const GuideHead = ({ title }) => (
+  <Seo title={title} standalone>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  </Seo>
+);
 
 // A deliberately minimal shell for the audioguide pages — no navigation, no
 // footer, no logo. The guide is meant to be used fullscreen on a phone while
@@ -36,15 +50,6 @@ const GuideLayout = ({
   return (
     <StyledThemeProvider theme={theme}>
       <GlobalStyles />
-      <Helmet>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
-        <link rel="manifest" href="/favicons/site.webmanifest" />
-        <link rel="shortcut icon" href="/favicons/favicon.ico" />
-        <meta name="theme-color" content="#ffffff" />
-      </Helmet>
       <GuideShell>
         <GuideHeader>
           {headerAction}

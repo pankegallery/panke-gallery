@@ -1,10 +1,23 @@
 import React from 'react';
-import Helmet from 'react-helmet';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import { theme } from '../theme/theme';
 import { GlobalStyles } from '../theme/GlobalStyles';
 import PasswordGate from './password-gate';
+import Seo from './seo';
+
+/**
+ * Head for the print pages, to export as `Head` from them: the title as
+ * given, and `noindex` (see below).
+ *
+ * @param {Object} props
+ * @param {string} props.title
+ */
+export const PrintHead = ({ title }) => (
+  <Seo title={title} standalone>
+    <meta name="robots" content="noindex, nofollow" />
+  </Seo>
+);
 
 // Deliberately bare — no header, nav, or footer. This wraps internal
 // print-only pages (the QR code sheets), which have no visitor-facing
@@ -19,9 +32,6 @@ import PasswordGate from './password-gate';
 const PrintLayout = ({ children }) => (
   <StyledThemeProvider theme={theme}>
     <GlobalStyles />
-    <Helmet>
-      <meta name="robots" content="noindex, nofollow" />
-    </Helmet>
     <PasswordGate>{children}</PasswordGate>
   </StyledThemeProvider>
 );

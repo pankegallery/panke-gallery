@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
@@ -200,7 +200,6 @@ class EventTemplate extends React.Component {
     return (
       <Layout>
       <main>
-        <Helmet title={`${event.title}`} />
         <HeadSection>
           {/* Title and date left, subline and tags right: 4/8 like the
               "About the event" row below, 6/6 on larger screens (#70). */}
@@ -253,6 +252,8 @@ class EventTemplate extends React.Component {
     )
   }
 }
+
+export const Head = ({ data }) => <Seo title={data.contentfulEvent.title} />
 
 export default EventTemplate;
 

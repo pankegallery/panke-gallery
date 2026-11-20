@@ -1,9 +1,9 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import ExhibitionItem from '../components/exhibition-item'
 import { ExternalMark } from '../components/exhibition-item/ExhibitionItem.styles'
@@ -101,7 +101,6 @@ const ResidencyTemplate = ({ data }) => {
   return (
     <Layout>
       <main>
-        <Helmet title={title} />
         <HeadSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
@@ -158,6 +157,8 @@ const ResidencyTemplate = ({ data }) => {
     </Layout>
   )
 }
+
+export const Head = ({ data }) => <Seo title={data.contentfulResidency.title} />
 
 export default ResidencyTemplate
 

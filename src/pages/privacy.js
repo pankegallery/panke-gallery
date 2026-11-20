@@ -1,8 +1,8 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ContentBlock from '../components/content-block'
 
 // The first sections of the text ("Who is responsible", "In short") stand
@@ -50,15 +50,6 @@ const PankePrivacy = ({ data }) => {
 
   return (
     <Layout>
-      <Helmet
-        title="Privacy Policy"
-        meta={[
-          {
-            name: 'description',
-            content: 'How panke.gallery handles personal data: hosting, images, cookie-free visitor statistics, newsletter, event RSVPs and your rights under the GDPR.'
-          }
-        ]}
-      />
       {lead.map(({ title, html: sectionHtml }) => (
         <ContentBlock key={title} blockTitle={title} html={sectionHtml} />
       ))}
@@ -66,6 +57,13 @@ const PankePrivacy = ({ data }) => {
     </Layout>
   )
 }
+
+export const Head = () => (
+  <Seo
+    title="Privacy Policy"
+    description="How panke.gallery handles personal data: hosting, images, cookie-free visitor statistics, newsletter, event RSVPs and your rights under the GDPR."
+  />
+)
 
 export default PankePrivacy
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import get from 'lodash/get'
-import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import ConsentEmbed from '../components/consent-embed'
 import NewsletterForm from '../components/newsletter-form'
@@ -40,15 +40,6 @@ class PankeContact extends React.Component{
     
     return(
       <Layout>
-        <Helmet
-          title="Contact"
-          meta={[
-            {
-              name: 'description',
-              content: 'Opening hours, contact information and guidance how to reach panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
-            }
-          ]}
-        />
         <FurtherSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
@@ -113,6 +104,13 @@ class PankeContact extends React.Component{
     );
   }
 }
+
+export const Head = () => (
+  <Seo
+    title="Contact"
+    description="Opening hours, contact information and guidance how to reach panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
+  />
+)
 
 export default PankeContact;
 

@@ -1,10 +1,10 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import ContentBlock from '../components/content-block'
 import Slideshow from '../components/slideshow'
 import Documentation from '../components/documentation-images'
@@ -95,7 +95,6 @@ class ExhibitionTemplate extends React.Component {
     return (
       <Layout>
         <main>
-          <Helmet title={`${exhibition.title}`} />
           <HeadSection>
             {/* Title and date left, subline and tags right: 4/8 like the
                 "About the exhibition" row below, 6/6 on larger screens (#70). */}
@@ -163,6 +162,8 @@ class ExhibitionTemplate extends React.Component {
     )
   }
 }
+
+export const Head = ({ data }) => <Seo title={data.contentfulExhibition.title} />
 
 export default ExhibitionTemplate;
 

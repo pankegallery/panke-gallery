@@ -51,7 +51,6 @@ module.exports = {
   pathPrefix: '/panke-gallery',
   plugins: [
     'gatsby-transformer-remark',
-    'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-plugin-sharp`,
       options: {
@@ -94,18 +93,6 @@ module.exports = {
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
-    },
-    {
-      resolve: 'gatsby-plugin-matomo',
-      options: {
-        siteId: '2',
-        matomoUrl: 'https://matomo.crosssenses.de',
-        siteUrl: 'https://www.panke.gallery',
-        // No cookies, so Matomo needs no consent banner (§ 25 TDDDG, #60).
-        // Visits are still counted, only returning visitors aren't
-        // recognised across days.
-        disableCookies: true
-      }
     }
   ]
 }
