@@ -27,6 +27,11 @@ export const theme = {
       // Image boxes in the archive while their year's images load (#68),
       // as in the archive prototype.
       tint: '#f1f1f4'
+    },
+    // Hover colours of the footer's social icons, in the platforms' own blue.
+    social: {
+      facebook: '#2f4984',
+      bluesky: '#1185fe'
     }
   },
   breakpoints: {
@@ -97,6 +102,8 @@ export const theme = {
   sizes: {
     // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.
     tapTarget: '44px',
+    // Smallest target for a mouse (WCAG 2.5.8), e.g. the colour switcher.
+    pointerTarget: '24px',
     yearChipMinWidth: '60px',
     // Teasers stop at a readable line length in wide text columns.
     teaserMaxWidth: '60ch',

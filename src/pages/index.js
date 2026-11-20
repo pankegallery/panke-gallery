@@ -25,6 +25,7 @@ import {
   IntroSection,
   Intro,
   Visit,
+  VisuallyHidden,
 } from '../components/content/Content.styles';
 
 /**
@@ -132,6 +133,7 @@ const PankeIndex = ({ data }) => {
 
   return (
     <Layout wide>
+      <VisuallyHidden as="h1">panke.gallery</VisuallyHidden>
       {newsItems.length > 0 && (
         <NewsSection>
           {newsItems.map(({ node }) => (

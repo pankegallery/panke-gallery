@@ -29,14 +29,14 @@ class ExhibitionTemplate extends React.Component {
     var ImageOrSlides;
     if (exhibition.exhibitionImpressionsSlideshow != null) {
       ImageOrSlides = (
-        <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} length={exhibition.exhibitionImpressionsSlideshow.length} />
+        <Slideshow slides={exhibition.exhibitionImpressionsSlideshow} alt={exhibition.title} />
       );
     }
     else if (exhibition.featuredImage?.gatsbyImageData) {
       // Without image data (e.g. a broken upload) GatsbyImage would warn on
       // every build, so the image is left out instead.
       ImageOrSlides = (
-        <GatsbyImage alt="FeaturedImage" image={exhibition.featuredImage.gatsbyImageData} />
+        <GatsbyImage alt={exhibition.featuredImage.description || exhibition.title} image={exhibition.featuredImage.gatsbyImageData} />
       );
     }
 
@@ -94,7 +94,7 @@ class ExhibitionTemplate extends React.Component {
 
     return (
       <Layout>
-        <main>
+        <div>
           <HeadSection>
             {/* Title and date left, subline and tags right: 4/8 like the
                 "About the exhibition" row below, 6/6 on larger screens (#70). */}
@@ -157,7 +157,7 @@ class ExhibitionTemplate extends React.Component {
 
           {DocumentationImages}
 
-        </main>
+        </div>
       </Layout>
     )
   }

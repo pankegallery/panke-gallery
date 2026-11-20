@@ -59,7 +59,7 @@ const GuideExhibitionOverview = props => {
     <GuideLayout
       showOverviewLink={false}
       headerAction={
-        <HeaderTitle>
+        <HeaderTitle as="h1">
           <strong>{heading}</strong>
           {dateDisplayed && <span className="date">{dateDisplayed}</span>}
         </HeaderTitle>

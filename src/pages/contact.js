@@ -7,7 +7,7 @@ import Seo from "../components/seo"
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import ConsentEmbed from '../components/consent-embed'
 import NewsletterForm from '../components/newsletter-form'
-import { FurtherSection } from '../components/content/Content.styles';
+import { FurtherSection, VisuallyHidden } from '../components/content/Content.styles';
 import { Col, Row } from '../components/layout/Layout.styles';
 
 class PankeContact extends React.Component{
@@ -40,6 +40,7 @@ class PankeContact extends React.Component{
     
     return(
       <Layout>
+        <VisuallyHidden as="h1">Contact</VisuallyHidden>
         <FurtherSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>

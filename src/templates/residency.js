@@ -100,7 +100,7 @@ const ResidencyTemplate = ({ data }) => {
 
   return (
     <Layout>
-      <main>
+      <div>
         <HeadSection>
           <Row>
             <Col $md={4} $sm={4} $xs={12}>
@@ -153,7 +153,7 @@ const ResidencyTemplate = ({ data }) => {
         ))}
 
         <WorksSection works={residency.works} />
-      </main>
+      </div>
     </Layout>
   )
 }

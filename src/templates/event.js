@@ -68,11 +68,11 @@ const EventMedia = ({ event }) => {
 
   let cover = null
   if (slides != null) {
-    cover = <Slideshow slides={slides} length={slides.length} />
+    cover = <Slideshow slides={slides} alt={event.title} />
   } else if (event.featuredImage?.gatsbyImageData) {
     // Without image data (e.g. a broken upload) GatsbyImage would warn on
     // every build, so the image is left out instead.
-    cover = <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
+    cover = <GatsbyImage alt={event.featuredImage.description || event.title} image={event.featuredImage.gatsbyImageData} />
   }
   // The pill goes below a slideshow rather than on it, clear of its arrows.
   const pillBelow = slides != null
@@ -199,7 +199,7 @@ class EventTemplate extends React.Component {
 
     return (
       <Layout>
-      <main>
+      <div>
         <HeadSection>
           {/* Title and date left, subline and tags right: 4/8 like the
               "About the event" row below, 6/6 on larger screens (#70). */}
@@ -247,7 +247,7 @@ class EventTemplate extends React.Component {
 
         {DocumentationImages}
 
-      </main>
+      </div>
       </Layout>
     )
   }
