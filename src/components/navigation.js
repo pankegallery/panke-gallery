@@ -4,7 +4,7 @@ import { NavMain, NavSatellite, NavList, NavWrapper } from './navigation/Navigat
 
 const Navigation = () => (
   <NavWrapper>
-    <NavMain id="nav-main" aria-label="Main">
+    <NavMain className="nav-main" aria-label="Main">
       <NavList>
         <li><Link to="/exhibitions">Exhibitions</Link></li>
         <li><Link to="/events">Events</Link></li>
@@ -15,7 +15,7 @@ const Navigation = () => (
     </NavMain>
 
     {/* Side projects of the gallery, apart from its own programme. */}
-    <NavSatellite id="nav-satellite" aria-label="Side projects">
+    <NavSatellite className="nav-satellite" aria-label="Side projects">
       <NavList>
         <li><Link to="/rosa">/rosa</Link></li>
         <li><a href="http://router.gallery" target="_blank" rel="noopener noreferrer">Router</a></li>
