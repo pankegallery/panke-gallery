@@ -32,6 +32,60 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+// panke.gallery is in Berlin: event times in emails are always Berlin time.
+const EVENT_TIME_ZONE = 'Europe/Berlin';
+
+/**
+ * Formats an event's start for the confirmation email, e.g.
+ * "Friday, 20 November 2026 at 16:00", always in Berlin time.
+ *
+ * Contentful may store `date` without a UTC offset ("2026-11-20T16:00").
+ * The website reads that as Berlin time, but `new Date()` reads it in the
+ * time zone of the machine running the code, and Netlify Functions run in
+ * UTC: converting that to Berlin made the email an hour late in winter and
+ * two in summer (#128). So a date without an offset is shown as the wall-clock
+ * time it names, and only a date with an offset is converted to Berlin time.
+ *
+ * @param {string} eventDate - Contentful date: date only, date-time, or date-time with offset.
+ * @returns {string} The formatted date, or '' if `eventDate` can't be read.
+ */
+function formatEventDate(eventDate) {
+  if (typeof eventDate !== 'string') return '';
+  const value = eventDate.trim();
+
+  // Date only, e.g. "2026-11-20": no time to show.
+  const dateOnly = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (dateOnly) {
+    const [, y, m, d] = dateOnly.map(Number);
+    return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-GB', {
+      dateStyle: 'full',
+      timeZone: 'UTC'
+    });
+  }
+
+  // Date-time without offset: already Berlin wall-clock time. Formatting the
+  // same fields in UTC shows them unchanged, whatever zone the server is in.
+  const local = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?$/);
+  if (local) {
+    // Seconds are optional: Number(undefined) would be NaN, so default to 0.
+    const [, y, m, d, h, min, s] = local.map((part) => Number(part || 0));
+    return new Date(Date.UTC(y, m - 1, d, h, min, s)).toLocaleString('en-GB', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+      timeZone: 'UTC'
+    });
+  }
+
+  // Date-time with offset ("+01:00", "Z"): an exact instant, shown in Berlin time.
+  const instant = new Date(value);
+  if (isNaN(instant)) return '';
+  return instant.toLocaleString('en-GB', {
+    dateStyle: 'full',
+    timeStyle: 'short',
+    timeZone: EVENT_TIME_ZONE
+  });
+}
+
 // Send a confirmation email via Resend. Returns true on success.
 // Non-fatal: callers should not fail the RSVP if this throws/returns false.
 async function sendConfirmationEmail({ name, email, eventTitle, eventDate }) {
@@ -44,17 +98,8 @@ async function sendConfirmationEmail({ name, email, eventTitle, eventDate }) {
   }
 
   // Optional human-readable date line
-  let dateLine = '';
-  if (eventDate) {
-    const d = new Date(eventDate);
-    if (!isNaN(d)) {
-      dateLine = `<p><strong>When:</strong> ${d.toLocaleString('en-GB', {
-        dateStyle: 'full',
-        timeStyle: 'short',
-        timeZone: 'Europe/Berlin'
-      })}</p>`;
-    }
-  }
+  const when = formatEventDate(eventDate);
+  const dateLine = when ? `<p><strong>When:</strong> ${when}</p>` : '';
 
   const html = `
     <div style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.5; color: #111;">
@@ -274,3 +319,5 @@ exports.handler = async (event, context) => {
     };
   }
 };
+
+exports.formatEventDate = formatEventDate;
