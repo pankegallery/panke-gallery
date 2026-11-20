@@ -4,7 +4,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
-import Seo, { excerptOf, shareImageOf } from '../components/seo'
+import Seo, { excerptOf, shareImageOf, eventDataOfEvent } from '../components/seo'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
@@ -255,6 +255,7 @@ class EventTemplate extends React.Component {
 
 // The share preview: the entry's subtitle, or else the start of its text, and
 // its featured image, or else the first slide.
+// The dates and place go into event data for search engines.
 export const Head = ({ data, location }) => {
   const entry = data.contentfulEvent
   return (
@@ -264,6 +265,7 @@ export const Head = ({ data, location }) => {
       path={location.pathname}
       image={shareImageOf(entry.featuredImage || entry.eventImpressionsSlideshow?.[0])}
       type="article"
+      event={eventDataOfEvent(entry)}
     />
   )
 }

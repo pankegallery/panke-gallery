@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
+import { GALLERY, venueOfEvent } from '../utils/venues'
 
 const KEYWORDS =
   'net art, Netzkunst, Galerlie, gallery, Berlin, Wedding, Sakrowski, transmediale, Kultur'
@@ -50,6 +51,64 @@ export const excerptOf = (...fields) =>
     .find(Boolean)
 
 /**
+ * A date and time from Contentful, which stores the time as it is in Berlin
+ * without an offset ("2026-11-08T16:00"), with the offset Berlin has on that
+ * day (+01:00 or +02:00), since search engines would otherwise read it as UTC.
+ * A time that already has an offset is kept as it is.
+ *
+ * @param {string} local - Date and time as stored in Contentful.
+ * @returns {string} The same time in ISO 8601 with an offset.
+ */
+const berlinTime = local => {
+  if (/(Z|[+-]\d\d:?\d\d)$/.test(local)) return local
+  // The offset at the same clock time in UTC, which differs from the one at
+  // the actual moment only in the night of a daylight saving switch.
+  const offset = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', timeZoneName: 'longOffset' })
+    .formatToParts(new Date(`${local}Z`))
+    .find(part => part.type === 'timeZoneName')
+    .value.replace('GMT', '')
+  return `${local}${offset || '+00:00'}`
+}
+
+/**
+ * An exhibition as event data for `<Seo event>`: the days it runs, at the
+ * gallery. Nothing while its date is to be confirmed, since search engines
+ * would show a wrong date.
+ *
+ * @param {Object} exhibition - A Contentful exhibition with `startDate`,
+ *   `endDate` and `dateTbc`.
+ * @returns {Object|undefined}
+ */
+export const eventDataOfExhibition = ({ startDate, endDate, dateTbc }) =>
+  dateTbc || !startDate
+    ? undefined
+    : {
+        type: 'ExhibitionEvent',
+        startDate: startDate.slice(0, 10),
+        endDate: endDate?.slice(0, 10),
+        venue: GALLERY,
+      }
+
+/**
+ * An event as event data for `<Seo event>`: its start, its end unless it is
+ * open-ended, and its place (/rosa for the /rosa series, otherwise the
+ * gallery, see `venueOfEvent`).
+ *
+ * @param {Object} event - A Contentful event with `date`, `endTime`,
+ *   `openEnd` and `eventSeries { slug }`.
+ * @returns {Object|undefined}
+ */
+export const eventDataOfEvent = event =>
+  event?.date
+    ? {
+        type: 'Event',
+        startDate: berlinTime(event.date),
+        endDate: event.endTime && !event.openEnd ? berlinTime(event.endTime) : undefined,
+        venue: venueOfEvent(event),
+      }
+    : undefined
+
+/**
  * The tags in a page's `<head>`: title, description, the site-wide keywords
  * and author, and the Open Graph and Twitter tags that make up a link's
  * preview when it's shared. Render it from a page's or template's `Head`
@@ -77,9 +136,13 @@ export const excerptOf = (...fields) =>
  *   audioguide and the print sheets): the title as given, and no default
  *   description, keywords, author or share tags, since these came from the
  *   site layout.
+ * @param {Object} [props.event] - For an exhibition or event page: its dates
+ *   and place (see `eventDataOfExhibition` and `eventDataOfEvent`), rendered
+ *   as schema.org event data, so search engines can list it as an event.
+ *   Needs `path`.
  * @param {React.ReactNode} [props.children] - Further tags for this page.
  */
-const Seo = ({ title, shareTitle = title, description, path, image, type = 'website', standalone = false, children }) => {
+const Seo = ({ title, shareTitle = title, description, path, image, type = 'website', event, standalone = false, children }) => {
   const { site } = useStaticQuery(graphql`
     query SeoSiteMetadata {
       site {
@@ -115,6 +178,32 @@ const Seo = ({ title, shareTitle = title, description, path, image, type = 'webs
     height: SHARE_IMAGE_HEIGHT,
   }
 
+  const eventData = event && url && {
+    '@context': 'https://schema.org',
+    '@type': event.type,
+    name: shareTitle,
+    description: metaDescription,
+    url,
+    image: [shareImage.url],
+    startDate: event.startDate,
+    endDate: event.endDate,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: event.venue.name,
+      url: `${meta.siteUrl}${event.venue.path}`,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: event.venue.streetAddress,
+        postalCode: event.venue.postalCode,
+        addressLocality: event.venue.locality,
+        addressCountry: 'DE',
+      },
+    },
+    organizer: { '@type': 'Organization', name: meta.title, url: meta.siteUrl },
+  }
+
   return (
     <>
       <title>{`${title} · ${meta.title}`}</title>
@@ -142,6 +231,15 @@ const Seo = ({ title, shareTitle = title, description, path, image, type = 'webs
 
       {/* Mastodon names the account as the author under a shared link. */}
       <meta name="fediverse:creator" content={meta.fediverseCreator} />
+
+      {/* Set as HTML, since React would escape the quotes. "<" is escaped so
+          that no text from Contentful can close the script early. */}
+      {eventData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(eventData).replace(/</g, '\\u003c') }}
+        />
+      )}
       {children}
     </>
   )
