@@ -42,8 +42,9 @@ export const shouldUpdateScroll = ({ routerProps: { location } }) =>
   ARCHIVE_YEAR.test(location.pathname) ? false : undefined;
 
 // Matomo page views, as gatsby-plugin-matomo sent them. The tracker itself is
-// added in gatsby-ssr.js; `window._paq` is missing in development, on the
-// offline app shell and when the browser sends Do Not Track.
+// added in gatsby-ssr.js, on every page and on the offline app shell that
+// returning visitors get; `window._paq` is missing in development and when
+// the browser sends Do Not Track.
 let isFirstRoute = true;
 let trackedTitle = null;
 
