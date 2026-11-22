@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Helmet from 'react-helmet'
 import { graphql, Link } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import EventItem from '../components/event-item'
 import EventSection from '../components/event-section'
 import Tag from '../components/tag'
 import YearIndex from '../components/year-index'
 import { Grid } from '../components/layout/Layout.styles'
-import { Section, SectionStack, Headline, TagList, TagButton, YearSection, YearHeading } from '../components/content/Content.styles';
+import { Section, SectionStack, Headline, TagList, TagButton, YearSection, YearHeading, VisuallyHidden } from '../components/content/Content.styles';
 import { groupByOpeningYear } from '../utils/group-by-opening-year.mjs'
 import { useRouteParam } from '../utils/use-route-param';
 import { useOpenYear } from '../utils/use-open-year'
@@ -155,7 +155,9 @@ const SeriesOverview = ({ series, activeSeries = '' }) => {
                   to={isSelected ? '/events/' : `/events/${slug}/`}
                   label={isSelected
                     ? `Show all events, not only ${name}`
-                    : `Show only ${name} events (${count})`}
+                    // Name and count side by side as on screen, so the label
+                    // contains what is shown (WCAG 2.5.3, label in name).
+                    : `Show only ${name} ${count} events`}
                 />
               </li>
             )
@@ -217,25 +219,13 @@ const PankeEvents = ({ data, params, location }) => {
 
   useOpenYear(year, location)
 
-  const head = (
-    <Helmet
-      title="Events"
-      meta={[
-        {
-          name: 'description',
-          content: 'Upcoming and past events of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture.'
-        }
-      ]}
-    />
-  )
-
   if (activeSeries) {
     const active = series.find(({ slug }) => slug === activeSeries)
     const seriesEvents = events.filter(({ eventSeries }) => eventSeries?.slug === activeSeries)
 
     return (
       <Layout wide>
-        {head}
+        <VisuallyHidden as="h1">Events</VisuallyHidden>
         <SectionStack>
           <SeriesOverview series={series} activeSeries={activeSeries} />
 
@@ -254,7 +244,7 @@ const PankeEvents = ({ data, params, location }) => {
 
   return (
     <Layout wide>
-      {head}
+      <VisuallyHidden as="h1">Events</VisuallyHidden>
       <SectionStack>
         <EventSection label="Upcoming events" events={upcoming} />
         <EventSection label="Recent events" events={recent} />
@@ -285,6 +275,14 @@ const PankeEvents = ({ data, params, location }) => {
     </Layout>
   );
 }
+
+export const Head = () => (
+  <Seo
+    title="Events"
+    path="/events/"
+    description="Upcoming and past events of panke.gallery in Berlin-Wedding. The gallery seeks to open up a dialogue between established and emerging artists whose work comes out of the connections between digital or net-based art and club culture."
+  />
+)
 
 export default PankeEvents;
 

@@ -3,7 +3,18 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { Carousel, CarouselIndicators, CarouselInner, CarouselItem, CarouselControl } from './slideshow/Slideshow.styles'
 import { Meta } from './content/Content.styles'
 
-const Slideshow = ({ slides, interval = 5000 }) => {
+/**
+ * The image slideshow on exhibition, event and edition pages: one slide at a
+ * time with its description as caption, moving on every `interval` ms.
+ *
+ * @param {Object} props
+ * @param {Object[]} props.slides - Contentful images with `gatsbyImageData`
+ *   and `description`.
+ * @param {string} props.alt - Alt text for slides without a description,
+ *   e.g. the exhibition's title.
+ * @param {number} [props.interval=5000] - Time per slide in ms; 0 stops it.
+ */
+const Slideshow = ({ slides, alt, interval = 5000 }) => {
   const [active, setActive] = useState(0)
   const count = slides.length
 
@@ -27,21 +38,22 @@ const Slideshow = ({ slides, interval = 5000 }) => {
         {slides.map((_, index) => (
           <button
             key={index}
-            $active={index === active}
+            type="button"
             onClick={() => goTo(index)}
             aria-label={`Slide ${index + 1}`}
+            aria-current={index === active ? 'true' : undefined}
             className={index === active ? 'active' : ''}
           />
         ))}
       </CarouselIndicators>
 
       {/* Wrapper for slides */}
-      <CarouselInner role="listbox">
+      <CarouselInner>
         {slides.map(({ gatsbyImageData, description }, index) => (
           <CarouselItem key={index} $active={index === active} aria-hidden={index !== active}>
             <div>
               <div className="image-wrapper 3-col">
-                <GatsbyImage alt="FeaturedImage" image={gatsbyImageData} />
+                <GatsbyImage alt={description || alt} image={gatsbyImageData} />
               </div>
               <Meta style={{ textAlign: 'center', padding: '10px 0' }}>{description}</Meta>
             </div>

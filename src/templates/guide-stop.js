@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
-import GuideLayout from '../components/guide-layout'
+import GuideLayout, { GuideHead } from '../components/guide-layout'
 import AudioPlayer from '../components/audio-player'
 import LanguagePicker from '../components/language-picker'
 import { HeadSection, Meta } from '../components/content/Content.styles'
@@ -38,6 +37,18 @@ const StopNumber = styled.p`
   font-weight: ${props => props.theme.fontWeights.medium};
 `
 
+const stopTitle = row => `${row.artworkName} — Audioguide`
+
+// The languages a position offers. More than one means the visitor picks one.
+const languagesOf = rows =>
+  Array.from(new Set(rows.map(row => row.language).filter(Boolean))).sort()
+
+// Which row to actually show: the one matching the chosen language, or —
+// if this position mixes a language-agnostic row in with variants (e.g. a
+// silent/visual-only piece) — that row as a fallback.
+const rowForLanguage = (rows, language) =>
+  rows.find(row => row.language === language) || rows.find(row => !row.language)
+
 const GuideStopTemplate = props => {
   const exhibitionSlug = get(props, 'pageContext.exhibitionSlug')
   const exhibitionTitle = get(props, 'pageContext.exhibitionTitle')
@@ -47,10 +58,7 @@ const GuideStopTemplate = props => {
   // on the chosen language, resolved here before anything renders.
   const rows = get(props, 'data.allAudioguideStop.edges', []).map(({ node }) => node)
 
-  const languages = useMemo(
-    () => Array.from(new Set(rows.map(row => row.language).filter(Boolean))).sort(),
-    [rows]
-  )
+  const languages = useMemo(() => languagesOf(rows), [rows])
   const needsLanguagePicker = languages.length > 1
 
   const [language, setLanguage] = useState(null)
@@ -78,15 +86,16 @@ const GuideStopTemplate = props => {
     setPickerOpen(false)
   }
 
-  // Which row to actually show: the one matching the chosen language, or —
-  // if this position mixes a language-agnostic row in with variants (e.g. a
-  // silent/visual-only piece) — that row as a fallback.
-  const activeRow = needsLanguagePicker
-    ? rows.find(row => row.language === language) || rows.find(row => !row.language)
-    : rows[0]
+  const activeRow = needsLanguagePicker ? rowForLanguage(rows, language) : rows[0]
 
   const showPicker = needsLanguagePicker && checkedStorage && (!language || pickerOpen)
   const showStop = !needsLanguagePicker || (checkedStorage && language && !pickerOpen)
+
+  // `Head` only renders on navigation, so a language picked on this page
+  // sets the title here.
+  useEffect(() => {
+    if (needsLanguagePicker && showStop && activeRow) document.title = stopTitle(activeRow)
+  }, [needsLanguagePicker, showStop, activeRow])
 
   if (rows.length === 0) return null
 
@@ -108,8 +117,6 @@ const GuideStopTemplate = props => {
 
   return (
     <GuideLayout overviewHref={`/guide/${exhibitionSlug}/`} headerAction={headerAction}>
-      <Helmet title={`${activeRow.artworkName} — Audioguide`} />
-
       <Overview>
         <HeadSection>
           <StopNumber>{activeRow.referenceNumber}</StopNumber>
@@ -135,6 +142,21 @@ const GuideStopTemplate = props => {
       />
     </GuideLayout>
   )
+}
+
+// Language variants can name the artwork differently. The static HTML can't
+// know the visitor's language and shows the language picker, so it names the
+// exhibition. `Head` isn't hydrated, so in the browser it can read the stored
+// language straight away and name the artwork in that language.
+export const Head = ({ data, pageContext }) => {
+  const rows = data.allAudioguideStop.edges.map(({ node }) => node)
+  const languages = languagesOf(rows)
+  const stored = languages.length > 1 ? getStoredLanguage() : null
+  const row = languages.length > 1
+    ? languages.includes(stored) && rowForLanguage(rows, stored)
+    : rows[0]
+
+  return <GuideHead title={row ? stopTitle(row) : `${pageContext.exhibitionTitle} — Audioguide`} />
 }
 
 export default GuideStopTemplate;

@@ -1,4 +1,8 @@
 [build]
+  # `npm run build` deletes .cache/.parcel-cache first: a leftover Parcel
+  # cache can make local builds (`netlify deploy`) hang at "compile gatsby
+  # files". It holds only the compiled gatsby-* files and is rebuilt in
+  # seconds; the rest of the Gatsby cache stays (#93).
   command = "npm run build"
   publish = "public"
   functions = "netlify/functions"

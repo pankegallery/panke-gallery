@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { graphql, Link } from 'gatsby'
 import styled from 'styled-components'
 
-import GuideLayout from '../components/guide-layout'
+import GuideLayout, { GuideHead } from '../components/guide-layout'
 import GuideStopList from '../components/guide-stop-list'
 import { List } from '../components/guide-stop-list/GuideStopList.styles'
 import { HeaderTitle } from '../components/guide-layout/GuideLayout.styles'
@@ -91,13 +90,11 @@ const GuideOverview = props => {
     <GuideLayout 
       showOverviewLink={false}
       headerAction={
-        <HeaderTitle>
+        <HeaderTitle as="h1">
           <strong>Overview of audio guide stops</strong>
         </HeaderTitle>
       }
     >
-      <Helmet title="Audioguide — Overview" />
-
       {exhibitionsWithStops.length > 0 && (
         <>
           <SectionHeading>Exhibitions</SectionHeading>
@@ -123,6 +120,8 @@ const GuideOverview = props => {
     </GuideLayout>
   );
 }
+
+export const Head = () => <GuideHead title="Audioguide — Overview" />
 
 export default GuideOverview;
 

@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
+import Seo, { excerptOf, shareImageOf, eventDataOfEvent } from '../components/seo'
 import ContentBlock, { ContentHtml } from '../components/content-block'
 import EventDate from '../components/event-date-time'
 import Slideshow from '../components/slideshow'
@@ -68,11 +68,11 @@ const EventMedia = ({ event }) => {
 
   let cover = null
   if (slides != null) {
-    cover = <Slideshow slides={slides} length={slides.length} />
+    cover = <Slideshow slides={slides} alt={event.title} />
   } else if (event.featuredImage?.gatsbyImageData) {
     // Without image data (e.g. a broken upload) GatsbyImage would warn on
     // every build, so the image is left out instead.
-    cover = <GatsbyImage alt="FeaturedImage" image={event.featuredImage.gatsbyImageData} />
+    cover = <GatsbyImage alt={event.featuredImage.description || event.title} image={event.featuredImage.gatsbyImageData} />
   }
   // The pill goes below a slideshow rather than on it, clear of its arrows.
   const pillBelow = slides != null
@@ -199,8 +199,7 @@ class EventTemplate extends React.Component {
 
     return (
       <Layout>
-      <main>
-        <Helmet title={`${event.title}`} />
+      <div>
         <HeadSection>
           {/* Title and date left, subline and tags right: 4/8 like the
               "About the event" row below, 6/6 on larger screens (#70). */}
@@ -248,10 +247,27 @@ class EventTemplate extends React.Component {
 
         {DocumentationImages}
 
-      </main>
+      </div>
       </Layout>
     )
   }
+}
+
+// The share preview: the entry's subtitle, or else the start of its text, and
+// its featured image, or else the first slide.
+// The dates and place go into event data for search engines.
+export const Head = ({ data, location }) => {
+  const entry = data.contentfulEvent
+  return (
+    <Seo
+      title={entry.title}
+      description={excerptOf(entry.subtitleShortDescription, entry.description)}
+      path={location.pathname}
+      image={shareImageOf(entry.featuredImage || entry.eventImpressionsSlideshow?.[0])}
+      type="article"
+      event={eventDataOfEvent(entry)}
+    />
+  )
 }
 
 export default EventTemplate;
@@ -291,11 +307,13 @@ export const pageQuery = graphql`
       subtitleShortDescription {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       description {
         childMarkdownRemark {
           html
+          excerpt(pruneLength: 200)
         }
       }
       furtherInformationBlocks {
@@ -315,6 +333,9 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
+        description
       }
       eventImpressionsSlideshow{
         gatsbyImageData(
@@ -323,6 +344,8 @@ export const pageQuery = graphql`
           placeholder: BLURRED,
           quality: 100
         )
+        url
+        mimeType
         description
       }
       eventDocumentationImagesBelow{

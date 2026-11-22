@@ -43,7 +43,10 @@ const Tag = ({ tag, type, to, selected = false, label, count }) => {
       title={tag.name}
     >
       <TagName>{tag.name}</TagName>
-      {count != null && <TagCount>{count}</TagCount>}
+      {/* The space isn't drawn between flex items, but keeps the name and
+          the count apart as text ("/rosa 20", not "/rosa20"), the way the
+          label says it. */}
+      {count != null && <>{' '}<TagCount>{count}</TagCount></>}
     </StyledTag>
   )
 }
