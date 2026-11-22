@@ -43,8 +43,10 @@ if (!(navigator.doNotTrack === '1' || window.doNotTrack === '1')) {
 const matomoPixel = pathname =>
   `<img src="${MATOMO_URL}/matomo.php?idsite=${MATOMO_SITE_ID}&amp;rec=1&amp;url=${encodeURIComponent(SITE_URL + pathname)}" style="border:0" alt="" />`
 
-// gatsby-plugin-offline renders an empty app shell for offline use. Nobody
-// visits it as a page, so it gets no tracker.
+// gatsby-plugin-offline renders an empty app shell, and its service worker
+// serves it in place of every page a returning visitor opens. So the shell
+// needs the tracker too: the page view is sent from `onRouteUpdate` with the
+// real address. It gets no pixel, which would count the shell's own address.
 const OFFLINE_APP_SHELL = '/offline-plugin-app-shell-fallback/'
 
 export const onRenderBody = ({ pathname, setHtmlAttributes, setHeadComponents, setPostBodyComponents }) => {
@@ -54,11 +56,13 @@ export const onRenderBody = ({ pathname, setHtmlAttributes, setHeadComponents, s
   setHeadComponents(favicons)
 
   // Only the production build tracks, so `npm run dev` sends nothing.
-  if (process.env.NODE_ENV !== 'production' || pathname === OFFLINE_APP_SHELL) return
+  if (process.env.NODE_ENV !== 'production') return
 
   setHeadComponents([<link key="matomo-preconnect" rel="preconnect" href={MATOMO_URL} />])
   setPostBodyComponents([
     <script key="matomo-tracker" dangerouslySetInnerHTML={{ __html: matomoTracker }} />,
-    <noscript key="matomo-pixel" dangerouslySetInnerHTML={{ __html: matomoPixel(pathname) }} />,
+    ...(pathname === OFFLINE_APP_SHELL
+      ? []
+      : [<noscript key="matomo-pixel" dangerouslySetInnerHTML={{ __html: matomoPixel(pathname) }} />]),
   ])
 }
