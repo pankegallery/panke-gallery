@@ -203,8 +203,7 @@ export const pageQuery = graphql`
           layout: CONSTRAINED,
           width: 1080,
           aspectRatio: 1.7778,
-          placeholder: BLURRED,
-          quality: 100
+          placeholder: BLURRED
         )
         url
         mimeType
