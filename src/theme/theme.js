@@ -97,7 +97,21 @@ export const theme = {
   // One column on phones, so Recent shows full-width images: between
   // exhibitions it is the first thing on the page.
   grid: {
-    columns: { sm: 1, md: 3, xl: 4 }
+    columns: { sm: 1, md: 3, xl: 4 },
+    // Justified rows of documentation images (#6), keyed like `media`:
+    // `sm` phones, `md` from `breakpoints.sm`, `lg` from `breakpoints.md`.
+    // `target` is where a row starts: its images grow from there until they
+    // fill the width, so rows end up taller (about 290–400px in the 1080px
+    // column). A target of 360px would put two 3:2 landscapes at 1096px,
+    // just over that column, and so each alone at 720px high; the lower
+    // tablet target keeps them in pairs down to `breakpoints.sm`. `max`
+    // stops a row that can't fill the width, such as the last one or a
+    // lone wide image, from growing further: about as high as the highest
+    // full rows, so a lone image doesn't outgrow the rows above it.
+    documentationRows: {
+      target: { sm: '200px', md: '220px', lg: '280px' },
+      max: { sm: '300px', md: '400px' }
+    }
   },
   sizes: {
     // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.
