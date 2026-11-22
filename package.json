@@ -53,7 +53,7 @@
   "scripts": {
     "dev": "gatsby develop",
     "clean": "gatsby clean",
-    "build": "CI='' gatsby build",
+    "build": "rm -rf .cache/.parcel-cache && CI='' gatsby build",
     "serve": "gatsby serve",
     "test:functions": "node --test 'netlify/tests/**/*.test.js'",
     "setup": "npm install --no-save contentful-import yargs-parser axios chalk && node ./setup.js"
