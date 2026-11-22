@@ -234,8 +234,7 @@ export const pageQuery = graphql`
         gatsbyImageData(
           layout: CONSTRAINED,
           width: 1080,
-          placeholder: BLURRED,
-          quality: 100
+          placeholder: BLURRED
         )
         url
         mimeType
@@ -245,8 +244,7 @@ export const pageQuery = graphql`
         gatsbyImageData(
           layout: CONSTRAINED,
           width: 1080,
-          placeholder: BLURRED,
-          quality: 100
+          placeholder: BLURRED
         )
         url
         mimeType
@@ -256,8 +254,7 @@ export const pageQuery = graphql`
         gatsbyImageData(
           layout: CONSTRAINED,
           width: 1080,
-          placeholder: BLURRED,
-          quality: 100
+          placeholder: BLURRED
         )
         description
       }
