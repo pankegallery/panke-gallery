@@ -75,6 +75,9 @@ const berlinTime = local => {
  * gallery. Nothing while its date is to be confirmed, since search engines
  * would show a wrong date.
  *
+ * The type is the plain `Event`, not schema.org's `ExhibitionEvent`: Google
+ * lists only `Event` and ignores the subtypes it doesn't know.
+ *
  * @param {Object} exhibition - A Contentful exhibition with `startDate`,
  *   `endDate` and `dateTbc`.
  * @returns {Object|undefined}
@@ -83,7 +86,7 @@ export const eventDataOfExhibition = ({ startDate, endDate, dateTbc }) =>
   dateTbc || !startDate
     ? undefined
     : {
-        type: 'ExhibitionEvent',
+        type: 'Event',
         startDate: startDate.slice(0, 10),
         endDate: endDate?.slice(0, 10),
         venue: GALLERY,
