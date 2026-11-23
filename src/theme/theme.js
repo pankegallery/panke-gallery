@@ -108,9 +108,16 @@ export const theme = {
     // stops a row that can't fill the width, such as the last one or a
     // lone wide image, from growing further: about as high as the highest
     // full rows, so a lone image doesn't outgrow the rows above it.
+    // From `breakpoints.md` the rows are planned for the whole page instead
+    // (`plan`, see src/utils/plan-documentation-rows.js): rows aim at
+    // `ideal`, stay between `min` and `max`, and the last row stops at
+    // `ideal`. `moveCost` is how much better the rows must get before an
+    // image leaves its upload position; at 300 only a lone portrait moves,
+    // by a few places. In px, as numbers, since the plan calculates with them.
     documentationRows: {
       target: { sm: '200px', md: '220px', lg: '280px' },
-      max: { sm: '300px', md: '400px' }
+      max: { sm: '300px', md: '400px' },
+      plan: { ideal: 360, min: 200, max: 500, moveCost: 300 }
     }
   },
   sizes: {
