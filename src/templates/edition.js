@@ -69,7 +69,7 @@ class EditionTemplate extends React.Component {
       }
       else {
         EditionCheckout = (
-          <Checkout slug={edition.slug} priceID={edition.stripePriceId} />
+          <Checkout slug={edition.slug} />
         )
       }
     }
