@@ -419,6 +419,39 @@ exports.createSchemaCustomization = ({ actions }) => {
   `)
 }
 
+/**
+ * Points image data for an animated GIF at the uploaded file itself.
+ *
+ * The Contentful Images API re-encodes every variant it serves. For GIFs that
+ * backfires (#120): an animated WebP is smaller for some GIFs and over a third
+ * larger for others even at quality 80 (several times larger at 100), lossy
+ * WebP softens the hard pixel edges many of the artworks rely on, and a
+ * resized GIF is no smaller than the upload. The upload is never larger than
+ * itself, so GIFs skip the WebP sources and get the original file as their
+ * only candidate. Width, height and placeholder stay as generated, so the
+ * layout doesn't jump, and CSS (`object-fit: cover`) does any cropping to the
+ * requested aspect ratio.
+ *
+ * @param {Object} imageData - `gatsbyImageData` as gatsby-source-contentful made it.
+ * @param {Object} asset - The ContentfulAsset node.
+ * @returns {Object} The image data, unchanged unless the asset is a GIF.
+ */
+const keepGifOriginal = (imageData, asset) => {
+  if (!imageData || asset.file?.contentType !== 'image/gif') return imageData
+  const src = `https:${asset.file.url}`
+  return {
+    ...imageData,
+    images: {
+      sources: [],
+      fallback: {
+        ...imageData.images.fallback,
+        src,
+        srcSet: `${src} ${asset.file.details.image.width}w`,
+      },
+    },
+  }
+}
+
 exports.createResolvers = ({ createResolvers }) => {
   const QRCode = require('qrcode')
   // errorCorrectionLevel: 'H' (~30% of the code can be damaged/obscured and
@@ -427,6 +460,14 @@ exports.createResolvers = ({ createResolvers }) => {
   const qrCodeSvgFor = url => QRCode.toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'H' })
 
   createResolvers({
+    // Wraps the plugin's own resolver, so every query that asks for
+    // gatsbyImageData gets the GIF handling without changes to templates.
+    ContentfulAsset: {
+      gatsbyImageData: {
+        resolve: async (source, args, context, info) =>
+          keepGifOriginal(await info.originalResolver(source, args, context, info), source),
+      },
+    },
     AudioguideStop: {
       pageUrl: {
         resolve: source =>

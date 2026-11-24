@@ -85,7 +85,12 @@ module.exports = {
         defaults: {
           formats: [`auto`, `webp`],
           placeholder: `blurred`,
-          quality: 100,
+          // 80 rather than 100 (#120): at 100 a WebP is often bigger than the
+          // uploaded JPG or PNG, and photos look the same at 80. The Contentful
+          // Images API rounds to steps, so 75 and 80 give identical files.
+          // Animated GIFs bypass this entirely, see keepGifOriginal in
+          // gatsby-node.js.
+          quality: 80,
           breakpoints: [750, 1080, 1366, 1920],
           backgroundColor: `transparent`,
           tracedSVGOptions: {},
