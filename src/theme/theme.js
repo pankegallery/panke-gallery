@@ -120,6 +120,20 @@ export const theme = {
       plan: { ideal: 360, min: 200, max: 500, moveCost: 300 }
     }
   },
+  // The slideshow on exhibition, event and edition pages (#145): one frame
+  // for all slides, so the page doesn't jump when it moves on. Each image
+  // fits into the frame uncut, centred on white. The frame takes the shape
+  // of the slideshow's typical (median) slide, so most slides fill it, kept
+  // between `ratio.min` (3:2, the shape of most slides on the site) and
+  // `ratio.max` (16:9): a slideshow of only 3:2 or only 16:9 images looks
+  // as before, portraits never make the frame taller than 3:2, and a
+  // panorama never makes it flat. `viewportReserve` is what the frame
+  // leaves of the screen's height for the caption below it (up to two
+  // lines) and a little air, so frame and caption fit on one screen.
+  slideshow: {
+    ratio: { min: 3 / 2, max: 16 / 9 },
+    viewportReserve: '96px'
+  },
   sizes: {
     // Smallest touch target (WCAG 2.5.5), e.g. the year chips on /exhibitions.
     tapTarget: '44px',
