@@ -17,7 +17,6 @@
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
-    "@stripe/stripe-js": "^1.13.1",
     "babel-plugin-styled-components": "^2.4.0",
     "gatsby": "^5.16.1",
     "gatsby-adapter-netlify": "^1.4.0",
@@ -34,6 +33,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "sharp": "^0.35.5",
+    "stripe": "^23.2.0",
     "styled-components": "^6.6.0"
   },
   "homepage": "https://github.com/crosssenses/panke-gallery#readme",

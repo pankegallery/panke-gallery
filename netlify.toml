@@ -29,6 +29,15 @@
 #   prefixed, so it never gets inlined into the client bundle. Remember to
 #   also set this for the "Local development" context (or a local .env file)
 #   if testing /codes via `netlify dev` — see AUDIOGUIDE_TASKS.md §3.4.
+# - STRIPE_SECRET_KEY: Restricted Stripe key with write access to Checkout
+#   Sessions only, read by netlify/functions/create-checkout-session.js (#114).
+#   Scope it to Functions. Live key for Production; a test-mode key for Deploy
+#   Previews and Local development. Never GATSBY_-prefixed.
+# - STRIPE_TEST_PRICE_ID (optional, test mode only): a test-mode price used for
+#   every edition, since the price IDs in Contentful only exist in live mode.
+#   Ignored with a live key, so it can't change what a buyer pays.
+#   (The function also needs CONTENTFUL_SPACE_ID and CONTENTFUL_DELIVERY_TOKEN
+#   above, to look up the edition's price.)
 
 # Deletes RSVP registrations 3 months after their event and keeps a count per
 # event (#107). Weekly is often enough for a 3-month deadline. Scheduled

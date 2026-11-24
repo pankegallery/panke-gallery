@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'gatsby'
-// The `pure` entry, not the package root: the root injects the Stripe.js
-// script as a side effect of the import, so every edition page loaded Stripe
-// (and its fraud-detection iframe) before anyone clicked "Buy" (#60). With
-// `pure`, the script loads only when `loadStripe` runs in the click handler.
-import { loadStripe } from '@stripe/stripe-js/pure'
 import { theme } from '../theme/theme'
 import { CheckoutError } from './checkout/Checkout.styles'
 
-const STRIPE_PUBLISHABLE_KEY = process.env.GATSBY_STRIPE_PUBLISHABLE_LIVE_KEY;
+// Creates the Stripe Checkout Session on the server (#114). The browser
+// loads nothing from Stripe until it is sent to Stripe's Checkout page (#60).
+const CHECKOUT_ENDPOINT = '/.netlify/functions/create-checkout-session'
 
 const buttonStyles = {
   fontSize: theme.fontSizes.medium,
@@ -27,71 +24,49 @@ const buttonDisabledStyles = {
   cursor: 'not-allowed',
 }
 
-//const EUCountries = ['AT', 'BE', 'HR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
-
-const worldCountries = ['AC', 'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AO', 'AQ', 'AR', 'AT', 'AU', 'AW', 'AX', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BL', 'BM', 'BN', 'BO', 'BQ', 'BR', 'BS', 'BT', 'BV', 'BW', 'BY', 'BZ', 'CA', 'CD', 'CF', 'CG', 'CH', 'CI', 'CK', 'CL', 'CM', 'CN', 'CO', 'CR', 'CV', 'CW', 'CY', 'CZ', 'DE', 'DJ', 'DK', 'DM', 'DO', 'DZ', 'EC', 'EE', 'EG', 'EH', 'ER', 'ES', 'ET', 'FI', 'FJ', 'FK', 'FO', 'FR', 'GA', 'GB', 'GD', 'GE', 'GF', 'GG', 'GH', 'GI', 'GL', 'GM', 'GN', 'GP', 'GQ', 'GR', 'GS', 'GT', 'GU', 'GW', 'GY', 'HK', 'HN', 'HR', 'HT', 'HU', 'ID', 'IE', 'IL', 'IM', 'IN', 'IO', 'IQ', 'IS', 'IT', 'JE', 'JM', 'JO', 'JP', 'KE', 'KG', 'KH', 'KI', 'KM', 'KN', 'KR', 'KW', 'KY', 'KZ', 'LA', 'LB', 'LC', 'LI', 'LK', 'LR', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG', 'MK', 'ML', 'MM', 'MN', 'MO', 'MQ', 'MR', 'MS', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC', 'NE', 'NG', 'NI', 'NL', 'NO', 'NP', 'NR', 'NU', 'NZ', 'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PL', 'PM', 'PN', 'PR', 'PS', 'PT', 'PY', 'QA', 'RE', 'RO', 'RS', 'RU', 'RW', 'SA', 'SB', 'SC', 'SE', 'SG', 'SH', 'SI', 'SJ', 'SK', 'SL', 'SM', 'SN', 'SO', 'SR', 'SS', 'ST', 'SV', 'SX', 'SZ', 'TA', 'TC', 'TD', 'TF', 'TG', 'TH', 'TJ', 'TK', 'TL', 'TM', 'TN', 'TO', 'TR', 'TT', 'TV', 'TW', 'TZ', 'UA', 'UG', 'US', 'UY', 'UZ', 'VA', 'VC', 'VE', 'VG', 'VN', 'VU', 'WF', 'WS', 'XK', 'YE', 'YT', 'ZA', 'ZM', 'ZW', 'ZZ']
-
-// The buyer goes on to Stripe's hosted Checkout page, which runs Stripe's
-// fraud detection itself. Turned off here, the hidden fraud-detection iframe
-// isn't added to our page in the moment between the click and the redirect.
-loadStripe.setLoadParameters({ advancedFraudSignals: false })
-
-let stripePromise
-const getStripe = () => {
-  if (!stripePromise) {
-    stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
-  }
-  return stripePromise
-}
-
 /**
- * The "Buy the edition" button. A click loads Stripe.js and sends the buyer
- * to Stripe's hosted Checkout, which returns them to the edition page with
- * `?checkout=success` or `?checkout=cancel`. If the checkout can't be opened
- * (Stripe.js blocked or unreachable, or Stripe rejects the request), the
- * button turns active again and a short message says so.
+ * The "Buy the edition" button. A click asks our Netlify function for a
+ * Stripe Checkout Session and sends the buyer to Stripe's hosted Checkout,
+ * which returns them to the edition page with `?checkout=success` or
+ * `?checkout=cancel`. The function looks up the price in Contentful, so the
+ * page only sends the slug. If the checkout can't be started, the button
+ * turns active again and a short message says so.
  *
  * @param {Object} props
- * @param {string} props.slug - The edition's slug, for the return URLs.
- * @param {string} props.priceID - The edition's Stripe price ID.
+ * @param {string} props.slug - The edition's slug.
  */
-const Checkout = ({ slug, priceID }) => {
-
-  let url = typeof window !== 'undefined' ? window.location.origin : '';
-  url = `${url}/edition/${slug}`
-
+const Checkout = ({ slug }) => {
   const [loading, setLoading] = useState(false)
   const [failed, setFailed] = useState(false)
 
-  const redirectToCheckout = async event => {
+  // Going back from Stripe with the browser's Back button can restore this
+  // page from the back/forward cache, still disabled from the click.
+  useEffect(() => {
+    const onPageShow = event => {
+      if (event.persisted) setLoading(false)
+    }
+    window.addEventListener('pageshow', onPageShow)
+    return () => window.removeEventListener('pageshow', onPageShow)
+  }, [])
+
+  const startCheckout = async event => {
     event.preventDefault()
     setLoading(true)
     setFailed(false)
 
-    // A successful redirect leaves the page, so we only get past the await
-    // when it failed. Loading the script can fail too (e.g. a content
-    // blocker), which rejects rather than returning `error`.
-    let error
     try {
-      const stripe = await getStripe()
-      const result = await stripe.redirectToCheckout({
-        mode: 'payment',
-        lineItems: [{
-          price: priceID,
-          quantity: 1
-        }],
-        shippingAddressCollection: {
-          allowedCountries: worldCountries,
-        },
-        successUrl: `${url}?checkout=success`,
-        cancelUrl: `${url}?checkout=cancel`,
+      const response = await fetch(CHECKOUT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug })
       })
-      error = result.error
-    } catch (loadError) {
-      error = loadError
-    }
-
-    if (error) {
+      const data = await response.json().catch(() => ({}))
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || `Checkout responded ${response.status}`)
+      }
+      // The button stays disabled while the browser leaves for Stripe.
+      window.location.assign(data.url)
+    } catch (error) {
       console.warn('Checkout error:', error)
       setFailed(true)
       setLoading(false)
@@ -105,14 +80,14 @@ const Checkout = ({ slug, priceID }) => {
         style={
           loading ? { ...buttonStyles, ...buttonDisabledStyles } : buttonStyles
         }
-        onClick={redirectToCheckout}
+        onClick={startCheckout}
       >
         Buy the edition
       </button>
       <div role="status">
         {failed && (
           <CheckoutError>
-            The checkout couldn't be opened. Please reload the page and try again, or <Link to="/contact/">contact us</Link> to order the edition.
+            The checkout couldn't be opened. Please try again, or <Link to="/contact/">contact us</Link> to order the edition.
           </CheckoutError>
         )}
       </div>
