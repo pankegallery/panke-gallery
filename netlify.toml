@@ -45,3 +45,38 @@
   from = "/streaming"
   to = "/events/"
   status = 301
+
+# Content moved or renamed in Contentful (#63). Without `force`, Netlify
+# only redirects when no page exists at the old path, so a rule can go in
+# before the slug changes: until then the old page is still served.
+
+# "Deffffffficiency - Live stream event" is now an event, not an exhibition.
+[[redirects]]
+  from = "/exhibition/deffffffficiency-live-stream-event"
+  to = "/event/deffffffficiency-live-stream-event/"
+  status = 301
+
+# Event slugs that were titles with spaces get lowercase, hyphenated slugs.
+# "URL Party" was the slug of the event "GUERRES INTIMES == FOSSE AUX MORTS…"
+# (1 November 2017). Each old path twice: as written, and lowercased,
+# because Netlify answered the old pages under their lowercased path, so
+# that is the one in search results and bookmarks.
+[[redirects]]
+  from = "/event/URL Party"
+  to = "/event/guerres-intimes-fosse-aux-morts/"
+  status = 301
+
+[[redirects]]
+  from = "/event/url party"
+  to = "/event/guerres-intimes-fosse-aux-morts/"
+  status = 301
+
+[[redirects]]
+  from = "/event/How to Beat Everyone in Your Office at Table Tennis"
+  to = "/event/how-to-beat-everyone-in-your-office-at-table-tennis/"
+  status = 301
+
+[[redirects]]
+  from = "/event/how to beat everyone in your office at table tennis"
+  to = "/event/how-to-beat-everyone-in-your-office-at-table-tennis/"
+  status = 301
